@@ -222,8 +222,6 @@ class FormPropertyWidget extends AdminWidget implements
         return $this->propertyFactory;
     }
 
-
-
     /**
      * Retrieve the property control factory.
      *
@@ -240,7 +238,6 @@ class FormPropertyWidget extends AdminWidget implements
 
         return $this->propertyInputFactory;
     }
-
 
     /**
      * Retrieve the property display factory.
@@ -424,8 +421,6 @@ class FormPropertyWidget extends AdminWidget implements
 
         return $this;
     }
-
-
 
     /**
      * Set the widget and property data.
@@ -764,6 +759,16 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
+     * Alias of {@see PropertyInterface::getRequired()}.
+     *
+     * @return boolean
+     */
+    public function required()
+    {
+        return $this->property()['required'];
+    }
+
+    /**
      * @return string
      */
     public function inputId()
@@ -1062,7 +1067,7 @@ class FormPropertyWidget extends AdminWidget implements
     }
 
     /**
-     * Alias of {@see PropertyInterface::l10n()}.
+     * Alias of {@see PropertyInterface::getL10n()}.
      *
      * @return boolean
      */

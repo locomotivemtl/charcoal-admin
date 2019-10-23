@@ -112,22 +112,19 @@ class AdminServiceProvider implements ServiceProviderInterface
         $container['admin/config'] = function (Container $container) {
             $appConfig = $container['config'];
 
-            // The `admin.json` file is not part of regular config
-            $extraConfigs = (array)$appConfig['admin_config'];
-
-            $moduleAdminConfigs = [];
+            $extraConfigs = [];
 
             foreach ($container['module/classes'] as $module) {
                 if (defined(sprintf('%s::ADMIN_CONFIG', $module))) {
-                    $moduleAdminConfigs[] = $module::ADMIN_CONFIG;
+                    $moduleAdminConfigs = (array)$module::ADMIN_CONFIG;
+                    array_push($extraConfigs, ...$moduleAdminConfigs);
                 };
             }
 
-            if (!empty($moduleAdminConfigs)) {
-                $extraConfigs = array_merge(
-                    $extraConfigs,
-                    $moduleAdminConfigs
-                );
+            // The `admin.json` file is not part of regular config
+            if (!empty($appConfig['admin_config'])) {
+                $appAdminConfigs = (array)$appConfig['admin_config'];
+                array_push($extraConfigs, ...$appAdminConfigs);
             }
 
             if (!empty($extraConfigs)) {
@@ -137,7 +134,12 @@ class AdminServiceProvider implements ServiceProviderInterface
                 }
             }
 
-            return new AdminConfig($appConfig['admin']);
+            $adminConfig = $appConfig['admin'];
+            if (!($adminConfig instanceof AdminConfig)) {
+                $adminConfig = new AdminConfig($appConfig['admin']);
+            }
+
+            return $adminConfig;
         };
 
         if (!isset($container['admin/base-url'])) {

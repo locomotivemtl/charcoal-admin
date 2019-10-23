@@ -8,6 +8,7 @@ use RuntimeException;
 use Pimple\Container;
 
 // From 'charcoal-core'
+use Charcoal\Loader\CollectionLoader;
 use Charcoal\Model\ModelInterface;
 
 // From 'charcoal-factory'
@@ -30,7 +31,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
     use ActionContainerTrait;
     use CollectionContainerTrait {
-        CollectionContainerTrait::createCollectionLoader as createCollectionLoaderFromTrait;
+        CollectionContainerTrait::configureCollectionLoader as configureCollectionLoaderFromTrait;
         CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
         CollectionContainerTrait::parseObjectRow as parseCollectionObjectRow;
     }
@@ -152,14 +153,41 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected $parsedObjectActions = false;
 
     /**
-     * @param array $data The widget data.
+     * Set the widget data.
+     *
+     * This method prioritizes specific data in order for the widget
+     * to properly merge and process. To bypass a bug in Charcoal's logic,
+     * any "collection_config" values are assigned after data-sources are merged.
+     *
+     * @param  array $data The widget data.
      * @return TableWidget Chainable
      */
     public function setData(array $data)
     {
+        if (isset($data['obj_type'])) {
+            $this->setObjType($data['obj_type']);
+            unset($data['obj_type']);
+        }
+
+        if (isset($data['data_sources'])) {
+            $this->setDataSources($data['data_sources']);
+            unset($data['data_sources']);
+        }
+
+        if (isset($data['collection_config'])) {
+            $collectionConfig = $data['collection_config'];
+            unset($data['collection_config']);
+        } else {
+            $collectionConfig = null;
+        }
+
         parent::setData($data);
 
         $this->mergeDataSources($data);
+
+        if ($collectionConfig !== null) {
+            $this->mergeCollectionConfig($collectionConfig);
+        }
 
         return $this;
     }
@@ -841,18 +869,45 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
+     * Determine if the object is active.
+     *
+     * @param  ModelInterface|null $object The object to test.
+     * @return boolean
+     */
+    public function isObjActive(ModelInterface $object = null)
+    {
+        if ($object === null) {
+            $object = $this->getCurrentObjOrProto();
+        }
+
+        $method = [ $object, 'isActiveTableRow' ];
+        if (is_callable($method)) {
+            return call_user_func($method);
+        }
+
+        if (isset($object['active'])) {
+            return (bool)$object['active'];
+        }
+
+        return false;
+    }
+
+    /**
      * Determine if the object can be created.
      *
      * If TRUE, the "Create" button is shown. Objects can still be
      * inserted programmatically or via direct action on the database.
      *
+     * @param  ModelInterface|null $object The object to test.
      * @return boolean
      */
-    public function isObjCreatable()
+    public function isObjCreatable(ModelInterface $object = null)
     {
-        $model = $this->proto();
-        $method = [ $model, 'isCreatable' ];
+        if ($object === null) {
+            $object = $this->proto();
+        }
 
+        $method = [ $object, 'isCreatable' ];
         if (is_callable($method)) {
             return call_user_func($method);
         }
@@ -866,13 +921,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * If TRUE, the "Modify" button is shown. Objects can still be
      * updated programmatically or via direct action on the database.
      *
+     * @param  ModelInterface|null $object The object to test.
      * @return boolean
      */
-    public function isObjEditable()
+    public function isObjEditable(ModelInterface $object = null)
     {
-        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
-        $method = [ $model, 'isEditable' ];
+        if ($object === null) {
+            $object = $this->getCurrentObjOrProto();
+        }
 
+        $method = [ $object, 'isEditable' ];
         if (is_callable($method)) {
             return call_user_func($method);
         }
@@ -886,13 +944,16 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * If TRUE, the "Delete" button is shown. Objects can still be
      * deleted programmatically or via direct action on the database.
      *
+     * @param  ModelInterface|null $object The object to test.
      * @return boolean
      */
-    public function isObjDeletable()
+    public function isObjDeletable(ModelInterface $object = null)
     {
-        $model  = ($this->currentObj) ? $this->currentObj : $this->proto();
-        $method = [ $model, 'isDeletable' ];
+        if ($object === null) {
+            $object = $this->getCurrentObjOrProto();
+        }
 
+        $method = [ $object, 'isDeletable' ];
         if (is_callable($method)) {
             return call_user_func($method);
         }
@@ -906,16 +967,20 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * If TRUE, any "View" button is shown. The object can still be
      * saved programmatically.
      *
+     * @param  ModelInterface|null $object The object to test.
      * @return boolean
      */
-    public function isObjViewable()
+    public function isObjViewable(ModelInterface $object = null)
     {
-        $model = ($this->currentObj) ? $this->currentObj : $this->proto();
-        if (!$model->id()) {
+        if ($object === null) {
+            $object = $this->getCurrentObjOrProto();
+        }
+
+        if (!$object->id()) {
             return false;
         }
 
-        $method = [ $model, 'isViewable' ];
+        $method = [ $object, 'isViewable' ];
         if (is_callable($method)) {
             return call_user_func($method);
         }
@@ -942,24 +1007,41 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     }
 
     /**
-     * Create a collection loader.
+     * Configure the collection loader.
      *
-     * @return CollectionLoader
+     * @see \Charcoal\Admin\Ui\CollectionContainerTrait::configureCollectionLoader()
+     *     Overrides the method to assign the current main menu identifier to each object.
+     *
+     * @param  CollectionLoader $loader The collection loader to prepare.
+     * @param  array|null       $data   Optional collection data.
+     * @return void
      */
-    protected function createCollectionLoader()
+    protected function configureCollectionLoader(CollectionLoader $loader, array $data = null)
     {
-        $loader = $this->createCollectionLoaderFromTrait();
+        $this->configureCollectionLoaderFromTrait($loader, $data);
 
-        $mainMenu = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
-        if ($mainMenu) {
-            $loader->setCallback(function (&$obj) use ($mainMenu) {
-                if (!$obj['main_menu']) {
-                    $obj['main_menu'] = $mainMenu;
+        if (!isset($loader->hasMainMenuCallback)) {
+            $mainMenu = filter_input(INPUT_GET, 'main_menu', FILTER_SANITIZE_STRING);
+            if ($mainMenu) {
+                $fn = function (&$obj) use ($mainMenu) {
+                    if (!$obj['main_menu']) {
+                        $obj['main_menu'] = $mainMenu;
+                    }
+                };
+
+                $callback = $loader->callback();
+                if ($callback === null) {
+                    $callback = $fn;
+                } else {
+                    $callback = function (&$obj) use ($fn) {
+                        $fn($obj);
+                    };
                 }
-            });
-        }
 
-        return $loader;
+                $loader->setCallback($callback);
+                $loader->hasMainMenuCallback = true;
+            }
+        }
     }
 
     /**
@@ -1276,11 +1358,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             'class' => []
         ];
 
-        $method = [ $object, 'isActiveTableRow' ];
-        if (is_callable($method)) {
-            if (call_user_func($method)) {
-                $row['attr']['class'][] = 'active';
-            }
+        if ($this->isObjActive($object)) {
+            $row['attr']['class'][] = 'active';
         }
 
         $row['attr']['class'][] = 'js-table-row';

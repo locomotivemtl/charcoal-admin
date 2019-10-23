@@ -4,6 +4,7 @@ namespace Charcoal\Admin\Ui;
 
 use Exception;
 use InvalidArgumentException;
+use UnexpectedValueException;
 
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
@@ -250,8 +251,36 @@ trait CollectionContainerTrait
     {
         return new CollectionLoader([
             'logger'  => $this->logger,
-            'factory' => $this->modelFactory()
+            'factory' => $this->modelFactory(),
         ]);
+    }
+
+    /**
+     * Configure the collection loader.
+     *
+     * This method ensures the object type exists before altering the instance.
+     *
+     * @param  CollectionLoader $loader The collection loader to prepare.
+     * @param  array|null       $data   Optional collection data.
+     * @return void
+     */
+    protected function configureCollectionLoader(CollectionLoader $loader, array $data = null)
+    {
+        $objType = $this->getObjTypeOrFail();
+
+        $loader->setModel($this->proto());
+
+        $config = $this->collectionConfig();
+        if (is_array($config) && !empty($config)) {
+            unset($config['properties']);
+            $loader->setData($config);
+        }
+
+        if ($data) {
+            $loader->setData($data);
+        }
+
+        $loader->isConfigured = true;
     }
 
     /**
@@ -277,6 +306,26 @@ trait CollectionContainerTrait
     public function objType()
     {
         return $this->objType;
+    }
+
+    /**
+     * Retrieve the current object type or throw an exception.
+     *
+     * @throws UnexpectedValueException If the collection object type is invalid or missing.
+     * @return string
+     */
+    public function getObjTypeOrFail()
+    {
+        $objType = $this->objType();
+
+        if (!$objType) {
+            throw new UnexpectedValueException(sprintf(
+                '%1$s cannot create collection. Object type is not defined.',
+                get_class($this)
+            ));
+        }
+
+        return $objType;
     }
 
     /**
@@ -628,29 +677,12 @@ trait CollectionContainerTrait
      */
     public function createCollection(array $data = null)
     {
-        $objType = $this->objType();
-        if (!$objType) {
-            throw new Exception(sprintf(
-                '%1$s cannot create collection. Object type is not defined.',
-                get_class($this)
-            ));
-        }
+        $objType = $this->getObjTypeOrFail();
 
         $loader = $this->collectionLoader();
-        $loader->setModel($this->proto());
-
-        $collectionConfig = $this->collectionConfig();
-        if (is_array($collectionConfig) && !empty($collectionConfig)) {
-            unset($collectionConfig['properties']);
-            $loader->setData($collectionConfig);
-        }
-
-        if ($data) {
-            $loader->setData($data);
-        }
+        $this->configureCollectionLoader($loader, $data);
 
         $collection = $loader->load();
-
         return $collection;
     }
 
@@ -821,7 +853,7 @@ trait CollectionContainerTrait
      */
     public function hasObjects()
     {
-        return (count($this->objects()) > 0);
+        return ($this->numObjects() > 0);
     }
 
     /**
@@ -839,22 +871,10 @@ trait CollectionContainerTrait
     public function numTotal()
     {
         if ($this->numTotal === null) {
-            $objType = $this->objType();
-            if (!$objType) {
-                throw new Exception(sprintf(
-                    '%1$s cannot create collection. Object type is not defined.',
-                    get_class($this)
-                ));
-            }
+            $objType = $this->getObjTypeOrFail();
 
             $loader = $this->collectionLoader();
-            $loader->setModel($this->proto());
-
-            $collectionConfig = $this->collectionConfig();
-            if (is_array($collectionConfig) && !empty($collectionConfig)) {
-                unset($collectionConfig['properties']);
-                $loader->setData($collectionConfig);
-            }
+            $this->configureCollectionLoader($loader);
 
             $this->numTotal = $loader->loadCount();
         }
@@ -910,5 +930,15 @@ trait CollectionContainerTrait
         }
 
         return $this->proto;
+    }
+
+    /**
+     * Retrieve the current object in a collection or its prototype.
+     *
+     * @return ModelInterface
+     */
+    protected function getCurrentObjOrProto()
+    {
+        return $this->currentObj ?: $this->proto();
     }
 }

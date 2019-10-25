@@ -539,7 +539,7 @@ class FormPropertyWidget extends AdminWidget implements
         $this->propertyData = $data;
 
         if (!$this->isMergingWidgetData) {
-            $this->setCoreData($this->propertyData);
+            $data = $this->setCoreData($this->propertyData);
         }
 
         if ($this->property) {
@@ -560,7 +560,7 @@ class FormPropertyWidget extends AdminWidget implements
         $this->propertyData = array_replace($this->propertyData, $data);
 
         if (!$this->isMergingWidgetData) {
-            $this->setCoreData($this->propertyData);
+            $data = $this->setCoreData($this->propertyData);
         }
 
         if ($this->property) {
@@ -1312,7 +1312,7 @@ class FormPropertyWidget extends AdminWidget implements
      * Set the core data for the widget and property's first.
      *
      * @param  array $data The widget and property data.
-     * @return array The widget and property data.
+     * @return array Returns the remaining dataset.
      */
     private function setCoreData(array $data)
     {
@@ -1470,6 +1470,8 @@ class FormPropertyWidget extends AdminWidget implements
             $data = array_replace_recursive($metadata['admin'], $data);
         }
 
+        $data = $this->filterInputPropertyData($data);
+
         $input->setInputType($type);
         $input->setProperty($prop);
         $input->setPropertyVal($this->propertyVal());
@@ -1497,6 +1499,8 @@ class FormPropertyWidget extends AdminWidget implements
             $display->setViewController($this->viewController());
         }
 
+        $data = $this->filterDisplayPropertyData($data);
+
         $display->setDisplayType($type);
         $display->setProperty($prop);
         $display->setPropertyVal($this->propertyVal());
@@ -1508,6 +1512,35 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         return $display;
+    }
+
+    /**
+     * Filter the property data for the property input.
+     *
+     * @param  array $data The widget and property data.
+     * @return array Returns the remaining dataset.
+     */
+    protected function filterInputPropertyData(array $data)
+    {
+        unset(
+            $data['formFieldCssClass'],
+            $data['form_field_css_class'],
+            $data['formGroupCssClass'],
+            $data['form_group_css_class']
+        );
+
+        return $data;
+    }
+
+    /**
+     * Filter the property data for the property display.
+     *
+     * @param  array $data The widget and property data.
+     * @return array Returns the remaining dataset.
+     */
+    protected function filterDisplayPropertyData(array $data)
+    {
+        return $data;
     }
 
     /**

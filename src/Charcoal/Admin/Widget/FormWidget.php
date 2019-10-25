@@ -165,8 +165,9 @@ class FormWidget extends AdminWidget implements
             return $this->hiddenProperties[$ident];
         }
 
-        $prop = $this->createFormProperty($data);
+        $prop = $this->createFormProperty();
         $prop->setPropertyIdent($ident);
+        $prop->setData($data);
 
         if ($this instanceof ObjectContainerInterface) {
             $prop->setPropertyVal($this->obj()[$ident]);

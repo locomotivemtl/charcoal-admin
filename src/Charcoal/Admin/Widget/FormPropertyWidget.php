@@ -1316,6 +1316,14 @@ class FormPropertyWidget extends AdminWidget implements
      */
     private function setCoreData(array $data)
     {
+        if (isset($data['ident'])) {
+            $this->setPropertyIdent($data['ident']);
+        }
+
+        if (isset($data['property_ident'])) {
+            $this->setPropertyIdent($data['property_ident']);
+        }
+
         if (isset($data['input_type'])) {
             $this->setInputType($data['input_type']);
         }

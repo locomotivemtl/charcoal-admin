@@ -1,0 +1,48 @@
+{{!--
+    Ranger Number Input Control
+    ===========================
+
+    `charcoal/admin/property/input/range`
+--}}
+{{# hasInputAffix }}
+    <div class="input-group">
+{{/ hasInputAffix }}
+{{# inputPrefix }}
+    <div class="input-group-prepend" id="{{ inputId }}_prefix">
+        <span class="input-group-text" id="{{ inputId }}_prefix_text">{{& . }}</span>
+    </div>
+{{/ inputPrefix }}
+<div class="form-control">
+    <input
+        type="range"
+        id="{{ inputId }}"
+        name="{{ inputName }}"
+        class="custom-range{{# inputClass }} {{ . }}{{/ inputClass }}"
+        {{# size }}size="{{ . }}"{{/ size }}
+        {{# hasMin }}min="{{ min }}"{{/ hasMin }}
+        {{# hasMax }}max="{{ max }}"{{/ hasMax }}
+        {{# hasStep }}step="{{ step }}"{{/ hasStep }}
+        {{# readOnly }}readonly{{/ readOnly }}
+        {{# required }}required{{/ required }}
+        {{# disabled }}disabled{{/ disabled }}
+        value="{{ inputVal }}"
+    >
+</div>
+{{# inputSuffix }}
+    <div class="input-group-append" id="{{ inputId }}_suffix">
+        <span class="input-group-text" id="{{ inputId }}_suffix_text">{{& . }}</span>
+    </div>
+{{/ inputSuffix }}
+{{# hasInputAffix }}
+    </div>
+{{/ hasInputAffix }}
+
+{{# addJs }}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id:   '{{ inputId }}',
+    type: 'charcoal/admin/property/input/range',
+    data: {{& controlDataForJsAsJson }}
+});
+</script>
+{{/ addJs }}

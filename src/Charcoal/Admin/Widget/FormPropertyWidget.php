@@ -1229,7 +1229,7 @@ class FormPropertyWidget extends AdminWidget implements
      *
      * @return string|null Returns the property's "input_type" or "display_type".
      */
-    protected function resolvedOutputType()
+    public function resolvedOutputType()
     {
         switch ($this->outputType()) {
             case static::PROPERTY_DISPLAY:

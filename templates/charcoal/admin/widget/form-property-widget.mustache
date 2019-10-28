@@ -33,7 +33,7 @@
 
     {{# output }}
     {{!-- The actual property control (typically `PropertyInput`) --}}
-    <div id="form-field-{{ widgetId }}" class="{{ formFieldCssClass }}{{# hidden }} d-none{{/ hidden }}"{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
+    <div id="form-field-{{ widgetId }}" class="{{ formFieldCssClass }}{{# hidden }} d-none{{/ hidden }}"{{# inputNameAsCssClass }} data-name="{{ . }}"{{/ inputNameAsCssClass }}{{# propertyType }} data-type="{{ . }}"{{/ propertyType }}{{# resolvedOutputType }} data-field="{{ . }}"{{/ resolvedOutputType }}{{# widgetId }} data-key="{{ widgetId }}"{{/ widgetId }}{{# l10n }} data-lang="{{ lang }}"{{/ l10n }}>
         {{> $widget_template }}
     </div>
     {{/ output }}

@@ -263,23 +263,17 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function widgetId()
     {
+        $type = $this->outputType();
+        switch ($type) {
+            case static::PROPERTY_DISPLAY:
+                return $this->display()->displayId();
+
+            case static::PROPERTY_CONTROL:
+                return $this->input()->inputId();
+        }
+
         if (!$this->widgetId) {
-            $type = $this->type();
-            switch ($type) {
-                case static::PROPERTY_DISPLAY:
-                    $id = $this->display()->displayId();
-                    break;
-
-                case static::PROPERTY_CONTROL:
-                    $id = $this->input()->inputId();
-                    break;
-
-                default:
-                    $id = 'widget_'.uniqid();
-                    break;
-            }
-
-            $this->widgetId = $id;
+            $this->widgetId = 'widget_'.uniqid();
         }
 
         return $this->widgetId;

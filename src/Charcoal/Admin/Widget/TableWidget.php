@@ -486,7 +486,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
             $column['attr'] = html_build_attributes($column['attr']);
 
-            yield $column;
+            yield $propertyIdent => $column;
         }
     }
 

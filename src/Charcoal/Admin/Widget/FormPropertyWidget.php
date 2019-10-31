@@ -1493,17 +1493,19 @@ class FormPropertyWidget extends AdminWidget implements
             $display->setViewController($this->viewController());
         }
 
+        $metadata = $prop->metadata();
+        $data = $prop->data();
+
+        if (isset($metadata['admin'])) {
+            $data = array_replace_recursive($metadata['admin'], $data);
+        }
+
         $data = $this->filterDisplayPropertyData($data);
 
         $display->setDisplayType($type);
         $display->setProperty($prop);
         $display->setPropertyVal($this->propertyVal());
         $display->setData($prop->data());
-
-        $metadata = $prop->metadata();
-        if (isset($metadata['admin'])) {
-            $display->setData($metadata['admin']);
-        }
 
         return $display;
     }

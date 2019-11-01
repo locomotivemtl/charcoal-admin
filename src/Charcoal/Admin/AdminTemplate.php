@@ -124,6 +124,11 @@ class AdminTemplate extends AbstractTemplate implements
     protected $secondaryMenu;
 
     /**
+     * @var array
+     */
+    private $adminDataForJs;
+
+    /**
      * @var FactoryInterface $modelFactory
      */
     private $modelFactory;
@@ -1125,5 +1130,86 @@ class AdminTemplate extends AbstractTemplate implements
     public function isFullscreenTemplate()
     {
         return false;
+    }
+
+    /**
+     * Retrieve the default data to the global Admin JavaScript application.
+     *
+     * @return array
+     */
+    final protected function getDefaultAdminDataForJs()
+    {
+        return [
+            'debug'      => $this->debug(),
+            'base_url'   => $this->baseUrl(),
+            'admin_url'  => $this->adminUrl(),
+            'admin_path' => $this->adminConfig('basePath'),
+            'user_id'    => $this->authenticator()->userId(),
+        ];
+    }
+
+    /**
+     * Retrieve all data options for the global Admin JavaScript application.
+     *
+     * @return array
+     */
+    final protected function getAdminDataForJs()
+    {
+        if ($this->adminDataForJs === null) {
+            $this->adminDataForJs = $this->getDefaultAdminDataForJs();
+        }
+
+        return $this->adminDataForJs;
+    }
+
+    /**
+     * Add extra data to the global Admin JavaScript application.
+     *
+     * @param  array $data Additional options.
+     * @return self
+     */
+    final public function addAdminDataForJs(array $data)
+    {
+        $this->adminDataForJs = array_merge($this->getAdminDataForJs(), $data);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the resolved data options for the global Admin JavaScript application.
+     *
+     * @return array
+     */
+    final public function adminDataForJs()
+    {
+        return array_map(function ($datum) {
+            return is_callable($datum) ? $datum($this) : $datum;
+        }, $this->getAdminDataForJs());
+    }
+
+    /**
+     * Converts the {@see self::adminDataForJs() admin options} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    final public function adminDataForJsAsJson()
+    {
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->adminDataForJs(), $options);
+    }
+
+    /**
+     * Converts the {@see self::adminDataForJs() admin options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    final public function escapedAdminDataForJsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->adminDataForJsAsJson().'<%={{ }}=%>';
     }
 }

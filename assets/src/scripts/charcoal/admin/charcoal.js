@@ -8,7 +8,7 @@ var Charcoal = Charcoal || {};
 Charcoal.Admin = (function () {
     'use strict';
 
-    var options, manager, action, feedback, recaptcha, cache, store, debug,
+    var options, manager, action, feedback, recaptcha, cache, store,
         currentLocale = document.documentElement.getAttribute('locale'),
         currentLang   = document.documentElement.lang,
         defaultLang   = 'en';
@@ -26,8 +26,10 @@ Charcoal.Admin = (function () {
      * @type {Object}
      */
     options = {
-        base_url: null,
-        admin_path: null,
+        debug:         false,
+        base_url:      null,
+        admin_url:     null,
+        admin_path:    null,
     };
 
     /**
@@ -44,13 +46,13 @@ Charcoal.Admin = (function () {
     Admin.debug = function (mode) {
         if (arguments.length) {
             if (typeof mode === 'boolean') {
-                debug = mode;
+                options.debug = mode;
             } else {
                 throw new TypeError('Must be a boolean, received ' + (typeof mode));
             }
         }
 
-        return debug || false;
+        return options.debug || false;
     };
 
     /**
@@ -141,7 +143,7 @@ Charcoal.Admin = (function () {
      * @return {string} - The admin URL.
      */
     Admin.admin_url = function (path) {
-        return options.base_url + options.admin_path + '/' + (typeof path === 'string' ? path : '');
+        return options.admin_url + (typeof path === 'string' ? path : '');
     };
 
     /**

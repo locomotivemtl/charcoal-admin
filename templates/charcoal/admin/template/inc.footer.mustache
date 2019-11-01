@@ -29,18 +29,12 @@
     <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.js"></script>
 
     <script>
-        Charcoal.Admin.set_data({
-            base_url:   '{{ baseUrl }}',
-            admin_path: 'admin'
-        });
+        Charcoal.Admin.set_data({{& adminDataForJsAsJson }});
 
         $(document)
             .ready(function() {
                 var $html = $(document.documentElement);
                 $html.removeClass('has-no-js').addClass('has-js');
-                if ($html.hasClass('s-admin-debug') || $html.hasClass('debug-mode') || $html.data('debug')) {
-                    Charcoal.Admin.debug(true);
-                }
 
                 // Initialize tooltips globally
                 $('[data-toggle="tooltip"]').tooltip();

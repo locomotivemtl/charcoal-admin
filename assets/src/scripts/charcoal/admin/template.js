@@ -6,9 +6,6 @@
  */
 Charcoal.Admin.Template = function (opts) {
     Charcoal.Admin.Component.call(this, opts);
-
-    window.alert('Template ' + opts);
-
     return this;
 };
 

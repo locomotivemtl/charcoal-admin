@@ -31,6 +31,9 @@ use Charcoal\Translator\TranslatorAwareTrait;
 use Charcoal\Property\PropertyInterface;
 use Charcoal\Property\PropertyMetadata;
 
+// From 'charcoal-app'
+use Charcoal\App\DebugAwareTrait;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Property\PropertyInputInterface;
 
@@ -43,6 +46,7 @@ abstract class AbstractPropertyInput implements
     LoggerAwareInterface,
     ViewableInterface
 {
+    use DebugAwareTrait;
     use DescribableTrait;
     use LoggerAwareTrait;
     use TranslatorAwareTrait;
@@ -221,9 +225,15 @@ abstract class AbstractPropertyInput implements
      *
      * @return string Returns data serialized with {@see json_encode()}.
      */
-    public function controlDataForJsAsJson()
+    final public function controlDataForJsAsJson()
     {
-        return json_encode($this->controlDataForJs(), JSON_UNESCAPED_UNICODE);
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->controlDataForJs(), $options);
     }
 
     /**
@@ -878,6 +888,9 @@ abstract class AbstractPropertyInput implements
 
         // Fulfills the ViewableTrait dependencies
         $this->setView($container['view']);
+
+        // Fulfills the DebugAwareTrait dependencies
+        $this->setDebug($container['debug']);
     }
 
     /**

@@ -351,7 +351,13 @@ class AdminWidget extends AbstractWidget implements
      */
     final public function widgetDataForJsAsJson()
     {
-        return json_encode($this->widgetDataForJs(), JSON_UNESCAPED_UNICODE);
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->widgetDataForJs(), $options);
     }
 
     /**

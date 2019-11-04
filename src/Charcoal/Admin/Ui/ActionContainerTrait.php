@@ -35,15 +35,6 @@ trait ActionContainerTrait
     protected $actionsPriority;
 
     /**
-     * Holds a list of all renderable classes.
-     *
-     * Format: `class => boolean`
-     *
-     * @var boolean[]
-     */
-    protected static $objRenderableCache = [];
-
-    /**
      * Parse the given UI actions.
      *
      * @param  array $actions  Actions to resolve.

@@ -409,7 +409,7 @@ class AlterPrimaryKeyScript extends AdminScript
      */
     protected function propertyField(IdProperty $prop)
     {
-        $fields = $prop->fields('');
+        $fields = $prop->fields();
 
         return reset($fields);
     }
@@ -557,7 +557,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $source = $model->source();
 
         $extra = $field->extra();
-        $field->setExtra('');
+        $field->setExtra(null);
 
         // Don't alter table if column name already exists.
         $sql = strtr(

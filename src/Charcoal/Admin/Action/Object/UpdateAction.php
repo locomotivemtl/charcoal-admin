@@ -147,7 +147,7 @@ class UpdateAction extends AbstractSaveAction
             $obj = $this->loadObj();
             $obj->mergeData($this->updateData());
 
-            $valid = $obj->validate();
+            $valid = $this->validate($obj);
             if (!$valid) {
                 if (!$this->hasFeedbacks()) {
                     $this->addFeedback('error', strtr($errorThrown, [

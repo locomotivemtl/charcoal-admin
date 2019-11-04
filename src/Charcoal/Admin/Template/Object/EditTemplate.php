@@ -214,7 +214,7 @@ class EditTemplate extends AdminTemplate implements
     protected function renderTitle($title)
     {
         $obj = $this->obj();
-        if ($obj->view()) {
+        if ($this->isObjRenderable($obj)) {
             return $obj->render((string)$title, $obj);
         } else {
             return (string)$title;

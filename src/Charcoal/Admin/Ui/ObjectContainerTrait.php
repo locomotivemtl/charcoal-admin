@@ -12,6 +12,10 @@ use Charcoal\Model\ModelInterface;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
+// From 'charcoal-view'
+use Charcoal\View\ViewableInterface;
+use Charcoal\View\ViewInterface;
+
 /**
  * An implementation, as Trait, of the {@see \Charcoal\Admin\Ui\ObjectContainerInterface}.
  */
@@ -41,6 +45,15 @@ trait ObjectContainerTrait
      * @var ModelInterface $obj
      */
     protected $obj;
+
+    /**
+     * Holds a list of all renderable classes.
+     *
+     * Format: `class => boolean`
+     *
+     * @var boolean[]
+     */
+    protected static $objRenderableCache = [];
 
     /**
      * @param FactoryInterface $factory The model factory, to create objects.
@@ -372,5 +385,46 @@ trait ObjectContainerTrait
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    /**
+     * Determine if the model implements {@see \Charcoal\View\ViewableInterface}.
+     *
+     * @param  string|object $obj      Object type or instance to test.
+     * @param  boolean       $toString Whether to test for `__toString()`.
+     * @return boolean
+     */
+    protected function isObjRenderable($obj, $toString = false)
+    {
+        if (is_string($obj)) {
+            if (!method_exists($this, 'modelFactory')) {
+                return false;
+            }
+
+            $obj = $this->modelFactory()->get($obj);
+        }
+
+        if (!is_object($obj)) {
+            return false;
+        }
+
+        $key = get_class($obj);
+
+        if (isset(static::$objRenderableCache[$key])) {
+            return static::$objRenderableCache[$key];
+        }
+
+        $check = false;
+        if (is_object($obj)) {
+            if (($obj instanceof ViewableInterface) && ($obj->view() instanceof ViewInterface)) {
+                $check = true;
+            } elseif ($toString && is_callable([ $obj, '__toString()' ])) {
+                $check = true;
+            }
+        }
+
+        static::$objRenderableCache[$key] = $check;
+
+        return static::$objRenderableCache[$key];
     }
 }

@@ -326,7 +326,7 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
             $collectionIdent = $this->collectionIdentFallback();
         }
 
-        if ($collectionIdent && $proto->view()) {
+        if ($collectionIdent && $this->isObjRenderable($proto)) {
             $collectionIdent = $proto->render($collectionIdent);
         }
 

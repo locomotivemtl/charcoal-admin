@@ -24,6 +24,7 @@ use Charcoal\Source\PaginationInterface;
 use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-view'
+use Charcoal\View\ViewableInterface;
 use Charcoal\View\ViewInterface;
 
 /**
@@ -133,6 +134,15 @@ trait CollectionContainerTrait
      * @var ViewInterface $view
      */
     private $view;
+
+    /**
+     * Holds a list of all renderable classes.
+     *
+     * Format: `class => boolean`
+     *
+     * @var boolean[]
+     */
+    protected static $objRenderableCache = [];
 
     /**
      * @param ViewInterface|array $view The view instance.
@@ -391,7 +401,7 @@ trait CollectionContainerTrait
             $collectionIdent = $this->collectionIdentFallback();
         }
 
-        if ($collectionIdent && $proto->view()) {
+        if ($collectionIdent && $this->isObjRenderable($proto)) {
             $collectionIdent = $proto->render($collectionIdent);
         }
 
@@ -940,5 +950,48 @@ trait CollectionContainerTrait
     protected function getCurrentObjOrProto()
     {
         return $this->currentObj ?: $this->proto();
+    }
+
+    /**
+     * Determine if the model implements {@see \Charcoal\View\ViewableInterface}.
+     *
+     * @see \Charcoal\Admin\Ui\ObjectContainerTrait::isObjRenderable()
+     *
+     * @param  string|object $obj      Object type or instance to test.
+     * @param  boolean       $toString Whether to test for `__toString()`.
+     * @return boolean
+     */
+    protected function isObjRenderable($obj, $toString = false)
+    {
+        if (is_string($obj)) {
+            if (!method_exists($this, 'modelFactory')) {
+                return false;
+            }
+
+            $obj = $this->modelFactory()->get($obj);
+        }
+
+        if (!is_object($obj)) {
+            return false;
+        }
+
+        $key = get_class($obj);
+
+        if (isset(static::$objRenderableCache[$key])) {
+            return static::$objRenderableCache[$key];
+        }
+
+        $check = false;
+        if (is_object($obj)) {
+            if (($obj instanceof ViewableInterface) && ($obj->view() instanceof ViewInterface)) {
+                $check = true;
+            } elseif ($toString && is_callable([ $obj, '__toString()' ])) {
+                $check = true;
+            }
+        }
+
+        static::$objRenderableCache[$key] = $check;
+
+        return static::$objRenderableCache[$key];
     }
 }

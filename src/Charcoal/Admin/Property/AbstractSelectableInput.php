@@ -2,8 +2,6 @@
 
 namespace Charcoal\Admin\Property;
 
-use Charcoal\View\ViewableInterface;
-use Charcoal\View\ViewInterface;
 use Closure;
 use DateTimeInterface;
 use InvalidArgumentException;
@@ -13,6 +11,10 @@ use Charcoal\Model\ModelInterface;
 
 // From 'charcoal-translator'
 use Charcoal\Translator\Translation;
+
+// From 'charcoal-view'
+use Charcoal\View\ViewableInterface;
+use Charcoal\View\ViewInterface;
 
 /**
  * Selectable input properties provide an array of choices to choose from.
@@ -265,7 +267,7 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
             return null;
         }
 
-        if (($obj instanceof ViewableInterface) && ($obj->view() instanceof ViewInterface)) {
+        if ($this->isObjRenderable($obj)) {
             return $obj->renderTemplate($prop);
         } else {
             $callback = function ($matches) use ($obj) {

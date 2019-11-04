@@ -10,7 +10,8 @@ use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
-use Charcoal\Model\ModelValidator;
+use Charcoal\Validator\ValidatableInterface;
+use Charcoal\Validator\ValidatorInterface;
 
 // From 'charcoal-user'
 use Charcoal\User\Authenticator;
@@ -56,6 +57,23 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     }
 
     /**
+     * Defer object validation.
+     *
+     * This methos is useful for subclasses.
+     *
+     * @param  ModelInterface $obj The object to validate.
+     * @return boolean
+     */
+    public function validate(ModelInterface $obj)
+    {
+        if ($obj instanceof ValidatableInterface) {
+            return $obj->validate();
+        }
+
+        return true;
+    }
+
+    /**
      * Merge the given object's validation results the response feedback.
      *
      * @param  ModelInterface       $obj     The validated object.
@@ -65,8 +83,12 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
      */
     public function addFeedbackFromValidation(ModelInterface $obj, $filters = null)
     {
+        if (!($obj instanceof ValidatableInterface)) {
+            return $this;
+        }
+
         $validator = $obj->validator();
-        $levels    = [ ModelValidator::ERROR, ModelValidator::WARNING, ModelValidator::NOTICE ];
+        $levels    = [ ValidatorInterface::ERROR, ValidatorInterface::WARNING, ValidatorInterface::NOTICE ];
 
         if (is_string($filters) && in_array($filters, $levels)) {
             $results = call_user_func([ $validator, $filters.'Results' ]);

@@ -66,6 +66,18 @@ trait UserProviderTrait
     }
 
     /**
+     * Retrieve the Authenticator.
+     *
+     * @return \Charcoal\User\AuthenticatorInterface
+     */
+    protected function getAuthenticator()
+    {
+        $container = $this->container();
+
+        return $container['admin/authenticator'];
+    }
+
+    /**
      * Set up the service container.
      *
      * @return Container

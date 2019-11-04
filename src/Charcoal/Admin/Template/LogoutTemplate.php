@@ -8,8 +8,6 @@ use Psr\Http\Message\RequestInterface;
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Template\AuthTemplateTrait;
-use Charcoal\Admin\User;
-use Charcoal\Admin\User\AuthToken;
 
 /**
  * Log Out template
@@ -26,31 +24,13 @@ class LogoutTemplate extends AdminTemplate
      */
     public function init(RequestInterface $request)
     {
-        $user = User::getAuthenticated($this->modelFactory());
-        if ($user) {
-            $result = $user->logout();
-            $this->deleteUserAuthTokens($user);
+        $authenticator = $this->authenticator();
+
+        if ($authenticator->check()) {
+            $authenticator->logout();
         }
 
         return parent::init($request);
-    }
-
-    /**
-     * @param User $user The user to clear auth tokens for.
-     * @return LogoutTemplate Chainable
-     */
-    private function deleteUserAuthTokens(User $user)
-    {
-        $token = $this->modelFactory()->create(AuthToken::class);
-
-        if ($token->source()->tableExists()) {
-            $q = sprintf('DELETE FROM %s WHERE user_id = :userId', $token->source()->table());
-            $token->source()->dbQuery($q, [
-                'userId' => $user->id()
-            ]);
-        }
-
-        return $this;
     }
 
     /**

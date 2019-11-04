@@ -52,9 +52,7 @@ class ResetPasswordScriptTest extends AbstractTestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerClimate($container);
+        $containerProvider->registerScriptDependencies($container);
         return $container;
     }
 

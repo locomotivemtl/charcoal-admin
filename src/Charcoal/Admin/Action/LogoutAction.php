@@ -10,8 +10,6 @@ use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
-use Charcoal\Admin\User;
-use Charcoal\Admin\User\AuthToken;
 
 /**
  * Action: Attempt to log a user out.
@@ -38,40 +36,27 @@ class LogoutAction extends AdminAction
         unset($request);
 
         try {
-            $doneMessage = $this->translator()->translation('You are now logged out.');
-            $failMessage = $this->translator()->translation('An error occurred while logging out');
-            $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+            $translator = $this->translator();
+
+            $doneMessage = $translator->translation('You are now logged out.');
+            $failMessage = $translator->translation('An error occurred while logging out');
+            $errorThrown = strtr($translator->translation('{{ errorMessage }}: {{ errorThrown }}'), [
                 '{{ errorMessage }}' => $failMessage
             ]);
 
-            $user = User::getAuthenticated($this->modelFactory());
-            if ($user === null) {
-                $result = false;
+            $authenticator = $this->authenticator();
 
-                /** Fail silently — Never confirm or deny the existence of an account. */
-                $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
-                if ($ip) {
-                    $logMessage = sprintf('[Admin] Logout attempt for unauthenticated user from %s', $ip);
-                } else {
-                    $logMessage = '[Admin] Logout attempt for unauthenticated user';
-                }
-                $this->logger->warning($logMessage);
-            } else {
-                $result = $user->logout();
-                $this->deleteUserAuthTokens($user);
-            }
+            if ($authenticator->check()) {
+                $authenticator->logout();
 
-            $this->setSuccess($result);
-            if ($result) {
                 $this->addFeedback('success', $doneMessage);
+                $this->setSuccess(true);
 
-                return $response;
-            } else {
-                $this->addFeedback('error', $failMessage);
-
-                return $response->withStatus(500);
+                return $response->withStatus(204);
             }
         } catch (Exception $e) {
+            error_log($e->getMessage());
+            error_log($e->getTraceAsString());
             $this->addFeedback('error', strtr($errorThrown, [
                 '{{ errorThrown }}' => $e->getMessage()
             ]));
@@ -79,23 +64,20 @@ class LogoutAction extends AdminAction
 
             return $response->withStatus(500);
         }
-    }
 
-    /**
-     * @param User $user The user to clear auth tokens for.
-     * @return self
-     */
-    private function deleteUserAuthTokens(User $user)
-    {
-        $token = $this->modelFactory()->create(AuthToken::class);
-
-        if ($token->source()->tableExists()) {
-            $table = $token->source()->table();
-            $q = 'DELETE FROM '.$table.' WHERE user_id = :userId';
-            $token->source()->dbQuery($q, [ 'userId' => $user->id() ]);
+        /** Fail silently — Never confirm or deny the existence of an account. */
+        $ip = isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : null;
+        if ($ip) {
+            $logMessage = sprintf('[Admin] Logout attempt for unauthenticated user from %s', $ip);
+        } else {
+            $logMessage = '[Admin] Logout attempt for unauthenticated user';
         }
+        $this->logger->warning($logMessage);
 
-        return $this;
+        $this->addFeedback('error', $failMessage);
+        $this->setSuccess(false);
+
+        return $response->withStatus(401);
     }
 
     /**
@@ -105,7 +87,7 @@ class LogoutAction extends AdminAction
     public function results()
     {
         return [
-            'success' => $this->success()
+            'success' => $this->success(),
         ];
     }
 }

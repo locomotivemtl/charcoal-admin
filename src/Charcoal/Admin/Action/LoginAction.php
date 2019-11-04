@@ -9,10 +9,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-admin'
-use Charcoal\Admin\Action\AuthActionTrait;
 use Charcoal\Admin\AdminAction;
-use Charcoal\Admin\User;
-use Charcoal\Admin\User\AuthToken;
 
 /**
  * Action: Attempt to log a user in.
@@ -42,8 +39,6 @@ use Charcoal\Admin\User\AuthToken;
  */
 class LoginAction extends AdminAction
 {
-    use AuthActionTrait;
-
     /**
      * Authentication is required by default.
      *
@@ -76,7 +71,11 @@ class LoginAction extends AdminAction
 
             $email    = $request->getParam('email');
             $password = $request->getParam('password');
+            $remember = $request->getParam('remember-me');
             $nextUrl  = $request->getParam('next_url');
+
+            $email    = filter_var($email, FILTER_SANITIZE_EMAIL);
+            $remember = filter_var($remember, FILTER_VALIDATE_BOOLEAN);
 
             if (!$email || !$password) {
                 $this->addFeedback('error', $translator->translate('Invalid email or password'));
@@ -104,7 +103,7 @@ class LoginAction extends AdminAction
             }
             $this->logger->debug($logMessage);
 
-            $user = $this->authenticator()->authenticateByPassword($email, $password);
+            $user = $this->authenticator()->authenticateByPassword($email, $password, $remember);
             if ($user === null) {
                 if ($ip) {
                     $logMessage = sprintf('[Admin] Login failed for "%s" from %s', $email, $ip);
@@ -118,8 +117,6 @@ class LoginAction extends AdminAction
 
                 return $response->withStatus(403);
             } else {
-                $this->setRememberCookie($request, $user);
-
                 if ($ip) {
                     $logMessage = sprintf('[Admin] Login successful for "%s" from %s', $email, $ip);
                 } else {
@@ -146,24 +143,5 @@ class LoginAction extends AdminAction
 
             return $response->withStatus(500);
         }
-    }
-
-    /**
-     * @param  RequestInterface $request The HTTP request.
-     * @param  User             $user    The authenticated user to maybe remember.
-     * @return void
-     */
-    public function setRememberCookie(RequestInterface $request, User $user)
-    {
-        $remember = $request->getParam('remember-me');
-        if (!$remember) {
-            return;
-        }
-
-        $authToken = $this->modelFactory()->create(AuthToken::class);
-        $authToken->generate($user->id());
-        $authToken->sendCookie();
-
-        $authToken->save();
     }
 }

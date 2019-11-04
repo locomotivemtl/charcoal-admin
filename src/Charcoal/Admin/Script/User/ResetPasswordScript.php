@@ -6,6 +6,13 @@ namespace Charcoal\Admin\Script\User;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
+// From Pimple
+use Pimple\Container;
+
+// From 'charcoal-user'
+use Charcoal\User\AuthAwareInterface;
+use Charcoal\User\AuthAwareTrait;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminScript;
 use Charcoal\Admin\User;
@@ -13,8 +20,11 @@ use Charcoal\Admin\User;
 /**
  *
  */
-class ResetPasswordScript extends AdminScript
+class ResetPasswordScript extends AdminScript implements
+    AuthAwareInterface
 {
+    use AuthAwareTrait;
+
     /**
      * @param array|\ArrayAccess $data The dependencies (app and logger).
      */
@@ -24,6 +34,18 @@ class ResetPasswordScript extends AdminScript
 
         $arguments = $this->defaultArguments();
         $this->setArguments($arguments);
+    }
+
+    /**
+     * @param  Container $container Pimple DI container.
+     * @return void
+     */
+    protected function setDependencies(Container $container)
+    {
+        parent::setDependencies($container);
+
+        // Satisfies AuthAwareInterface
+        $this->setAuthenticator($container['admin/authenticator']);
     }
 
     /**
@@ -61,13 +83,15 @@ class ResetPasswordScript extends AdminScript
     }
 
     /**
-     * @param RequestInterface  $request  A PSR-7 compatible Request instance.
-     * @param ResponseInterface $response A PSR-7 compatible Response instance.
+     * @param  RequestInterface  $request  A PSR-7 compatible Request instance.
+     * @param  ResponseInterface $response A PSR-7 compatible Response instance.
      * @return ResponseInterface
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
         unset($request);
+
+        $authenticator = $this->authenticator();
 
         $climate = $this->climate();
 
@@ -75,21 +99,22 @@ class ResetPasswordScript extends AdminScript
             'Reset a Charcoal Administrator password'
         );
 
-        $email = $this->argOrInput('email');
+        $user = $authenticator->createUser();
 
-        $user = $this->modelFactory()->create(User::class);
+        $email = $this->argOrInput('email');
         $user->loadFrom('email', $email);
 
-        if (!$user->id()) {
+        if ($authenticator->validateAuthentication($user)) {
             $climate->red()->out(
                 'User does not exist.'
             );
             return $response;
         }
 
-        $password = $this->argOrInput('password');
+        $passKey  = $user->getAuthPasswordKey();
+        $password = $this->argOrInput($passKey);
 
-        $user->resetPassword($password);
+        $authenticator->changeUserPassword($user, $password);
 
         if ($climate->arguments->get('sendEmail')) {
             $this->sendResetPasswordEmail($email, $password);

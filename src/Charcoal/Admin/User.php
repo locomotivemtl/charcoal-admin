@@ -6,8 +6,7 @@ namespace Charcoal\Admin;
 use Charcoal\User\AbstractUser;
 
 /**
- * Admin User class.
- *
+ * Admin User Model
  */
 class User extends AbstractUser
 {

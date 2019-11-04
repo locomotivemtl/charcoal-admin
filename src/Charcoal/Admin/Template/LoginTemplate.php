@@ -8,7 +8,6 @@ use Psr\Http\Message\RequestInterface;
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
 use Charcoal\Admin\Template\AuthTemplateTrait;
-use Charcoal\Admin\User\AuthToken;
 
 /**
  *
@@ -72,16 +71,18 @@ class LoginTemplate extends AdminTemplate
      */
     public function rememberMeEnabled()
     {
-        $token = $this->modelFactory()->create(AuthToken::class);
+        $auth  = $this->authenticator();
+        $token = $auth->tokenFactory()->get($auth->tokenType());
 
-        if ($token->metadata()['enabled'] === false) {
+        if ($token->isEnabled() === false) {
             return false;
         }
-        if ($token->metadata()['httpsOnly'] === true) {
+
+        if ($token->isSecure() === true) {
             return $this->isHttps();
-        } else {
-            return true;
         }
+
+        return true;
     }
 
     /**

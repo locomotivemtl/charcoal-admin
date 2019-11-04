@@ -39,9 +39,7 @@ class ProcessWeeklyScriptTest extends AbstractTestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
-        $containerProvider->registerBaseUrl($container);
-        $containerProvider->registerModelFactory($container);
-        $containerProvider->registerClimate($container);
+        $containerProvider->registerScriptDependencies($container);
 
         $container['email/factory'] = function(Container $container) {
             return $container['model/factory'];

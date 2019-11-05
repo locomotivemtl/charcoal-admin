@@ -54,6 +54,7 @@
             background-color: $charcoal-white-0;
             border-radius: $border-radius;
 
+            .c-form-widget &,
             .c-form-widget.-quick-form &,
             .c-form-widget.-object-form &,
             .c-form-widget.-tabbed & {

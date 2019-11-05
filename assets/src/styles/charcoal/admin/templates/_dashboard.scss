@@ -1,0 +1,10 @@
+.dashboard {
+    .widget {
+        border-radius: 5px;
+        padding: $unit-small;
+        padding-top: initial;
+        margin: 0 $unit-small $unit-small *2 $unit-small;
+        box-sizing: border-box;
+        max-width: calc(100% - (#{$unit-small} * 2));
+    }
+}

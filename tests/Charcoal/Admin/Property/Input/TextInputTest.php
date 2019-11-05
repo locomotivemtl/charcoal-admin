@@ -27,15 +27,13 @@ class TextInputTest extends AbstractTestCase
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();
-        $containerProvider->registerTranslator($container);
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerMetadataLoader($container);
+        $containerProvider->registerInputDependencies($container);
         $container['view'] = $this->createMock('\Charcoal\View\ViewInterface');
 
         $this->obj = new TextInput([
-            'logger' => $container['logger'],
+            'logger'          => $container['logger'],
             'metadata_loader' => $container['metadata/loader'],
-            'container' => $container
+            'container'       => $container,
         ]);
     }
 

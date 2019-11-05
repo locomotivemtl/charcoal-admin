@@ -695,6 +695,24 @@ class ContainerProvider
      * @param  Container $container A DI container.
      * @return void
      */
+    public function registerInputDependencies(Container $container)
+    {
+        $this->registerDebug($container);
+
+        $this->registerLogger($container);
+        $this->registerTranslator($container);
+        $this->registerAdminConfig($container);
+        $this->registerBaseUrl($container);
+        $this->registerMetadataLoader($container);
+
+        $this->registerAuthenticator($container);
+        $this->registerAuthorizer($container);
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
     public function registerScriptDependencies(Container $container)
     {
         $this->registerDebug($container);

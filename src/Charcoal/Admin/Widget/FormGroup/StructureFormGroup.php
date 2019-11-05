@@ -347,7 +347,7 @@ class StructureFormGroup extends FormGroupWidget implements
         $property = $this->storageProperty();
 
         if ($property) {
-            $struct = $property->structureMetadata();
+            $struct = $property->getStructureMetadata();
 
             if (isset($struct['properties'])) {
                 return $struct['properties'];
@@ -370,7 +370,7 @@ class StructureFormGroup extends FormGroupWidget implements
 
             $property = $this->storageProperty();
 
-            $struct = $property->structureMetadata();
+            $struct = $property->getStructureMetadata();
             $formGroup = null;
             if (isset($struct['admin']['default_form_group'])) {
                 $groupName = $struct['admin']['default_form_group'];

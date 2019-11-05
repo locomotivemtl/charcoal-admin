@@ -3657,6 +3657,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.suppress_feedback = false;
     this.is_new_object     = false;
     this.xhr               = null;
+    this.useDefaultAction  = false;
 
     this.update_tab_ident();
 
@@ -3680,6 +3681,7 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts) {
     this.group_conditions = opts.data.group_conditions;
     this.$form            = $(this.form_selector);
     this.allow_reload     = opts.data.allow_reload;
+    this.useDefaultAction = opts.data.use_default_action;
 
     return this;
 };
@@ -4018,7 +4020,7 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
         });
     }
 
-    if (this.is_new_object) {
+    if (!this.useDefaultAction && this.is_new_object) {
         this.suppress_feedback = true;
 
         if (response.next_url) {
@@ -4153,7 +4155,9 @@ Charcoal.Admin.Widget_Form.prototype.enable_button = function ($trigger) {
  * @return string The requested URL for processing the form.
  */
 Charcoal.Admin.Widget_Form.prototype.request_url = function () {
-    if (this.is_new_object) {
+    if (this.useDefaultAction) {
+        return this.$form.attr('action');
+    } else if (this.is_new_object) {
         return Charcoal.Admin.admin_url() + this.save_action;
     } else {
         return Charcoal.Admin.admin_url() + this.update_action;

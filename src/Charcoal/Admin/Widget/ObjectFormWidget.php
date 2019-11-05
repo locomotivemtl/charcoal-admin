@@ -206,7 +206,7 @@ class ObjectFormWidget extends FormWidget implements
 
         // We need to sort form properties by form group property order if a group exists
         if (!empty($group)) {
-            $group = array_map([$this, 'camelize'], $group);
+            $group = array_map([ $this, 'camelize' ], $group);
             $props = array_merge(array_flip($group), $props);
         }
 

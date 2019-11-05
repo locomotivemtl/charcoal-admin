@@ -9,6 +9,7 @@
 <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
     <div class="o-flex c-form-widget -form{{# isTabbable }} -tabbed{{/ isTabbable }}">
         <div class="o-flex_main c-form-widget_form">
+            <div class="o-section">
             {{# isTabbable }}
                 {{> charcoal/admin/template/form/nav-tabs }}
             {{/ isTabbable }}
@@ -16,8 +17,11 @@
             {{# hasGroups }}
                 {{> charcoal/admin/template/form/groups }}
             {{/ hasGroups }}
+            </div>
 
-            <button type="submit" class="btn btn-primary">{{ submitLabel }}</button>
+            <div class="o-section">
+                <button type="submit" class="btn btn-primary">{{ submitLabel }}</button>
+            </div>
         </div>
 
         {{# hiddenProperties }}

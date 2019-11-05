@@ -15,6 +15,9 @@ use Psr\Http\Message\RequestInterface;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\Translation;
+
 /// From 'charcoal-ui'
 use Charcoal\Ui\Form\FormInterface;
 use Charcoal\Ui\Form\FormTrait;
@@ -454,6 +457,7 @@ class FormWidget extends AdminWidget implements
      */
     public function formProperties()
     {
+
         $sidebars = $this->sidebars;
         if (!is_array($sidebars)) {
             yield null;
@@ -602,6 +606,17 @@ class FormWidget extends AdminWidget implements
         }
 
         return $this->submitLabel;
+    }
+
+    /**
+     * @param string|Translation $label The submit label for the form.
+     * @return self
+     */
+    public function setSubmitLabel($label)
+    {
+        $this->submitLabel = $this->translator()->translate($label);
+
+        return $this;
     }
 
     /**

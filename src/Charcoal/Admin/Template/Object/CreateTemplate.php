@@ -218,7 +218,7 @@ class CreateTemplate extends AdminTemplate implements
      * @throws Exception If the object's admin metadata is not set.
      * @return \ArrayAccess
      */
-    private function objAdminMetadata()
+    protected function objAdminMetadata()
     {
         $obj = $this->obj();
 

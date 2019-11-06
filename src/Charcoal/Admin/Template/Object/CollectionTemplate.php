@@ -264,7 +264,7 @@ class CollectionTemplate extends AdminTemplate implements
      * @throws Exception If the object's admin metadata is not set.
      * @return \ArrayAccess
      */
-    private function objAdminMetadata()
+    protected function objAdminMetadata()
     {
         $objMetadata = $this->proto()->metadata();
         $adminMetadata = isset($objMetadata['admin']) ? $objMetadata['admin'] : [];

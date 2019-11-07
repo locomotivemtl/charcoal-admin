@@ -686,7 +686,7 @@ trait RoutableTrait
      */
     public function createRouteObject()
     {
-        $route = $this->modelFactory()->create($this->objectRouteClass());
+        $route = $this->modelFactory()->create($this->getObjectRouteClass());
 
         return $route;
     }
@@ -698,7 +698,7 @@ trait RoutableTrait
      */
     public function getRouteObjectPrototype()
     {
-        $proto = $this->modelFactory()->get($this->objectRouteClass());
+        $proto = $this->modelFactory()->get($this->getObjectRouteClass());
 
         return $proto;
     }
@@ -728,9 +728,19 @@ trait RoutableTrait
      *
      * @return string
      */
-    public function objectRouteClass()
+    public function getObjectRouteClass()
     {
         return $this->objectRouteClass;
+    }
+
+    /**
+     * Alias of {@see self::getObjectRouteClass()}.
+     *
+     * @return string
+     */
+    public function objectRouteClass()
+    {
+        return $this->getObjectRouteClass();
     }
 
     /**

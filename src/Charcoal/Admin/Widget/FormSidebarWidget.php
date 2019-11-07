@@ -113,6 +113,20 @@ class FormSidebarWidget extends AdminWidget implements
     protected $showFooter = true;
 
     /**
+     * Whether to display the sidebar actions.
+     *
+     * @var boolean
+     */
+    protected $showSidebarActions;
+
+    /**
+     * Whether to display the language switcher.
+     *
+     * @var boolean
+     */
+    protected $showLanguageSwitch;
+
+    /**
      * Whether the object is viewable.
      *
      * @var boolean
@@ -330,11 +344,20 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function showSidebarActions()
     {
-        $actions = array_filter($this->sidebarActions(), function($action) {
-            return $action['active'] === true;
-        });
+        if ($this->showSidebarActions === null) {
+            $actions = $this->sidebarActions();
+            if (empty($actions)) {
+                return false;
+            }
 
-        return count($actions) > 0;
+            $actions = array_filter($actions, function($action) {
+                return $action['active'] === true;
+            });
+
+            $this->showSidebarActions = (count($actions) > 0);
+        }
+
+        return $this->showSidebarActions;
     }
 
     /**
@@ -778,18 +801,23 @@ class FormSidebarWidget extends AdminWidget implements
      */
     public function showLanguageSwitch()
     {
-        if ($this->form()) {
-            $locales = count($this->translator()->availableLocales());
-            if ($locales > 1) {
-                foreach ($this->form()->formProperties() as $formProp) {
-                    if ($formProp->property()['l10n']) {
-                        return true;
+        if ($this->showLanguageSwitch === null) {
+            if ($this->form()) {
+                $locales = count($this->translator()->availableLocales());
+                if ($locales > 1) {
+                    foreach ($this->form()->getFormProperties() as $formProp) {
+                        if ($formProp->property()['l10n']) {
+                            $this->showLanguageSwitch = true;
+                            return $this->showLanguageSwitch;
+                        }
                     }
                 }
             }
+
+            $this->showLanguageSwitch = false;
         }
 
-        return false;
+        return $this->showLanguageSwitch;
     }
 
     /**

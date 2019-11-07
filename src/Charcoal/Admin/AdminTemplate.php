@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin;
 
+use Charcoal\Ui\PrioritizableInterface;
 use Exception;
 use InvalidArgumentException;
 
@@ -783,7 +784,30 @@ class AdminTemplate extends AbstractTemplate implements
             $menuItems[] = $this->parseMainMenuItem($menuItem, $menuIdent, $mainMenuIdent);
         }
 
+        usort($menuItems, [ $this, 'sortItemsByPriority' ]);
+
         return $menuItems;
+    }
+
+    /**
+     * Comparison function used by {@see uasort()}.
+     *
+     * @param $a Sortable entity A.
+     * @param $b Sortable entity B.
+     * @return integer Sorting value: -1 or 1.
+     */
+    protected function sortItemsByPriority(
+        $a,
+        $b
+    ) {
+        $priorityA = isset($a['priority']) ? $a['priority'] : 0;
+        $priorityB = isset($b['priority']) ? $b['priority'] : 0;
+
+        if ($priorityA === $priorityB) {
+            return 0;
+        }
+
+        return ($priorityA < $priorityB) ? (-1) : 1;
     }
 
     /**

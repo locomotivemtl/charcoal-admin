@@ -32,7 +32,7 @@ trait RevisionableTrait
     private $objectRevisionClass = ObjectRevision::class;
 
     /**
-     * @param boolean $enabled The (revision) enabled flag.
+     * @param  boolean $enabled The (revision) enabled flag.
      * @return RevisionableInterface Chainable
      */
     public function setRevisionEnabled($enabled)
@@ -56,7 +56,7 @@ trait RevisionableTrait
      */
     public function createRevisionObject()
     {
-        $rev = $this->modelFactory()->create($this->objectRevisionClass());
+        $rev = $this->modelFactory()->create($this->getObjectRevisionClass());
 
         return $rev;
     }
@@ -85,21 +85,31 @@ trait RevisionableTrait
      *
      * @return string
      */
-    public function objectRevisionClass()
+    public function getObjectRevisionClass()
     {
         return $this->objectRevisionClass;
     }
 
     /**
-     * @return ObjectRevision
+     * Alias of {@see self::getObjectRevisionClass()}.
+     *
+     * @return string
+     */
+    public function objectRevisionClass()
+    {
+        return $this->getObjectRevisionClass();
+    }
+
+    /**
      * @see \Charcoal\Object\ObjectRevision::create_fromObject()
+     * @return ObjectRevision
      */
     public function generateRevision()
     {
         $rev = $this->createRevisionObject();
 
         $rev->createFromObject($this);
-        if (!empty($rev->dataDiff())) {
+        if (!empty($rev->getDataDiff())) {
             $rev->save();
         }
 
@@ -107,8 +117,8 @@ trait RevisionableTrait
     }
 
     /**
-     * @return ObjectRevision
      * @see \Charcoal\Object\ObejctRevision::lastObjectRevision
+     * @return ObjectRevision
      */
     public function latestRevision()
     {
@@ -119,9 +129,9 @@ trait RevisionableTrait
     }
 
     /**
-     * @param integer $revNum The revision number.
-     * @return ObjectRevision
      * @see \Charcoal\Object\ObejctRevision::objectRevisionNum
+     * @param  integer $revNum The revision number.
+     * @return ObjectRevision
      */
     public function revisionNum($revNum)
     {
@@ -134,19 +144,19 @@ trait RevisionableTrait
     /**
      * Retrieves all revisions for the current objet
      *
-     * @param callable $callback Optional object callback.
+     * @param  callable $callback Optional object callback.
      * @return array
      */
     public function allRevisions(callable $callback = null)
     {
         $loader = new CollectionLoader([
-            'logger'    => $this->logger,
-            'factory'   => $this->modelFactory()
+            'logger'  => $this->logger,
+            'factory' => $this->modelFactory(),
         ]);
         $loader->setModel($this->createRevisionObject());
-        $loader->addFilter('target_type', $this->objType());
-        $loader->addFilter('target_id', $this->id());
-        $loader->addOrder('rev_ts', 'desc');
+        $loader->addFilter('targetType', $this->objType());
+        $loader->addFilter('targetId', $this->id());
+        $loader->addOrder('revTs', 'desc');
         if ($callback !== null) {
             $loader->setCallback($callback);
         }
@@ -156,7 +166,7 @@ trait RevisionableTrait
     }
 
     /**
-     * @param integer $revNum The revision number to revert to.
+     * @param  integer $revNum The revision number to revert to.
      * @throws InvalidArgumentException If revision number is invalid.
      * @return boolean Success / Failure.
      */
@@ -173,10 +183,12 @@ trait RevisionableTrait
         if (!$rev->id()) {
             return false;
         }
-        if (is_callable([$this, 'setLastModifiedBy'])) {
-            $this->setLastModifiedBy($rev->revUser());
+
+        if (isset($obj['lastModifiedBy'])) {
+            $obj['lastModifiedBy'] = $rev->getRevUser();
         }
-        $this->setData($rev->dataObj());
+
+        $this->setData($rev->getDataObj());
         $this->update();
 
         return true;

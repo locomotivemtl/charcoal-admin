@@ -18,7 +18,7 @@ interface ObjectRevisionInterface
     /**
      * @return string
      */
-    public function targetType();
+    public function getTargetType();
 
     /**
      * @param mixed $targetId The object ID.
@@ -29,7 +29,7 @@ interface ObjectRevisionInterface
     /**
      * @return mixed
      */
-    public function targetId();
+    public function getTargetId();
 
     /**
      * @param integer $revNum The revision number.
@@ -40,7 +40,7 @@ interface ObjectRevisionInterface
     /**
      * @return integer
      */
-    public function revNum();
+    public function getRevNum();
 
     /**
      * @param mixed $revTs The revision's timestamp.
@@ -51,7 +51,7 @@ interface ObjectRevisionInterface
     /**
      * @return \DateTimeInterface|null
      */
-    public function revTs();
+    public function getRevTs();
 
     /**
      * @param string $revUser The revision user ident.
@@ -62,7 +62,7 @@ interface ObjectRevisionInterface
     /**
      * @return string
      */
-    public function revUser();
+    public function getRevUser();
 
     /**
      * @param array|string $data The previous revision data.
@@ -73,7 +73,7 @@ interface ObjectRevisionInterface
     /**
      * @return array
      */
-    public function dataPrev();
+    public function getDataPrev();
 
     /**
      * @param array|string $data The current revision (object) data.
@@ -84,7 +84,7 @@ interface ObjectRevisionInterface
     /**
      * @return array
      */
-    public function dataObj();
+    public function getDataObj();
 
      /**
       * @param array|string $data The data diff.
@@ -95,7 +95,7 @@ interface ObjectRevisionInterface
     /**
      * @return array
      */
-    public function dataDiff();
+    public function getDataDiff();
 
     /**
      * Create a new revision from an object

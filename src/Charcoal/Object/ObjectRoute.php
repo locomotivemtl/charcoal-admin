@@ -178,7 +178,7 @@ class ObjectRoute extends AbstractModel implements
      */
     public function isSlugUnique()
     {
-        $proto = $this->modelFactory()->get(self::class);
+        $proto  = $this->modelFactory()->get(static::class);
         $loader = $this->collectionLoader();
         $loader
             ->reset()
@@ -409,42 +409,6 @@ class ObjectRoute extends AbstractModel implements
         $this->routeOptionsIdent = $routeOptionsIdent;
 
         return $this;
-    }
-
-    /**
-     * Retrieve the object model factory.
-     *
-     * @throws RuntimeException If the model factory was not previously set.
-     * @return FactoryInterface
-     */
-    public function modelFactory()
-    {
-        if (!isset($this->modelFactory)) {
-            throw new RuntimeException(sprintf(
-                'Model Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->modelFactory;
-    }
-
-    /**
-     * Retrieve the model collection loader.
-     *
-     * @throws RuntimeException If the collection loader was not previously set.
-     * @return CollectionLoader
-     */
-    public function collectionLoader()
-    {
-        if (!isset($this->collectionLoader)) {
-            throw new RuntimeException(sprintf(
-                'Collection Loader is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->collectionLoader;
     }
 
     /**

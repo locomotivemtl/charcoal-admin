@@ -14,6 +14,7 @@ use Charcoal\Factory\FactoryInterface;
 
 // From 'charcoal-core'
 use Charcoal\Model\AbstractModel;
+use Charcoal\Model\ModelFactoryTrait;
 
 // From 'charcoal-object'
 use Charcoal\Object\ObjectRevisionInterface;
@@ -32,6 +33,8 @@ use Charcoal\Object\RevisionableInterface;
  */
 class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
 {
+    use ModelFactoryTrait;
+
     /**
      * Object type of this revision (required)
      * @var string $targetType
@@ -78,13 +81,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     private $dataDiff;
 
     /**
-     * @var FactoryInterface $modelFactory
-     */
-    private $modelFactory;
-
-    /**
-     * Dependencies
-     * @param Container $container DI Container.
+     * @param  Container $container DI Container.
      * @return void
      */
     protected function setDependencies(Container $container)
@@ -95,24 +92,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     }
 
     /**
-     * @param FactoryInterface $factory The factory used to create models.
-     * @return void
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-    }
-
-    /**
-     * @return FactoryInterface The model factory.
-     */
-    protected function modelFactory()
-    {
-        return $this->modelFactory;
-    }
-
-    /**
-     * @param string $targetType The object type (type-ident).
+     * @param  string $targetType The object type (type-ident).
      * @throws InvalidArgumentException If the obj type parameter is not a string.
      * @return ObjectRevision Chainable
      */
@@ -130,13 +110,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return string
      */
-    public function targetType()
+    public function getTargetType()
     {
         return $this->targetType;
     }
 
     /**
-     * @param mixed $targetId The object ID.
+     * @param  mixed $targetId The object ID.
      * @return ObjectRevision Chainable
      */
     public function setTargetId($targetId)
@@ -148,13 +128,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return mixed
      */
-    public function targetId()
+    public function getTargetId()
     {
         return $this->targetId;
     }
 
     /**
-     * @param integer $revNum The revision number.
+     * @param  integer $revNum The revision number.
      * @throws InvalidArgumentException If the revision number argument is not numerical.
      * @return ObjectRevision Chainable
      */
@@ -172,13 +152,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return integer
      */
-    public function revNum()
+    public function getRevNum()
     {
         return $this->revNum;
     }
 
     /**
-     * @param mixed $revTs The revision's timestamp.
+     * @param  mixed $revTs The revision's timestamp.
      * @throws InvalidArgumentException If the timestamp is invalid.
      * @return ObjectRevision Chainable
      */
@@ -203,13 +183,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return DateTimeInterface|null
      */
-    public function revTs()
+    public function getRevTs()
     {
         return $this->revTs;
     }
 
     /**
-     * @param string $revUser The revision user ident.
+     * @param  string $revUser The revision user ident.
      * @throws InvalidArgumentException If the revision user parameter is not a string.
      * @return ObjectRevision Chainable
      */
@@ -231,13 +211,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return string
      */
-    public function revUser()
+    public function getRevUser()
     {
         return $this->revUser;
     }
 
     /**
-     * @param string|array|null $data The previous revision data.
+     * @param  string|array|null $data The previous revision data.
      * @return ObjectRevision Chainable
      */
     public function setDataPrev($data)
@@ -255,13 +235,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return array
      */
-    public function dataPrev()
+    public function getDataPrev()
     {
         return $this->dataPrev;
     }
 
     /**
-     * @param array|string|null $data The current revision (object) data.
+     * @param  array|string|null $data The current revision (object) data.
      * @return ObjectRevision Chainable
      */
     public function setDataObj($data)
@@ -279,13 +259,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return array
      */
-    public function dataObj()
+    public function getDataObj()
     {
         return $this->dataObj;
     }
 
     /**
-     * @param array|string $data The data diff.
+     * @param  array|string $data The data diff.
      * @return ObjectRevision
      */
     public function setDataDiff($data)
@@ -303,7 +283,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     /**
      * @return array
      */
-    public function dataDiff()
+    public function getDataDiff()
     {
         return $this->dataDiff;
     }
@@ -315,7 +295,7 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
      * 2. Load the current item from DB
      * 3. Create diff from (1) and (2).
      *
-     * @param RevisionableInterface $obj The object to create the revision from.
+     * @param  RevisionableInterface $obj The object to create the revision from.
      * @return ObjectRevision Chainable
      */
     public function createFromObject(RevisionableInterface $obj)
@@ -324,15 +304,15 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
 
         $this->setTargetType($obj->objType());
         $this->setTargetId($obj->id());
-        $this->setRevNum($prevRev->revNum() + 1);
+        $this->setRevNum($prevRev->getRevNum() + 1);
         $this->setRevTs('now');
 
-        if (is_callable([$obj, 'lastModifiedBy'])) {
-            $this->setRevUser($obj->lastModifiedBy());
+        if (isset($obj['lastModifiedBy'])) {
+            $this->setRevUser($obj['lastModifiedBy']);
         }
 
         $this->setDataObj($obj->data());
-        $this->setDataPrev($prevRev->dataObj());
+        $this->setDataPrev($prevRev->getDataObj());
 
         $diff = $this->createDiff();
         $this->setDataDiff($diff);
@@ -348,10 +328,10 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
     public function createDiff(array $dataPrev = null, array $dataObj = null)
     {
         if ($dataPrev === null) {
-            $dataPrev = $this->dataPrev();
+            $dataPrev = $this->getDataPrev();
         }
         if ($dataObj === null) {
-            $dataObj = $this->dataObj();
+            $dataObj = $this->getDataObj();
         }
         $dataDiff = $this->recursiveDiff($dataPrev, $dataObj);
         return $dataDiff;
@@ -415,21 +395,13 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
 
         $rev = $this->modelFactory()->create(self::class);
 
-        $sql = sprintf('
-            SELECT
-                *
-            FROM
-                `%s`
-            WHERE
-                `target_type` = :target_type
-            AND
-                `target_id` = :target_id
-            ORDER BY
-                `rev_ts` desc
-            LIMIT 1', $this->source()->table());
+        $sql = sprintf(
+            'SELECT * FROM `%s` WHERE `target_type` = :target_type AND `target_id` = :target_id ORDER BY `rev_ts` DESC LIMIT 1',
+            $this->source()->table()
+        );
         $rev->loadFromQuery($sql, [
             'target_type' => $obj->objType(),
-            'target_id'   => $obj->id()
+            'target_id'   => $obj->id(),
         ]);
 
         return $rev;
@@ -448,25 +420,16 @@ class ObjectRevision extends AbstractModel implements ObjectRevisionInterface
             $this->source()->createTable();
         }
 
-
         $rev = $this->modelFactory()->create(self::class);
 
-        $sql = sprintf('
-            SELECT
-                *
-            FROM
-                `%s`
-            WHERE
-                `target_type` = :target_type
-            AND
-                `target_id` = :target_id
-            AND
-                `rev_num` = :rev_num
-            LIMIT 1', $this->source()->table());
+        $sql = sprintf(
+            'SELECT * FROM `%s` WHERE `target_type` = :target_type AND `target_id` = :target_id AND `rev_num` = :rev_num LIMIT 1',
+            $this->source()->table()
+        );
         $rev->loadFromQuery($sql, [
             'target_type' => $obj->objType(),
             'target_id'   => $obj->id(),
-            'rev_num'     => intval($revNum)
+            'rev_num'     => intval($revNum),
         ]);
 
         return $rev;

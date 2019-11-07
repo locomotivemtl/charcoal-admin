@@ -364,6 +364,25 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * Retrieve the form's property controls.
+     *
+     * @return FormPropertyWidget[]
+     */
+    public function getFormProperties()
+    {
+        $formProperties = [];
+        foreach ($this->formProperties as $formProperty) {
+            if ($formProperty->active() === false) {
+                continue;
+            }
+
+            $formProperties[$formProperty->propertyIdent()] = $formProperty;
+        }
+
+        return $formProperties;
+    }
+
+    /**
      * Replace hidden property controls to the form.
      *
      * @param  array $properties The hidden form properties.

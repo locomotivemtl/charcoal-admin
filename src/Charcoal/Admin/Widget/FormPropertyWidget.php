@@ -35,6 +35,7 @@ class FormPropertyWidget extends AdminWidget implements
     FormInputInterface
 {
     const HIDDEN_FORM_CONTROL     = 'charcoal/admin/property/input/hidden';
+    const READONLY_FORM_CONTROL   = 'charcoal/admin/property/input/readonly';
     const DEFAULT_FORM_CONTROL    = 'charcoal/admin/property/input/text';
 
     const PROPERTY_CONTROL = 'input';
@@ -750,6 +751,14 @@ class FormPropertyWidget extends AdminWidget implements
     public function hidden()
     {
         return ($this->inputType() === static::HIDDEN_FORM_CONTROL || $this->property()['hidden']);
+    }
+
+    /**
+     * @return boolean
+     */
+    public function editable()
+    {
+        return ($this->inputType() !== static::READONLY_FORM_CONTROL && $this->outputType() === static::PROPERTY_CONTROL);
     }
 
     /**

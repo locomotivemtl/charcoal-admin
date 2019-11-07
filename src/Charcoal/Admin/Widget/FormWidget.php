@@ -141,58 +141,156 @@ class FormWidget extends AdminWidget implements
      */
     public function getOrCreateFormProperty($ident, array $data = null)
     {
-        if ($ident && isset($this->formProperties[$ident])) {
-            $p = $this->formProperties[$ident];
+        if ($this->updateFormProperty($ident, $data)) {
+            return $this->formProperties[$ident];
+        }
 
-            if ($data !== null) {
-                $p->setData($data);
+        $formProperty = $this->buildFormProperty($ident, $data);
+
+        if ($this->hasHiddenProperty($ident) && $formProperty->editable()) {
+            throw new InvalidArgumentException(sprintf(
+                'Property "%s" is already registered as hidden input',
+                $ident
+            ));
+        }
+
+        if ($formProperty->hidden()) {
+            if ($formProperty->prop()->val()) {
+                $formProperty->setPropertyVal($formProperty->prop()->val());
             }
 
-            $this->formProperties[$ident] = $p;
+            $this->hiddenProperties[$ident] = $formProperty;
+
+            return $this->hiddenProperties[$ident];
+        }
+
+        $this->formProperties[$ident] = $formProperty;
+
+        return $this->formProperties[$ident];
+    }
+
+    /**
+     * @param string $ident Property ident.
+     * @param array  $data  Property metadata.
+     * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
+     */
+    public function getOrCreateHiddenProperty($ident, array $data = null)
+    {
+        if ($this->updateHiddenProperty($ident, $data)) {
+            return $this->hiddenProperties[$ident];
+        }
+
+        $formProperty = $this->buildFormProperty($ident, $data);
+        $formProperty->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);
+
+        if ($this->hasFormProperty($ident) && $this->formProperties[$ident]->editable()) {
+            throw new InvalidArgumentException(sprintf(
+                'Property "%s" is already registered as user input',
+                $ident
+            ));
+        }
+
+        if ($formProperty->prop()->val()) {
+            $formProperty->setPropertyVal($formProperty->prop()->val());
+        }
+
+        $this->hiddenProperties[$ident] = $formProperty;
+
+        return $this->hiddenProperties[$ident];
+    }
+
+    /**
+     * @param string $ident Property ident.
+     * @param array  $data  Property metadata.
+     * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
+     */
+    protected function buildFormProperty($ident, array $data = null)
+    {
+        $formProperty = $this->createFormProperty();
+        $formProperty->setPropertyIdent($ident);
+
+        if ($this instanceof ObjectContainerInterface) {
+            $obj = $this->obj();
+
+            if ($obj->hasProperty($ident)) {
+                $propertyMetadata = $obj->metadata()->property($ident);
+                $formProperty->setData($propertyMetadata);
+            }
+
+            $formProperty->setPropertyVal($obj[$ident]);
+
+            if ($formProperty->propertyType() === HierarchicalObjectProperty::class) {
+                $formProperty->merge([ 'obj_id' => $obj->id() ]);
+            }
+        }
+
+        $formProperty->setData($data);
+        $formProperty->setViewController($this->viewController());
+
+        return $formProperty;
+    }
+
+    /**
+     * @param string $ident Property ident.
+     * @param array  $data  Property metadata.
+     * @return \Charcoal\Admin\Widget\FormPropertyWidget|null
+     */
+    protected function updateFormProperty($ident, array $data = null)
+    {
+        if ($ident && isset($this->formProperties[$ident])) {
+            $formProperty = $this->formProperties[$ident];
+
+            if ($data !== null) {
+                $formProperty->setData($data);
+            }
+
+            $this->formProperties[$ident] = $formProperty;
 
             return $this->formProperties[$ident];
         }
 
+        return null;
+    }
+
+    /**
+     * @param string $ident Property ident.
+     * @param array  $data  Property metadata.
+     * @return \Charcoal\Admin\Widget\FormPropertyWidget|null
+     */
+    protected function updateHiddenProperty($ident, array $data = null)
+    {
         if ($ident && isset($this->hiddenProperties[$ident])) {
-            $p = $this->hiddenProperties[$ident];
+            $formProperty = $this->hiddenProperties[$ident];
 
             if ($data !== null) {
-                $p->setData($data);
+                unset($data['inputType'], $data['input_type']);
+                $formProperty->setData($data);
             }
 
-            $this->hiddenProperties[$ident] = $p;
+            $this->hiddenProperties[$ident] = $formProperty;
 
             return $this->hiddenProperties[$ident];
         }
 
-        $prop = $this->createFormProperty();
-        $prop->setPropertyIdent($ident);
-        $prop->setData($data);
+        return null;
+    }
 
-        if ($this instanceof ObjectContainerInterface) {
-            $prop->setPropertyVal($this->obj()[$ident]);
+    /**
+     * @param  string $ident Property ident.
+     * @return boolean
+     */
+    protected function hasFormProperty($ident)
+    {
+        return ($ident && isset($this->formProperties[$ident]));
+    }
 
-            if ($prop->propertyType() === HierarchicalObjectProperty::class) {
-                $prop->merge(['obj_id' => $this->obj()->id()]);
-            }
-        }
-
-        $prop->setViewController($this->viewController());
-
-        if ($prop->hidden()) {
-            $prop->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);
-            if ($prop->prop()->val()) {
-                $prop->setPropertyVal($prop->prop()->val());
-            }
-
-            $this->hiddenProperties[$ident] = $prop;
-
-            return $this->hiddenProperties[$ident];
-        }
-
-        $this->formProperties[$ident] = $prop;
-
-        return $this->formProperties[$ident];
+    /**
+     * @param  string $ident Property ident.
+     * @return boolean
+     */
+    protected function hasHiddenProperty($ident)
+    {
+        return ($ident && isset($this->hiddenProperties[$ident]));
     }
 
     /**
@@ -429,7 +527,7 @@ class FormWidget extends AdminWidget implements
         }
 
         if (is_array($formProperty)) {
-            $this->getOrCreateFormProperty($propertyIdent, $formProperty);
+            $this->getOrCreateHiddenProperty($propertyIdent, $formProperty);
         } elseif (!$formProperty instanceof FormPropertyWidget) {
             throw new InvalidArgumentException(sprintf(
                 'Property must be an array or an instance of FormPropertyWidget, received %s',

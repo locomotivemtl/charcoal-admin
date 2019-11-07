@@ -72,14 +72,14 @@ class ObjectRouteTest extends AbstractTestCase
         $this->assertEquals(42, $this->obj['id']);
 
         $expected = new DateTime('today');
-        $this->assertEquals($expected, $this->obj['creationDate']);
-        $this->assertEquals($expected, $this->obj['lastModificationDate']);
+        $this->assertEquals($expected, $this->obj->getCreationDate());
+        $this->assertEquals($expected, $this->obj->getLastModificationDate());
 
-        $this->assertEquals('es', $this->obj['lang']);
-        $this->assertEquals('foobar', $this->obj['slug']);
-        $this->assertEquals('foo', $this->obj->routeObjType());
-        $this->assertEquals(3, $this->obj->routeObjId());
-        $this->assertEquals('baz', $this->obj->routeTemplate());
+        $this->assertEquals('es', $this->obj->getLang());
+        $this->assertEquals('foobar', $this->obj->getSlug());
+        $this->assertEquals('foo', $this->obj->getRouteObjType());
+        $this->assertEquals(3, $this->obj->getRouteObjId());
+        $this->assertEquals('baz', $this->obj->getRouteTemplate());
     }
 
     /**
@@ -103,7 +103,7 @@ class ObjectRouteTest extends AbstractTestCase
      */
     public function testSetCreationDate()
     {
-        $this->assertNull($this->obj['creationDate']);
+        $this->assertNull($this->obj->getCreationDate());
     }
 
     /**

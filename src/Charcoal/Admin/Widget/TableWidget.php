@@ -183,7 +183,10 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         parent::setData($data);
 
-        $this->mergeDataSources($data);
+        if (!$this->mergedDataSources) {
+            $this->mergeDataSources($data);
+            $this->mergedDataSources = true;
+        }
 
         if ($collectionConfig !== null) {
             $this->mergeCollectionConfig($collectionConfig);
@@ -640,8 +643,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         return $objectActions;
     }
 
-
-
     /**
      * Determine if the table's empty collection actions should be shown.
      *
@@ -721,7 +722,6 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         return $this->listActions;
     }
-
 
     /**
      * @return PaginationWidget

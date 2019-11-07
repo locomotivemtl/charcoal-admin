@@ -100,6 +100,13 @@ class AdminWidget extends AbstractWidget implements
     private $activeCondition;
 
     /**
+     * Keep track if data sources were merged.
+     *
+     * @var boolean
+     */
+    protected $mergedDataSources = false;
+
+    /**
      * Extra data sources to merge when setting data on an entity.
      *
      * @var array

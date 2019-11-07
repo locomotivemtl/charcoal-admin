@@ -113,7 +113,10 @@ class DocWidget extends FormWidget implements
     {
         parent::setData($data);
 
-        $this->mergeDataSources($data);
+        if (!$this->mergedDataSources) {
+            $this->mergeDataSources($data);
+            $this->mergedDataSources = true;
+        }
 
         return $this;
     }

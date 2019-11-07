@@ -14,6 +14,9 @@ use Pimple\Container;
 use Charcoal\Model\AbstractModel;
 use Charcoal\Loader\CollectionLoader;
 
+use Charcoal\Model\ModelFactoryTrait;
+use Charcoal\Loader\CollectionLoaderAwareTrait;
+
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
@@ -37,6 +40,9 @@ use Charcoal\Object\ObjectRouteInterface;
 class ObjectRoute extends AbstractModel implements
     ObjectRouteInterface
 {
+    use ModelFactoryTrait;
+    use CollectionLoaderAwareTrait;
+
     /**
      * A route is active by default.
      *
@@ -122,20 +128,6 @@ class ObjectRoute extends AbstractModel implements
     private $slugInc = 0;
 
     /**
-     * Store the factory instance for the current class.
-     *
-     * @var FactoryInterface
-     */
-    private $modelFactory;
-
-    /**
-     * Store the collection loader for the current class.
-     *
-     * @var CollectionLoader
-     */
-    private $collectionLoader;
-
-    /**
      * Inject dependencies from a DI Container.
      *
      * @param  Container $container A dependencies container instance.
@@ -192,8 +184,8 @@ class ObjectRoute extends AbstractModel implements
             ->reset()
             ->setModel($proto)
             ->addFilter('active', true)
-            ->addFilter('slug', $this->slug())
-            ->addFilter('lang', $this->lang())
+            ->addFilter('slug', $this->getSlug())
+            ->addFilter('lang', $this->getLang())
             ->addOrder('creation_date', 'desc')
             ->setPage(1)
             ->setNumPerPage(1);
@@ -209,9 +201,9 @@ class ObjectRoute extends AbstractModel implements
         if ($obj->id() === $this->id()) {
             return true;
         }
-        if ($obj->routeObjId() === $this->routeObjId() &&
-            $obj->routeObjType() === $this->routeObjType() &&
-            $obj->lang() === $this->lang()
+        if ($obj->getRouteObjId() === $this->getRouteObjId() &&
+            $obj->getRouteObjType() === $this->getRouteObjType() &&
+            $obj->getLang() === $this->getLang()
         ) {
             $this->setId($obj->id());
 
@@ -230,39 +222,13 @@ class ObjectRoute extends AbstractModel implements
     {
         if (!$this->isSlugUnique()) {
             if (!$this->originalSlug) {
-                $this->originalSlug = $this->slug();
+                $this->originalSlug = $this->getSlug();
             }
             $this->slugInc++;
             $this->setSlug($this->originalSlug.'-'.$this->slugInc);
 
             return $this->generateUniqueSlug();
         }
-
-        return $this;
-    }
-
-    /**
-     * Set an object model factory.
-     *
-     * @param  FactoryInterface $factory The model factory, to create objects.
-     * @return self
-     */
-    protected function setModelFactory(FactoryInterface $factory)
-    {
-        $this->modelFactory = $factory;
-
-        return $this;
-    }
-
-    /**
-     * Set a model collection loader.
-     *
-     * @param  CollectionLoader $loader The collection loader.
-     * @return self
-     */
-    protected function setCollectionLoader(CollectionLoader $loader)
-    {
-        $this->collectionLoader = $loader;
 
         return $this;
     }
@@ -486,7 +452,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return string
      */
-    public function slug()
+    public function getSlug()
     {
         return $this->slug;
     }
@@ -496,7 +462,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return string
      */
-    public function lang()
+    public function getLang()
     {
         return $this->lang;
     }
@@ -506,7 +472,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return DateTimeInterface|null
      */
-    public function creationDate()
+    public function getCreationDate()
     {
         return $this->creationDate;
     }
@@ -516,7 +482,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return DateTimeInterface|null
      */
-    public function lastModificationDate()
+    public function getLastModificationDate()
     {
         return $this->lastModificationDate;
     }
@@ -526,7 +492,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return string
      */
-    public function routeObjType()
+    public function getRouteObjType()
     {
         return $this->routeObjType;
     }
@@ -536,7 +502,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return string
      */
-    public function routeObjId()
+    public function getRouteObjId()
     {
         return $this->routeObjId;
     }
@@ -546,7 +512,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return string
      */
-    public function routeTemplate()
+    public function getRouteTemplate()
     {
         return $this->routeTemplate;
     }
@@ -556,7 +522,7 @@ class ObjectRoute extends AbstractModel implements
      *
      * @return array
      */
-    public function routeOptions()
+    public function getRouteOptions()
     {
         return $this->routeOptions;
     }
@@ -564,7 +530,7 @@ class ObjectRoute extends AbstractModel implements
     /**
      * @return string
      */
-    public function routeOptionsIdent()
+    public function getRouteOptionsIdent()
     {
         return $this->routeOptionsIdent;
     }

@@ -28,42 +28,42 @@ interface ObjectRouteInterface
      *
      * @return string
      */
-    public function slug();
+    public function getSlug();
 
     /**
      * Retrieve the locale of the object route.
      *
      * @return string
      */
-    public function lang();
+    public function getLang();
 
     /**
      * Retrieve the foreign object type related to this route.
      *
      * @return string
      */
-    public function routeObjType();
+    public function getRouteObjType();
 
     /**
      * Retrieve the foreign object ID related to this route.
      *
      * @return string
      */
-    public function routeObjId();
+    public function getRouteObjId();
 
     /**
      * Retrieve the foreign object's template identifier.
      *
      * @return string
      */
-    public function routeTemplate();
+    public function getRouteTemplate();
 
     /**
      * Retrieve the foreign object's route options.
      *
      * @return array
      */
-    public function routeOptions();
+    public function getRouteOptions();
 
     /**
      * Retrieve the foreign object's route options ident.
@@ -71,5 +71,5 @@ interface ObjectRouteInterface
      *
      * @return array
      */
-    public function routeOptionsIdent();
+    public function getRouteOptionsIdent();
 }

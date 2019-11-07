@@ -135,8 +135,9 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param string $ident Property ident.
-     * @param array  $data  Property metadata.
+     * @param  string $ident Property ident.
+     * @param  array  $data  Property metadata.
+     * @throws InvalidArgumentException If the property is already registered.
      * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
      */
     public function getOrCreateFormProperty($ident, array $data = null)
@@ -170,8 +171,9 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param string $ident Property ident.
-     * @param array  $data  Property metadata.
+     * @param  string $ident Property ident.
+     * @param  array  $data  Property metadata.
+     * @throws InvalidArgumentException If the property is already registered.
      * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
      */
     public function getOrCreateHiddenProperty($ident, array $data = null)
@@ -253,8 +255,8 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param string $ident Property ident.
-     * @param array  $data  Property metadata.
+     * @param  string $ident Property ident.
+     * @param  array  $data  Property metadata.
      * @return \Charcoal\Admin\Widget\FormPropertyWidget|null
      */
     protected function updateHiddenProperty($ident, array $data = null)

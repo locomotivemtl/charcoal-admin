@@ -358,7 +358,6 @@ class FormSidebarWidget extends AdminWidget implements
         }
 
         return $this->showSidebarActions;
-
     }
 
     /**

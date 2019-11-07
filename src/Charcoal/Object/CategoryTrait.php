@@ -51,13 +51,13 @@ trait CategoryTrait
     }
 
     /**
-     * Legacy support for old-style getter.
+     * Alias of {@see self::getCategoryItemType()}.
      *
      * @return string
      */
     public function categoryItemType()
     {
-        return $this->categoryItemType();
+        return $this->getCategoryItemType();
     }
 
     /**

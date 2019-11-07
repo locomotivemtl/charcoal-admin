@@ -149,7 +149,7 @@ class CreateScript extends AdminScript implements
         }
 
         // Trigger reset password
-        $authenticator->changeUserPassword($user, $password, false);
+        $authenticator->changeUserPassword($user, $vals['password'], false);
         unset($vals['password']);
 
         $user->setFlatData($vals);

@@ -230,8 +230,7 @@ class ObjectFormWidget extends FormWidget implements
             }
 
             $formProperty = $this->getOrCreateFormProperty($propertyIdent, $propertyMetadata);
-
-            if (!$formProperty->hidden()) {
+            if ($formProperty && !$formProperty->hidden()) {
                 yield $propertyIdent => $formProperty;
             }
         }
@@ -397,7 +396,10 @@ class ObjectFormWidget extends FormWidget implements
      */
     protected function defaultDataSources()
     {
-        return [static::DATA_SOURCE_REQUEST, static::DATA_SOURCE_OBJECT];
+        return [
+            static::DATA_SOURCE_REQUEST,
+            static::DATA_SOURCE_OBJECT,
+        ];
     }
 
     /**

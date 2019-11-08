@@ -92,17 +92,17 @@ class FormWidget extends AdminWidget implements
     private $widgetFactory;
 
     /**
-     * @param array $data Optional. The form property data to set.
+     * @param  array $data Optional. The form property data to set.
      * @return FormPropertyWidget
      */
     public function createFormProperty(array $data = null)
     {
-        $p = $this->widgetFactory()->create($this->formPropertyClass());
+        $formProperty = $this->widgetFactory()->create($this->formPropertyClass());
         if ($data !== null) {
-            $p->setData($data);
+            $formProperty->setData($data);
         }
 
-        return $p;
+        return $formProperty;
     }
 
     /**
@@ -138,7 +138,7 @@ class FormWidget extends AdminWidget implements
      * @param  string $ident Property ident.
      * @param  array  $data  Property metadata.
      * @throws InvalidArgumentException If the property is already registered.
-     * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
+     * @return FormPropertyWidget|null
      */
     public function getOrCreateFormProperty($ident, array $data = null)
     {
@@ -147,10 +147,13 @@ class FormWidget extends AdminWidget implements
         }
 
         $formProperty = $this->buildFormProperty($ident, $data);
+        if ($formProperty === null) {
+            return null;
+        }
 
         if ($this->hasHiddenProperty($ident) && $formProperty->editable()) {
             throw new InvalidArgumentException(sprintf(
-                'Property "%s" is already registered as hidden input',
+                'Form property "%s" is already registered as hidden input',
                 $ident
             ));
         }
@@ -174,7 +177,7 @@ class FormWidget extends AdminWidget implements
      * @param  string $ident Property ident.
      * @param  array  $data  Property metadata.
      * @throws InvalidArgumentException If the property is already registered.
-     * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
+     * @return FormPropertyWidget|null
      */
     public function getOrCreateHiddenProperty($ident, array $data = null)
     {
@@ -183,11 +186,15 @@ class FormWidget extends AdminWidget implements
         }
 
         $formProperty = $this->buildFormProperty($ident, $data);
+        if ($formProperty === null) {
+            return null;
+        }
+
         $formProperty->setInputType(FormPropertyWidget::HIDDEN_FORM_CONTROL);
 
         if ($this->hasFormProperty($ident) && $this->formProperties[$ident]->editable()) {
             throw new InvalidArgumentException(sprintf(
-                'Property "%s" is already registered as user input',
+                'Form property "%s" is already registered as user input',
                 $ident
             ));
         }
@@ -202,13 +209,21 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param string $ident Property ident.
-     * @param array  $data  Property metadata.
-     * @return \Charcoal\Admin\Widget\FormPropertyWidget|mixed
+     * @param  string $ident Property ident.
+     * @param  array  $data  Property metadata.
+     * @return FormPropertyWidget|null
      */
     protected function buildFormProperty($ident, array $data = null)
     {
-        $formProperty = $this->createFormProperty();
+        if (isset($data['widget_type'])) {
+            $formProperty = $this->widgetFactory()->create($data['widget_type']);
+            if (isset($data['widget_type'])) {
+                $formProperty->setTemplate($data['widget_type']);
+            }
+        } else {
+            $formProperty = $this->createFormProperty();
+        }
+
         $formProperty->setPropertyIdent($ident);
 
         if ($this instanceof ObjectContainerInterface) {
@@ -233,9 +248,9 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
-     * @param string $ident Property ident.
-     * @param array  $data  Property metadata.
-     * @return \Charcoal\Admin\Widget\FormPropertyWidget|null
+     * @param  string $ident Property ident.
+     * @param  array  $data  Property metadata.
+     * @return FormPropertyWidget|null
      */
     protected function updateFormProperty($ident, array $data = null)
     {
@@ -246,8 +261,6 @@ class FormWidget extends AdminWidget implements
                 $formProperty->setData($data);
             }
 
-            $this->formProperties[$ident] = $formProperty;
-
             return $this->formProperties[$ident];
         }
 
@@ -257,7 +270,7 @@ class FormWidget extends AdminWidget implements
     /**
      * @param  string $ident Property ident.
      * @param  array  $data  Property metadata.
-     * @return \Charcoal\Admin\Widget\FormPropertyWidget|null
+     * @return FormPropertyWidget|null
      */
     protected function updateHiddenProperty($ident, array $data = null)
     {
@@ -268,8 +281,6 @@ class FormWidget extends AdminWidget implements
                 unset($data['inputType'], $data['input_type']);
                 $formProperty->setData($data);
             }
-
-            $this->hiddenProperties[$ident] = $formProperty;
 
             return $this->hiddenProperties[$ident];
         }
@@ -422,7 +433,7 @@ class FormWidget extends AdminWidget implements
     {
         if (!is_string($propertyIdent)) {
             throw new InvalidArgumentException(
-                'Property ident must be a string'
+                'Form property ident must be a string'
             );
         }
 
@@ -442,7 +453,8 @@ class FormWidget extends AdminWidget implements
         }
 
         throw new InvalidArgumentException(sprintf(
-            'Property must be an array or an instance of FormPropertyWidget, received %s',
+            'Form property "%s" must be an array or an instance of FormPropertyWidget, received %s',
+            $propertyIdent,
             is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
         ));
     }
@@ -529,7 +541,7 @@ class FormWidget extends AdminWidget implements
     {
         if (!is_string($propertyIdent)) {
             throw new InvalidArgumentException(
-                'Property ident must be a string'
+                'Form property ident must be a string'
             );
         }
 
@@ -539,9 +551,10 @@ class FormWidget extends AdminWidget implements
                 return $this;
             }
 
-            throw new InvalidArgumentException(
-                'Form property must be a hidden'
-            );
+            throw new InvalidArgumentException(sprintf(
+                'Form property "%s" must be hidden',
+                $propertyIdent
+            ));
         }
 
         if (is_array($formProperty)) {
@@ -550,7 +563,8 @@ class FormWidget extends AdminWidget implements
         }
 
         throw new InvalidArgumentException(sprintf(
-            'Form property must be an array or an instance of FormPropertyWidget, received %s',
+            'Form property "%s" must be an array or an instance of FormPropertyWidget, received %s',
+            $propertyIdent,
             is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
         ));
     }

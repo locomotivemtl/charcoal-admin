@@ -430,16 +430,25 @@ class FormWidget extends AdminWidget implements
             );
         }
 
-        if (is_array($formProperty)) {
-            $this->getOrCreateFormProperty($propertyIdent, $formProperty);
-        } elseif (!$formProperty instanceof FormPropertyWidget) {
-            throw new InvalidArgumentException(sprintf(
-                'Property must be an array or an instance of FormPropertyWidget, received %s',
-                is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
-            ));
+        if ($formProperty instanceof FormPropertyWidget) {
+            if ($formProperty->hidden()) {
+                $this->hiddenProperties[$propertyIdent] = $formProperty;
+            } else {
+                $this->formProperties[$propertyIdent] = $formProperty;
+            }
+
+            return $this;
         }
 
-        return $this;
+        if (is_array($formProperty)) {
+            $this->getOrCreateFormProperty($propertyIdent, $formProperty);
+            return $this;
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'Property must be an array or an instance of FormPropertyWidget, received %s',
+            is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
+        ));
     }
 
     /**
@@ -528,16 +537,26 @@ class FormWidget extends AdminWidget implements
             );
         }
 
-        if (is_array($formProperty)) {
-            $this->getOrCreateHiddenProperty($propertyIdent, $formProperty);
-        } elseif (!$formProperty instanceof FormPropertyWidget) {
-            throw new InvalidArgumentException(sprintf(
-                'Property must be an array or an instance of FormPropertyWidget, received %s',
-                is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
-            ));
+        if ($formProperty instanceof FormPropertyWidget) {
+            if ($formProperty->hidden()) {
+                $this->hiddenProperties[$propertyIdent] = $formProperty;
+                return $this;
+            }
+
+            throw new InvalidArgumentException(
+                'Form property must be a hidden'
+            );
         }
 
-        return $this;
+        if (is_array($formProperty)) {
+            $this->getOrCreateHiddenProperty($propertyIdent, $formProperty);
+            return $this;
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'Form property must be an array or an instance of FormPropertyWidget, received %s',
+            is_object($formProperty) ? get_class($formProperty) : gettype($formProperty)
+        ));
     }
 
     /**

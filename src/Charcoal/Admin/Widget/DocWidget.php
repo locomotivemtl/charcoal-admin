@@ -316,15 +316,19 @@ class DocWidget extends FormWidget implements
      */
     public function formProperties(array $group = null)
     {
-        $obj = $this->obj();
+        $obj   = $this->obj();
         $props = $obj->metadata()->properties();
 
         // We need to sort form properties by form group property order if a group exists
         if (!empty($group)) {
-            $props = array_merge(array_flip($group), $props);
+            $group = array_map([ $this, 'camelize' ], $group);
+            $group = array_flip($group);
+            $props = array_intersect_key($props, $group);
+            $props = array_merge($group, $props);
         }
 
         foreach ($props as $propertyIdent => $propertyMetadata) {
+            $propertyIdent = $this->camelize($propertyIdent);
             if (method_exists($obj, 'filterPropertyMetadata')) {
                 $propertyMetadata = $obj->filterPropertyMetadata($propertyMetadata, $propertyIdent);
             }

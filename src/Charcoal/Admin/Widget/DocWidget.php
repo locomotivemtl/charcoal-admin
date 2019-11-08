@@ -126,45 +126,65 @@ class DocWidget extends FormWidget implements
      */
     public function sidebars()
     {
+        $sidebars = $this->getSidebars();
+        uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
+        foreach ($sidebars as $sidebarIdent => $sidebar) {
+            if (!$sidebar->active()) {
+                continue;
+            }
+
+            $this->setDynamicTemplate('sidebar_widget', $sidebar->template());
+            yield $sidebarIdent => $sidebar;
+        }
+    }
+
+    /**
+     * Retrieve the form sidebars.
+     *
+     * @return FormSidebarInterface[]
+     */
+    public function getSidebars()
+    {
         $objId = $this->obj()->id();
 
-        if ($objId) {
-            $translator = $this->translator();
-
-            $template = 'charcoal/admin/widget/form.sidebar';
-            $this->setDynamicTemplate('widget_template', $template);
-
-            $metadata = $this->obj()->metadata();
-            $objType  = (isset($metadata['labels']['singular_name'])
-                        ? $translator->translate($metadata['labels']['singular_name'])
-                        : (new ReflectionClass($obj))->getShortName());
-
-            $label = $translator->translate('Back to {{name}} id: {{id}}');
-            $label = strtr($label, [
-                '{{name}}' => $objType ?: $this->obj()['obj_type'],
-                '{{id}}'   => $this->obj()->id()
-            ]);
-
-            $url = 'object/edit?main_menu='.$this->obj()['main_menu'].'&obj_type={{obj_type}}&obj_id={{id}}';
-
-            $out = [
-                'title'       => $translator->translate('Actions'),
-                'show_footer' => false,
-                'actions'     => [
-                    [
-                        'label' => $label,
-                        'url'   => $url
-                    ]
-                ]
-            ];
-
-            /** @var FormSidebarWidget $sidebar */
-            $sidebar = $this->widgetFactory()->create(FormSidebarWidget::class);
-            $sidebar->setViewController($this->viewController());
-            $sidebar->setData($out);
-
-            yield $sidebar;
+        if (empty($objId)) {
+            return [];
         }
+
+        $translator = $this->translator();
+
+        $metadata = $this->obj()->metadata();
+        $objType  = (isset($metadata['labels']['singular_name'])
+                    ? $translator->translate($metadata['labels']['singular_name'])
+                    : (new ReflectionClass($obj))->getShortName());
+
+        $label = $translator->translate('Back to {{name}} ID: {{id}}');
+        $label = strtr($label, [
+            '{{name}}' => $objType ?: $this->obj()['obj_type'],
+            '{{id}}'   => $this->obj()->id(),
+        ]);
+
+        $url = 'object/edit?main_menu='.$this->obj()['main_menu'].'&obj_type={{obj_type}}&obj_id={{id}}';
+
+        $out = [
+            'title'       => $translator->translate('Actions'),
+            'show_footer' => false,
+            'actions'     => [
+                [
+                    'label' => $label,
+                    'url'   => $url,
+                ],
+            ],
+        ];
+
+        /** @var FormSidebarWidget $sidebar */
+        $sidebar = $this->widgetFactory()->create(FormSidebarWidget::class);
+        $sidebar->setViewController($this->viewController());
+        $sidebar->setData($out);
+
+        return [
+            'default' => $sidebar,
+        ];
     }
 
     /**

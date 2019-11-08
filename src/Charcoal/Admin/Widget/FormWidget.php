@@ -29,6 +29,7 @@ use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\FormSidebarInterface;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Widget\FormPropertyWidget;
+use Charcoal\Admin\Widget\FormSidebarWidget;
 
 /**
  * A Basic Admin Form
@@ -51,6 +52,13 @@ class FormWidget extends AdminWidget implements
      * @var array
      */
     protected $sidebars = [];
+
+    /**
+     * Keep track if sidebars are sorted.
+     *
+     * @var boolean
+     */
+    protected $sortedSidebars = false;
 
     /**
      * The form's controls.
@@ -83,6 +91,17 @@ class FormWidget extends AdminWidget implements
      * @var string
      */
     protected $formPropertyClass = FormPropertyWidget::class;
+
+    /**
+     * The class name of the form sidebar widget.
+     *
+     * Must be a fully-qualified PHP namespace and an implementation of
+     * {@see \Charcoal\Admin\Ui\FormSidebarInterface}.
+     * Used by the widget factory.
+     *
+     * @var string
+     */
+    protected $sidebarClass = FormSidebarWidget::class;
 
     /**
      * Store the factory instance for the current class.
@@ -132,6 +151,49 @@ class FormWidget extends AdminWidget implements
     public function formPropertyClass()
     {
         return $this->formPropertyClass;
+    }
+
+    /**
+     * @param array $data Optional. The form sidebar data to set.
+     * @return FormSidebarInterface
+     */
+    public function createSidebar(array $data = null)
+    {
+        $sidebar = $this->widgetFactory()->create($this->sidebarClass());
+        if ($data !== null) {
+            $sidebar->setData($data);
+        }
+
+        return $sidebar;
+    }
+
+    /**
+     * Set the class name of the form sidebar widget.
+     *
+     * @param  string $className The class name of the form sidebar widget.
+     * @throws InvalidArgumentException If the class name is not a string.
+     * @return FormWidget Chainable
+     */
+    protected function setSidebarClass($className)
+    {
+        if (!is_string($className)) {
+            throw new InvalidArgumentException(
+                'Form sidebar class name must be a string.'
+            );
+        }
+
+        $this->sidebarClass = $className;
+        return $this;
+    }
+
+    /**
+     * Retrieve the class name of the form sidebar widget.
+     *
+     * @return string
+     */
+    public function sidebarClass()
+    {
+        return $this->sidebarClass;
     }
 
     /**
@@ -296,11 +358,97 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * @param  string $ident Sidebar ident.
+     * @param  array  $data  Sidebar metadata.
+     * @throws InvalidArgumentException If the property is already registered.
+     * @return FormSidebarInterface|null
+     */
+    public function getOrCreateSidebar($ident, array $data = null)
+    {
+        if ($this->updateSidebar($ident, $data)) {
+            return $this->sidebars[$ident];
+        }
+
+        $sidebar = $this->buildSidebar($ident, $data);
+
+        if ($sidebar !== null) {
+            $authUser = $this->authenticator()->user();
+            if (!$authUser || !$this->authorizer()->userAllowed($authUser, $sidebar->requiredGlobalAclPermissions())) {
+                return null;
+            }
+
+            $this->sortedSidebars = false;
+            $this->sidebars[$ident] = $sidebar;
+            return $this->sidebars[$ident];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  string $ident Sidebar ident.
+     * @param  array  $data  Sidebar metadata.
+     * @throws InvalidArgumentException If the sidebar widget type is invalid.
+     * @return FormSidebarInterface|null
+     */
+    protected function buildSidebar($ident, array $data = null)
+    {
+        if (isset($data['widget_type'])) {
+            $sidebar = $this->widgetFactory()->create($data['widget_type']);
+            if (!($sidebar instanceof FormSidebarInterface)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Sidebar must be an instance of FormSidebarInterface, received %s',
+                    get_class($sidebar)
+                ));
+            }
+            $sidebar->setTemplate($data['widget_type']);
+        } else {
+            $sidebar = $this->createSidebar();
+        }
+
+        $sidebar->setIdent($ident);
+        $sidebar->setForm($this->formWidget());
+        $sidebar->setData($data);
+
+        return $sidebar;
+    }
+
+    /**
+     * @param  string $ident Sidebar ident.
+     * @param  array  $data  Sidebar metadata.
+     * @return FormSidebarInterface|null
+     */
+    protected function updateSidebar($ident, array $data = null)
+    {
+        if ($ident && isset($this->sidebars[$ident])) {
+            $sidebar = $this->sidebars[$ident];
+
+            if ($data !== null) {
+                $sidebar->setData($data);
+            }
+
+            return $this->sidebars[$ident];
+        }
+
+        return null;
+    }
+
+    /**
+     * @param  string $ident Sidebar ident.
+     * @return boolean
+     */
+    protected function hasSidebar($ident)
+    {
+        return ($ident && isset($this->sidebars[$ident]));
+    }
+
+    /**
      * @param array $sidebars The form sidebars.
      * @return self
      */
     public function setSidebars(array $sidebars)
     {
+        $this->sortedSidebars = false;
         $this->sidebars = [];
         foreach ($sidebars as $sidebarIdent => $sidebar) {
             $this->addSidebar($sidebarIdent, $sidebar);
@@ -319,62 +467,73 @@ class FormWidget extends AdminWidget implements
     {
         if (!is_string($sidebarIdent)) {
             throw new InvalidArgumentException(
-                'Sidebar ident must be a string'
+                'Form sidebar ident must be a string'
             );
         }
-        if (($sidebar instanceof FormSidebarInterface)) {
+
+        if ($sidebar instanceof FormSidebarInterface) {
+            $this->sortedSidebars = false;
             $this->sidebars[$sidebarIdent] = $sidebar;
-        } elseif (is_array($sidebar)) {
-            if (isset($sidebar['widget_type'])) {
-                $s = $this->widgetFactory()->create($sidebar['widget_type']);
-                $s->setTemplate($sidebar['widget_type']);
-            }
-
-            if (!isset($s) || !($s instanceof FormSidebarInterface)) {
-                $s = $this->widgetFactory()->create('charcoal/admin/widget/form-sidebar');
-            }
-
-            $s->setForm($this->formWidget());
-            $s->setData($sidebar);
-
-            $authUser = $this->authenticator()->user();
-            if (!$authUser || !$this->authorizer()->userAllowed($authUser, $s->requiredGlobalAclPermissions())) {
-                return $this;
-            }
-
-            $this->sidebars[$sidebarIdent] = $s;
-        } else {
-            throw new InvalidArgumentException(
-                'Sidebar must be a FormSidebarWidget object or an array'
-            );
+            return $this;
         }
 
-        return $this;
+        if (is_array($sidebar)) {
+            $this->getOrCreateSidebar($sidebarIdent, $sidebar);
+            return $this;
+        }
+
+        throw new InvalidArgumentException(sprintf(
+            'Form sidebar "%s" must be an array or an instance of FormSidebarInterface, received %s',
+            $sidebarIdent,
+            is_object($sidebar) ? get_class($sidebar) : gettype($sidebar)
+        ));
     }
 
     /**
      * Yield the form sidebar(s).
      *
-     * @return \Generator
+     * @return FormSidebarInterface[]|\Generator
      */
     public function sidebars()
     {
+        if (!$this->sortedSidebars) {
+            $this->sortedSidebars = true;
+            uasort($this->sidebars, [ $this, 'sortSidebarsByPriority' ]);
+        }
+
         $sidebars = $this->sidebars;
-        uasort($sidebars, [$this, 'sortSidebarsByPriority']);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
             if (!$sidebar->active()) {
                 continue;
             }
 
-            if ($sidebar->template()) {
-                $template = $sidebar->template();
-            } else {
-                $template = 'charcoal/admin/widget/form.sidebar';
-            }
-
-            $this->setDynamicTemplate('widget_template', $template);
+            $this->setDynamicTemplate('sidebar_widget', $sidebar->template());
             yield $sidebarIdent => $sidebar;
         }
+    }
+
+    /**
+     * Retrieve the form sidebars.
+     *
+     * @return FormSidebarInterface[]
+     */
+    public function getSidebars()
+    {
+        if (!$this->sortedSidebars) {
+            $this->sortedSidebars = true;
+            uasort($this->sidebars, [ $this, 'sortSidebarsByPriority' ]);
+        }
+
+        $sidebars = [];
+        foreach ($this->sidebars as $sidebar) {
+            if (!$sidebar->active()) {
+                continue;
+            }
+
+            $sidebars[$sidebar->ident()] = $sidebar;
+        }
+
+        return $this->sidebars;
     }
 
     /**

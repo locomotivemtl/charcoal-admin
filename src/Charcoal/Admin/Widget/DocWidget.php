@@ -2,8 +2,8 @@
 
 namespace Charcoal\Admin\Widget;
 
+use ReflectionClass;
 use InvalidArgumentException;
-use phpDocumentor\Reflection\DocBlock\Tags\Var_;
 use UnexpectedValueException;
 
 // From Pimple
@@ -137,7 +137,7 @@ class DocWidget extends FormWidget implements
             $metadata = $this->obj()->metadata();
             $objType  = (isset($metadata['labels']['singular_name'])
                         ? $translator->translate($metadata['labels']['singular_name'])
-                        : null);
+                        : (new ReflectionClass($obj))->getShortName());
 
             $label = $translator->translate('Back to {{name}} id: {{id}}');
             $label = strtr($label, [

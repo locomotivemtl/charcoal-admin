@@ -926,12 +926,8 @@ class FormSidebarWidget extends AdminWidget implements
             return true;
         }
 
-        // Test sidebar vs. ACL roles
-        $authUser = $this->authenticator()->authenticate();
+        $authUser = $this->authenticator()->user();
         if (!$authUser || !$this->authorizer()->userAllowed($authUser, $permissions)) {
-            header('HTTP/1.0 403 Forbidden');
-            header('Location: '.$this->adminUrl().'login');
-
             return false;
         }
 

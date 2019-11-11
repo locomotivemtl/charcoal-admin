@@ -354,10 +354,11 @@
             if (this.actions.length) {
                 for (var action, k = 0; k < this.actions.length; k++) {
                     action = this.actions[k];
-                    buttons.push({
+                    action = $.extend(action,{
                         label:  action.label,
                         action: action.callback
                     });
+                    buttons.push(action);
                 }
             }
 

@@ -389,6 +389,7 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
         Charcoal.Admin.feedback()
             .add_action({
                 label:    commonL10n.cancel,
+                cssClass: 'btn-danger',
                 callback: function () {
                     BootstrapDialog.closeAll();
                 }
@@ -396,7 +397,9 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
             .add_action({
                 label:    commonL10n.continue,
                 callback: function () {
-                    //TODO THIS IS NOT IDEAL ... In the future, receiving an instance of BootstrapDialog would be better, unfortunately, this is not the case. Good day sir.
+                    //TODO THIS IS NOT IDEAL ... In the future,
+                    // receiving an instance of BootstrapDialog would be better,
+                    // unfortunately, this is not the case. Good day sir.
                     BootstrapDialog.closeAll();
 
                     this.confirmed = true;

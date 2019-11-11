@@ -2079,6 +2079,8 @@ Charcoal.Admin = (function () {
     Manager.prototype.add_action = function (opts)
     {
         this.actions.push(opts);
+
+        return this;
     };
 
     /**
@@ -2101,10 +2103,11 @@ Charcoal.Admin = (function () {
             if (this.actions.length) {
                 for (var action, k = 0; k < this.actions.length; k++) {
                     action = this.actions[k];
-                    buttons.push({
+                    action = $.extend(action,{
                         label:  action.label,
                         action: action.callback
                     });
+                    buttons.push(action);
                 }
             }
 
@@ -3658,6 +3661,7 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.is_new_object     = false;
     this.xhr               = null;
     this.useDefaultAction  = false;
+    this.confirmed         = false;
 
     this.update_tab_ident();
 
@@ -3961,6 +3965,10 @@ Charcoal.Admin.Widget_Form.prototype.submit_form = function (form) {
         form_data.append(this.submitted_via.name, this.submitted_via.value || true);
     }
 
+    if (this.confirmed) {
+        form_data.append('confirmed', true);
+    }
+
     this.disable_form($form, $trigger);
 
     // Use this loop if ever cascading checkbox inputs end up not
@@ -4006,8 +4014,33 @@ Charcoal.Admin.Widget_Form.prototype.request_done = function ($form, $trigger, r
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger, response/* textStatus, jqXHR */) {
+    this.confirmed = false;
+
     if (response.feedbacks) {
         Charcoal.Admin.feedback(response.feedbacks);
+    }
+
+    if (response.need_confirmation) {
+        Charcoal.Admin.feedback()
+            .add_action({
+                label:    commonL10n.cancel,
+                cssClass: 'btn-danger',
+                callback: function () {
+                    BootstrapDialog.closeAll();
+                }
+            })
+            .add_action({
+                label:    commonL10n.continue,
+                callback: function () {
+                    //TODO THIS IS NOT IDEAL ... In the future,
+                    // receiving an instance of BootstrapDialog would be better,
+                    // unfortunately, this is not the case. Good day sir.
+                    BootstrapDialog.closeAll();
+
+                    this.confirmed = true;
+                    this.submit_form($form[0]);
+                }.bind(this)
+            });
     }
 
     if (response.next_url) {

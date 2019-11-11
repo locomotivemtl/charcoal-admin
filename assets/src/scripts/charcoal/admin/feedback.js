@@ -330,6 +330,8 @@
     Manager.prototype.add_action = function (opts)
     {
         this.actions.push(opts);
+
+        return this;
     };
 
     /**

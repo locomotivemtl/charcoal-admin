@@ -231,6 +231,7 @@ class ObjectFormWidget extends FormWidget implements
 
             $formProperty = $this->getOrCreateFormProperty($propertyIdent, $propertyMetadata);
             if ($formProperty && !$formProperty->hidden()) {
+                $this->setDynamicTemplate('form_property_widget', $formProperty->template());
                 yield $propertyIdent => $formProperty;
             }
         }

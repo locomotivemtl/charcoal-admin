@@ -466,17 +466,12 @@ class FormWidget extends AdminWidget implements
      */
     public function formProperties()
     {
-        $sidebars = $this->sidebars;
-        if (!is_array($sidebars)) {
-            yield null;
-        } else {
-            foreach ($this->formProperties as $formProperty) {
-                if ($formProperty->active() === false) {
-                    continue;
-                }
-                $this->setDynamicTemplate('widget_template', $formProperty->inputType());
-                yield $formProperty->propertyIdent() => $formProperty;
+        foreach ($this->formProperties as $formProperty) {
+            if ($formProperty->active() === false) {
+                continue;
             }
+            $this->setDynamicTemplate('form_property_widget', $formProperty->template());
+            yield $formProperty->propertyIdent() => $formProperty;
         }
     }
 

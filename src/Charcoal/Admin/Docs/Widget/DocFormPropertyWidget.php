@@ -9,6 +9,8 @@ use Charcoal\Admin\Widget\FormPropertyWidget;
  */
 class DocFormPropertyWidget extends FormPropertyWidget
 {
+    const DEFAULT_TYPE = 'charcoal/admin/docs/widget/form-property-widget';
+
     /**
      * @var array
      */

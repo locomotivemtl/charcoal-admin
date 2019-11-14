@@ -24,4 +24,12 @@ class BasicInput extends TinymceInput
             $this->setData($defaultData);
         }
     }
+
+    /**
+     * @return string
+     */
+    public function inputType()
+    {
+        return 'charcoal/admin/property/input/tinymce';
+    }
 }

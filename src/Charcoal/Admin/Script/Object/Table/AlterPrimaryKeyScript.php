@@ -194,7 +194,7 @@ class AlterPrimaryKeyScript extends AdminScript
 
         $this->prepareProperties($oldKey, $newKey, $oldProp, $newProp);
 
-        if ($newProp->mode() === $oldProp->mode()) {
+        if ($newProp->getMode() === $oldProp->getMode()) {
             $cli->error(
                 sprintf(
                     'The ID is already %s. Canceling conversion.',
@@ -327,7 +327,7 @@ class AlterPrimaryKeyScript extends AdminScript
     protected function labelFromMode($mode)
     {
         if ($mode instanceof IdProperty) {
-            $mode = $mode->mode();
+            $mode = $mode->getMode();
         }
 
         switch ($mode) {
@@ -358,7 +358,7 @@ class AlterPrimaryKeyScript extends AdminScript
      */
     protected function labelFromProp(IdProperty $prop)
     {
-        $mode = $prop->mode();
+        $mode = $prop->getMode();
         switch ($mode) {
             case IdProperty::MODE_AUTO_INCREMENT:
                 return 'auto-increment ID';
@@ -602,7 +602,7 @@ class AlterPrimaryKeyScript extends AdminScript
         $model  = $this->targetModel();
         $source = $model->source();
         $dbh    = $source->db();
-        $key    = $prop->ident();
+        $key    = $prop->getIdent();
 
         if ($keepId) {
             $field->setIdent(sprintf('%1$s_%2$s', $key, date('YmdHis')));
@@ -729,8 +729,8 @@ class AlterPrimaryKeyScript extends AdminScript
         $table  = $source->table();
         $dbh    = $source->db();
 
-        $newKey = $newProp->ident();
-        $oldKey = $oldProp->ident();
+        $newKey = $newProp->getIdent();
+        $oldKey = $oldProp->getIdent();
 
         $this->insertNewField($newField, $newProp);
 
@@ -741,7 +741,7 @@ class AlterPrimaryKeyScript extends AdminScript
                 $progress = $cli->progress($rows->rowCount());
             }
 
-            $mode = $newProp->mode();
+            $mode = $newProp->getMode();
             switch ($mode) {
                 case IdProperty::MODE_AUTO_INCREMENT:
                     $pool = 0;

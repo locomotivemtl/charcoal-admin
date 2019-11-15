@@ -2594,16 +2594,16 @@ Charcoal.Admin.Widget = function (opts) {
     Charcoal.Admin.Component.call(this, opts);
 
     /* jshint ignore:start */
-    this.widget_id;
-    this.widget_type;
+    this._widget_id;
+    this._widget_type;
     /* jshint ignore:end */
 
     if (opts.widget_id) {
-        this.widget_id = opts.widget_id;
+        this._widget_id = opts.widget_id;
     }
 
     if (opts.widget_type) {
-        this.widget_type = opts.widget_type;
+        this._widget_type = opts.widget_type;
     }
 
     return this;
@@ -2617,14 +2617,14 @@ Charcoal.Admin.Widget.prototype.parent = Charcoal.Admin.Component.prototype;
  * @return {?String} The component type or subtype.
  */
 Charcoal.Admin.Widget.prototype.widget_id = function () {
-    return this.widget_id || this.id();
+    return this._widget_id || this.id();
 };
 
 /**
  * @return {?String} The component type or subtype.
  */
 Charcoal.Admin.Widget.prototype.widget_type = function () {
-    return this.widget_type || this.type();
+    return this._widget_type || this.type();
 };
 
 /**
@@ -2668,7 +2668,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load' + window.location.search;
     var data = {
-        widget_type:    that.widget_type || that.type(),
+        widget_type:    that.widget_type(),
         widget_options: that.widget_options(),
         with_data:      with_data
     };

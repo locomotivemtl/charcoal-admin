@@ -94,22 +94,12 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
     }
 
     /**
-     * @return array Categories structure.
-     */
-    abstract public function categories();
-
-    /**
      * @return string JSONified categories structure.
      */
     public function seriesJson()
     {
         return json_encode($this->series());
     }
-
-    /**
-     * @return array Series structure.
-     */
-    abstract public function series();
 
     /**
      * @return string JSONified categories structure.
@@ -145,4 +135,14 @@ abstract class AbstractGraphWidget extends AdminWidget implements GraphWidgetInt
             ]
         ];
     }
+
+    /**
+     * @return array Categories structure.
+     */
+    abstract public function categories();
+
+    /**
+     * @return array Series structure.
+     */
+    abstract public function series();
 }

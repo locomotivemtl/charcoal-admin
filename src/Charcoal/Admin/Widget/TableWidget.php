@@ -435,6 +435,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     /**
      * Properties to display in collection template, and their order, as set in object metadata
      *
+     * @throws RuntimeException If the property is invalid or fails internally.
      * @return array|Generator
      */
     public function collectionProperties()
@@ -444,9 +445,17 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         foreach ($props as $propertyIdent => $property) {
             $propertyMetadata = $props[$propertyIdent];
 
-            $p = $this->propertyFactory()->create($propertyMetadata['type']);
-            $p->setIdent($propertyIdent);
-            $p->setData($propertyMetadata);
+            try {
+                $p = $this->propertyFactory()->create($propertyMetadata['type']);
+                $p->setIdent($propertyIdent);
+                $p->setData($propertyMetadata);
+            } catch (\Exception $e) {
+                throw new RuntimeException(sprintf(
+                    '[%s] Can not create property "%s"',
+                    $this->objType(),
+                    $propertyIdent
+                ), 0, $e);
+            }
 
             $options = $this->viewOptions($propertyIdent);
             $classes = $this->parsePropertyCellClasses($p);

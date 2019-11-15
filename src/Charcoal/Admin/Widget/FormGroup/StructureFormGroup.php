@@ -305,6 +305,10 @@ class StructureFormGroup extends FormGroupWidget implements
             $property = $obj->property($propertyIdent);
         }
 
+        if ($this->form()) {
+            $this->form()->addFormProperty($propertyIdent, []);
+        }
+
         if ($property instanceof ModelStructureProperty) {
             $this->storageProperty = $property;
         } else {

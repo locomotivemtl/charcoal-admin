@@ -8,6 +8,9 @@ use InvalidArgumentException;
 // From Pimple
 use Pimple\Container;
 
+// From 'charcoal-property'
+use Charcoal\Property\ModelStructureProperty;
+
 // From 'charcoal-ui'
 use Charcoal\Ui\FormGroup\FormGroupInterface;
 use Charcoal\Ui\Form\FormInterface;
@@ -533,6 +536,37 @@ class ObjectFormWidget extends FormWidget implements
         }
 
         return $objFormData;
+    }
+
+    /**
+     * Determine if the form has any multilingual properties.
+     *
+     * @return boolean
+     */
+    public function hasL10nFormProperties()
+    {
+        if ($this->hasObj()) {
+            $locales = count($this->translator()->availableLocales());
+            if ($locales > 1) {
+                foreach ($this->getFormProperties() as $formProp) {
+                    $modelProp = $formProp->property();
+                    if ($modelProp['l10n']) {
+                        return true;
+                    } elseif ($modelProp instanceof ModelStructureProperty) {
+                        $metadata = $this->obj()->property($modelProp['ident'])->getStructureMetadata();
+                        foreach ($metadata->properties() as $prop) {
+                            if (isset($prop['l10n']) && $prop['l10n']) {
+                                return true;
+                            }
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        return parent::hasL10nFormProperties();
     }
 
     /**

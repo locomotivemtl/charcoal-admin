@@ -92,6 +92,9 @@ class ReorderAction extends AdminAction implements ObjectContainerInterface
 
                 return $response->withStatus(400);
             }
+
+            $this->logger->debug('[Admin] Reordering objects: '.$objType);
+
             $this->setObjType($objType);
 
             if (!$objOrders || !is_array($objOrders)) {

@@ -131,6 +131,8 @@ class LoadAction extends AdminAction
                 return $response->withStatus(400);
             }
 
+            $this->logger->debug('[Admin] Loading widget: '.$widgetType);
+
             $widget = $this->widgetFactory()->create($widgetType);
             $widget->setView($this->widgetView());
 

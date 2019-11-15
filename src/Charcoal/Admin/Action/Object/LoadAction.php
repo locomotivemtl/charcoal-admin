@@ -123,6 +123,8 @@ class LoadAction extends AdminAction
         }
 
         try {
+            $this->logger->debug('[Admin] Loading object: '.$objType);
+
             $this->setObjType($objType);
             $this->loadObjectCollection($objType);
 

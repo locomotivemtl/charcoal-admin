@@ -802,16 +802,10 @@ class FormSidebarWidget extends AdminWidget implements
     public function showLanguageSwitch()
     {
         if ($this->showLanguageSwitch === null) {
-            if ($this->form()) {
-                $locales = count($this->translator()->availableLocales());
-                if ($locales > 1) {
-                    foreach ($this->form()->getFormProperties() as $formProp) {
-                        if ($formProp->property()['l10n']) {
-                            $this->showLanguageSwitch = true;
-                            return $this->showLanguageSwitch;
-                        }
-                    }
-                }
+            $form = $this->form();
+            if ($form) {
+                $this->showLanguageSwitch = $form->hasL10nFormProperties();
+                return $this->showLanguageSwitch;
             }
 
             $this->showLanguageSwitch = false;

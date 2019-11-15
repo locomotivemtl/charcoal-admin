@@ -572,6 +572,25 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * Determine if the form has any multilingual properties.
+     *
+     * @return boolean
+     */
+    public function hasL10nFormProperties()
+    {
+        $locales = count($this->translator()->availableLocales());
+        if ($locales > 1) {
+            foreach ($this->getFormProperties() as $formProp) {
+                if ($formProp->property()['l10n']) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Retrieve the label for the form submission button.
      *
      * @return \Charcoal\Translator\Translation|string|null

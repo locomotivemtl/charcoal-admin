@@ -4,6 +4,8 @@ namespace Charcoal\Admin\Service;
 
 use DateTime;
 use Exception;
+use InvalidArgumentException;
+use RuntimeException;
 use SplTempFileObject;
 
 // LeagueCSV
@@ -101,18 +103,19 @@ class Exporter
 
     /**
      * @param array $data Dependencies.
-     * @throws Exception If missing dependencies.
+     *
+     * @throws InvalidArgumentException If missing dependencies.
      * @return Exporter Chainable
      */
     public function __construct(array $data)
     {
         if (!isset($data['factory'])) {
-            throw new Exception(
+            throw new InvalidArgumentException(
                 'Model Factory must be defined in the Exporter constructor.'
             );
         }
         if (!isset($data['logger'])) {
-            throw new Exception(
+            throw new InvalidArgumentException(
                 'You must set the logger in the Exporter Constructor.'
             );
         }
@@ -165,7 +168,8 @@ class Exporter
 
     /**
      * Actual object collection
-     * @throws Exception If collection config is not set.
+     *
+     * @throws RuntimeException If collection config is not set.
      * @return Collection Collection from the export config.
      */
     public function collection()
@@ -175,7 +179,7 @@ class Exporter
         }
 
         if (!$this->collectionConfig()) {
-            throw new Exception(sprintf(
+            throw new RuntimeException(sprintf(
                 'Collection Config required for "%s"',
                 get_class($this)
             ));
@@ -195,8 +199,9 @@ class Exporter
     }
 
     /**
-     * Object type proto
-     * @throws Exception If no object type is defined.
+     * Retrieve the object prototype.
+     *
+     * @throws RuntimeException If no object type is defined.
      * @return mixed Object type proto | false.
      */
     private function proto()
@@ -205,13 +210,21 @@ class Exporter
             return $this->proto;
         }
 
-        if (!$this->objType()) {
-            throw new Exception(
+        $objType = $this->objType();
+        if (!$objType) {
+            throw new RuntimeException(
                 'You must define an object type for the exporter.'
             );
         }
 
-        $this->proto = $this->modelFactory()->get($this->objType());
+        try {
+            $this->proto = $this->modelFactory()->get($objType);
+        } catch (Exception $e) {
+            throw new RuntimeException(sprintf(
+                'Can not create object "%s"',
+                $objType
+            ), 0, $e);
+        }
         return $this->proto;
     }
 
@@ -227,9 +240,9 @@ class Exporter
 
     /**
      * Set all data from the metadata.
-     * @throws Exception If no export ident is specified or found.
-     * @throws Exception If no export data is found.
-     * @throws Exception If no properties are defined.
+     * @throws InvalidArgumentException If no export ident is specified or found.
+     * @throws InvalidArgumentException If no export data is found.
+     * @throws InvalidArgumentException If no properties are defined.
      * @return Exporter Chainable.
      */
     private function prepareOptions()
@@ -240,7 +253,7 @@ class Exporter
         if (!$this->exportIdent()) {
             $exportIdent = $this->exportIdent() ? : $this->metadata()->get('admin.default_export');
             if (!$exportIdent) {
-                throw new Exception(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'No export ident defined for "%s" in %s',
                     $this->objType(),
                     get_class($this)
@@ -252,7 +265,7 @@ class Exporter
 
         $export = $metadata->get('admin.export.'.$this->exportIdent());
         if (!$export) {
-            throw new Exception(sprintf(
+            throw new InvalidArgumentException(sprintf(
                 'No export data defined for "%s" at "%s" in %s',
                 $this->objType(),
                 $this->exportIdent(),
@@ -263,7 +276,7 @@ class Exporter
         if (is_string($export)) {
             $export = $metadata->get('admin.lists.'.$export);
             if (!$export) {
-                throw new Exception(sprintf(
+                throw new InvalidArgumentException(sprintf(
                     'No export data defined for "%s" in %s',
                     $this->objType(),
                     get_class($this)
@@ -271,8 +284,8 @@ class Exporter
             }
         }
 
-        if (!isset($export['properties'])) {
-            throw new Exception(sprintf(
+        if (empty($export['properties'])) {
+            throw new InvalidArgumentException(sprintf(
                 'No properties defined to export "%s" in %s',
                 $this->objType(),
                 get_class($this)
@@ -343,6 +356,8 @@ class Exporter
 
     /**
      * CSV rows from collection
+     *
+     * @throws RuntimeException If the property is invalid.
      * @return array Rows with data from collection.
      */
     private function rows()
@@ -358,10 +373,18 @@ class Exporter
                 // the proper val to output in csv
                 // as a string.
                 $propertyMetadata = $metadata->get('properties.'.$p);
-                $prop = $this->propertyFactory()->create($propertyMetadata['type']);
-                $prop->setIdent($p);
-                $prop->setData($propertyMetadata);
-                $row[] = $this->stripContent($prop->displayVal($c->propertyValue($p)));
+                try {
+                    $prop = $this->propertyFactory()->create($propertyMetadata['type']);
+                    $prop->setIdent($p);
+                    $prop->setData($propertyMetadata);
+                    $row[] = $this->stripContent($prop->displayVal($c->propertyValue($p)));
+                } catch (Exception $e) {
+                    throw new RuntimeException(sprintf(
+                        '[%s] Can not create property "%s"',
+                        $this->objType(),
+                        $p
+                    ), 0, $e);
+                }
             }
             yield $row;
         }
@@ -429,10 +452,20 @@ class Exporter
     /**
      * Output properties
      * @param array $properties Properties.
+     * @throws InvalidArgumentException If the array is not a list of strings.
      * @return Exporter Chainable.
      */
     private function setProperties(array $properties)
     {
+        $p = reset($properties);
+        if (!is_string($p)) {
+            throw new InvalidArgumentException(sprintf(
+                'Invalid properties to export "%s" in %s',
+                $this->objType(),
+                get_class($this)
+            ));
+        }
+
         $this->properties = $properties;
         return $this;
     }
@@ -538,13 +571,13 @@ class Exporter
     }
 
     /**
-     * @throws Exception If the property factory was not previously set / injected.
+     * @throws RuntimeException If the property factory was not previously set / injected.
      * @return FactoryInterface
      */
     private function propertyFactory()
     {
         if ($this->propertyFactory === null) {
-            throw new Exception(
+            throw new RuntimeException(
                 'Property factory is not set for table widget'
             );
         }

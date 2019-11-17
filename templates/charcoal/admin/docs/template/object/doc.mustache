@@ -12,7 +12,7 @@
 --}}
 {{> charcoal/admin/template/inc.header }}
 
-<main class="c-page-container o-flex_main">
+<main class="c-page-container o-flex_main"{{# objType }} data-model-type="{{ . }}"{{/ objType }}>
     {{> charcoal/admin/template/inc.page-header }}
     <section class="o-container -bottom">
         {{> charcoal/admin/widget/feedbacks }}

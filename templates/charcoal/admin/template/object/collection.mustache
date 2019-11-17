@@ -14,7 +14,7 @@
 
 {{! @todo See if broken, feedbacks partial used to be right here L15 }}
 
-<main class="c-page-container o-flex_main">
+<main class="c-page-container o-flex_main"{{# objType }} data-model-type="{{ . }}"{{/ objType }}>
     {{> charcoal/admin/template/inc.page-header }}
     {{# searchWidget }}
         {{> charcoal/admin/widget/search }}

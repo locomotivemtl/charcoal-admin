@@ -36,13 +36,9 @@ class AdminModule extends AbstractModule
      */
     public function setup()
     {
+        // Hack: skip if the request does not start with '/admin'
         $container = $this->app()->getContainer();
-
-        // Hack: skip if the request does not start with '/admin[/]?'
-        // Make sure URL like '/administration' are still
-        // accessible and not processed as admin routes.
-        $trimmedPath = ltrim($container['request']->getUri()->getPath(), '/');
-        if ($trimmedPath !== 'admin' && substr($trimmedPath, 0, 6) !== 'admin/') {
+        if ($this->isPathAdmin($container['request']->getUri()->getPath()) !== true) {
             return $this;
         }
 

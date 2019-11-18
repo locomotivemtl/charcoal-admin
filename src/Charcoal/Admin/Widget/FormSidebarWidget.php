@@ -29,6 +29,13 @@ class FormSidebarWidget extends AdminWidget implements
     use ActionContainerTrait;
 
     /**
+     * Default widget type.
+     *
+     * @const STRING
+     */
+    const DEFAULT_TYPE = 'charcoal/admin/widget/form-sidebar-widget';
+
+    /**
      * Default sorting priority for an action.
      *
      * @const integer
@@ -167,6 +174,14 @@ class FormSidebarWidget extends AdminWidget implements
      * @var string[]
      */
     private $requiredGlobalAclPermissions = [];
+
+    /**
+     * @return string
+     */
+    public function type()
+    {
+        return static::DEFAULT_TYPE;
+    }
 
     /**
      * @param array|ArrayInterface $data Class data.

@@ -978,6 +978,10 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function addFormFieldCssClass($cssClass)
     {
+        if (empty($this->formFieldCssClass)) {
+            $this->formFieldCssClass = $this->defaultFormFieldCssClasses();
+        }
+
         $cssClass = array_merge($this->formFieldCssClass, $this->parseCssClasses($cssClass));
         $this->formFieldCssClass = array_unique($cssClass);
         return $this;
@@ -1018,6 +1022,10 @@ class FormPropertyWidget extends AdminWidget implements
      */
     public function addFormGroupCssClass($cssClass)
     {
+        if (empty($this->formGroupCssClass)) {
+            $this->formGroupCssClass = $this->defaultFormGroupCssClasses();
+        }
+
         $cssClass = array_merge($this->formGroupCssClass, $this->parseCssClasses($cssClass));
         $this->formGroupCssClass = array_unique($cssClass);
         return $this;
@@ -1345,6 +1353,14 @@ class FormPropertyWidget extends AdminWidget implements
 
         if (isset($data['type'])) {
             $this->setType($data['type']);
+        }
+
+        if (isset($data['form_field_css_class'])) {
+            $this->addFormFieldCssClass($data['form_field_css_class']);
+        }
+
+        if (isset($data['form_group_css_class'])) {
+            $this->addFormGroupCssClass($data['form_group_css_class']);
         }
 
         return $data;

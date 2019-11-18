@@ -193,7 +193,7 @@ $(function() {
             });
 
             if (href) {
-                clipper = new Clipboard('#' + $copier.attr('id'), {
+                clipper = new ClipboardJS('#' + $copier.attr('id'), {
                     text: function () {
                         return href;
                     }

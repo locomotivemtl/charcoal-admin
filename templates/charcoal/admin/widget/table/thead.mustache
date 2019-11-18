@@ -7,13 +7,13 @@
 <thead>
     <tr>
         {{# sortable }}
-            <th class="table-cell-sort" aria-hidden="true"></th>
+            <th class="table-row-sort table-cell-sort" aria-hidden="true"></th>
         {{/ sortable }}
         {{# collectionProperties }}
             {{> charcoal/admin/widget/table/thead-col }}
         {{/ collectionProperties }}
         {{# showObjectActions }}
-            <th>{{# _t }}Actions{{/ _t }}</th>
+            <th class="c-table-container_actions">{{# _t }}Actions{{/ _t }}</th>
         {{/ showObjectActions }}
     </tr>
 </thead>

@@ -69,8 +69,10 @@
                     <div class="btn-group-vertical c-sidebar-widget_actions" role="group">
                         {{# sidebarActions }}
                             {{# isSeparator }}
-                                </div>
-                                <div class="btn-group-vertical c-sidebar-widget_actions mt-sm-3" role="group">
+                                {{# active }}
+                                    </div>
+                                    <div class="btn-group-vertical c-sidebar-widget_actions mt-sm-3" role="group">
+                                {{/ active }}
                             {{/ isSeparator }}
                             {{^ isSeparator }}
                                 {{> charcoal/admin/widget/actions }}

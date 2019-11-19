@@ -21,6 +21,11 @@ trait CategoryTrait
     private $categoryItems;
 
     /**
+     * @var integer
+     */
+    private $numCategoryItems;
+
+    /**
      * @param string $type The category item type.
      * @throws InvalidArgumentException If the type argument is not a string.
      * @return self
@@ -65,10 +70,30 @@ trait CategoryTrait
      *
      * @return integer
      */
+    public function getNumCategoryItems()
+    {
+        if ($this->numCategoryItems === null) {
+            $items = $this->getCategoryItems();
+            if (is_array($items) || ($items instanceof \Countable)) {
+                $count = count($items);
+            } else {
+                $count = 0;
+            }
+
+            $this->numCategoryItems = $count;
+        }
+
+        return $this->numCategoryItems;
+    }
+
+    /**
+     * Alias of {@see self::getNumCategoryItems()}.
+     *
+     * @return integer
+     */
     public function numCategoryItems()
     {
-        $items = $this->categoryItems();
-        return (is_array($items) || ($items instanceof \Countable)) ? count($items) : 0;
+        return $this->getNumCategoryItems();
     }
 
     /**
@@ -78,7 +103,7 @@ trait CategoryTrait
      */
     public function hasCategoryItems()
     {
-        $numItems = $this->numCategoryItems();
+        $numItems = $this->getNumCategoryItems();
         return ($numItems > 0);
     }
 
@@ -87,10 +112,11 @@ trait CategoryTrait
      *
      * @return \Charcoal\Object\CategorizableInterface[]|array A list of `CategorizableInterface` objects
      */
-    public function categoryItems()
+    public function getCategoryItems()
     {
         if ($this->categoryItems === null) {
-            $this->categoryItems = $this->loadCategoryItems();
+            $this->categoryItems    = $this->loadCategoryItems();
+            $this->numCategoryItems = null;
         }
         return $this->categoryItems;
     }

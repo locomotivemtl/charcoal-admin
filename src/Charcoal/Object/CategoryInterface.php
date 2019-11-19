@@ -16,7 +16,7 @@ interface CategoryInterface
     /**
      * @return string
      */
-    public function categoryItemType();
+    public function getCategoryItemType();
 
     /**
      * Get the number of items in this category.
@@ -32,5 +32,5 @@ interface CategoryInterface
     /**
      * @return array
      */
-    public function categoryItems();
+    public function getCategoryItems();
 }

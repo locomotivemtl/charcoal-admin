@@ -13,14 +13,14 @@
     "prefer-stable": true,
     "extra": {
         "branch-alias": {
-            "dev-master": "0.7.x-dev"
+            "dev-master": "0.8.x-dev"
         }
     },
     "require": {
         "php": ">=5.6.0 || >=7.0",
         "psr/log": "^1.0",
-        "locomotivemtl/charcoal-config": "~0.9",
-        "locomotivemtl/charcoal-core": "~0.4",
+        "locomotivemtl/charcoal-config": "~0.10",
+        "locomotivemtl/charcoal-core": "~0.5",
         "locomotivemtl/charcoal-factory": "~0.4",
         "locomotivemtl/charcoal-translator": "~0.3"
     },

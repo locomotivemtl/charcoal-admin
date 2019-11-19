@@ -52,7 +52,7 @@ trait CategorizableMultipleTrait
      *
      * @return string
      */
-    public function categoryType()
+    public function getCategoryType()
     {
         return $this->categoryType;
     }
@@ -75,7 +75,7 @@ trait CategorizableMultipleTrait
      *
      * @return array|Traversable
      */
-    public function categories()
+    public function getCategories()
     {
         return $this->categories;
     }

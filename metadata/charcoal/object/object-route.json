@@ -1,4 +1,12 @@
 {
+    "sources": {
+        "default": {
+            "type": "database",
+            "table": "object_routes"
+        }
+    },
+    "default_source": "default",
+
     "properties": {
         "id": {
             "type": "id"
@@ -14,9 +22,8 @@
                 "fr": "Les routes inactives retourneront une erreur 404."
             }
         },
-        "creation_date": {
+        "creationDate": {
             "type": "date-time",
-            "input_type": "charcoal/admin/property/input/readonly",
             "label": {
                 "en": "Creation date",
                 "fr": "Date de création"
@@ -26,9 +33,8 @@
                 "fr": "La date de création devrait être enregistrée automatiquement lors de la première sauvegarde de l'objet."
             }
         },
-        "last_modification_date": {
+        "lastModificationDate": {
             "type": "date-time",
-            "input_type": "charcoal/admin/property/input/readonly",
             "label": {
                 "en": "Last Modification Date",
                 "fr": "Date de la dernière modification"
@@ -47,57 +53,46 @@
         },
         "slug": {
             "type": "string",
+            "unique": true,
             "label": {
                 "fr": "Slug",
                 "en": "Slug"
-            },
-            "unique": true,
-            "uniq": true
+            }
         },
-        "route_obj_type": {
+        "routeObjType": {
             "type": "string",
             "label": {
                 "fr": "Type d'objet de la route",
                 "en": "Route object type"
             }
         },
-        "route_obj_id": {
+        "routeObjId": {
             "type": "string",
             "label": {
                 "fr": "Identification de l'objet de la route",
                 "en": "Route object ID"
             }
         },
-        "route_template": {
+        "routeTemplate": {
             "type": "string",
             "label": {
                 "fr": "Identifiant du garabrit",
                 "en": "Template ident"
             }
         },
-        "route_options": {
+        "routeOptions": {
             "type": "structure",
-            "input_type": "charcoal/admin/property/input/textarea",
-            "rows": 8,
             "label": {
                 "en": "Route options",
                 "fr": "Options de route"
             }
         },
-        "route_options_ident": {
+        "routeOptionsIdent": {
             "type": "string",
             "label": {
                 "en": "Route options Ident",
                 "fr": "Identifiant d'options de route"
             }
         }
-    },
-
-    "sources": {
-        "default": {
-            "type": "database",
-            "table": "object_routes"
-        }
-    },
-    "default_source": "default"
+    }
 }

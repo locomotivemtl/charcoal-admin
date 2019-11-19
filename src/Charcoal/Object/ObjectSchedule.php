@@ -134,7 +134,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @return string
      */
-    public function targetType()
+    public function getTargetType()
     {
         return $this->targetType;
     }
@@ -157,7 +157,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @return mixed
      */
-    public function targetId()
+    public function getTargetId()
     {
         return $this->targetId;
     }
@@ -181,7 +181,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
     /**
      * @return array
      */
-    public function dataDiff()
+    public function getDataDiff()
     {
         return $this->dataDiff;
     }
@@ -204,7 +204,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @return boolean
      */
-    public function processed()
+    public function getProcessed()
     {
         return $this->processed;
     }
@@ -251,7 +251,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @return null|DateTimeInterface
      */
-    public function scheduledDate()
+    public function getScheduledDate()
     {
         return $this->scheduledDate;
     }
@@ -298,7 +298,7 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
      *
      * @return null|DateTimeInterface
      */
-    public function processedDate()
+    public function getProcessedDate()
     {
         return $this->processedDate;
     }
@@ -333,45 +333,45 @@ class ObjectSchedule extends AbstractModel implements ObjectScheduleInterface
         callable $failureCallback = null
     ) {
 
-        if ($this->processed() === true) {
+        if ($this->getProcessed() === true) {
             // Do not process twice, ever.
             return null;
         }
 
-        if ($this->targetType() === null) {
+        if ($this->getTargetType() === null) {
             $this->logger->error('Can not process object schedule: no object type defined.');
             return false;
         }
 
-        if ($this->targetId() === null) {
+        if ($this->getTargetId() === null) {
             $this->logger->error(sprintf(
                 'Can not process object schedule: no object "%s" ID defined.',
-                $this->targetType()
+                $this->getTargetType()
             ));
             return false;
         }
 
-        if (empty($this->dataDiff())) {
+        if (empty($this->getDataDiff())) {
             $this->logger->error('Can not process object schedule: no changes (diff) defined.');
             return false;
         }
 
-        $obj = $this->modelFactory()->create($this->targetType());
-        $obj->load($this->targetId());
+        $obj = $this->modelFactory()->create($this->getTargetType());
+        $obj->load($this->getTargetId());
         if (!$obj->id()) {
             $this->logger->error(sprintf(
                 'Can not load "%s" object %s',
-                $this->targetType(),
-                $this->targetId()
+                $this->getTargetType(),
+                $this->getTargetId()
             ));
         }
-        $obj->setData($this->dataDiff());
-        $update = $obj->update(array_keys($this->dataDiff()));
+        $obj->setData($this->getDataDiff());
+        $update = $obj->update(array_keys($this->getDataDiff()));
 
         if ($update) {
             $this->setProcessed(true);
             $this->setProcessedDate('now');
-            $this->update(['processed', 'processed_date']);
+            $this->update([ 'processed', 'processed_date' ]);
 
             if ($successCallback !== null) {
                 $successCallback($this);

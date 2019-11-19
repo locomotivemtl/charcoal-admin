@@ -1,0 +1,14 @@
+{
+    "properties": {
+        "creationDate": {
+            "input_type": "charcoal/admin/property/input/readonly"
+        },
+        "lastModificationDate": {
+            "input_type": "charcoal/admin/property/input/readonly"
+        },
+        "routeOptions": {
+            "input_type": "charcoal/admin/property/input/textarea",
+            "rows": 8
+        }
+    }
+}

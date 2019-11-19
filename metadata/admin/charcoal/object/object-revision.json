@@ -3,9 +3,9 @@
         "lists": {
             "default": {
                 "properties": [
-                    "rev_num",
-                    "rev_ts",
-                    "rev_user"
+                    "revNum",
+                    "revTs",
+                    "revUser"
                 ]
             }
         },

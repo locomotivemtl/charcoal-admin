@@ -22,7 +22,7 @@ interface CategorizableInterface
      *
      * @return string
      */
-    public function categoryType();
+    public function getCategoryType();
 
     /**
      * Set the category the object belongs to.

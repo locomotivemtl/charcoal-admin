@@ -38,8 +38,8 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * Create a new hierarchically-sorted collection.
      *
-     * @param  array|\Traversable|null $objs Array of objects to pre-populate this collection.
-     * @param  boolean                 $sort Whether to sort the collection immediately.
+     * @param  array|Traversable|null $objs Array of objects to pre-populate this collection.
+     * @param  boolean                $sort Whether to sort the collection immediately.
      * @return void
      */
     public function __construct($objs = [], $sort = true)
@@ -62,8 +62,8 @@ class HierarchicalCollection extends CharcoalCollection
     {
         $level   = 0;
         $count   = 0;
-        $pageNum = $this->page();
-        $perPage = $this->numPerPage();
+        $pageNum = $this->getPage();
+        $perPage = $this->getNumPerPage();
 
         $sortedObjects = [];
         $rootObjects   = [];
@@ -85,7 +85,7 @@ class HierarchicalCollection extends CharcoalCollection
 
         if (empty($rootObjects) && !empty($childObjects)) {
             foreach ($childObjects as $parentId => $children) {
-                $parentObj = $children[0]->master();
+                $parentObj = $children[0]->getMaster();
                 $parentObj->auxiliary = true;
 
                 $rootObjects[] = $parentObj;
@@ -183,14 +183,14 @@ class HierarchicalCollection extends CharcoalCollection
         $level,
         array &$sortedObjects
     ) {
-        $pageNum = $this->page();
-        $perPage = $this->numPerPage();
+        $pageNum = $this->getPage();
+        $perPage = $this->getNumPerPage();
 
         if ($perPage < 1) {
             foreach ($childObjects[$parentObj->id()] as $object) {
                 if ($count === 0 && $object->hasMaster()) {
                     $myParents = [];
-                    $myParent  = $object->master();
+                    $myParent  = $object->getMaster();
                     while ($myParent) {
                         $myParents[] = $myParent;
 
@@ -198,7 +198,7 @@ class HierarchicalCollection extends CharcoalCollection
                             break;
                         }
 
-                        $myParent = $myParent->master();
+                        $myParent = $myParent->getMaster();
                     }
 
                     $numParents = count($myParents);
@@ -236,7 +236,7 @@ class HierarchicalCollection extends CharcoalCollection
                 // If the page starts in a subtree, print the parents.
                 if ($count === $start && $object->hasMaster()) {
                     $myParents = [];
-                    $myParent  = $object->master();
+                    $myParent  = $object->getMaster();
                     while ($myParent) {
                         $myParents[] = $myParent;
 
@@ -244,7 +244,7 @@ class HierarchicalCollection extends CharcoalCollection
                             break;
                         }
 
-                        $myParent = $myParent->master();
+                        $myParent = $myParent->getMaster();
                     }
 
                     $numParents = count($myParents);
@@ -281,7 +281,7 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * @param  integer $page The current page. Start at 0.
      * @throws InvalidArgumentException If the parameter is not numeric or < 0.
-     * @return self
+     * @return Pagination (Chainable)
      */
     public function setPage($page)
     {
@@ -306,7 +306,7 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * @return integer
      */
-    public function page()
+    public function getPage()
     {
         return $this->page;
     }
@@ -314,7 +314,7 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * @param  integer $num The number of results to retrieve, per page.
      * @throws InvalidArgumentException If the parameter is not numeric or < 0.
-     * @return self
+     * @return Pagination (Chainable)
      */
     public function setNumPerPage($num)
     {
@@ -340,7 +340,7 @@ class HierarchicalCollection extends CharcoalCollection
     /**
      * @return integer
      */
-    public function numPerPage()
+    public function getNumPerPage()
     {
         return $this->numPerPage;
     }

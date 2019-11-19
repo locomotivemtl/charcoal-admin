@@ -32,7 +32,6 @@
         },
         "publishStatus": {
             "type": "string",
-            "input_type": "charcoal/admin/property/input/select",
             "label": {
                 "en": "Publication Status",
                 "fr": "Statut de publication"

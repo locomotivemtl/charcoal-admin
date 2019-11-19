@@ -19,7 +19,7 @@
                 "fr": "Pour trier l'objet dans une collection."
             }
         },
-        "required_acl_permissions": {
+        "requiredAclPermissions": {
             "type": "string",
             "multiple": true,
             "allow_null": true,

@@ -22,7 +22,7 @@ interface CategorizableMultipleInterface
      *
      * @return string
      */
-    public function categoryType();
+    public function getCategoryType();
 
     /**
      * Set the categories the object belongs to.
@@ -37,5 +37,5 @@ interface CategorizableMultipleInterface
      *
      * @return array|\Traversable
      */
-    public function categories();
+    public function getCategories();
 }

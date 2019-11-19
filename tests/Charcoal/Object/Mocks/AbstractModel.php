@@ -63,7 +63,7 @@ abstract class AbstractModel
     /**
      * @return string|integer
      */
-    public function id()
+    public function getId()
     {
         if ($this->id === null) {
             $this->id = uniqid();
@@ -75,9 +75,25 @@ abstract class AbstractModel
     /**
      * @return string
      */
-    public function key()
+    public function id()
+    {
+        return $this->getId();
+    }
+
+    /**
+     * @return string
+     */
+    public function getKey()
     {
         return 'id';
+    }
+
+    /**
+     * @return string
+     */
+    public function key()
+    {
+        return $this->getKey();
     }
 
     /**

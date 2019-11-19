@@ -1,0 +1,10 @@
+{
+    "properties": {
+        "created": {
+            "input_type": "charcoal/admin/property/input/readonly"
+        },
+        "lastModified": {
+            "input_type": "charcoal/admin/property/input/readonly"
+        }
+    }
+}

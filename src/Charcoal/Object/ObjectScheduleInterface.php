@@ -16,7 +16,7 @@ interface ObjectScheduleInterface
     /**
      * @return string
      */
-    public function targetType();
+    public function getTargetType();
 
     /**
      * @param mixed $targetId The object ID.
@@ -27,7 +27,7 @@ interface ObjectScheduleInterface
     /**
      * @return mixed
      */
-    public function targetId();
+    public function getTargetId();
 
     /**
      * Set the date/time the item should be processed at.
@@ -43,7 +43,7 @@ interface ObjectScheduleInterface
      *
      * @return null|\DateTimeInterface
      */
-    public function scheduledDate();
+    public function getScheduledDate();
 
     /**
      * @param array|string $data The data diff.
@@ -54,7 +54,7 @@ interface ObjectScheduleInterface
     /**
      * @return array
      */
-    public function dataDiff();
+    public function getDataDiff();
 
     /**
      * Set the date/time the item was processed at.
@@ -70,7 +70,7 @@ interface ObjectScheduleInterface
      *
      * @return null|\DateTimeInterface
      */
-    public function processedDate();
+    public function getProcessedDate();
 
     /**
      * Process the item.

@@ -58,14 +58,14 @@ class CategoryTraitTest extends AbstractTestCase
             ->method('loadCategoryItems')
             ->will($this->returnValue([]));
 
-        $this->assertEquals(0, $mock->numCategoryItems());
+        $this->assertEquals(0, $mock->getNumCategoryItems());
 
         $mock = $this->createTrait();
         $mock->expects($this->any())
             ->method('loadCategoryItems')
             ->will($this->returnValue([ 'item' ]));
 
-        $this->assertEquals(1, $mock->numCategoryItems());
+        $this->assertEquals(1, $mock->getNumCategoryItems());
     }
 
     /**

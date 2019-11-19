@@ -35,11 +35,11 @@ class CategorizableTraitTest extends AbstractTestCase
     public function testSetCategoryType()
     {
         $obj = $this->obj;
-        $this->assertNull($obj->categoryType());
+        $this->assertNull($obj->getCategoryType());
 
         $ret = $obj->setCategoryType('foobar');
         $this->assertSame($ret, $obj);
-        $this->assertEquals('foobar', $obj->categoryType());
+        $this->assertEquals('foobar', $obj->getCategoryType());
 
         $this->expectException('\InvalidArgumentException');
         $obj->setCategoryType(false);

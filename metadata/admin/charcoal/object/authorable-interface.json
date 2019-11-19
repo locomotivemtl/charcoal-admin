@@ -1,0 +1,16 @@
+{
+    "properties": {
+        "createdBy": {
+            "type": "object",
+            "input_type": "charcoal/admin/property/input/readonly",
+            "obj_type": "charcoal/admin/user",
+            "pattern": "displayName"
+        },
+        "lastModifiedBy": {
+            "type": "object",
+            "input_type": "charcoal/admin/property/input/readonly",
+            "obj_type": "charcoal/admin/user",
+            "pattern": "displayName"
+        }
+    }
+}

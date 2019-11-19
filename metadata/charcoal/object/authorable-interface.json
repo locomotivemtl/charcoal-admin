@@ -1,16 +1,14 @@
 {
     "properties": {
-        "created_by": {
+        "createdBy": {
             "type": "string",
-            "input_type": "charcoal/admin/property/input/readonly",
             "label": {
                 "en": "Created by",
                 "fr": "Créé par"
             }
         },
-        "last_modified_by": {
+        "lastModifiedBy": {
             "type": "string",
-            "input_type": "charcoal/admin/property/input/readonly",
             "label": {
                 "en": "Last modfied by",
                 "fr": "Modifié par"

@@ -2,30 +2,30 @@
     "admin": {
         "dashboards": {
             "charcoal/object/content/form": {
-                "layout": {
-                    "structure": [
-                        {"columns": [1]}
-                    ]
-                },
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/object-form",
                         "group_display_mode": "tab"
                     }
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
                 }
             },
             "charcoal/object/content/table": {
-                "layout": {
-                    "structure": [
-                        {"columns": [1]}
-                    ]
-                },
                 "widgets": {
                     "table": {
                         "type": "charcoal/admin/widget/table",
-                        "data_sources": ["request"],
+                        "data_sources": [ "request" ],
                         "sortable": false
                     }
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
                 }
             }
         }

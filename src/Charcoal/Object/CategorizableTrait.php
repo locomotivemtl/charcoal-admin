@@ -53,7 +53,7 @@ trait CategorizableTrait
      *
      * @return string
      */
-    public function categoryType()
+    public function getCategoryType()
     {
         return $this->categoryType;
     }

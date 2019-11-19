@@ -293,7 +293,7 @@ class FormGroupWidget extends AbstractUiItem implements
      */
     public function showNotesAbove()
     {
-        return $this->showNotesAbove;
+        return $this->showNotesAbove && $this->showNotes();
     }
 
     /**

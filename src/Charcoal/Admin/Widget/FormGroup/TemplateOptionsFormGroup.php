@@ -95,22 +95,6 @@ class TemplateOptionsFormGroup extends StructureFormGroup
     private $metadataLoader;
 
     /**
-     * @return string
-     */
-    public function type()
-    {
-        return 'charcoal/admin/widget/form-group/template-options';
-    }
-
-    /**
-     * @return string
-     */
-    public function template()
-    {
-        return 'charcoal/admin/widget/form-group/structure';
-    }
-
-    /**
      * Set the form object's template controller identifier.
      *
      * @param  mixed $ident The template controller identifier.

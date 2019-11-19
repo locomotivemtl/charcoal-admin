@@ -1,0 +1,10 @@
+{{^ hasFormProperties }}
+    {{# showEmpty }}
+        <div class="c-structure-property_empty alert alert-warning" role="alert">{{# _t }}No Template Options.{{/ _t }}</div>
+    {{/ showEmpty }}
+{{/ hasFormProperties }}
+<section class="c-structure-property_entry" id="structure-entry-{{ structId }}">
+    <div class="c-structure-property_entry_content">
+        {{> charcoal/admin/widget/form-group/form-properties }}
+    </div>
+</section>

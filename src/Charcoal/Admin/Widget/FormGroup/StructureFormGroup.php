@@ -202,6 +202,32 @@ class StructureFormGroup extends FormGroupWidget implements
     }
 
     /**
+     * Retrieve the UI item's template.
+     *
+     * This method updates the dynamic template "structure_template".
+     *
+     * @return string If unset, returns the UI item type.
+     */
+    public function template()
+    {
+        $this->setDynamicTemplate('structure_template', $this->displayTemplate());
+
+        return parent::template();
+    }
+
+    /**
+     * Retrieve the property's display layout template.
+     *
+     * @return string|null
+     */
+    public function displayTemplate()
+    {
+        $display = $this->display();
+
+        return 'charcoal/admin/widget/form-group/structure/container-'.$display;
+    }
+
+    /**
      * Retrieve the form's object.
      *
      * @throws RuntimeException If the form doesn't have a model.
@@ -437,10 +463,6 @@ class StructureFormGroup extends FormGroupWidget implements
 
                     $structProperties[$propertyIdent] = $propertyMetadata;
                 }
-            }
-
-            if (empty($structProperties)) {
-                $structProperties = $availableProperties;
             }
 
             $this->parsedFormProperties = $structProperties;

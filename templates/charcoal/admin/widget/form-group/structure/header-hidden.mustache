@@ -1,0 +1,7 @@
+<h2 class="sr-only">{{ title }}</h2>
+{{# showDescription }}
+    <div class="form-text text-muted o-section">{{& description }}</div>
+{{/ showDescription }}
+{{# showNotesAbove }}
+    {{> charcoal/admin/template/inc.notes }}
+{{/ showNotesAbove }}

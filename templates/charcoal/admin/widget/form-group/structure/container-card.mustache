@@ -1,0 +1,22 @@
+<div class="card card-collapsible">
+    {{# showHeader }}
+        {{# collapsible }}
+        <a data-toggle="collapse" href="#collapse-{{ structId }}">
+        {{/ collapsible }}
+            <header class="card-header -border" role="tab">
+                {{> charcoal/admin/widget/form-group/structure/header-shown }}
+            </header>
+        {{# collapsible }}
+        </a>
+        {{/ collapsible }}
+    {{/ showHeader }}
+    {{^ showHeader }}
+        {{> charcoal/admin/widget/form-group/structure/header-hidden }}
+    {{/ showHeader }}
+    <div class="c-structure-property_entries card-body{{# collapsible }} collapse{{/ collapsible }}" id="collapse-{{ structId }}">
+        {{> charcoal/admin/widget/form-group/structure/entries }}
+    </div>
+    {{^ showNotesAbove }}
+        {{> charcoal/admin/template/inc.notes }}
+    {{/ showNotesAbove }}
+</div>

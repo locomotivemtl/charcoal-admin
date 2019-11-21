@@ -122,6 +122,14 @@ class StructureFormGroup extends FormGroupWidget implements
     protected $isStructureFinalized = false;
 
     /**
+     * Whether to automatically use all available properties
+     * if a form group is not defined.
+     *
+     * @var boolean
+     */
+    protected $autoFormGroup;
+
+    /**
      * The form group's raw data.
      *
      * @var array|null
@@ -388,6 +396,27 @@ class StructureFormGroup extends FormGroupWidget implements
     }
 
     /**
+     * Determine if the form group should use all available properties.
+     *
+     * @return boolean
+     */
+    protected function autoFormGroup()
+    {
+        if ($this->autoFormGroup === null) {
+            $property = $this->storageProperty();
+            $struct   = $property->getStructureMetadata();
+
+            if (isset($struct['admin']['auto_form_group'])) {
+                $this->autoFormGroup = $struct['admin']['auto_form_group'];
+            } else {
+                $this->autoFormGroup = true;
+            }
+        }
+
+        return $this->autoFormGroup;
+    }
+
+    /**
      * Finalize the form group's properies, entries, and layout.
      *
      * @param  boolean $reload Rebuild the form group's structure.
@@ -463,6 +492,10 @@ class StructureFormGroup extends FormGroupWidget implements
 
                     $structProperties[$propertyIdent] = $propertyMetadata;
                 }
+            }
+
+            if (empty($structProperties) && $this->autoFormGroup() === true) {
+                $structProperties = $availableProperties;
             }
 
             $this->parsedFormProperties = $structProperties;

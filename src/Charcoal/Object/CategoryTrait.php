@@ -23,7 +23,7 @@ trait CategoryTrait
     /**
      * @var integer
      */
-    private $numCategoryItems;
+    protected $numCategoryItems;
 
     /**
      * @param string $type The category item type.

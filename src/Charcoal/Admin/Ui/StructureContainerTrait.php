@@ -100,7 +100,8 @@ trait StructureContainerTrait
     {
         return [
             self::GROUP_STRUCT_DISPLAY,
-            self::SEAMLESS_STRUCT_DISPLAY
+            self::CARD_STRUCT_DISPLAY,
+            self::SEAMLESS_STRUCT_DISPLAY,
         ];
     }
 

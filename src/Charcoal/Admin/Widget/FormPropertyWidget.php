@@ -1429,7 +1429,7 @@ class FormPropertyWidget extends AdminWidget implements
         }
 
         if ($this->propertyType || $this->property) {
-            $type = $this->property()->displayType();
+            $type = $this->property()->getDisplayType();
         }
 
         return $type;

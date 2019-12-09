@@ -77,9 +77,9 @@ class LinkDisplay extends AbstractPropertyDisplay
     {
         $prop = $this->property();
         if ($prop instanceof FileProperty) {
-            if ($prop->publicAccess() === false) {
+            if ($prop['publicAccess'] === false) {
                 $query = http_build_query([
-                    'disk' => $prop->filesystem(),
+                    'disk' => $prop['filesystem'],
                     'path' => $path,
                 ]);
                 return $this->adminUrl('filesystem/download')->withQuery($query);

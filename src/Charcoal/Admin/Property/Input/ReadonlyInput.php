@@ -94,10 +94,17 @@ class ReadonlyInput extends AbstractPropertyInput
             }
         }
 
+        $metadata = $property->metadata();
+        $data = $property->data();
+
+        if (isset($metadata['admin'])) {
+            $data = array_replace_recursive($metadata['admin'], $data);
+        }
+
         $display = $this->propertyDisplayFactory()->create($displayType);
         $display->setDisplayType($displayType);
         $display->setProperty($property);
-        $display->setData($property->metadata()->data());
+        $display->setData($data);
         $display->setPropertyVal($value);
 
         return $this->view()->renderTemplate($displayType, $display);

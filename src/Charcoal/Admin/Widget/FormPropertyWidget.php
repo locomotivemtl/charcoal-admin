@@ -1529,8 +1529,8 @@ class FormPropertyWidget extends AdminWidget implements
 
         $display->setDisplayType($type);
         $display->setProperty($prop);
+        $display->setData($data);
         $display->setPropertyVal($this->propertyVal());
-        $display->setData($prop->data());
 
         return $display;
     }

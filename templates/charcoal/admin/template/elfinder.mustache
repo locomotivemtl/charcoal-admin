@@ -1,3 +1,4 @@
+{{# prepareElfinderConnectorUrl }}{{!-- NOOP --}}{{/ prepareElfinderConnectorUrl }}
 <!DOCTYPE html>
 <html class="has-no-js{{# devMode }} s-admin-debug{{/ devMode }}" lang="{{ lang }}">
     <head>
@@ -79,7 +80,7 @@
                 }
 
                 defaultOpts = {
-                    url:        '{{ adminUrl }}elfinder-connector' + '?obj_type={{ objType }}' + '&obj_id={{ objId }}' + '&property={{ propertyIdent }}',
+                    url:        '{{& elfinderConnectorUrl }}',
                     resizable:  false,
                     height:     $window.height(),
                     commandsOptions: {

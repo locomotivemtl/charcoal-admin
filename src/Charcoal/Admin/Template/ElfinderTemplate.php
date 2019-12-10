@@ -12,6 +12,9 @@ use Psr\Http\Message\RequestInterface;
 // From Pimple
 use Pimple\Container;
 
+// From Mustache
+use Mustache_LambdaHelper as LambdaHelper;
+
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
@@ -85,6 +88,12 @@ class ElfinderTemplate extends AdminTemplate
      */
     private $callbackIdent = '';
 
+    /**
+     * URL for the elFinder connector.
+     *
+     * @var string
+     */
+    private $elfinderConnectorUrl;
 
     /**
      * Sets the template data from a PSR Request object.
@@ -349,6 +358,46 @@ class ElfinderTemplate extends AdminTemplate
     public function elfinderCallback()
     {
         return $this->callbackIdent;
+    }
+
+    /**
+     * @param  string $url The elFinder connector AJAX URL.
+     * @return self
+     */
+    public function setElfinderConnectorUrl($url)
+    {
+        $this->elfinderConnectorUrl = $url;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function elfinderConnectorUrl()
+    {
+        return $this->elfinderConnectorUrl;
+    }
+
+    /**
+     * Necessary evil to render the elFinder connector URL with the correct object model context.
+     *
+     * This method allows one to customize the URL without duplicating the template view.
+     *
+     * @see \Charcoal\Admin\Property\Input\FileInput::prepareFilePickerUrl()
+     *
+     * @return callable|null
+     */
+    public function prepareElfinderConnectorUrl()
+    {
+        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ propertyIdent }}';
+        $uri = '{{# withAdminUrl }}elfinder-connector?'.$uri.'{{/ withAdminUrl }}';
+
+        return function ($noop, LambdaHelper $helper) use ($uri) {
+            $uri = $helper->render($uri);
+            $this->elfinderConnectorUrl = $uri;
+
+            return null;
+        };
     }
 
     /**

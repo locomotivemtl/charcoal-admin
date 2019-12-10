@@ -446,8 +446,15 @@ class ElfinderTemplate extends AdminTemplate
      */
     protected function defaultLocalizations()
     {
+        $t = $this->translator();
+
         return [
-            'volume_default' => $this->translator()->translation('Library'),
+            'volume_default' => $t->translation('filesystem.volume.default'),
+            'volume_library' => $t->translation('filesystem.volume.library'),
+            'volume_storage' => $t->translation('filesystem.volume.storage'),
+            'volume_uploads' => $t->translation('filesystem.volume.uploads'),
+            'volume_public'  => $t->translation('filesystem.volume.public'),
+            'volume_private' => $t->translation('filesystem.volume.private'),
         ];
     }
 

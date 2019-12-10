@@ -401,17 +401,8 @@ class ElfinderConnectorAction extends AdminAction
         $fsConfig   = $this->getFilesystemConfig($ident);
         $elfConfig  = $this->getFilesystemAdminConfig($ident);
 
-        if (isset($elfConfig['label'])) {
-            $label = $elfConfig['label'];
-        } elseif (isset($fsConfig['label'])) {
-            $label = $fsConfig['label'];
-        } else {
-            $label = 'filesystem.disk.'.$ident;
-        }
-
         $immutableSettings = [
             'filesystem'  => $filesystem,
-            'alias'       => $this->translator()->translate($label),
         ];
 
         $root = array_replace_recursive(

@@ -196,7 +196,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         if (!defined('ELFINDER_IMG_PARENT_URL')) {
             // Ensure images injected by elFinder are relative to its assets directory
-            define('ELFINDER_IMG_PARENT_URL', $this->baseUrl(ElfinderTemplate::ELFINDER_ASSETS_REL_PATH));
+            define('ELFINDER_IMG_PARENT_URL', (string)$this->baseUrl(ElfinderTemplate::ELFINDER_ASSETS_REL_PATH));
         }
 
         $options = $this->buildConnectorOptions($extraOptions);
@@ -352,7 +352,7 @@ class ElfinderConnectorAction extends AdminAction
             'rootCssClass' => 'elfinder-navbar-root-local',
             'filesystem'   => null,
             'cache'        => false,
-            'URL'          => $this->baseUrl(self::DEFAULT_STORAGE_PATH),
+            'URL'          => (string)$this->baseUrl(self::DEFAULT_STORAGE_PATH),
             'path'         => self::DEFAULT_STORAGE_PATH,
         ];
     }
@@ -377,7 +377,7 @@ class ElfinderConnectorAction extends AdminAction
         return [
             'URL'     => $baseUrl.'/'.$uploadPath,
             'path'    => $uploadPath,
-            'tmbURL'  => $this->baseUrl($uploadPath.'/.tmb'),
+            'tmbURL'  => (string)$this->baseUrl($uploadPath.'/.tmb'),
             'tmbPath' => $uploadPath.'/.tmb',
         ];
     }
@@ -482,8 +482,8 @@ class ElfinderConnectorAction extends AdminAction
             $disk = $this->getNamedRoot($targetFilesystem);
 
             $startPath = $formProperty['uploadPath'];
-            $isPublic = $formProperty['publicAccess'];
-            $basePath = $isPublic ? $this->publicPath : $this->basePath;
+            $isPublic  = $formProperty['publicAccess'];
+            $basePath  = $isPublic ? $this->publicPath : $this->basePath;
 
             if (!file_exists($basePath.$startPath)) {
                 mkdir($basePath.$startPath, 0755, true);

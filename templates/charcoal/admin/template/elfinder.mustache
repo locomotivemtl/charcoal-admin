@@ -134,13 +134,12 @@
                             }
                         }
 
-
                         if (typeof(parent.elFinderCallback['{{ elfinderCallback }}']) === 'function') {
                             parent.elFinderCallback['{{ elfinderCallback }}'](file, fm);
                         }
                     }
                 };
-                customOpts = {{& elfinderConfigAsJson }};
+                customOpts = {{& elfinderClientConfigAsJson }};
 
                 return {
                     defaultOpts: $.extend({}, defaultOpts, customOpts),

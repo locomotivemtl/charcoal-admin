@@ -276,9 +276,9 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the custom localizations for elFinder.
      *
-     * @return string Returns data serialized with {@see json_encode()}.
+     * @return array
      */
-    public function elfinderLocalizationsAsJson()
+    public function elfinderLocalizations()
     {
         $i18n = [];
 
@@ -288,7 +288,33 @@ class ElfinderTemplate extends AdminTemplate
             }
         }
 
-        return json_encode($i18n, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
+        return $i18n;
+    }
+
+    /**
+     * Converts the elFinder {@see self::elfinderLocalizations() localizations} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function elfinderLocalizationsAsJson()
+    {
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->elfinderLocalizations(), $options);
+    }
+
+    /**
+     * Converts the elFinder {@see self::elfinderLocalizations() localizations} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    final public function escapedElfinderLocalizationsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->elfinderLocalizationsAsJson().'<%={{ }}=%>';
     }
 
     /**
@@ -379,21 +405,21 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
-     * Retrieve the current property's client-side settings for elFinder.
+     * Retrieve the elFinder client-side settings.
      *
-     * @return string Returns data serialized with {@see json_encode()}.
+     * @return array
      */
-    public function elfinderConfigAsJson()
+    public function elfinderClientConfig()
     {
-        $property = $this->formProperty();
-        $settings = [];
-
-        if ($this->elfinderConfig['client']) {
+        if (empty($this->elfinderConfig['client'])) {
+            $settings = [];
+        } else {
             $settings = $this->elfinderConfig['client'];
         }
 
         $settings['lang'] = $this->translator()->getLocale();
 
+        $property = $this->formProperty();
         if ($property) {
             $mimeTypes = filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);
 
@@ -413,7 +439,33 @@ class ElfinderTemplate extends AdminTemplate
             $settings['rememberLastDir'] = !($property instanceof FileProperty);
         }
 
-        return json_encode($settings, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
+        return $settings;
+    }
+
+    /**
+     * Converts the elFinder client-side {@see self::elfinderClientConfig() options} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function elfinderClientConfigAsJson()
+    {
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->elfinderClientConfig(), $options);
+    }
+
+    /**
+     * Converts the elFinder client-side {@see self::elfinderClientConfig() options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    final public function escapedElfinderClientConfigAsJson()
+    {
+        return '{{=<% %>=}}'.$this->elfinderClientConfigAsJson().'<%={{ }}=%>';
     }
 
     /**

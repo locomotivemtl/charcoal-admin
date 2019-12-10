@@ -447,7 +447,7 @@ class ElfinderTemplate extends AdminTemplate
     protected function defaultLocalizations()
     {
         return [
-            'volume_default' => $this->translator()->translation('Library')
+            'volume_default' => $this->translator()->translation('Library'),
         ];
     }
 

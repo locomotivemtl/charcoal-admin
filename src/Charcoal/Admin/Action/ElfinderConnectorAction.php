@@ -165,7 +165,11 @@ class ElfinderConnectorAction extends AdminAction
      */
     protected function validDataFromRequest()
     {
-        return [ 'obj_type', 'obj_id', 'property' ];
+        return [
+            'obj_type',
+            'obj_id',
+            'property',
+        ];
     }
 
     /**
@@ -234,7 +238,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         $options = [
             'debug' => false,
-            'roots' => $this->getCurrentRoots()
+            'roots' => $this->getCurrentRoots(),
         ];
 
         $adminOptions = $this->getAdminConnectorOptions();
@@ -332,7 +336,7 @@ class ElfinderConnectorAction extends AdminAction
             'uploadAllow'     => $this->defaultUploadAllow(),
             'uploadOrder'     => [ 'deny', 'allow' ],
             'accessControl'   => [ $this, 'checkAccess' ],
-            'duplicateSuffix' => '_%s_'
+            'duplicateSuffix' => '_%s_',
         ];
     }
 
@@ -374,7 +378,7 @@ class ElfinderConnectorAction extends AdminAction
             'URL'     => $baseUrl.'/'.$uploadPath,
             'path'    => $uploadPath,
             'tmbURL'  => $this->baseUrl($uploadPath.'/.tmb'),
-            'tmbPath' => $uploadPath.'/.tmb'
+            'tmbPath' => $uploadPath.'/.tmb',
         ];
     }
 
@@ -703,7 +707,7 @@ class ElfinderConnectorAction extends AdminAction
         return [
             'image',
             'application/pdf',
-            'text/plain'
+            'text/plain',
         ];
     }
 
@@ -716,7 +720,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         // By default, all files are rejected.
         return [
-            'all'
+            'all',
         ];
     }
 
@@ -733,7 +737,7 @@ class ElfinderConnectorAction extends AdminAction
             'read'    => false,
             'write'   => false,
             'hidden'  => true,
-            'locked'  => false
+            'locked'  => false,
         ];
     }
 

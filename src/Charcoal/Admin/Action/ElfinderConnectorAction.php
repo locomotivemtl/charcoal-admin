@@ -165,7 +165,11 @@ class ElfinderConnectorAction extends AdminAction
      */
     protected function validDataFromRequest()
     {
-        return [ 'obj_type', 'obj_id', 'property' ];
+        return [
+            'obj_type',
+            'obj_id',
+            'property',
+        ];
     }
 
     /**
@@ -192,7 +196,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         if (!defined('ELFINDER_IMG_PARENT_URL')) {
             // Ensure images injected by elFinder are relative to its assets directory
-            define('ELFINDER_IMG_PARENT_URL', $this->baseUrl(ElfinderTemplate::ELFINDER_ASSETS_REL_PATH));
+            define('ELFINDER_IMG_PARENT_URL', (string)$this->baseUrl(ElfinderTemplate::ELFINDER_ASSETS_REL_PATH));
         }
 
         $options = $this->buildConnectorOptions($extraOptions);
@@ -234,7 +238,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         $options = [
             'debug' => false,
-            'roots' => $this->getCurrentRoots()
+            'roots' => $this->getCurrentRoots(),
         ];
 
         $adminOptions = $this->getAdminConnectorOptions();
@@ -332,7 +336,7 @@ class ElfinderConnectorAction extends AdminAction
             'uploadAllow'     => $this->defaultUploadAllow(),
             'uploadOrder'     => [ 'deny', 'allow' ],
             'accessControl'   => [ $this, 'checkAccess' ],
-            'duplicateSuffix' => '_%s_'
+            'duplicateSuffix' => '_%s_',
         ];
     }
 
@@ -348,7 +352,7 @@ class ElfinderConnectorAction extends AdminAction
             'rootCssClass' => 'elfinder-navbar-root-local',
             'filesystem'   => null,
             'cache'        => false,
-            'URL'          => $this->baseUrl(self::DEFAULT_STORAGE_PATH),
+            'URL'          => (string)$this->baseUrl(self::DEFAULT_STORAGE_PATH),
             'path'         => self::DEFAULT_STORAGE_PATH,
         ];
     }
@@ -373,8 +377,8 @@ class ElfinderConnectorAction extends AdminAction
         return [
             'URL'     => $baseUrl.'/'.$uploadPath,
             'path'    => $uploadPath,
-            'tmbURL'  => $this->baseUrl($uploadPath.'/.tmb'),
-            'tmbPath' => $uploadPath.'/.tmb'
+            'tmbURL'  => (string)$this->baseUrl($uploadPath.'/.tmb'),
+            'tmbPath' => $uploadPath.'/.tmb',
         ];
     }
 
@@ -397,17 +401,8 @@ class ElfinderConnectorAction extends AdminAction
         $fsConfig   = $this->getFilesystemConfig($ident);
         $elfConfig  = $this->getFilesystemAdminConfig($ident);
 
-        if (isset($elfConfig['label'])) {
-            $label = $elfConfig['label'];
-        } elseif (isset($fsConfig['label'])) {
-            $label = $fsConfig['label'];
-        } else {
-            $label = 'filesystem.disk.'.$ident;
-        }
-
         $immutableSettings = [
             'filesystem'  => $filesystem,
-            'alias'       => $this->translator()->translate($label),
         ];
 
         $root = array_replace_recursive(
@@ -478,8 +473,8 @@ class ElfinderConnectorAction extends AdminAction
             $disk = $this->getNamedRoot($targetFilesystem);
 
             $startPath = $formProperty['uploadPath'];
-            $isPublic = $formProperty['publicAccess'];
-            $basePath = $isPublic ? $this->publicPath : $this->basePath;
+            $isPublic  = $formProperty['publicAccess'];
+            $basePath  = $isPublic ? $this->publicPath : $this->basePath;
 
             if (!file_exists($basePath.$startPath)) {
                 mkdir($basePath.$startPath, 0755, true);
@@ -703,7 +698,7 @@ class ElfinderConnectorAction extends AdminAction
         return [
             'image',
             'application/pdf',
-            'text/plain'
+            'text/plain',
         ];
     }
 
@@ -716,7 +711,7 @@ class ElfinderConnectorAction extends AdminAction
     {
         // By default, all files are rejected.
         return [
-            'all'
+            'all',
         ];
     }
 
@@ -733,7 +728,7 @@ class ElfinderConnectorAction extends AdminAction
             'read'    => false,
             'write'   => false,
             'hidden'  => true,
-            'locked'  => false
+            'locked'  => false,
         ];
     }
 

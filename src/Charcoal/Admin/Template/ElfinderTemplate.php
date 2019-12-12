@@ -12,6 +12,9 @@ use Psr\Http\Message\RequestInterface;
 // From Pimple
 use Pimple\Container;
 
+// From Mustache
+use Mustache_LambdaHelper as LambdaHelper;
+
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
@@ -85,6 +88,12 @@ class ElfinderTemplate extends AdminTemplate
      */
     private $callbackIdent = '';
 
+    /**
+     * URL for the elFinder connector.
+     *
+     * @var string
+     */
+    private $elfinderConnectorUrl;
 
     /**
      * Sets the template data from a PSR Request object.
@@ -276,9 +285,9 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the custom localizations for elFinder.
      *
-     * @return string Returns data serialized with {@see json_encode()}.
+     * @return array
      */
-    public function elfinderLocalizationsAsJson()
+    public function elfinderLocalizations()
     {
         $i18n = [];
 
@@ -288,7 +297,33 @@ class ElfinderTemplate extends AdminTemplate
             }
         }
 
-        return json_encode($i18n, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
+        return $i18n;
+    }
+
+    /**
+     * Converts the elFinder {@see self::elfinderLocalizations() localizations} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function elfinderLocalizationsAsJson()
+    {
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->elfinderLocalizations(), $options);
+    }
+
+    /**
+     * Converts the elFinder {@see self::elfinderLocalizations() localizations} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    final public function escapedElfinderLocalizationsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->elfinderLocalizationsAsJson().'<%={{ }}=%>';
     }
 
     /**
@@ -323,6 +358,46 @@ class ElfinderTemplate extends AdminTemplate
     public function elfinderCallback()
     {
         return $this->callbackIdent;
+    }
+
+    /**
+     * @param  string $url The elFinder connector AJAX URL.
+     * @return self
+     */
+    public function setElfinderConnectorUrl($url)
+    {
+        $this->elfinderConnectorUrl = $url;
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function elfinderConnectorUrl()
+    {
+        return $this->elfinderConnectorUrl;
+    }
+
+    /**
+     * Necessary evil to render the elFinder connector URL with the correct object model context.
+     *
+     * This method allows one to customize the URL without duplicating the template view.
+     *
+     * @see \Charcoal\Admin\Property\Input\FileInput::prepareFilePickerUrl()
+     *
+     * @return callable|null
+     */
+    public function prepareElfinderConnectorUrl()
+    {
+        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ propertyIdent }}';
+        $uri = '{{# withAdminUrl }}elfinder-connector?'.$uri.'{{/ withAdminUrl }}';
+
+        return function ($noop, LambdaHelper $helper) use ($uri) {
+            $uri = $helper->render($uri);
+            $this->elfinderConnectorUrl = $uri;
+
+            return null;
+        };
     }
 
     /**
@@ -379,21 +454,21 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
-     * Retrieve the current property's client-side settings for elFinder.
+     * Retrieve the elFinder client-side settings.
      *
-     * @return string Returns data serialized with {@see json_encode()}.
+     * @return array
      */
-    public function elfinderConfigAsJson()
+    public function elfinderClientConfig()
     {
-        $property = $this->formProperty();
-        $settings = [];
-
-        if ($this->elfinderConfig['client']) {
+        if (empty($this->elfinderConfig['client'])) {
+            $settings = [];
+        } else {
             $settings = $this->elfinderConfig['client'];
         }
 
         $settings['lang'] = $this->translator()->getLocale();
 
+        $property = $this->formProperty();
         if ($property) {
             $mimeTypes = filter_input(INPUT_GET, 'filetype', FILTER_SANITIZE_STRING);
 
@@ -413,7 +488,33 @@ class ElfinderTemplate extends AdminTemplate
             $settings['rememberLastDir'] = !($property instanceof FileProperty);
         }
 
-        return json_encode($settings, (JSON_UNESCAPED_SLASHES|JSON_UNESCAPED_UNICODE));
+        return $settings;
+    }
+
+    /**
+     * Converts the elFinder client-side {@see self::elfinderClientConfig() options} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function elfinderClientConfigAsJson()
+    {
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->elfinderClientConfig(), $options);
+    }
+
+    /**
+     * Converts the elFinder client-side {@see self::elfinderClientConfig() options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    final public function escapedElfinderClientConfigAsJson()
+    {
+        return '{{=<% %>=}}'.$this->elfinderClientConfigAsJson().'<%={{ }}=%>';
     }
 
     /**
@@ -446,8 +547,15 @@ class ElfinderTemplate extends AdminTemplate
      */
     protected function defaultLocalizations()
     {
+        $t = $this->translator();
+
         return [
-            'volume_default' => $this->translator()->translation('Library')
+            'volume_default' => $t->translation('filesystem.volume.default'),
+            'volume_library' => $t->translation('filesystem.volume.library'),
+            'volume_storage' => $t->translation('filesystem.volume.storage'),
+            'volume_uploads' => $t->translation('filesystem.volume.uploads'),
+            'volume_public'  => $t->translation('filesystem.volume.public'),
+            'volume_private' => $t->translation('filesystem.volume.private'),
         ];
     }
 

@@ -130,6 +130,7 @@ class StatusDisplay extends AbstractPropertyDisplay implements ViewableInterface
     }
 
     /**
+     * @TODO Allow the state to be a string and render it on a supplied template controller.
      * @return boolean|string
      */
     private function calculateState()
@@ -151,10 +152,6 @@ class StatusDisplay extends AbstractPropertyDisplay implements ViewableInterface
                     return $stateIdent;
                 }
             };
-        }
-
-        if (is_string($state)) {
-            //@TODO Render Template on Template controller
         }
 
         return static::STATE_DEFAULT;

@@ -573,7 +573,11 @@ Charcoal.Admin.Widget_Form.prototype.view_revision = function (/* form */) {
  * Hande the "back to list" button / action.
  */
 Charcoal.Admin.Widget_Form.prototype.back_to_list = function () {
-    window.location.href = 'object/collection?obj_type=' + this.obj_type;
+    var params     = new URLSearchParams(window.location.search);
+    window.location.href = 'object/collection?' +
+        (params.has('main_menu') ? 'main_menu=' + params.get('main_menu') + '&' : '') +
+        (params.has('secondary_menu') ? 'secondary_menu=' + params.get('secondary_menu') + '&' : '') +
+        'obj_type=' + this.obj_type;
 };
 
 /**

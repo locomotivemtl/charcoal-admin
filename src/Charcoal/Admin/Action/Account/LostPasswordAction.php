@@ -271,7 +271,7 @@ class LostPasswordAction extends AdminAction
                 'siteName'         => $siteName,
                 'adminUrl'         => $this->adminUrl(),
                 'urlResetPassword' => $this->adminUrl().'account/reset-password/'.$token->id(),
-                'expiry'           => $token->expiry()->format('Y-m-d H:i:s'),
+                'expiry'           => $token['expiry']->format('Y-m-d H:i:s'),
                 'ipAddress'        => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
             ],
         ]);

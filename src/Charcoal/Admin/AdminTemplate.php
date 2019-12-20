@@ -28,6 +28,7 @@ use Charcoal\App\Template\AbstractTemplate;
 // From 'charcoal-admin'
 use Charcoal\Admin\Ui\DashboardContainerInterface;
 use Charcoal\Admin\Support\AdminTrait;
+use Charcoal\Admin\Support\ObjectLabelTrait;
 use Charcoal\Admin\Support\BaseUrlTrait;
 use Charcoal\Admin\Support\SecurityTrait;
 use Charcoal\Admin\Ui\FeedbackContainerTrait;
@@ -47,6 +48,7 @@ class AdminTemplate extends AbstractTemplate implements
     AuthAwareInterface
 {
     use AdminTrait;
+    use ObjectLabelTrait;
     use AuthAwareTrait;
     use BaseUrlTrait;
     use DebugAwareTrait;
@@ -551,8 +553,8 @@ class AdminTemplate extends AbstractTemplate implements
             return false;
         }
 
-        return (!empty($recaptcha['public_key'])  || !empty($recaptcha['key'])) &&
-               (!empty($recaptcha['private_key']) || !empty($recaptcha['secret']));
+        return (!empty($recaptcha['publicKey'])  || !empty($recaptcha['key'])) &&
+               (!empty($recaptcha['privateKey']) || !empty($recaptcha['secret']));
     }
 
     /**
@@ -604,8 +606,8 @@ class AdminTemplate extends AbstractTemplate implements
     {
         $recaptcha = $this->apiConfig('google.recaptcha');
 
-        if (!empty($recaptcha['public_key'])) {
-            return $recaptcha['public_key'];
+        if (!empty($recaptcha['publicKey'])) {
+            return $recaptcha['publicKey'];
         } elseif (!empty($recaptcha['key'])) {
             return $recaptcha['key'];
         }
@@ -621,7 +623,7 @@ class AdminTemplate extends AbstractTemplate implements
     public function recaptchaParameters()
     {
         $apiConfig = $this->apiConfig('google.recaptcha');
-        $tplConfig = $this->get('recaptcha_options') ?: [];
+        $tplConfig = $this->get('recaptchaOptions') ?: [];
 
         $params = [
             'sitekey'  => $this->recaptchaSiteKey(),
@@ -697,7 +699,7 @@ class AdminTemplate extends AbstractTemplate implements
         $this->setAdminUrl($container['admin/base-url']);
 
         // Satisfies AdminTemplate dependencies
-        $this->setSiteName($container['config']['project_name']);
+        $this->setSiteName($container['config']['projectName']);
 
         $this->setModelFactory($container['model/factory']);
         $this->setWidgetFactory($container['widget/factory']);
@@ -755,7 +757,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function createMainMenu($options = null)
     {
-        $mainMenuConfig = $this->adminConfig('main_menu');
+        $mainMenuConfig = $this->adminConfig('mainMenu');
 
         if (!isset($mainMenuConfig['items'])) {
             throw new InvalidArgumentException(
@@ -797,16 +799,16 @@ class AdminTemplate extends AbstractTemplate implements
         if ($this->mainMenuIdentLoaded === false) {
             $mainMenuIdent = null;
 
-            if (isset($this['main_menu_item'])) {
-                $mainMenuIdent = $this['main_menu_item'];
+            if (isset($this['mainMenuItem'])) {
+                $mainMenuIdent = $this['mainMenuItem'];
             }
 
             if (!(empty($options) && !is_numeric($options))) {
                 if (is_string($options)) {
                     $mainMenuIdent = $options;
                 } elseif (is_array($options)) {
-                    if (isset($options['widget_options']['ident'])) {
-                        $mainMenuIdent = $options['widget_options']['ident'];
+                    if (isset($options['widgetOptions']['ident'])) {
+                        $mainMenuIdent = $options['widgetOptions']['ident'];
                     }
                 }
             }
@@ -814,7 +816,7 @@ class AdminTemplate extends AbstractTemplate implements
             // Get main menu from the obj_type
             $objType = filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
             if ($objType) {
-                $secondaryMenuItems = $this->adminConfig('secondary_menu');
+                $secondaryMenuItems = $this->adminConfig('secondaryMenu');
                 foreach ($secondaryMenuItems as $main => $item) {
                     if ($this->isObjTypeInSecondaryMenuItem($objType, $item)) {
                         $mainMenuIdent = $main;
@@ -880,12 +882,12 @@ class AdminTemplate extends AbstractTemplate implements
         foreach ($secondaryMenuItems as $ident => $options) {
             $options['ident'] = $ident;
 
-            if (isset($this['secondary_menu_item'])) {
-                $options['current_item'] = $this['secondary_menu_item'];
+            if (isset($this['secondaryMenuItem'])) {
+                $options['currentItem'] = $this['secondaryMenuItem'];
             }
 
-            if (isset($this['main_menu_item'])) {
-                $mainMenuIdent = $this['main_menu_item'];
+            if (isset($this['mainMenuItem'])) {
+                $mainMenuIdent = $this['mainMenuItem'];
             }
 
             if (is_string($options['ident'])) {
@@ -909,15 +911,15 @@ class AdminTemplate extends AbstractTemplate implements
      */
     protected function createSystemMenu($options = null)
     {
-        $menuConfig = $this->adminConfig('system_menu');
+        $menuConfig = $this->adminConfig('systemMenu');
 
         if (!isset($menuConfig['items'])) {
             return [];
         }
 
         $currentIdent = null;
-        if (isset($this['system_menu_item'])) {
-            $currentIdent = $this['system_menu_item'];
+        if (isset($this['systemMenuItem'])) {
+            $currentIdent = $this['systemMenuItem'];
         }
 
         if (!(empty($options) && !is_numeric($options))) {
@@ -1018,12 +1020,12 @@ class AdminTemplate extends AbstractTemplate implements
             $menuItem['label'] = $this->translator()->translation($menuItem['label']);
         }
 
-        $menuItem['show_label'] = (isset($menuItem['show_label']) ? !!$menuItem['show_label'] : true);
+        $menuItem['showLabel'] = (isset($menuItem['showLabel']) ? !!$menuItem['showLabel'] : true);
 
         $menuItem['selected'] = ($menuItem['ident'] === $currentIdent);
 
         $menuItem['hasSecondaryMenuTab'] = false;
-        $secondaryMenu = $this->adminConfig('secondary_menu');
+        $secondaryMenu = $this->adminConfig('secondaryMenu');
         if (!empty($menuIdent) && isset($secondaryMenu[$menuIdent])) {
             /** Extract the secondary menu widget related to this main menu item. */
             $secondaryMenuWidget = current(
@@ -1068,8 +1070,8 @@ class AdminTemplate extends AbstractTemplate implements
 
         $menuItem['url'] = $url;
 
-        if (isset($menuItem['icon_css'])) {
-            $menuItem['iconCss'] = $menuItem['icon_css'];
+        if (isset($menuItem['iconCss'])) {
+            $menuItem['iconCss'] = $menuItem['iconCss'];
         }
 
         if (isset($menuItem['label'])) {

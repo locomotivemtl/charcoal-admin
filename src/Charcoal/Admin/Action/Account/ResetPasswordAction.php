@@ -231,7 +231,7 @@ class ResetPasswordAction extends AdminAction
             'userId' => $userId,
         ]);
 
-        return !!$obj->token();
+        return !!$obj['token'];
     }
 
     /**

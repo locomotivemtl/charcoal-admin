@@ -80,20 +80,20 @@ class ObjectRevisionsWidget extends AdminWidget
         $lastRevision = $target->latestRevision();
         $propLabel    = '<span title="%1$s">%2$s</code>';
 
-        $callback = function(&$obj) use ($lastRevision, $target, $propLabel) {
-            $dataDiff = $obj->dataDiff();
-            $obj->revTsDisplay = $obj->revTs()->format('Y-m-d H:i:s');
+        $callback = function (&$obj) use ($lastRevision, $target, $propLabel) {
+            $dataDiff = $obj['dataDiff'];
+            $obj->revTsDisplay = $obj['revTs']->format('Y-m-d H:i:s');
             $obj->numDiff = count($dataDiff);
 
             if (isset($dataDiff[0])) {
                 $props = array_keys($dataDiff[0]);
-                $props = array_diff($props, [ 'last_modified', 'last_modified_by' ]);
+                $props = array_diff($props, [ 'lastModified', 'lastModifiedBy' ]);
 
                 $changedProps = [];
                 $droppedProps = [];
                 foreach ($props as $p) {
                     if ($target->hasProperty($p)) {
-                        $label = $target->p($p)->label();
+                        $label = $target->p($p)['label'];
                         $changedProps[] = sprintf($propLabel, $p, $label);
                     } else {
                         $label = ucwords(str_replace([ '.', '_' ], ' ', $p));
@@ -107,7 +107,7 @@ class ObjectRevisionsWidget extends AdminWidget
                 $obj->droppedProperties = '';
             }
 
-            $obj->allowRevert = ($lastRevision->revNum() != $obj->revNum());
+            $obj->allowRevert = ($lastRevision['revNum'] != $obj['revNum']);
         };
 
         return $target->allRevisions($callback);

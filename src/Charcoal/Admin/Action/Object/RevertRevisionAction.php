@@ -108,9 +108,9 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
             ]);
 
             $obj    = $this->obj();
-            $revNum = $this->revNum();
+            $revNum = $this['revNum'];
             $rev    = $obj->revisionNum($revNum);
-            $revTs  = $rev->revTs();
+            $revTs  = $rev['revTs'];
             $result = $obj->revertToRevision($revNum);
 
             if ($result) {

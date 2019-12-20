@@ -5,10 +5,10 @@
         "size": {
             "type": "integer"
         },
-        "min_length": {
+        "minLength": {
             "type": "integer"
         },
-        "max_length": {
+        "maxLength": {
             "type": "integer"
         },
         "pattern": {

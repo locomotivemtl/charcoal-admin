@@ -1,7 +1,7 @@
 {
     "properties": {
         "category": {
-            "obj_type": "charcoal/admin/user/permission-category"
+            "objType": "charcoal/admin/user/permission-category"
         }
     },
 
@@ -10,7 +10,8 @@
             "table": "charcoal_admin_permissions"
         }
     },
-    "default_source": "default",
+
+    "defaultSource": "default",
 
     "admin": {
         "lists": {
@@ -22,7 +23,8 @@
                 ]
             }
         },
-        "default_list": "default",
+
+        "defaultList": "default",
 
         "forms": {
             "default": {
@@ -41,7 +43,8 @@
                 }
             }
         },
-        "default_form": "default",
+
+        "defaultForm": "default",
 
         "dashboards": {
             "admin.edit": {
@@ -57,12 +60,12 @@
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/object-form",
-                        "form_ident": "default",
-                        "obj_type": "charcoal/admin/user/permission"
+                        "formIdent": "default",
+                        "objType": "charcoal/admin/user/permission"
                     }
                 },
-                "secondary_menu": {
-                    "widget_options": {
+                "secondaryMenu": {
+                    "widgetOptions": {
                         "ident": "system"
                     }
                 }
@@ -80,19 +83,19 @@
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/table",
-                        "collection_ident": "default",
-                        "obj_type": "charcoal/admin/user/permission"
+                        "collectionIdent": "default",
+                        "objType": "charcoal/admin/user/permission"
                     }
                 },
-                "secondary_menu": {
-                    "widget_options": {
+                "secondaryMenu": {
+                    "widgetOptions": {
                         "ident": "system"
                     }
                 }
             }
         },
-        "default_create_dashboard": "admin.edit",
-        "default_edit_dashboard": "admin.edit",
-        "default_collection_dashboard": "admin.table"
+        "defaultCreateDashboard": "admin.edit",
+        "defaultEditDashboard": "admin.edit",
+        "defaultCollectionDashboard": "admin.table"
     }
 }

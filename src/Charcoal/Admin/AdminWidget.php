@@ -80,7 +80,7 @@ class AdminWidget extends AbstractWidget implements
     /**
      * @var string $lang
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var boolean $showLabel

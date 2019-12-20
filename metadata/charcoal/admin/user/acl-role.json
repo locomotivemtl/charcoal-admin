@@ -1,7 +1,7 @@
 {
     "properties": {
         "parent": {
-            "obj_type": "charcoal/admin/user/acl-role"
+            "objType": "charcoal/admin/user/acl-role"
         }
     },
 
@@ -10,14 +10,15 @@
             "table": "charcoal_admin_acl_roles"
         }
     },
-    "default_source": "default",
+
+    "defaultSource": "default",
 
     "admin": {
         "lists": {
             "default": {
                 "title": {
-                    "en":"Administrators",
-                    "fr":"Gestionnaires"
+                    "en": "Administrators",
+                    "fr": "Gestionnaires"
                 },
                 "properties": [
                     "ident",
@@ -26,7 +27,8 @@
                 ]
             }
         },
-        "default_list": "default",
+
+        "defaultList": "default",
 
         "forms": {
             "default": {
@@ -68,7 +70,8 @@
                 }
             }
         },
-        "default_form": "default",
+
+        "defaultForm": "default",
 
         "dashboards": {
             "admin.edit": {
@@ -84,12 +87,12 @@
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/object-form",
-                        "form_ident": "default",
-                        "obj_type": "charcoal/admin/user/acl-role"
+                        "formIdent": "default",
+                        "objType": "charcoal/admin/user/acl-role"
                     }
                 },
-                "secondary_menu": {
-                    "widget_options": {
+                "secondaryMenu": {
+                    "widgetOptions": {
                         "ident": "system"
                     }
                 }
@@ -107,19 +110,19 @@
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/table",
-                        "collection_ident": "default",
-                        "obj_type": "charcoal/admin/user/acl-role"
+                        "collectionIdent": "default",
+                        "objType": "charcoal/admin/user/acl-role"
                     }
                 },
-                "secondary_menu": {
-                    "widget_options": {
+                "secondaryMenu": {
+                    "widgetOptions": {
                         "ident": "system"
                     }
                 }
             }
         },
-        "default_create_dashboard": "admin.edit",
-        "default_edit_dashboard": "admin.edit",
-        "default_collection_dashboard": "admin.table"
+        "defaultCreateDashboard": "admin.edit",
+        "defaultEditDashboard": "admin.edit",
+        "defaultCollectionDashboard": "admin.table"
     }
 }

@@ -45,8 +45,8 @@ class TextInputTest extends AbstractTestCase
         $obj = $this->obj;
         $ret = $obj->setData([
             'size'        => 42,
-            'min_length'  => 10,
-            'max_length'  => 100,
+            'minLength'  => 10,
+            'maxLength'  => 100,
             'pattern'     => 'foo',
             'placeholder' => 'bar'
         ]);

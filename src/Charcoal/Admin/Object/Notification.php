@@ -15,30 +15,30 @@ class Notification extends AbstractModel
      * The user ids.
      * @var string[]
      */
-    private $users = [];
+    protected $users = [];
 
     /**
      * The types of object to watch, for notifications.
      * @var string[]
      */
-    private $targetTypes;
+    protected $targetTypes;
 
     /**
      * Extra emails the report shoul be sent to.
      * @var string[]
      */
-    private $extraEmails = [];
+    protected $extraEmails = [];
 
     /**
      * Can be "minute", "hourly", "daily", "weekly" or "monthly".
      * @var string
      */
-    private $frequency;
+    protected $frequency;
 
     /**
      * @var boolean
      */
-    private $active = true;
+    protected $active = true;
 
     /**
      * @param array|string|null $users The users of this notifications.
@@ -64,14 +64,6 @@ class Notification extends AbstractModel
     }
 
     /**
-     * @return array
-     */
-    public function users()
-    {
-        return $this->users;
-    }
-
-    /**
      * @param array|string|null $targetTypes The targetTypes of this notifications.
      * @throws InvalidArgumentException If the types are not an array or a comma-separated string.
      * @return Notification Chainable
@@ -79,7 +71,7 @@ class Notification extends AbstractModel
     public function setTargetTypes($targetTypes)
     {
         if ($targetTypes === null) {
-            $this->targetTypes = null;
+            $this['targetTypes'] = null;
             return $this;
         }
         if (is_string($targetTypes)) {
@@ -90,16 +82,8 @@ class Notification extends AbstractModel
                 'Object types must be an array or a comma-separated string.'
             );
         }
-        $this->targetTypes = array_map('trim', $targetTypes);
+        $this['targetTypes'] = array_map('trim', $targetTypes);
         return $this;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function targetTypes()
-    {
-        return $this->targetTypes;
     }
 
     /**
@@ -123,14 +107,6 @@ class Notification extends AbstractModel
         }
         $this->extraEmails = array_map('trim', $extraEmails);
         return $this;
-    }
-
-    /**
-     * @return array|null
-     */
-    public function extraEmails()
-    {
-        return $this->extraEmails;
     }
 
     /**
@@ -161,14 +137,6 @@ class Notification extends AbstractModel
     }
 
     /**
-     * @return boolean
-     */
-    public function frequency()
-    {
-        return $this->frequency;
-    }
-
-    /**
      * @param boolean $active The active flag.
      * @return Notification Chainable
      */
@@ -176,13 +144,5 @@ class Notification extends AbstractModel
     {
         $this->active = !!$active;
         return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function active()
-    {
-        return $this->active;
     }
 }

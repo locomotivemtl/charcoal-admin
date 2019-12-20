@@ -1,12 +1,13 @@
 {
-    "category_item_type": "charcoal/admin/user/permission",
+    "categoryItemType": "charcoal/admin/user/permission",
 
     "sources": {
         "default": {
             "table": "charcoal_admin_permissions_categories"
         }
     },
-    "default_source": "default",
+
+    "defaultSource": "default",
 
     "admin": {
         "lists": {
@@ -18,7 +19,7 @@
                     "property": "position",
                     "mode": "asc"
                 }],
-                "list_actions": [{
+                "listActions": [{
                     "label": {
                         "en": "New user permission category",
                         "fr": "Nouvelle catégorie de permission"
@@ -28,13 +29,12 @@
                 }]
             }
         },
-        "default_list": "default",
+
+        "defaultList": "default",
 
         "forms": {
             "default": {
-                "label": {
-
-                },
+                "label": {},
                 "groups": {
                     "info": {
                         "title": "Informations",
@@ -48,7 +48,8 @@
                 }
             }
         },
-        "default_form": "default",
+
+        "defaultForm": "default",
 
         "dashboards": {
             "admin.edit": {
@@ -64,8 +65,8 @@
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/object-form",
-                        "form_ident": "default",
-                        "obj_type": "charcoal/admin/user/permission-category"
+                        "formIdent": "default",
+                        "objType": "charcoal/admin/user/permission-category"
                     }
                 }
             },
@@ -82,19 +83,20 @@
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/table",
-                        "collection_ident": "default",
-                        "obj_type": "charcoal/admin/user/permission-category"
+                        "collectionIdent": "default",
+                        "objType": "charcoal/admin/user/permission-category"
                     }
                 },
-                "secondary_menu": {
-                    "widget_options": {
+                "secondaryMenu": {
+                    "widgetOptions": {
                         "ident": "system"
                     }
                 }
             }
         },
-        "default_create_dashboard": "admin.edit",
-        "default_edit_dashboard": "admin.edit",
-        "default_collection_dashboard": "admin.table"
+
+        "defaultCreateDashboard": "admin.edit",
+        "defaultEditDashboard": "admin.edit",
+        "defaultCollectionDashboard": "admin.table"
     }
 }

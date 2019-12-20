@@ -57,7 +57,7 @@ abstract class AbstractPropertyInput implements
     /**
      * @var string $lang
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var string $ident

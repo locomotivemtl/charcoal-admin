@@ -271,7 +271,7 @@ class CollectionMapWidget extends AdminWidget implements CollectionContainerInte
         }
 
         foreach ($this->mapObjects as $obj) {
-            $this->setDynamicTemplate('widget_template', $obj->mapInfoboxTemplate);
+            $this->setDynamicTemplate('widgetTemplate', $obj->mapInfoboxTemplate);
             yield $obj;
         }
     }

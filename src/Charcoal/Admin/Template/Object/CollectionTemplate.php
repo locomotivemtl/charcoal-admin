@@ -124,13 +124,14 @@ class CollectionTemplate extends AdminTemplate implements
             }
         }
 
-        if (!$objLabel && isset($metadata['labels']['all_items'])) {
-            $objLabel = $translator->translation($metadata['labels']['all_items']);
+
+        if (!$objLabel && !empty($this->getObjectAdminLabel($model, 'allItems'))) {
+            $objLabel = $this->getObjectAdminLabel($model, 'allItems');
         }
 
         if (!$objLabel) {
-            $objType = (isset($metadata['labels']['name'])
-                        ? $translator->translation($metadata['labels']['name'])
+            $objType = (!empty($this->getObjectAdminLabel($model, 'name'))
+                        ? $this->getObjectAdminLabel($model, 'name')
                         : null);
 
             $objLabel = $translator->translation('Collection: {{ objType }}');
@@ -222,12 +223,8 @@ class CollectionTemplate extends AdminTemplate implements
 
         if (isset($adminMetadata['defaultSearchList'])) {
             $listIdent = $adminMetadata['defaultSearchList'];
-        } elseif (isset($adminMetadata['default_search_list'])) {
-            $listIdent = $adminMetadata['default_search_list'];
         } elseif (isset($adminMetadata['defaultList'])) {
             $listIdent = $adminMetadata['defaultList'];
-        } elseif (isset($adminMetadata['default_list'])) {
-            $listIdent = $adminMetadata['default_list'];
         } else {
             $listIdent = 'default';
         }
@@ -249,8 +246,6 @@ class CollectionTemplate extends AdminTemplate implements
         $adminMetadata = $this->objAdminMetadata();
         if (isset($adminMetadata['defaultCollectionDashboard'])) {
             return $adminMetadata['defaultCollectionDashboard'];
-        } elseif (isset($adminMetadata['default_collection_dashboard'])) {
-            return $adminMetadata['default_collection_dashboard'];
         }
 
         // You've reached error.

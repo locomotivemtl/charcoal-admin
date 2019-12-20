@@ -114,7 +114,7 @@ class GridStackDashboardWidget extends AdminWidget implements
                 $widgetCallback($widget);
             }
 
-            $this->setDynamicTemplate('widget_template', $widget->template());
+            $this->setDynamicTemplate('widgetTemplate', $widget->template());
             yield $widget;
         }
     }

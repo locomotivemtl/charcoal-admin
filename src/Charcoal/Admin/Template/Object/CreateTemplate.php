@@ -85,12 +85,10 @@ class CreateTemplate extends AdminTemplate implements
                 if (!$title && isset($metadata['admin']['forms'])) {
                     $adminMetadata = $metadata['admin'];
 
-                    $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
+                    $formIdent = filter_input(INPUT_GET, 'formIdent', FILTER_SANITIZE_STRING);
                     if (!$formIdent) {
                         if (isset($adminMetadata['defaultForm'])) {
-                            $fomIdent = $adminMetadata['defaultForm'];
-                        } elseif (isset($adminMetadata['default_form'])) {
-                            $formIdent = $adminMetadata['default_form'];
+                            $formIdent = $adminMetadata['defaultForm'];
                         } else {
                             $formIdent = '';
                         }
@@ -101,18 +99,17 @@ class CreateTemplate extends AdminTemplate implements
                     }
                 }
 
-                if (!$title && isset($metadata['labels']['new_item'])) {
-                    $title = $translator->translation($metadata['labels']['new_item']);
+                if (!$title && !empty($this->getObjectAdminLabel($obj, 'newItem'))) {
+                    $title = $this->getObjectAdminLabel($obj, 'newItem');
                 }
 
-                if (!$title && isset($metadata['labels']['new_model'])) {
-                    $title = $translator->translation($metadata['labels']['new_model']);
+                if (!$title && !empty($this->getObjectAdminLabel($obj, 'newModel'))) {
+                    $title = $this->getObjectAdminLabel($obj, 'newModel');
                 }
-
 
                 if (!$title) {
-                    $objType = (isset($metadata['labels']['singular_name'])
-                        ? $translator->translation($metadata['labels']['singular_name'])
+                    $objType = (!empty($this->getObjectAdminLabel($obj, 'singularName'))
+                        ? $translator->translation($this->getObjectAdminLabel($obj, 'singularName'))
                         : null);
 
                     if (!empty($_GET['clone_id'])) {
@@ -193,7 +190,7 @@ class CreateTemplate extends AdminTemplate implements
             if (isset($adminMetadata['defaultCreateDashboard'])) {
                 $dashboardIdent = $adminMetadata['defaultCreateDashboard'];
             } elseif (isset($adminMetadata['default_create_dashboard'])) {
-                 $dashboardIdent = $adminMetadata['default_create_dashboard'];
+                $dashboardIdent = $adminMetadata['default_create_dashboard'];
             } else {
                 throw new Exception(sprintf(
                     'Can not show object creation dashboard: No default create dashboard defined in admin metadata for %s',

@@ -54,7 +54,7 @@ trait NestedWidgetContainerTrait
     public function widget()
     {
         $widget = $this->getWidget();
-        $this->setDynamicTemplate('widget_template', $widget->template());
+        $this->setDynamicTemplate('widgetTemplate', $widget->template());
         yield $widget;
     }
 

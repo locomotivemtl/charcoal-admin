@@ -95,8 +95,8 @@ trait ImageAttributesTrait
         return [
             'height'     => $this->height(),
             'width'      => $this->width(),
-            'max-height' => $this->maxHeight(),
-            'max-width'  => $this->maxWidth(),
+            'maxHeight' => $this->maxHeight(),
+            'maxWidth'  => $this->maxWidth(),
         ];
     }
 

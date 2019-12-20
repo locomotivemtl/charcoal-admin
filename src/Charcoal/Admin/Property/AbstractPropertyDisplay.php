@@ -44,7 +44,7 @@ abstract class AbstractPropertyDisplay implements
     /**
      * @var string
      */
-    private $lang;
+    protected $lang;
 
     /**
      * @var string

@@ -450,8 +450,8 @@ class SelectizeInput extends SelectInput
         $metadata = $this->metadata();
         $options = [];
 
-        if (isset($metadata['data']['selectize_options'])) {
-            $options = $metadata['data']['selectize_options'];
+        if (isset($metadata['data']['selectizeOptions'])) {
+            $options = $metadata['data']['selectizeOptions'];
             $options = $this->parseSelectizeOptions($options);
         }
 

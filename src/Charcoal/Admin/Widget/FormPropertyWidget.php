@@ -1141,7 +1141,7 @@ class FormPropertyWidget extends AdminWidget implements
                 break;
         }
 
-        $this->setDynamicTemplate('widget_template', $type);
+        $this->setDynamicTemplate('widgetTemplate', $type);
 
         if ($this->l10n() && $this->loopL10n()) {
             $locales  = $this->translator()->availableLocales();

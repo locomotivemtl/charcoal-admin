@@ -2,8 +2,8 @@
     "properties": {
         "roles": {
             "type": "object",
-            "obj_type": "charcoal/admin/user/acl-role",
-            "input_type": "charcoal/admin/property/input/checkbox",
+            "objType": "charcoal/admin/user/acl-role",
+            "inputType": "charcoal/admin/property/input/checkbox",
             "pattern": "{{ident}}",
             "multiple": true
         }
@@ -14,7 +14,8 @@
             "table": "charcoal_admin_users"
         }
     },
-    "default_source": "default",
+
+    "defaultSource": "default",
 
     "admin": {
         "lists": {
@@ -24,12 +25,12 @@
                     "fr": "Administrateurs / Gestionnaires"
                 },
                 "properties": [
-                    "display_name",
+                    "displayName",
                     "email",
                     "roles",
-                    "last_login_date"
+                    "lastLoginDate"
                 ],
-                "list_actions": [
+                "listActions": [
                     {
                         "ident": "create",
                         "label": {
@@ -41,7 +42,8 @@
                 ]
             }
         },
-        "default_list": "default",
+
+        "defaultList": "default",
 
         "forms": {
             "default": {
@@ -54,7 +56,7 @@
                         },
                         "properties": [
                             "active",
-                            "display_name",
+                            "displayName",
                             "email",
                             "password"
                         ],
@@ -76,10 +78,10 @@
                             "fr": "Journal"
                         },
                         "properties": [
-                            "last_login_date",
-                            "last_login_ip",
-                            "last_password_date",
-                            "last_password_ip"
+                            "lastLoginDate",
+                            "lastLoginIp",
+                            "lastPasswordDate",
+                            "lastPasswordIp"
                         ],
                         "priority": 30
                     }
@@ -88,20 +90,21 @@
                     "actions": {
                         "properties": [
                             "created",
-                            "last_modified"
+                            "lastModified"
                         ]
                     }
                 }
             }
         },
-        "default_form": "default",
+
+        "defaultForm": "default",
 
         "dashboards": {
             "admin.edit": {
                 "layout": {
                     "structure": [
                         {
-                            "num_columns": 3,
+                            "numColumns": 3,
                             "columns": [ 2, 1 ]
                         }
                     ]
@@ -109,11 +112,11 @@
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/object-form",
-                        "obj_type": "charcoal/admin/user"
+                        "objType": "charcoal/admin/user"
                     }
                 },
-                "secondary_menu": {
-                    "widget_options": {
+                "secondaryMenu": {
+                    "widgetOptions": {
                         "ident": "system"
                     }
                 }
@@ -128,18 +131,19 @@
                     "list": {
                         "type": "charcoal/admin/widget/table",
                         "label": "Admin user (website manager) list",
-                        "obj_type": "charcoal/admin/user"
+                        "objType": "charcoal/admin/user"
                     }
                 },
-                "secondary_menu": {
-                    "widget_options": {
+                "secondaryMenu": {
+                    "widgetOptions": {
                         "ident": "system"
                     }
                 }
             }
         },
-        "default_create_dashboard": "admin.edit",
-        "default_edit_dashboard": "admin.edit",
-        "default_collection_dashboard": "admin.collection"
+
+        "defaultCreateDashboard": "admin.edit",
+        "defaultEditDashboard": "admin.edit",
+        "defaultCollectionDashboard": "admin.collection"
     }
 }

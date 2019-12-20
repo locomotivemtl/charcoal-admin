@@ -1,5 +1,5 @@
 {
-    "base_path": "admin",
+    "basePath": "admin",
 
     "metadata": {
         "cache": "memory"
@@ -111,7 +111,7 @@
             "filesystem/download": {
                 "methods": [ "GET" ],
                 "ident": "charcoal/admin/action/filesystem/load",
-                "action_data": {
+                "actionData": {
                     "disposition": "attachment"
                 }
             },
@@ -254,7 +254,7 @@
     },
 
     "user": {
-        "subscription_email": {
+        "subscriptionEmail": {
             "active": true,
             "template": "charcoal/admin/email/user.subscription",
             "campaign": "admin.user.subscription",
@@ -266,7 +266,7 @@
             "log": true,
             "track": true
         },
-        "lost_password_email": {
+        "lostPasswordEmail": {
             "active": true,
             "template": "charcoal/admin/email/user.lost-password",
             "campaign": "admin.user.lost-password",
@@ -294,12 +294,12 @@
     },
 
     "login": {
-        "visit_site": null,
-        "token_expiry": "2 hours"
+        "visitSite": null,
+        "tokenExpiry": "2 hours"
     },
 
-    "main_menu": {
-        "visit_site": null
+    "mainMenu": {
+        "visitSite": null
     },
 
     "assets": {

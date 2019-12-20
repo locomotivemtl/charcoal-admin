@@ -99,7 +99,7 @@ class ResetPasswordTemplate extends AdminTemplate
             'token' => $token
         ]);
 
-        return !!$obj->token();
+        return !!$obj['token'];
     }
 
     /**

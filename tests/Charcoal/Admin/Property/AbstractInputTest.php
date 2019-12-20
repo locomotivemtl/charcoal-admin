@@ -48,7 +48,7 @@ class AbstractInputTest extends AbstractTestCase
             'ident'=>'foo',
             'required'=>true,
             'disabled'=>true,
-            'read_only'=>true
+            'readOnly'=>true
         ]);
         $this->assertSame($ret, $obj);
         $this->assertEquals('foo', $obj->ident());

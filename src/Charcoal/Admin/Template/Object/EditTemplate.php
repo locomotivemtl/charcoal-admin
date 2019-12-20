@@ -88,33 +88,31 @@ class EditTemplate extends AdminTemplate implements
                     $formIdent = filter_input(INPUT_GET, 'form_ident', FILTER_SANITIZE_STRING);
                     if (!$formIdent) {
                         if (isset($adminMetadata['defaultForm'])) {
-                            $fomIdent = $adminMetadata['defaultForm'];
-                        } elseif (isset($adminMetadata['default_form'])) {
-                            $formIdent = $adminMetadata['default_form'];
+                            $formIdent = $adminMetadata['defaultForm'];
                         } else {
                             $formIdent = '';
                         }
                     }
 
-                    if (isset($adminMetadata['forms'][$formIdent]['label'])) {
-                        $title = $translator->translation($adminMetadata['forms'][$formIdent]['label']);
+                    if (!empty($this->getObjectAdminLabel($obj, 'label'))) {
+                        $title = $this->getObjectAdminLabel($obj, 'label');
                     }
                 }
 
                 $labels = $metadata['labels'];
-                if (!$title && isset($labels['edit_item'])) {
-                    $title = $translator->translation($labels['edit_item']);
+                if (!$title && !empty($this->getObjectAdminLabel($obj, 'editItem'))) {
+                    $title = $this->getObjectAdminLabel($obj, 'editItem');
                 }
 
-                if (!$title && isset($labels['edit_model'])) {
-                    $title = $translator->translation($labels['edit_model']);
+                if (!$title && !empty($this->getObjectAdminLabel($obj, 'editModel'))) {
+                    $title = $this->getObjectAdminLabel($obj, 'editModel');
                 }
 
                 if (!$title) {
                     $title = $translator->translation('Edit: {{ objType }} #{{ id }}');
-                    if (isset($labels['singular_name'])) {
+                    if (!empty($this->getObjectAdminLabel($obj, 'singularName'))) {
                         $title = strtr($title, [
-                            '{{ objType }}' => $translator->translation($labels['singular_name'])
+                            '{{ objType }}' => $this->getObjectAdminLabel($obj, 'singularName')
                         ]);
                     }
                 }
@@ -185,7 +183,7 @@ class EditTemplate extends AdminTemplate implements
             if (isset($adminMetadata['defaultEditDashboard'])) {
                 $dashboardIdent = $adminMetadata['defaultEditDashboard'];
             } elseif (isset($adminMetadata['default_edit_dashboard'])) {
-                 $dashboardIdent = $adminMetadata['default_edit_dashboard'];
+                $dashboardIdent = $adminMetadata['default_edit_dashboard'];
             } else {
                 throw new Exception(sprintf(
                     'No default edit dashboard defined in admin metadata for %s',

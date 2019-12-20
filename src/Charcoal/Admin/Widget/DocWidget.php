@@ -132,7 +132,7 @@ class DocWidget extends FormWidget implements
             $translator = $this->translator();
 
             $template = 'charcoal/admin/widget/form.sidebar';
-            $this->setDynamicTemplate('widget_template', $template);
+            $this->setDynamicTemplate('widgetTemplate', $template);
 
             $metadata = $this->obj()->metadata();
             $objType  = (isset($metadata['labels']['singular_name'])

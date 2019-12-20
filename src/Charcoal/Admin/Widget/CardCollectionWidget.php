@@ -82,7 +82,7 @@ class CardCollectionWidget extends TableWidget
     public function objectCardRow()
     {
         foreach ($this->objectRows() as $obj) {
-            $this->setDynamicTemplate('widget_template', $this->cardTemplate());
+            $this->setDynamicTemplate('widgetTemplate', $this->cardTemplate());
             yield $obj;
         }
     }

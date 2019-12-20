@@ -86,7 +86,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
 
         $climate = $this->climate();
 
-        $frequency = $this->frequency();
+        $frequency = $this['frequency'];
 
         $notifications = $this->loadNotifications($frequency);
 
@@ -170,12 +170,12 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
      */
     private function handleNotification(Notification $notification)
     {
-        if (empty($notification->targetTypes())) {
+        if (empty($notification['targetTypes'])) {
             return;
         }
         $objectsByTypes = [];
         $numTotal = 0;
-        foreach ($notification->targetTypes() as $objType) {
+        foreach ($notification['targetTypes'] as $objType) {
             $objType = trim($objType);
             $objects = $this->updatedObjects($objType);
             $num = count($objects);
@@ -215,7 +215,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             'template_data' => [
                 'objects'       => new \ArrayIterator($objects),
                 'numObjects'    => $numTotal,
-                'frequency'     => $this->frequency(),
+                'frequency'     => $this['frequency'],
                 'startString'   => $this->startDate()->format('Y-m-d H:i:s'),
                 'endString'     => $this->endDate()->format('Y-m-d H:i:s')
             ]
@@ -224,7 +224,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
 
         $email->setData($emailData);
 
-        foreach ($notification->users() as $userId) {
+        foreach ($notification['users'] as $userId) {
             $user = $this->userFactory->create(User::class);
             $user->load($userId);
             if (!$user->id() || !$user->email()) {
@@ -233,7 +233,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
             $email->addTo($user->email());
         }
 
-        foreach ($notification->extraEmails() as $extraEmail) {
+        foreach ($notification['extraEmails'] as $extraEmail) {
             $email->addBcc($extraEmail);
         }
         $email->send();
@@ -251,21 +251,21 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         ]);
         $loader->setModel(ObjectRevision::class);
         $loader->addFilter([
-            'property'  => 'target_type',
+            'property'  => 'targetType',
             'val'       => $objType
         ]);
         $loader->addFilter([
-            'property'  => 'rev_ts',
+            'property'  => 'revTs',
             'val'       => $this->startDate()->format('Y-m-d H:i:s'),
             'operator'  => '>'
         ]);
         $loader->addFilter([
-            'property'  => 'rev_ts',
+            'property'  => 'revTs',
             'val'       => $this->endDate()->format('Y-m-d H:i:s'),
             'operator'  => '<'
         ]);
         $loader->addOrder([
-            'property' => 'rev_ts',
+            'property' => 'revTs',
             'mode'     => 'DESC'
         ]);
         $objFactory = $this->objectFactory;
@@ -273,7 +273,7 @@ abstract class AbstractNotificationScript extends AdminScript implements CronScr
         $baseUrl = $this->baseUrl();
 
         $loader->setCallback(function (&$obj) use ($objFactory, $userFactory, $baseUrl) {
-            $diff = $obj->dataDiff();
+            $diff = $obj['dataDiff'];
             $obj->updatedProperties = isset($diff[0]) ? array_keys($diff[0]) : [];
             $obj->dateStr = $obj['rev_ts']->format('Y-m-d H:i:s');
             $obj->numProperties = count($obj->updatedProperties);

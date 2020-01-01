@@ -25,6 +25,7 @@ use Charcoal\Ui\FormInput\FormInputInterface;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
+use Charcoal\Admin\Ui\FormPropertyInterface;
 
 /**
  * Form Control Widget
@@ -32,6 +33,7 @@ use Charcoal\Admin\AdminWidget;
  * For model properties.
  */
 class FormPropertyWidget extends AdminWidget implements
+    FormPropertyInterface,
     FormInputInterface
 {
     const HIDDEN_FORM_CONTROL     = 'charcoal/admin/property/input/hidden';
@@ -42,12 +44,21 @@ class FormPropertyWidget extends AdminWidget implements
     const PROPERTY_DISPLAY = 'display';
     const DEFAULT_OUTPUT   = self::PROPERTY_CONTROL;
 
+    const DEFAULT_TYPE = 'charcoal/admin/widget/form-property-widget';
+
     /**
      * The widget's type.
      *
      * @var string|null
      */
     protected $type;
+
+    /**
+     * The widget's template.
+     *
+     * @var string $template
+     */
+    protected $template;
 
     /**
      * The widget's property output type.
@@ -207,57 +218,6 @@ class FormPropertyWidget extends AdminWidget implements
     private $icon;
 
     /**
-     * Retrieve the property factory.
-     *
-     * @throws RuntimeException If the property factory is missing.
-     * @return FactoryInterface
-     */
-    public function propertyFactory()
-    {
-        if ($this->propertyFactory === null) {
-            throw new RuntimeException(
-                'Missing Property Factory'
-            );
-        }
-
-        return $this->propertyFactory;
-    }
-
-    /**
-     * Retrieve the property control factory.
-     *
-     * @throws RuntimeException If the property control factory is missing.
-     * @return FactoryInterface
-     */
-    public function propertyInputFactory()
-    {
-        if ($this->propertyInputFactory === null) {
-            throw new RuntimeException(
-                'Missing Property Input Factory'
-            );
-        }
-
-        return $this->propertyInputFactory;
-    }
-
-    /**
-     * Retrieve the property display factory.
-     *
-     * @throws RuntimeException If the property display factory is missing.
-     * @return FactoryInterface
-     */
-    public function propertyDisplayFactory()
-    {
-        if ($this->propertyDisplayFactory === null) {
-            throw new RuntimeException(
-                'Missing Property Display Factory'
-            );
-        }
-
-        return $this->propertyDisplayFactory;
-    }
-
-    /**
      * Retrieve the widget ID.
      *
      * @return string
@@ -307,6 +267,69 @@ class FormPropertyWidget extends AdminWidget implements
         $this->type = $type;
 
         return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function template()
+    {
+        if ($this->template === null) {
+            return static::DEFAULT_TYPE;
+        }
+
+        return $this->template;
+    }
+
+    /**
+     * Retrieve the property factory.
+     *
+     * @throws RuntimeException If the property factory is missing.
+     * @return FactoryInterface
+     */
+    public function propertyFactory()
+    {
+        if ($this->propertyFactory === null) {
+            throw new RuntimeException(
+                'Missing Property Factory'
+            );
+        }
+
+        return $this->propertyFactory;
+    }
+
+    /**
+     * Retrieve the property control factory.
+     *
+     * @throws RuntimeException If the property control factory is missing.
+     * @return FactoryInterface
+     */
+    public function propertyInputFactory()
+    {
+        if ($this->propertyInputFactory === null) {
+            throw new RuntimeException(
+                'Missing Property Input Factory'
+            );
+        }
+
+        return $this->propertyInputFactory;
+    }
+
+    /**
+     * Retrieve the property display factory.
+     *
+     * @throws RuntimeException If the property display factory is missing.
+     * @return FactoryInterface
+     */
+    public function propertyDisplayFactory()
+    {
+        if ($this->propertyDisplayFactory === null) {
+            throw new RuntimeException(
+                'Missing Property Display Factory'
+            );
+        }
+
+        return $this->propertyDisplayFactory;
     }
 
     /**

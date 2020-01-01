@@ -349,9 +349,8 @@ class DocWidget extends FormWidget implements
             $formProperty->setData($propertyMetadata);
             $formProperty->setPropertyVal($obj[$propertyIdent]);
 
-            if ($formProperty->hidden()) {
-                $this->hiddenProperties[$propertyIdent] = $formProperty;
-            } else {
+            if (!$formProperty->hidden()) {
+                $this->setDynamicTemplate('form_property_widget', $formProperty->template());
                 yield $propertyIdent => $formProperty;
             }
         }

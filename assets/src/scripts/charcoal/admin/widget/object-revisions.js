@@ -7,7 +7,7 @@
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Object_Revisions = function (opts) {
-    this.widget_type = 'charcoal/admin/widget/object-revisions';
+    Charcoal.Admin.Widget.call(this, opts);
 
     this.extra_form_data = opts.extra_form_data || {};
 

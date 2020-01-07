@@ -6,8 +6,10 @@
  *
  * @see widget.js (Charcoal.Admin.Widget)
  */
-Charcoal.Admin.Widget_Relation = function ()
+Charcoal.Admin.Widget_Relation = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this.dirty = false;
     return this;
 };

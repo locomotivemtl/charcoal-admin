@@ -2905,8 +2905,10 @@ var globalXHR = {};
  *
  * @see widget.js (Charcoal.Admin.Widget
  */
-Charcoal.Admin.Widget_Attachment = function ()
+Charcoal.Admin.Widget_Attachment = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this.glyphs = {
         embed:      'glyphicon-blackboard',
         video:      'glyphicon-film',
@@ -3318,7 +3320,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     if (this.is_dirty()) {
         return false;
     }
-    
+
     // Create join from current list.
     this.join();
 };
@@ -3418,8 +3420,10 @@ Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Card_Collection = function ()
+Charcoal.Admin.Widget_Card_Collection = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     // Widget_Card_Collection properties
     this.obj_type       = null;
     this.widget_id      = null;
@@ -3646,7 +3650,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.reload = function (callback)
  */
 
 Charcoal.Admin.Widget_Form = function (opts) {
-    this.widget_type = 'charcoal/admin/widget/form';
+    Charcoal.Admin.Widget.call(this, opts);
 
     // Widget_Form properties
     this.widget_id         = null;
@@ -4345,12 +4349,12 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
  * @param  {Object}  opts Options for widget
  */
 
-var Graph = function (data) {
-    Charcoal.Admin.Widget.call(this, data);
+var Graph = function (opts) {
+    Charcoal.Admin.Widget.call(this, opts);
 };
 
 Graph.prototype            = Object.create(Charcoal.Admin.Widget.prototype);
-Graph.prototype.contructor = Charcoal.Admin.Widget_Graph;
+Graph.prototype.contructor = Graph;
 Graph.prototype.parent     = Charcoal.Admin.Widget.prototype;
 
 Graph.prototype.init = function () {
@@ -4395,10 +4399,11 @@ Charcoal.Admin.Widget_Graph = Graph;
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Map = function ()
+Charcoal.Admin.Widget_Map = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this._controller = undefined;
-    this.widget_type = 'charcoal/admin/widget/map';
 
     return this;
 };
@@ -4507,7 +4512,7 @@ Charcoal.Admin.Widget_Map.prototype.coords = function ()
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Object_Revisions = function (opts) {
-    this.widget_type = 'charcoal/admin/widget/object-revisions';
+    Charcoal.Admin.Widget.call(this, opts);
 
     this.extra_form_data = opts.extra_form_data || {};
 
@@ -4626,7 +4631,8 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.request_success = function ($fo
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
-    this.widget_type = 'charcoal/admin/widget/quick-form';
+    Charcoal.Admin.Widget.call(this, opts);
+
     this.save_callback = opts.save_callback || '';
     this.cancel_callback = opts.cancel_callback || '';
 
@@ -4897,8 +4903,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.destroy = function () {
  *
  * @see widget.js (Charcoal.Admin.Widget)
  */
-Charcoal.Admin.Widget_Relation = function ()
+Charcoal.Admin.Widget_Relation = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this.dirty = false;
     return this;
 };
@@ -5249,6 +5257,8 @@ Charcoal.Admin.Widget_Relation.prototype.widget_options = function ()
  */
 Charcoal.Admin.Widget_Search = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this._elem = undefined;
 
     if (!opts) {
@@ -5424,8 +5434,10 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget)
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Table = function ()
+Charcoal.Admin.Widget_Table = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     // Widget_Table properties
     this.obj_type       = null;
     this.widget_id      = null;
@@ -5525,7 +5537,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             }
         });
     }
-    
+
     $('.js-jump-page-form', that.table_selector).on('submit', function (event) {
         event.preventDefault();
 
@@ -5604,17 +5616,6 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
             object_actions:     this.object_actions
         }
     };
-};
-
-/**
- *
- */
-Charcoal.Admin.Widget_Table.prototype.reload = function (callback)
-{
-    // Call supra class
-    Charcoal.Admin.Widget.prototype.reload.call(this, callback);
-
-    return this;
 };
 ;/**
  * Base Property Input (charcoal/admin/property/input)

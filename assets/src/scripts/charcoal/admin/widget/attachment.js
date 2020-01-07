@@ -13,8 +13,10 @@ var globalXHR = {};
  *
  * @see widget.js (Charcoal.Admin.Widget
  */
-Charcoal.Admin.Widget_Attachment = function ()
+Charcoal.Admin.Widget_Attachment = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this.glyphs = {
         embed:      'glyphicon-blackboard',
         video:      'glyphicon-film',
@@ -426,7 +428,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     if (this.is_dirty()) {
         return false;
     }
-    
+
     // Create join from current list.
     this.join();
 };

@@ -10,12 +10,12 @@
  * @param  {Object}  opts Options for widget
  */
 
-var Graph = function (data) {
-    Charcoal.Admin.Widget.call(this, data);
+var Graph = function (opts) {
+    Charcoal.Admin.Widget.call(this, opts);
 };
 
 Graph.prototype            = Object.create(Charcoal.Admin.Widget.prototype);
-Graph.prototype.contructor = Charcoal.Admin.Widget_Graph;
+Graph.prototype.contructor = Graph;
 Graph.prototype.parent     = Charcoal.Admin.Widget.prototype;
 
 Graph.prototype.init = function () {

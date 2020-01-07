@@ -9,8 +9,10 @@
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Table = function ()
+Charcoal.Admin.Widget_Table = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     // Widget_Table properties
     this.obj_type       = null;
     this.widget_id      = null;
@@ -110,7 +112,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
             }
         });
     }
-    
+
     $('.js-jump-page-form', that.table_selector).on('submit', function (event) {
         event.preventDefault();
 
@@ -189,15 +191,4 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
             object_actions:     this.object_actions
         }
     };
-};
-
-/**
- *
- */
-Charcoal.Admin.Widget_Table.prototype.reload = function (callback)
-{
-    // Call supra class
-    Charcoal.Admin.Widget.prototype.reload.call(this, callback);
-
-    return this;
 };

@@ -7,10 +7,11 @@
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Map = function ()
+Charcoal.Admin.Widget_Map = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this._controller = undefined;
-    this.widget_type = 'charcoal/admin/widget/map';
 
     return this;
 };

@@ -7,7 +7,8 @@
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
-    this.widget_type = 'charcoal/admin/widget/quick-form';
+    Charcoal.Admin.Widget.call(this, opts);
+
     this.save_callback = opts.save_callback || '';
     this.cancel_callback = opts.cancel_callback || '';
 

@@ -11,7 +11,7 @@
  */
 
 Charcoal.Admin.Widget_Form = function (opts) {
-    this.widget_type = 'charcoal/admin/widget/form';
+    Charcoal.Admin.Widget.call(this, opts);
 
     // Widget_Form properties
     this.widget_id         = null;

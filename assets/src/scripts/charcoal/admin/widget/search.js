@@ -9,6 +9,8 @@
  */
 Charcoal.Admin.Widget_Search = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     this._elem = undefined;
 
     if (!opts) {

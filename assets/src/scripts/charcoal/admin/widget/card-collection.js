@@ -11,8 +11,10 @@
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Card_Collection = function ()
+Charcoal.Admin.Widget_Card_Collection = function (opts)
 {
+    Charcoal.Admin.Widget.call(this, opts);
+
     // Widget_Card_Collection properties
     this.obj_type       = null;
     this.widget_id      = null;

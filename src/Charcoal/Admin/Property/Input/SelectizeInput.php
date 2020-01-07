@@ -125,6 +125,23 @@ class SelectizeInput extends SelectInput
     private $remoteSource;
 
     /**
+     * @var string|null
+     */
+    private $optgroupProperty;
+
+    /**
+     * @var array|null
+     */
+    private $optgroupObjMap;
+
+    /**
+     * Check used to parse multi Optgroup map against the obj properties.
+     *
+     * @var boolean
+     */
+    private $isOptgroupObjMapFinalized = false;
+
+    /**
      * This function takes an array and fill the model object with its value.
      *
      * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
@@ -463,6 +480,37 @@ class SelectizeInput extends SelectInput
 
         $options['placeholder'] = $placeholder;
         $prop = $this->property();
+
+        // Generate Optgroups from model.
+        if ($this->optgroupProperty() && $prop instanceof ObjectProperty) {
+            $model = $this->modelFactory()->get($prop['objType']);
+
+            $optgroupProp = $model->p($this->optgroupProperty());
+
+            if ($optgroupProp instanceof ObjectProperty) {
+                $collection = $this->collectionLoader()
+                     ->setModel($optgroupProp['objType'])
+                     ->addFilter([
+                         'property' => 'active',
+                         'value'    => 1
+                     ])
+                     ->setCallback([$this, 'mapObjToOptgroup'])
+                     ->load();
+
+                $optgroups = array_map([$this, 'mapObjToOptgroup'], $collection->values());
+                $options['optgroups'] = $optgroups;
+            } elseif ($optgroupProp instanceof SelectablePropertyInterface) {
+                $optgroups = array_values($optgroupProp->choices());
+
+                // Make sure label is converted to string.
+                array_walk($optgroups, function (&$item) {
+                    $item['label'] = (string)$item['label'];
+                });
+
+                $options['optgroups'] = $optgroups;
+            }
+        }
+
         if ($prop instanceof SelectablePropertyInterface) {
             $choices = iterator_to_array($this->choices());
 
@@ -775,6 +823,92 @@ class SelectizeInput extends SelectInput
     }
 
     /**
+     * @param  array|\ArrayAccess|ModelInterface $obj The object to map to a optgroup.
+     * @return array
+     */
+    public function mapObjToOptgroup($obj)
+    {
+        $map = $this->optgroupObjMap();
+
+        $optgroup = [];
+
+        foreach ($map as $key => $props) {
+            $optgroup[$key] = null;
+
+            $props = explode(':', $props);
+            foreach ($props as $prop) {
+                // I think we can still use this CHOICE method here for render.
+                $optgroup[$key] = $this->renderChoiceObjMap($obj, $prop);
+                break;
+            }
+        }
+
+        return $optgroup;
+    }
+
+    /**
+     * Retrieve the object-to-choice data map.
+     *
+     * @return array Returns a data map to abide.
+     */
+    public function optgroupObjMap()
+    {
+        $map = $this->optgroupObjMap ?: $this->defaultOptgroupObjMap();
+
+        if (!$this->isOptgroupObjMapFinalized) {
+            $this->isOptgroupObjMapFinalized = true;
+
+            // Get the optgroup property.
+
+            $prop = $this->property();
+            if ($prop instanceof ObjectProperty) {
+                /** @var ModelInterface $model */
+                $model = $this->modelFactory()->get($prop['objType']);
+
+                // fetch the optgroup property
+                $optgroupProp = $model->p($this->optgroupProperty());
+                if ($optgroupProp instanceof ObjectProperty) {
+                    $optgroupModel = $this->modelFactory()->get($optgroupProp['objType']);
+
+                    $objProperties = $optgroupModel->properties();
+
+                    if ($objProperties instanceof \Iterator) {
+                        $objProperties = iterator_to_array($objProperties);
+                    }
+
+                    foreach ($map as &$mapProp) {
+                        $props = explode(':', $mapProp);
+                        foreach ($props as $p) {
+                            if (isset($objProperties[$p])) {
+                                $mapProp = $p;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            $this->optgroupObjMap = $map;
+        }
+
+        return $this->optgroupObjMap;
+    }
+
+    /**
+     * Retrieve the default object-to-optgroup data map.
+     *
+     * @return array
+     */
+    public function defaultOptgroupObjMap()
+    {
+        return [
+            'value' => 'id',
+            'label' => 'name:title:label:id',
+            'color' => 'color'
+        ];
+    }
+
+    /**
      * Retrieve the control's data options for JavaScript components.
      *
      * @return array
@@ -858,6 +992,25 @@ class SelectizeInput extends SelectInput
         if ($this->remoteSource) {
             $this->remoteSource = $this->renderTemplate($this->remoteSource);
         }
+
+        return $this;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function optgroupProperty()
+    {
+        return $this->optgroupProperty;
+    }
+
+    /**
+     * @param string|null $optgroupProperty OptgroupProperty for SelectizeInput.
+     * @return self
+     */
+    public function setOptgroupProperty($optgroupProperty)
+    {
+        $this->optgroupProperty = $optgroupProperty;
 
         return $this;
     }

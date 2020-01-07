@@ -122,7 +122,7 @@ class LoadAction extends AdminAction
             if (!$widgetType) {
                 $actualType = is_object($widgetType) ? get_class($widgetType) : gettype($widgetType);
                 $this->addFeedback('error', strtr($reqMessage, [
-                    '{{ parameter }}'    => '"obj_type"',
+                    '{{ parameter }}'    => '"widget_type"',
                     '{{ expectedType }}' => 'string',
                     '{{ actualType }}'   => $actualType,
                 ]));

@@ -2,7 +2,6 @@
 
 namespace Charcoal\Admin;
 
-use Charcoal\Ui\PrioritizableInterface;
 use Exception;
 use InvalidArgumentException;
 
@@ -21,6 +20,9 @@ use Charcoal\User\AuthAwareTrait;
 
 // From 'charcoal-translator'
 use Charcoal\Translator\TranslatorAwareTrait;
+
+// From 'charcoal-ui'
+use Charcoal\Ui\PrioritizableInterface;
 
 // From 'charcoal-app'
 use Charcoal\App\DebugAwareTrait;
@@ -792,8 +794,8 @@ class AdminTemplate extends AbstractTemplate implements
     /**
      * Comparison function used by {@see uasort()}.
      *
-     * @param $a Sortable entity A.
-     * @param $b Sortable entity B.
+     * @param  mixed $a Sortable entity A.
+     * @param  mixed $b Sortable entity B.
      * @return integer Sorting value: -1 or 1.
      */
     protected function sortItemsByPriority(

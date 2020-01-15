@@ -39,12 +39,19 @@
         this.allow_update = null;
 
         this.set_properties(opts).init();
+
+        this.selectize_init();
+
     };
     Selectize.prototype = Object.create(Charcoal.Admin.Property.prototype);
     Selectize.constructor = Charcoal.Admin.Property_Input_Selectize;
     Selectize.parent = Charcoal.Admin.Property.prototype;
 
-    Selectize.prototype.init = function () {
+    Selectize.prototype.init = function () {};
+
+    // Used of selectize_init in order 
+    // to avoid the re-execution of init() function on Charcoal.Admin.manager().render();
+    Selectize.prototype.selectize_init = function() {
         this.init_selectize();
         this.init_clipboard();
         this.init_allow_update();
@@ -61,6 +68,7 @@
     };
 
     Selectize.prototype.set_properties = function (opts) {
+
         this.input_id = opts.id || this.input_id;
         this.obj_type = opts.data.obj_type || this.obj_type;
         this.remote_source = opts.data.remote_source || this.remote_source;
@@ -450,9 +458,10 @@
 
         var selectize = this.selectize;
         var $createButton = $(this.selectize_selector + '_create');
+
         var self = this;
 
-        $createButton.on('click', function () {
+        $createButton.on('click', function (e) {
             self.create_item(null, function (item) {
                 // Create the item.
                 if (item && item.value) {

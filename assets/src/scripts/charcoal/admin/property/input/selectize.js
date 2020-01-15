@@ -461,7 +461,7 @@
 
         var self = this;
 
-        $createButton.on('click', function (e) {
+        $createButton.on('click', function () {
             self.create_item(null, function (item) {
                 // Create the item.
                 if (item && item.value) {

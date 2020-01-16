@@ -98,18 +98,18 @@ class ElfinderConnectorAction extends AdminAction
     protected $elfinderConnector;
 
     /**
+     * Store the current property instance for the current class.
+     *
+     * @var PropertyInterface
+     */
+    protected $formProperty;
+
+    /**
      * Store the factory instance for the current class.
      *
      * @var FactoryInterface
      */
     private $propertyFactory;
-
-    /**
-     * Store the current property instance for the current class.
-     *
-     * @var PropertyInterface
-     */
-    private $formProperty;
 
     /**
      * The related object type.
@@ -648,28 +648,22 @@ class ElfinderConnectorAction extends AdminAction
     /**
      * Retrieve the current property.
      *
-     * @return PropertyInterface
+     * @return PropertyInterface|boolean A Form Property instance
+     *     or FALSE if a property can not be resolved.
      */
     public function formProperty()
     {
         if ($this->formProperty === null) {
             $this->formProperty = false;
 
-            if ($this->objType() && $this->propertyIdent()) {
-                $propertyIdent = $this->propertyIdent();
+            $objType       = $this->objType();
+            $propertyIdent = $this->propertyIdent();
 
-                $model = $this->modelFactory()->create($this->objType());
-                $props = $model->metadata()->properties();
+            if ($objType && $propertyIdent) {
+                $model = $this->modelFactory()->get($objType);
 
-                if (isset($props[$propertyIdent])) {
-                    $propertyMetadata = $props[$propertyIdent];
-
-                    $property = $this->propertyFactory()->create($propertyMetadata['type']);
-
-                    $property->setIdent($propertyIdent);
-                    $property->setData($propertyMetadata);
-
-                    $this->formProperty = $property;
+                if ($model->hasProperty($propertyIdent)) {
+                    $this->formProperty = $model->property($propertyIdent);
                 }
             }
         }

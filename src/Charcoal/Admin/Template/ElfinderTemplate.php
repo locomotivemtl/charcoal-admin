@@ -44,7 +44,7 @@ class ElfinderTemplate extends AdminTemplate
      *
      * @var \Charcoal\Property\PropertyInterface
      */
-    private $formProperty;
+    protected $formProperty;
 
     /**
      * The related object type.
@@ -433,17 +433,20 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the current property.
      *
-     * @return \Charcoal\Property\PropertyInterface
+     * @return \Charcoal\Property\PropertyInterface|boolean A Form Property instance
+     *     or FALSE if a property can not be resolved.
      */
     public function formProperty()
     {
         if ($this->formProperty === null) {
             $this->formProperty = false;
 
-            if ($this->objType() && $this->propertyIdent()) {
-                $propertyIdent = $this->propertyIdent();
+            $objType       = $this->objType();
+            $propertyIdent = $this->propertyIdent();
 
-                $model = $this->modelFactory()->create($this->objType());
+            if ($objType && $propertyIdent) {
+                $model = $this->modelFactory()->get($objType);
+
                 if ($model->hasProperty($propertyIdent)) {
                     $this->formProperty = $model->property($propertyIdent);
                 }

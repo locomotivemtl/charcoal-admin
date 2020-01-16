@@ -875,9 +875,7 @@ class FormSidebarWidget extends AdminWidget implements
     }
 
     /**
-     * Parse the widget's conditional logic.
-     *
-     * @see    AdminWidget::resolveConditionalLogic()
+     * @see    \Charcoal\Ui\ConditionalizableTrait::resolveConditionalLogic()
      * @param  callable|string $condition The callable or renderable condition.
      * @return boolean
      */

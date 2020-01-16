@@ -496,54 +496,6 @@ class AdminWidget extends AbstractWidget implements
     }
 
     /**
-     * Resolve the conditional logic.
-     *
-     * @param  mixed $condition The condition.
-     * @return boolean|null
-     */
-    final protected function parseConditionalLogic($condition)
-    {
-        if ($condition === null) {
-            return null;
-        }
-
-        if (is_bool($condition)) {
-            return $condition;
-        }
-
-        $not = false;
-        if (is_string($condition)) {
-            $not = ($condition[0] === '!');
-            if ($not) {
-                $condition = ltrim($condition, '!');
-            }
-        }
-
-        $result = $this->resolveConditionalLogic($condition);
-
-        return $not ? !$result : $result;
-    }
-
-    /**
-     * Parse the widget's conditional logic.
-     *
-     * @param  callable|string $condition The callable or renderable condition.
-     * @return boolean
-     */
-    protected function resolveConditionalLogic($condition)
-    {
-        if (is_callable([ $this, $condition ])) {
-            return !!$this->{$condition}();
-        } elseif (is_callable($condition)) {
-            return !!$condition();
-        } elseif ($this->view()) {
-            return !!$this->renderTemplate($condition);
-        }
-
-        return !!$condition;
-    }
-
-    /**
      * Set extra data sources to merge when setting data on an entity.
      *
      * @param mixed $sourceIdent  The data source identifier.

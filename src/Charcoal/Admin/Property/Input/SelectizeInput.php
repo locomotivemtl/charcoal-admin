@@ -853,7 +853,16 @@ class SelectizeInput extends SelectInput
      */
     public function optgroupObjMap()
     {
-        $map = $this->optgroupObjMap ?: $this->defaultOptgroupObjMap();
+        return $this->optgroupObjMap;
+    }
+
+    /**
+     * @param array|null $optgroupObjMap OptgroupObjMap for SelectizeInput.
+     * @return self
+     */
+    public function setOptgroupObjMap($optgroupObjMap)
+    {
+        $map = $optgroupObjMap ?: $this->defaultOptgroupObjMap();
 
         if (!$this->isOptgroupObjMapFinalized) {
             $this->isOptgroupObjMapFinalized = true;
@@ -891,8 +900,9 @@ class SelectizeInput extends SelectInput
             $this->optgroupObjMap = $map;
         }
 
-        return $this->optgroupObjMap;
+        return $this;
     }
+
 
     /**
      * Retrieve the default object-to-optgroup data map.

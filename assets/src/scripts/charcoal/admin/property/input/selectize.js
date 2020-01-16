@@ -51,7 +51,7 @@
 
     // Used of selectize_init in order 
     // to avoid the re-execution of init() function on Charcoal.Admin.manager().render();
-    Selectize.prototype.selectize_init = function() {
+    Selectize.prototype.selectize_init = function () {
         this.init_selectize();
         this.init_clipboard();
         this.init_allow_update();

@@ -6,9 +6,9 @@
 
     "build": [
         "jsonlint",
-        "copy:vendors",
         "styles",
         "scripts",
+        "copy:vendors",
         "svg_sprite"
     ],
 

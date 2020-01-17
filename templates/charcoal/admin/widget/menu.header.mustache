@@ -61,6 +61,8 @@
         {{/ showMainMenu }}
         {{# showSecondaryMenu }}
             <div class="c-nav-secondary tab-content">
+                {{!-- Empty div that allows the footer to stay in its place when there is no secondary menu. --}}
+                <div></div>
                 {{# secondaryMenu }}
                     {{> charcoal/admin/widget/secondary-menu }}
                 {{/ secondaryMenu }}

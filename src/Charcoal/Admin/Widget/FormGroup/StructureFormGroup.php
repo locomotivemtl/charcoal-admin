@@ -260,7 +260,7 @@ class StructureFormGroup extends FormGroupWidget implements
             if ($this->obj === null) {
                 throw new RuntimeException(sprintf(
                     'The [%1$s] widget has no data model.',
-                    static::CLASS
+                    static::class
                 ));
             }
         }
@@ -339,7 +339,7 @@ class StructureFormGroup extends FormGroupWidget implements
             $property = $obj->property($propertyIdent);
         }
 
-        if ($this->form()) {
+        if ($this->form() && $this->form()->obj() === $obj) {
             $this->form()->addFormProperty($propertyIdent, []);
         }
 

@@ -33,7 +33,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data)
             );
         } else {
             that.init();
-        }	
+        }
     }, 2000);
 
 };
@@ -155,7 +155,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
                 that.controller().create_new(type, object_id);
                 break;
         }
-         
+
         }
     });
 
@@ -166,7 +166,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
     });
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = function () 
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = function ()
 {
     var related_property = this.data.data.related_property;
     if (!related_property) {
@@ -182,14 +182,14 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = 
     }
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry = function (obj) 
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry = function (obj)
 {
     // retrieve obj_type
     var type = this.data.data.related_property[obj].obj_type;
     if (!type) {
         return false;
     }
-	
+
     var geometry_objects = [];
     var geometry_objects_request_done = false;
     var that = this;
@@ -215,11 +215,11 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry 
         }
         that.controller().reset();
 
-        for (var index in geometry_objects) {	
+        for (var index in geometry_objects) {
             if (geometry_objects[index].id !== $(event.currentTarget).val()) {
                 continue;
             }
-         
+
             var geometry = geometry_objects[index].geometry;
 
             var default_styles = that.default_styles();
@@ -262,7 +262,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.object_index = function 
  * This is to retrieve the defaults map styles
  * Return {Object}
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = function () 
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = function ()
 {
     return {
         strokeColor: '#000000',
@@ -372,7 +372,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function ()
     var places = (typeof raw.places === 'object') ? raw.places : {};
 
     // transform map data to geometry data for "geoshit" ¯\_(ツ)_/¯
-    var coords = (Object.keys(places).length) ? this.translate_coords(places[Object.keys(places)[0]].paths) : [];
+    var coords = (Object.keys(places).length) ? this.translate_coords(places[Object.keys(places)[0]].paths) : '';
 
     // Affect to the current property's input
     // I see no reason to have more than one input hidden here.

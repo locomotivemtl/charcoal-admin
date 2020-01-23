@@ -11,13 +11,4 @@ use Charcoal\Admin\Property\AbstractPropertyDisplay;
  */
 class TextDisplay extends AbstractPropertyDisplay
 {
-    /**
-     * @return string
-     */
-    public function displayVal()
-    {
-        $text = parent::displayVal();
-
-        return nl2br($text);
-    }
 }

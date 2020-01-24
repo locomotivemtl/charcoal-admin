@@ -13,7 +13,7 @@ use Charcoal\Admin\Ui\CollectionContainerTrait;
 /**
  * Base Graph widget
  */
-abstract class AbstractGraphWidget extends AdminWidget implements 
+abstract class AbstractGraphWidget extends AdminWidget implements
     GraphWidgetInterface
 {
     use ActionContainerTrait;

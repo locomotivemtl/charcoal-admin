@@ -71,12 +71,12 @@ class HierarchicalObjectProperty extends ObjectProperty
             $choice['group'] = null;
         }
 
-        if (is_callable([ $obj, 'name' ])) {
-            $choice['title'] = $obj->name();
-        } elseif (is_callable([ $obj, 'label' ])) {
-            $choice['title'] = $obj->label();
-        } elseif (is_callable([ $obj, 'title' ])) {
-            $choice['title'] = $obj->title();
+        if (isset($obj['name'])) {
+            $choice['title'] = $obj['name'];
+        } elseif (isset($obj['label'])) {
+            $choice['title'] = $obj['label'];
+        } elseif (isset($obj['title'])) {
+            $choice['title'] = $obj['title'];
         }
 
         return $choice;

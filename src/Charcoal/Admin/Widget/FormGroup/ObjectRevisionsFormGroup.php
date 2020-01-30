@@ -2,10 +2,13 @@
 
 namespace Charcoal\Admin\Widget\FormGroup;
 
-// From Pimple
+// From 'pimple/pimple'
 use Pimple\Container;
 
-// From 'charcoal-ui'
+// From 'locomotivemtl/charcoal-factory'
+use Charcoal\Factory\FactoryInterface;
+
+// From 'locomotivemtl/charcoal-ui'
 use Charcoal\Ui\FormGroup\AbstractFormGroup;
 
 /**
@@ -18,7 +21,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
      *
      * @var FactoryInterface
      */
-    private $modelFatory;
+    private $modelFactory;
 
     /**
      * @return boolean
@@ -64,8 +67,8 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
         $propLabel    = '<span title="%1$s">%2$s</code>';
 
         $callback = function(&$obj) use ($lastRevision, $target, $propLabel) {
-            $dataDiff = $obj->dataDiff();
-            $obj->revTsDisplay = $obj->revTs()->format('Y-m-d H:i:s');
+            $dataDiff = $obj['dataDiff'];
+            $obj->revTsDisplay = $obj['revTs']->format('Y-m-d H:i:s');
             $obj->numDiff = count($dataDiff);
 
             if (isset($dataDiff[0])) {
@@ -90,7 +93,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
                 $obj->droppedProperties = '';
             }
 
-            $obj->allowRevert = ($lastRevision->revNum() != $obj->revNum());
+            $obj->allowRevert = ($lastRevision['revNum'] != $obj['revNum']);
         };
 
         return $target->allRevisions($callback);

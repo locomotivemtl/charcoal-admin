@@ -211,13 +211,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements
     public function graphActions()
     {
         if ($this->graphActions === null) {
-            $collectionConfig = $this->collectionConfig();
-            if (isset($collectionConfig['list_actions'])) {
-                $actions = $collectionConfig['list_actions'];
-            } else {
-                $actions = [];
-            }
-            $this->setGraphActions($actions);
+            $this->setGraphActions([]);
         }
 
         if ($this->parsedGraphActions === false) {

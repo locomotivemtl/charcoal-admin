@@ -27,6 +27,8 @@ Charcoal.Admin.Widget_Table = function (opts)
     this.object_actions = {};
 
     this.template = this.properties = this.properties_options = undefined;
+
+    this.sortable = null;
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
@@ -65,11 +67,15 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
 
 Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 {
+    if (typeof this.sortable === 'object' && typeof this.sortable.destroy === 'function') {
+        this.sortable.destroy();
+    }
+
     var that = this;
 
     var $sortable_table = $('tbody.js-sortable', that.table_selector);
     if ($sortable_table.length > 0) {
-        new window.Sortable.default($sortable_table.get(), {
+        this.sortable = new window.Sortable.default($sortable_table.get(), {
             delay: 150,
             draggable: '.js-table-row',
             handle: '.js-sortable-handle',

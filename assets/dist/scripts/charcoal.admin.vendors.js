@@ -38097,11 +38097,6 @@ BB.gmap.controller = function(container, data) {
     // DOM Element where is applied the actual map
     this.__CONTAINER = container;
 
-    // Editable makes the controller listen for events
-    // such as click, mouseover, etc and dispatch that
-    // event to every children in 'places'
-    this.__EDITABLE = false;
-
     // all places are stucked there
     // this allows a quick research by ident
     this.__PLACES = {
@@ -38553,17 +38548,44 @@ BB.gmap.controller.prototype.get_place = function(ident) {
     return place;
 };
 
-BB.gmap.controller.prototype.remove_focus = function() {
-    var focused = this.focused();
+BB.gmap.controller.prototype.remove_focus = function(ident) {
+    var focused = this.focused(ident);
+
+    // if (this.data('multiple') && ident) {
+    //     this.__FOCUSED_ITEM[ident]
+    // }
+    
+    if (this.data('multiple') && !ident) {
+        for (var id in focused) {
+
+            var current = focused[id];
+            this.__FOCUSED_ITEM[id] = undefined;
+            delete this.__FOCUSED_ITEM[id];
+
+            current.blur();
+            console.log(current.data());
+            if (typeof this.data('onblur') === 'function') {
+                var func = this.data('onblur');
+                func(current, this);
+            }
+        }
+        return this;
+    }
+
     if (focused) {
 
+        if (this.data('multiple')) {
+            this.__FOCUSED_ITEM[ident] = undefined;
+            delete this.__FOCUSED_ITEM[ident];
+        } else {
+            this.__FOCUSED_ITEM = undefined;
+        }
+
+        focused.blur();
         if (typeof this.data('onblur') === 'function') {
             var func = this.data('onblur');
             func(focused, this);
         }
-
-        focused.blur();
-        this.__FOCUSED_ITEM = undefined;
     }
 
 
@@ -38577,10 +38599,24 @@ BB.gmap.controller.prototype.remove_focus = function() {
  */
 BB.gmap.controller.prototype.set_focus = function(item) {
     // First, remove focus
-    this.remove_focus();
-
     // Set focus on new item
-    this.__FOCUSED_ITEM = item;
+    if (!this.data('multiple')) {
+        this.remove_focus();
+        this.__FOCUSED_ITEM = item;
+    }
+
+    if (this.data('multiple')) {
+        if (!this.__FOCUSED_ITEM) {
+            this.__FOCUSED_ITEM = {};
+        }
+
+        if (typeof this.__FOCUSED_ITEM[item.data('ident')] != 'undefined') {
+            this.remove_focus(item.data('ident'));
+            return this;
+        }
+
+        this.__FOCUSED_ITEM[item.data('ident')] = item;
+    }
 
     if (typeof this.data('onfocus') === 'function') {
         var func = this.data('onfocus');
@@ -38593,7 +38629,19 @@ BB.gmap.controller.prototype.set_focus = function(item) {
 /**
  * Retrieve focus Item, then change it.
  */
-BB.gmap.controller.prototype.focused = function() {
+BB.gmap.controller.prototype.focused = function(ident) {
+    if (this.data('multiple') && ident) {
+        if (typeof this.__FOCUSED_ITEM == 'undefined') {
+            return undefined;
+        }
+        if (typeof this.__FOCUSED_ITEM[ident] != 'undefined') {
+            return this.__FOCUSED_ITEM[ident];
+        }
+        return undefined;
+    } else if (ident) {
+        // Prevents error when non multiple.
+        return undefined;
+    }
     return this.__FOCUSED_ITEM;
 };
 
@@ -38798,22 +38846,22 @@ BB.gmap.controller.prototype.map_click = function(event) {
 
     // Focused item on the map (if any)
     var focused = this.focused();
-
     if (!focused) {
         return this;
     }
 
     // Edit OR get out of focus
-    if (focused.data('editable')) {
-        focused.map_click(event);
+    if (!this.data('multiple')) {
+        if (focused.data('editable') && !this.data('multiple')) {
+            focused.map_click(event);
+        } else {
+            this.remove_focus();
+        }
     } else {
         this.remove_focus();
     }
 
-
-
     return this;
-
 };
 
 
@@ -38953,7 +39001,7 @@ BB.gmap.controller.prototype.get_all_markers = function() {
  * @param {Object} options
  * @return this (chainable)
  * @see https://github.com/googlemaps/js-marker-clusterer
-
+ 
  * @param {Object=} opt_options support the following options:
  *     'gridSize': (number) The grid size of a cluster in pixels.
  *     'maxZoom': (number) The maximum zoom level that a marker can be part of a
@@ -39450,7 +39498,10 @@ function init_infoBox() {
         // if we go beyond map, pan map
 
         var map = this.map;
-        var bounds = map.getBounds();
+        var bounds;
+        if (map) {
+            bounds = map.getBounds();
+        }
         if (!bounds) return;
 
         // The position of the infowindow
@@ -39980,31 +40031,31 @@ BB.gmap.marker.prototype.set_marker = function(marker) {
  *
  */
 BB.gmap.marker.prototype.listeners = function() {
-    // Scope
-    var that = this;
-
     // Marker
     var marker = this.object();
-
-    marker.bbmarker = this;
+    marker.bbobject = this;
 
     if (this.data('draggable')) {
-        google.maps.event.addListener(marker, 'dragend', that.dragend);
+        google.maps.event.addListener(marker, 'dragend', this.dragend);
     }
 
     // click listeners
     // No condition, which is different to the dragend option
     // We might always use the click event, I see no reason to make
     // it optional. Options will occur in the event handler.
-    google.maps.event.addListener(marker, 'click', that.onclick);
+    google.maps.event.addListener(this.object(), 'click', this.onclick);
+    google.maps.event.addListener(this.object(), 'mouseover', this.mouse_over);
+    google.maps.event.addListener(this.object(), 'mouseout', this.mouse_out);
 
 };
 
 BB.gmap.marker.prototype.clear_listeners = function() {
-    var marker = this.object();
-
-    google.maps.event.clearListeners(marker, 'dragend');
-    google.maps.event.clearListeners(marker, 'click');
+    google.maps.event.clearListeners(this.object(), 'mouseover');
+    google.maps.event.clearListeners(this.object(), 'mouseout');
+    google.maps.event.clearListeners(this.object(), 'click');
+    if (this.data('draggable')) {
+        google.maps.event.clearListeners(this.object(), 'dragend');
+    }
 
     return this;
 };
@@ -40018,7 +40069,7 @@ BB.gmap.marker.prototype.clear_listeners = function() {
  */
 BB.gmap.marker.prototype.dragend = function(event) {
     // Scope
-    var that = this.bbmarker;
+    var that = this.bbobject;
 
     var _data = that.data();
 
@@ -40042,7 +40093,7 @@ BB.gmap.marker.prototype.dragend = function(event) {
  */
 BB.gmap.marker.prototype.onclick = function(event) {
     // Scope
-    var that = this.bbmarker;
+    var that = this.bbobject;
     var _data = that.data();
 
     if (typeof _data.onclick == 'function') {
@@ -40050,65 +40101,44 @@ BB.gmap.marker.prototype.onclick = function(event) {
     } else if (typeof _data.onclick == 'string' && typeof window[_data.onclick] == 'function') {
         window[_data.onclick](that, event);
     }
-    if (_data.infobox) {
-        if (that.__INFOBOX) {
-            if (that.__INFOBOX.map) {
-                that.__INFOBOX.set_map(null);
-            } else {
-                that.__INFOBOX.set_position(that.object().getPosition());
-                that.__INFOBOX.set_map(that.controller().map());
-            }
-            that.focus();
-            return this;
-        }
-
-        if (!BB.gmap.statics.infobox_loaded) {
-            init_infoBox();
-            BB.gmap.statics.infobox_loaded = true;
-        }
-
-        // if (typeof _data.infobox == 'function') {
-        //     _data.infobox = _data.infobox(that.data());
-        // }
-
-        // if (typeof _data.infobox == 'string') {
-        //     var infobox = document.getElementById(_data.infobox);
-        //     if (!infobox) {
-        //         infobox = document.createElement('div');
-        //         infobox.style.position = 'absolute'; // Or this wont display corretly
-        //         infobox.innerHTML = _data.infobox;
-        //     }
-        //     _data.infobox = infobox;
-        // }
-
-        var infobox_options = {};
-        if (_data.infobox_options) {
-            infobox_options = _data.infobox_options;
-        }
-
-
-        // Default placement
-        if (!infobox_options.offsetY) {
-            infobox_options.offsetY = that.icon().height;
-        }
-
-        if (!infobox_options.offsetX) {
-            infobox_options.offsetX = (that.icon().width / 2);
-        }
-
-        infobox_options.map = that.controller().map();
-        infobox_options.position = that.get_position();
-        that.__INFOBOX = new BB.gmap.infobox(_data.infobox, infobox_options, that);
-    }
 
     that.focus();
+};
 
+/**
+ * `this` is NOT a BB.gmap.line object
+ * @see this.listeners()
+ * @param event
+ */
+BB.gmap.marker.prototype.mouse_over = function(event) {
+    var that = this.bbobject;
+    var _data = that.data();
+
+    if (typeof _data.onmouseover == 'function') {
+        _data.onmouseover(that, event);
+    }
+};
+
+/**
+ * `this` is NOT a BB.gmap.line object
+ * @see this.listeners()
+ * @param event
+ */
+BB.gmap.marker.prototype.mouse_out = function(event) {
+    var that = this.bbobject;
+    var _data = that.data();
+
+    if (typeof _data.onmouseout == 'function') {
+        _data.onmouseout(that, event);
+    }
 };
 
 /**
  * marker-selected.png
  */
 BB.gmap.marker.prototype.focus = function() {
+    this.checkInfobox(true);
+
     // Scope
     var that = this;
 
@@ -40125,10 +40155,10 @@ BB.gmap.marker.prototype.focus = function() {
             this.set_image(_data.icon_selected);
         }
     }
-
 };
 
 BB.gmap.marker.prototype.blur = function() {
+    this.checkInfobox(false);
     // Mechanics calls this methods upon map reset
     // We wanna check if the place still exists in the ma data entry
     if (!this.controller().get_place(this.ident())) {
@@ -40150,6 +40180,47 @@ BB.gmap.marker.prototype.blur = function() {
         }
     }
 };
+
+BB.gmap.marker.prototype.checkInfobox = function(visible) {
+    var that = this;
+    var _data = this.data();
+
+    if (_data.infobox) {
+        if (that.__INFOBOX) {
+            if (that.__INFOBOX.map && !visible) {
+                that.__INFOBOX.set_map(null);
+            } else if (visible) {
+                that.__INFOBOX.set_position(that.object().getPosition());
+                that.__INFOBOX.set_map(that.controller().map());
+            }
+            return this;
+        }
+
+        if (!BB.gmap.statics.infobox_loaded) {
+            init_infoBox();
+            BB.gmap.statics.infobox_loaded = true;
+        }
+
+        var infobox_options = {};
+        if (_data.infobox_options) {
+            infobox_options = _data.infobox_options;
+        }
+        
+
+        // Default placement
+        if (!infobox_options.offsetY) {
+            infobox_options.offsetY = that.icon().height;
+        }
+
+        if (!infobox_options.offsetX) {
+            infobox_options.offsetX = (that.icon().width / 2);
+        }
+
+        infobox_options.map = that.controller().map();
+        infobox_options.position = that.get_position();
+        that.__INFOBOX = new BB.gmap.infobox(_data.infobox, infobox_options, that);
+    }
+}
 
 BB.gmap.marker.prototype.get_bounds = function() {
     // Scope
@@ -40339,7 +40410,7 @@ BB.gmap.richmarker.prototype.listeners = function() {
     // Marker
     var marker = this.object();
 
-    marker.bbmarker = this;
+    marker.bbobject = this;
 
     if (this.data('draggable')) {
         google.maps.event.addListener(marker, 'dragend', that.dragend);
@@ -40366,6 +40437,7 @@ BB.gmap.richmarker.prototype.clear_listeners = function() {
  * marker-selected.png
  */
 BB.gmap.richmarker.prototype.focus = function() {
+    this.checkInfobox(true);
 
     if (this.controller().focused()) {
         if (this.controller().focused().ident() == this.ident()) {
@@ -40373,13 +40445,22 @@ BB.gmap.richmarker.prototype.focus = function() {
         }
     }
 
+    this.controller().set_focus(this);
+
     // Selected icon
     // Set selected state
-    this.controller().set_focus(this);
-    this.object().setHtml(this.data('selected_html'));
+    if (this.data('selected_html')) {
+        var selected_html = this.data('selected_html');
+        if (typeof selected_html === 'function') {
+            selected_html = selected_html(this.data());
+        }
+        this.object().setHtml(selected_html);
+    }
 };
 
 BB.gmap.richmarker.prototype.blur = function() {
+    this.checkInfobox(false);
+
     // Mechanics calls this methods upon map reset
     // We wanna check if the place still exists in the ma data entry
     if (!this.controller().get_place(this.ident())) {
@@ -40388,7 +40469,11 @@ BB.gmap.richmarker.prototype.blur = function() {
 
     // Selected icon
     // Unset selected state
-    this.object().setHtml(this.data('html'));
+    var html = this.data('html');
+    if (typeof html === 'function') {
+        html = html(this.data());
+    }
+    this.object().setHtml(html);
 };
 
 BB.gmap.richmarker.prototype.icon = function() {
@@ -40404,7 +40489,7 @@ BB.gmap.richmarker.prototype.icon = function() {
  * map
  * position
  * html
- *
+ * 
  * @param  {object} data Data for the marker.
  * @return {customMarker}Gmap custom marker object.
  */
@@ -40432,17 +40517,21 @@ customMarker = function(data) {
         };
 
         BB.gmap.customMarker.prototype.setHtml = function(html) {
+            this.html = html;
+
             var self = this;
             var div = this.div;
             if (!div) {
                 div = document.createElement('div');
                 div.style.position = 'absolute';
                 div.style.cursor = 'pointer';
+
                 google.maps.event.addDomListener(div, "click", function(event) {
                     event.stopPropagation();
                     event.preventDefault();
                     google.maps.event.trigger(self, "click");
                 });
+
                 var panes = this.getPanes();
                 panes.overlayImage.appendChild(div);
             }
@@ -40459,6 +40548,7 @@ customMarker = function(data) {
             }
 
             this.div = div;
+            
         }
 
         BB.gmap.customMarker.prototype.remove = function() {
@@ -40958,7 +41048,7 @@ BB.gmap.line.prototype.clear_listeners = function() {
 
     // Chainable
     return this;
-}
+};
 
 /**
  * `this` is NOT a BB.gmap.line object
@@ -40973,8 +41063,7 @@ BB.gmap.line.prototype.mouse_over = function(event) {
         _data.onmouseover(that, event);
     }
 
-    var styles = that.get_styles();
-    // Use hover styles
+    var styles = that.get_data('styles');
     if (typeof styles.hover == 'object') {
         that.set_styles(styles.hover);
     }
@@ -40987,21 +41076,21 @@ BB.gmap.line.prototype.mouse_over = function(event) {
  */
 BB.gmap.line.prototype.mouse_out = function(event) {
     var that = this.bbobject;
-
     var _data = that.data();
 
     if (typeof _data.onmouseout == 'function') {
         _data.onmouseout(that, event);
     }
 
-    var focused = that.controller().focused();
-    if (focused == that) {
-        return false;
-    }
-    // Go back to original state
     var styles = that.get_data('styles');
 
-    that.set_styles(that.get_data('styles'));
+    if (that.controller().focused(that.data('ident'))) {
+        if (typeof styles.focused == 'object') {
+            that.set_styles(styles.focused);
+        }
+    } else {
+        that.set_styles(styles);
+    }
 };
 
 
@@ -41056,10 +41145,15 @@ BB.gmap.line.prototype.focus = function() {
     if (this.__DELETED) {
         return false;
     }
+
+    if (this.controller().focused(this.data('ident'))) {
+        this.controller().set_focus(this);
+        return this;
+    }
+
     this.controller().set_focus(this);
 
     var styles = this.get_data('styles');
-
     if (typeof styles.focused == 'object') {
         this.set_styles(styles.focused);
     }
@@ -41082,7 +41176,6 @@ BB.gmap.line.prototype.blur = function() {
         return false;
     }
     this.set_styles(this.get_data('styles'));
-
     // No markers when not selected
     // this.hide_markers();
 

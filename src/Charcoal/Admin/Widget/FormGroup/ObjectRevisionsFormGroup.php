@@ -79,7 +79,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
                 $droppedProps = [];
                 foreach ($props as $p) {
                     if ($target->hasProperty($p)) {
-                        $label = $target->p($p)->label();
+                        $label = $target->p($p)['label'];
                         $changedProps[] = sprintf($propLabel, $p, $label);
                     } else {
                         $label = ucwords(str_replace([ '.', '_' ], ' ', $p));

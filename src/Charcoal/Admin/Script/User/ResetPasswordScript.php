@@ -104,7 +104,7 @@ class ResetPasswordScript extends AdminScript implements
         $email = $this->argOrInput('email');
         $user->loadFrom('email', $email);
 
-        if ($authenticator->validateAuthentication($user)) {
+        if (!$authenticator->validateAuthentication($user)) {
             $climate->red()->out(
                 'User does not exist.'
             );

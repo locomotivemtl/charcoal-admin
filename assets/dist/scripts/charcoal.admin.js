@@ -5492,7 +5492,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
 
 Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 {
-    if (typeof this.sortable === 'object' && typeof this.sortable.destroy === 'function') {
+    if (this.sortable !== null) {
         this.sortable.destroy();
     }
 
@@ -9659,7 +9659,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
     Selectize.prototype.init = function () {};
 
-    // Used of selectize_init in order 
+    // Used of selectize_init in order
     // to avoid the re-execution of init() function on Charcoal.Admin.manager().render();
     Selectize.prototype.selectize_init = function () {
         this.init_selectize();

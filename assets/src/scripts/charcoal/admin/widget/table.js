@@ -67,7 +67,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
 
 Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
 {
-    if (typeof this.sortable === 'object' && typeof this.sortable.destroy === 'function') {
+    if (this.sortable !== null) {
         this.sortable.destroy();
     }
 

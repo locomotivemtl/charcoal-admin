@@ -114,11 +114,14 @@ class AdminServiceProvider implements ServiceProviderInterface
 
             $extraConfigs = [];
 
-            foreach ($container['module/classes'] as $module) {
-                if (defined(sprintf('%s::ADMIN_CONFIG', $module))) {
-                    $moduleAdminConfigs = (array)$module::ADMIN_CONFIG;
-                    array_push($extraConfigs, ...$moduleAdminConfigs);
-                };
+            if (isset($container['module/classes'])) {
+                $modules = $container['module/classes'];
+                foreach ($modules as $module) {
+                    if (defined(sprintf('%s::ADMIN_CONFIG', $module))) {
+                        $moduleAdminConfigs = (array)$module::ADMIN_CONFIG;
+                        array_push($extraConfigs, ...$moduleAdminConfigs);
+                    };
+                }
             }
 
             // The `admin.json` file is not part of regular config
@@ -128,9 +131,11 @@ class AdminServiceProvider implements ServiceProviderInterface
             }
 
             if (!empty($extraConfigs)) {
-                $basePath = $appConfig['base_path'];
+                $basePath = rtrim($appConfig['base_path'], '/');
                 foreach ($extraConfigs as $path) {
-                    $appConfig->addFile($basePath.$path);
+                    $configPath = $basePath.'/'.ltrim($path, '/');
+
+                    $appConfig->addFile($configPath);
                 }
             }
 

@@ -16,8 +16,8 @@ use Slim\Http\Uri;
 // From 'tedivm/stash' (PSR-6)
 use Stash\Pool;
 
-// From 'zendframework/zend-permissions-acl'
-use Zend\Permissions\Acl\Acl;
+// From 'laminas/laminas-permissions-acl'
+use Laminas\Permissions\Acl\Acl;
 
 // From Pimple
 use Pimple\Container;

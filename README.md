@@ -38,8 +38,7 @@ $ composer require locomotivemtl/charcoal-admin
 
 Which, in turn, require:
 
--	`PHP 5.5+`, 7+ highly recommended.
-    +	Older versions of PHP are deprecated, therefore not supported.
+-	`PHP 7.1+`
 	+	`ext-fileinfo` File / MIME identification.
 	+	`ext-mbstring` Multi-bytes string support.
     +	`ext-pdo` PDO Database driver.

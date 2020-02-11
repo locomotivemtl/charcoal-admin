@@ -93,7 +93,6 @@ class CollectionTemplateTest extends AbstractTestCase
             $containerProvider->registerTemplateDependencies($container);
             $containerProvider->registerWidgetFactory($container);
             $containerProvider->registerDashboardBuilder($container);
-            $containerProvider->registerCollectionLoader($container);
 
             $this->container = $container;
         }

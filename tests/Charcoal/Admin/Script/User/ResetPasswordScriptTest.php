@@ -11,9 +11,6 @@ use Psr\Log\NullLogger;
 use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
-// From 'cache/void-adapter'
-use Cache\Adapter\Void\VoidCachePool;
-
 // From Pimple
 use Pimple\Container;
 

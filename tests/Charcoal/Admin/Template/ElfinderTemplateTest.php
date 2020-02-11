@@ -66,7 +66,6 @@ class ElfinderTemplateTest extends AbstractTestCase
             $container = new Container();
             $containerProvider = new ContainerProvider();
             $containerProvider->registerTemplateDependencies($container);
-            $containerProvider->registerMetadataLoader($container);
             $containerProvider->registerElfinderConfig($container);
             $container['widget/factory'] = $this->createMock('\Charcoal\Factory\FactoryInterface');
 

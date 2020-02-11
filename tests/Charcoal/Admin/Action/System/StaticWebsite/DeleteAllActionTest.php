@@ -49,8 +49,6 @@ class DeleteAllActionTest extends AbstractTestCase
     public function setUp()
     {
         $container = $this->container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerActionDependencies($container);
 
         $this->obj = new DeleteAllAction([
             'logger'    => $container['logger'],
@@ -92,8 +90,7 @@ class DeleteAllActionTest extends AbstractTestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
-            $containerProvider->registerCollectionLoader($container);
+            $containerProvider->registerActionDependencies($container);
 
             $this->container = $container;
         }

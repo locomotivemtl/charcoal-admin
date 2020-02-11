@@ -27,21 +27,26 @@ class ExporterTest extends AbstractTestCase
     private $obj;
 
     /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @return void
      */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerPropertyFactory($container);
-        $containerProvider->registerModelFactory($container);
+        $container = $this->container();
+
         $this->obj = new Exporter([
-           'logger'        => $container['logger'],
-           'factory'       => $container['model/factory'],
-           'translator'    => $container['translator'],
-           'obj_type'      => 'charcoal/admin/user',
-           'export_ident'  => 'y',
-           'propertyFactory'=> $container['property/factory']
+           'logger'          => $container['logger'],
+           'factory'         => $container['model/factory'],
+           'propertyFactory' => $container['property/factory'],
+           'translator'      => $container['translator'],
+           'obj_type'        => 'charcoal/admin/user',
+           'export_ident'    => 'y',
         ]);
     }
 
@@ -51,5 +56,28 @@ class ExporterTest extends AbstractTestCase
     public function testExport()
     {
         $this->assertTrue(true);
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    protected function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerBaseServices($container);
+            $containerProvider->registerViewServiceProvider($container);
+            $containerProvider->registerModelServiceProvider($container);
+            $containerProvider->registerTranslatorServiceProvider($container);
+
+            $container['view'] = $this->createMock('\Charcoal\View\ViewInterface');
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

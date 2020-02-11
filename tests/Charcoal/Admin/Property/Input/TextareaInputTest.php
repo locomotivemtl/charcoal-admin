@@ -16,18 +16,29 @@ use Charcoal\Tests\Admin\ContainerProvider;
 class TextareaInputTest extends AbstractTestCase
 {
     /**
+     * Tested Class.
+     *
+     * @var TextareaInput
+     */
+    private $obj;
+
+    /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @return void
      */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerMetadataLoader($container);
+        $container = $this->container();
 
         $this->obj = new TextareaInput([
-            'logger' => $container['logger'],
-            'metadata_loader' => $container['metadata/loader']
+            'logger'          => $container['logger'],
+            'metadata_loader' => $container['metadata/loader'],
         ]);
     }
 
@@ -74,5 +85,23 @@ class TextareaInputTest extends AbstractTestCase
 
         $this->expectException('\InvalidArgumentException');
         $obj->setRows('foo');
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    protected function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerInputDependencies($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

@@ -49,8 +49,6 @@ class LoadActionTest extends AbstractTestCase
     public function setUp()
     {
         $container = $this->container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerActionDependencies($container);
 
         $this->obj = new LoadAction([
             'logger'    => $container['logger'],
@@ -113,8 +111,7 @@ class LoadActionTest extends AbstractTestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerAdminServices($container);
-            $containerProvider->registerCollectionLoader($container);
+            $containerProvider->registerActionDependencies($container);
 
             $this->container = $container;
         }

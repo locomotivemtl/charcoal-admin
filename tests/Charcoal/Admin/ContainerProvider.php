@@ -13,12 +13,8 @@ use Psr\Log\NullLogger;
 // From Slim
 use Slim\Http\Uri;
 
-// From 'cache/void-adapter' (PSR-6)
-use Cache\Adapter\Void\VoidCachePool;
-
 // From 'tedivm/stash' (PSR-6)
 use Stash\Pool;
-use Stash\Driver\Ephemeral;
 
 // From 'zendframework/zend-permissions-acl'
 use Zend\Permissions\Acl\Acl;
@@ -41,8 +37,8 @@ use Charcoal\App\AppConfig;
 use Charcoal\App\Template\WidgetBuilder;
 
 // From 'charcoal-core'
-use Charcoal\Model\Service\MetadataLoader;
 use Charcoal\Source\DatabaseSource;
+use Charcoal\Model\ServiceProvider\ModelServiceProvider;
 
 // From 'charcoal-user'
 use Charcoal\User\Authenticator;
@@ -59,13 +55,10 @@ use Charcoal\Email\Email;
 use Charcoal\Email\EmailConfig;
 
 // From 'charcoal-view'
-use Charcoal\View\GenericView;
-use Charcoal\View\Mustache\MustacheEngine;
-use Charcoal\View\Mustache\MustacheLoader;
+use Charcoal\View\ViewServiceProvider;
 
 // From 'charcoal-translator'
-use Charcoal\Translator\LocalesManager;
-use Charcoal\Translator\Translator;
+use Charcoal\Translator\ServiceProvider\TranslatorServiceProvider;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\Config as AdminConfig;
@@ -116,8 +109,6 @@ class ContainerProvider
         $this->registerBaseServices($container);
         $this->registerBaseUrl($container);
         $this->registerAdminConfig($container);
-        $this->registerAuthenticator($container);
-        $this->registerAuthorizer($container);
     }
 
     /**
@@ -153,11 +144,36 @@ class ContainerProvider
                         'recaptcha' => [
                             'public_key'  => 'foobar',
                             'private_key' => 'bazqux',
-                        ]
-                    ]
-                ]
+                        ],
+                    ],
+                ],
+                'locales'    => [
+                    'en' => [
+                        'locale' => 'en-US',
+                    ],
+                ],
+                'translator' => [
+                    'paths' => [],
+                ],
+                'metadata'   => [
+                    'paths'  => [
+                        'metadata',
+                        'vendor/locomotivemtl/charcoal-object/metadata',
+                        'vendor/locomotivemtl/charcoal-user/metadata',
+                    ],
+                ],
             ]);
         };
+
+        /**
+         * List of Charcoal module classes.
+         *
+         * Explicitly defined in case of a version mismatch with dependencies. This parameter
+         * is normally defined by {@see \Charcoal\App\ServiceProvider\AppServiceProvider}.
+         *
+         * @var array
+         */
+        $container['module/classes'] = [];
     }
 
     /**
@@ -172,6 +188,17 @@ class ContainerProvider
 
         $container['admin/config'] = function () {
             return new AdminConfig();
+        };
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerElfinderConfig(Container $container)
+    {
+        $container['elfinder/config'] = function () {
+            return [];
         };
     }
 
@@ -323,63 +350,6 @@ class ContainerProvider
     }
 
     /**
-     * Setup the framework's view renderer.
-     *
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerView(Container $container)
-    {
-        $container['view/loader'] = function (Container $container) {
-            return new MustacheLoader([
-                'logger'    => $container['logger'],
-                'base_path' => realpath(__DIR__.'/../../../'),
-                'paths'     => [
-                    'views'
-                ]
-            ]);
-        };
-
-        $container['view/engine'] = function (Container $container) {
-            return new MustacheEngine([
-                'logger' => $container['logger'],
-                'cache'  => $container['cache'],
-                'loader' => $container['view/loader']
-            ]);
-        };
-
-        $container['view'] = function (Container $container) {
-            return new GenericView([
-                'logger' => $container['logger'],
-                'engine' => $container['view/engine']
-            ]);
-        };
-    }
-
-    /**
-     * Setup the application's translator service.
-     *
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerTranslator(Container $container)
-    {
-        $container['locales/manager'] = function () {
-            return new LocalesManager([
-                'locales' => [
-                    'en' => [ 'locale' => 'en-US' ]
-                ]
-            ]);
-        };
-
-        $container['translator'] = function (Container $container) {
-            return new Translator([
-                'manager' => $container['locales/manager']
-            ]);
-        };
-    }
-
-    /**
      * Setup the application's logging interface.
      *
      * @param  Container $container A DI container.
@@ -401,7 +371,7 @@ class ContainerProvider
     public function registerCache(Container $container)
     {
         $container['cache'] = function () {
-            return new Pool(new Ephemeral());
+            return new Pool();
         };
     }
 
@@ -422,70 +392,105 @@ class ContainerProvider
      * @param  Container $container A DI container.
      * @return void
      */
-    public function registerMetadataLoader(Container $container)
+    public function registerModelServiceProvider(Container $container)
+    {
+        static $provider = null;
+
+        if ($provider === null) {
+            $provider = new ModelServiceProvider();
+        }
+
+        $provider->register($container);
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerTranslatorServiceProvider(Container $container)
+    {
+        static $provider = null;
+
+        if ($provider === null) {
+            $provider = new TranslatorServiceProvider();
+        }
+
+        $provider->register($container);
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerViewServiceProvider(Container $container)
+    {
+        static $provider = null;
+
+        if ($provider === null) {
+            $provider = new ViewServiceProvider();
+        }
+
+        $provider->register($container);
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerAcl(Container $container)
+    {
+        $container['admin/acl'] = function () {
+            return new Acl();
+        };
+
+        $container['authorizer/acl'] = function () {
+            return $container['admin/acl'];
+        };
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerAuthenticator(Container $container)
     {
         $this->registerLogger($container);
-        $this->registerCache($container);
+        $this->registerModelServiceProvider($container);
 
-        $container['metadata/loader'] = function (Container $container) {
-            return new MetadataLoader([
+        $container['admin/authenticator'] = function (Container $container) {
+            return new Authenticator([
+                'logger'        => $container['logger'],
+                'user_type'     => AdminUser::class,
+                'user_factory'  => $container['model/factory'],
+                'token_type'    => AdminAuthToken::class,
+                'token_factory' => $container['model/factory'],
+            ]);
+        };
+
+        $container['authenticator'] = function (Container $container) {
+            return $container['admin/authenticator'];
+        };
+    }
+
+    /**
+     * @param  Container $container A DI container.
+     * @return void
+     */
+    public function registerAuthorizer(Container $container)
+    {
+        $this->registerLogger($container);
+        $this->registerAcl($container);
+
+        $container['admin/authorizer'] = function (Container $container) {
+            return new Authorizer([
                 'logger'    => $container['logger'],
-                'cache'     => $container['cache'],
-                'base_path' => realpath(__DIR__.'/../../..'),
-                'paths'     => [
-                    'metadata',
-                    'vendor/locomotivemtl/charcoal-object/metadata',
-                    'vendor/locomotivemtl/charcoal-user/metadata'
-                ]
+                'acl'       => $container['admin/acl'],
+                'resource'  => 'admin',
             ]);
         };
-    }
 
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerSourceFactory(Container $container)
-    {
-        $this->registerLogger($container);
-        $this->registerDatabase($container);
-
-        $container['source/factory'] = function (Container $container) {
-            return new Factory([
-                'map' => [
-                    'database' => DatabaseSource::class
-                ],
-                'arguments'  => [[
-                    'logger' => $container['logger'],
-                    'pdo'    => $container['database']
-                ]]
-            ]);
-        };
-    }
-
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerPropertyFactory(Container $container)
-    {
-        $this->registerTranslator($container);
-        $this->registerDatabase($container);
-        $this->registerLogger($container);
-
-        $container['property/factory'] = function (Container $container) {
-            return new Factory([
-                'resolver_options' => [
-                    'prefix' => '\\Charcoal\\Property\\',
-                    'suffix' => 'Property'
-                ],
-                'arguments' => [[
-                    'container'  => $container,
-                    'database'   => $container['database'],
-                    'translator' => $container['translator'],
-                    'logger'     => $container['logger']
-                ]]
-            ]);
+        $container['authorizer'] = function (Container $container) {
+            return $container['admin/authorizer'];
         };
     }
 
@@ -511,98 +516,6 @@ class ContainerProvider
         };
     }
 
-
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerModelFactory(Container $container)
-    {
-        $this->registerLogger($container);
-        $this->registerTranslator($container);
-        $this->registerMetadataLoader($container);
-        $this->registerPropertyFactory($container);
-        $this->registerSourceFactory($container);
-
-        $container['model/factory'] = function (Container $container) {
-            return new Factory([
-                'arguments' => [[
-                    'container'        => $container,
-                    'logger'           => $container['logger'],
-                    'metadata_loader'  => $container['metadata/loader'],
-                    'property_factory' => $container['property/factory'],
-                    'source_factory'   => $container['source/factory']
-                ]]
-            ]);
-        };
-    }
-
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerAcl(Container $container)
-    {
-        $container['admin/acl'] = function () {
-            return new Acl();
-        };
-    }
-
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerAuthenticator(Container $container)
-    {
-        $this->registerLogger($container);
-        $this->registerModelFactory($container);
-
-        $container['admin/authenticator'] = function (Container $container) {
-            return new Authenticator([
-                'logger'        => $container['logger'],
-                'user_type'     => AdminUser::class,
-                'user_factory'  => $container['model/factory'],
-                'token_type'    => AdminAuthToken::class,
-                'token_factory' => $container['model/factory']
-            ]);
-        };
-    }
-
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerAuthorizer(Container $container)
-    {
-        $this->registerLogger($container);
-        $this->registerAcl($container);
-
-        $container['admin/authorizer'] = function (Container $container) {
-            return new Authorizer([
-                'logger'    => $container['logger'],
-                'acl'       => $container['admin/acl'],
-                'resource'  => 'admin'
-            ]);
-        };
-    }
-
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerCollectionLoader(Container $container)
-    {
-        $this->registerLogger($container);
-        $this->registerModelFactory($container);
-
-        $container['model/collection/loader'] = function (Container $container) {
-            return new \Charcoal\Loader\CollectionLoader([
-                'logger'  => $container['logger'],
-                'factory' => $container['model/factory']
-            ]);
-        };
-    }
-
     /**
      * @param  Container $container A DI container.
      * @return void
@@ -612,20 +525,9 @@ class ContainerProvider
         $container['email/factory'] = function () {
             return new Factory([
                 'map' => [
-                    'email' => Email::class
-                ]
+                    'email' => Email::class,
+                ],
             ]);
-        };
-    }
-
-    /**
-     * @param  Container $container A DI container.
-     * @return void
-     */
-    public function registerElfinderConfig(Container $container)
-    {
-        $container['elfinder/config'] = function () {
-            return [];
         };
     }
 
@@ -636,17 +538,19 @@ class ContainerProvider
     public function registerActionDependencies(Container $container)
     {
         $this->registerDebug($container);
-
         $this->registerLogger($container);
-
-        $this->registerModelFactory($container);
-        $this->registerTranslator($container);
+        $this->registerDatabase($container);
+        $this->registerCache($container);
 
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
+
+        $this->registerViewServiceProvider($container);
+        $this->registerModelServiceProvider($container);
+        $this->registerTranslatorServiceProvider($container);
     }
 
     /**
@@ -656,17 +560,19 @@ class ContainerProvider
     public function registerTemplateDependencies(Container $container)
     {
         $this->registerDebug($container);
-
         $this->registerLogger($container);
-
-        $this->registerModelFactory($container);
-        $this->registerTranslator($container);
+        $this->registerDatabase($container);
+        $this->registerCache($container);
 
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
+
+        $this->registerViewServiceProvider($container);
+        $this->registerModelServiceProvider($container);
+        $this->registerTranslatorServiceProvider($container);
 
         $container['menu/builder'] = null;
         $container['menu/item/builder'] = null;
@@ -679,16 +585,19 @@ class ContainerProvider
     public function registerWidgetDependencies(Container $container)
     {
         $this->registerDebug($container);
-
         $this->registerLogger($container);
-        $this->registerTranslator($container);
-        $this->registerView($container);
+        $this->registerDatabase($container);
+        $this->registerCache($container);
+
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
-        $this->registerModelFactory($container);
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
+
+        $this->registerViewServiceProvider($container);
+        $this->registerModelServiceProvider($container);
+        $this->registerTranslatorServiceProvider($container);
     }
 
     /**
@@ -698,15 +607,19 @@ class ContainerProvider
     public function registerInputDependencies(Container $container)
     {
         $this->registerDebug($container);
-
         $this->registerLogger($container);
-        $this->registerTranslator($container);
+        $this->registerDatabase($container);
+        $this->registerCache($container);
+
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
-        $this->registerMetadataLoader($container);
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
+
+        $this->registerViewServiceProvider($container);
+        $this->registerModelServiceProvider($container);
+        $this->registerTranslatorServiceProvider($container);
     }
 
     /**
@@ -716,17 +629,19 @@ class ContainerProvider
     public function registerScriptDependencies(Container $container)
     {
         $this->registerDebug($container);
-
         $this->registerLogger($container);
-
-        $this->registerModelFactory($container);
-        $this->registerTranslator($container);
+        $this->registerDatabase($container);
+        $this->registerCache($container);
 
         $this->registerAdminConfig($container);
         $this->registerBaseUrl($container);
 
         $this->registerAuthenticator($container);
         $this->registerAuthorizer($container);
+
+        $this->registerViewServiceProvider($container);
+        $this->registerModelServiceProvider($container);
+        $this->registerTranslatorServiceProvider($container);
 
         $this->registerClimate($container);
     }

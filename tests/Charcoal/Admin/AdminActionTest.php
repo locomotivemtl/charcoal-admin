@@ -131,7 +131,6 @@ class AdminActionTest extends AbstractTestCase
             $container = new Container();
             $containerProvider = new ContainerProvider();
             $containerProvider->registerActionDependencies($container);
-            $containerProvider->registerCollectionLoader($container);
 
             $this->container = $container;
         }

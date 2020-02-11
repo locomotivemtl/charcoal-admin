@@ -126,10 +126,8 @@ class TableWidgetTest extends AbstractTestCase
         if ($this->container === null) {
             $container = new Container();
             $containerProvider = new ContainerProvider();
-            $containerProvider->registerCollectionLoader($container);
             $containerProvider->registerWidgetDependencies($container);
             $containerProvider->registerWidgetFactory($container);
-            $containerProvider->registerPropertyFactory($container);
             $containerProvider->registerPropertyDisplayFactory($container);
 
             $container['view'] = $this->createMock('\Charcoal\View\ViewInterface');

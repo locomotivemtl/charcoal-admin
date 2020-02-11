@@ -21,20 +21,24 @@ class AbstractInputTest extends AbstractTestCase
     public $obj;
 
     /**
+     * Store the service container.
+     *
+     * @var Container
+     */
+    private $container;
+
+    /**
      * @return void
      */
     public function setUp()
     {
-        $container = new Container();
-        $containerProvider = new ContainerProvider();
-        $containerProvider->registerLogger($container);
-        $containerProvider->registerMetadataLoader($container);
+        $container = $this->container();
 
         $this->obj = $this->getMockForAbstractClass(AbstractPropertyInput::class, [
             [
-                'logger' => $container['logger'],
-                'metadata_loader' => $container['metadata/loader']
-            ]
+                'logger'          => $container['logger'],
+                'metadata_loader' => $container['metadata/loader'],
+            ],
         ]);
     }
 
@@ -55,5 +59,23 @@ class AbstractInputTest extends AbstractTestCase
         $this->assertTrue($obj->required());
         $this->assertTrue($obj->disabled());
         $this->assertTrue($obj->readOnly());
+    }
+
+    /**
+     * Set up the service container.
+     *
+     * @return Container
+     */
+    protected function container()
+    {
+        if ($this->container === null) {
+            $container = new Container();
+            $containerProvider = new ContainerProvider();
+            $containerProvider->registerInputDependencies($container);
+
+            $this->container = $container;
+        }
+
+        return $this->container;
     }
 }

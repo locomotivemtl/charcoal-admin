@@ -520,14 +520,11 @@ class SelectizeInput extends SelectInput
                 $options['options'] = $choices;
             }
 
-            $items = $this->propertyVal();
+            // L10n properties is not supported through selectize items array,
+            $items = !$prop['l10n'] ? $this->propertyVal() : null;
 
             if ($items !== null && $prop instanceof AbstractProperty) {
-                $items = $prop->parseVal($items);
-
-                if ($prop['l10n']) {
-                    $items = (string)$this->translator()->translation($items);
-                }
+                $items = $this->property()->inputVal($items);
 
                 if (is_string($items)) {
                     $items = explode($prop->multipleSeparator(), $items);
@@ -587,6 +584,32 @@ class SelectizeInput extends SelectInput
     public function isObject()
     {
         return !!($this->p() instanceof ObjectProperty);
+    }
+
+    /**
+     * Retrieve the input name.
+     *
+     * The input name should always be the property's ident.
+     *
+     * @return string
+     */
+    public function inputName()
+    {
+        if ($this->inputName) {
+            $name = $this->inputName;
+        } else {
+            $name = $this->propertyIdent();
+        }
+
+        if ($this->p()['l10n']) {
+            $name .= '['.$this->lang().']';
+        }
+
+        if ($this->multiple() && $this->isObject()) {
+            $name .= '[]';
+        }
+
+        return $name;
     }
 
     /**
@@ -651,6 +674,7 @@ class SelectizeInput extends SelectInput
             if (is_string($val)) {
                 $val = explode($prop->multipleSeparator(), $val);
             }
+
         }
 
         if (!$prop['multiple']) {

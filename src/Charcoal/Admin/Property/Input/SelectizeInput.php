@@ -674,7 +674,6 @@ class SelectizeInput extends SelectInput
             if (is_string($val)) {
                 $val = explode($prop->multipleSeparator(), $val);
             }
-
         }
 
         if (!$prop['multiple']) {

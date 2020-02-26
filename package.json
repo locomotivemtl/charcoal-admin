@@ -14,7 +14,7 @@
         "bootstrap-select": "~1.13.0",
         "clipboard": "^2.0.0",
         "components-font-awesome": "~4.7.0",
-        "echarts": "^4.2.0",
+        "echarts": "^4.6.0",
         "jquery": "^3.4",
         "jquery-ui-bundle": "1.12.1",
         "jsoneditor": "^5.34.0",

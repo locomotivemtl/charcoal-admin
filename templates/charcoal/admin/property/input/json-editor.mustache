@@ -11,11 +11,11 @@
     <link href="/assets/admin/scripts/vendors/jsoneditor/jsoneditor.css" rel="stylesheet" type="text/css">
     <script src="/assets/admin/scripts/vendors/jsoneditor/jsoneditor.js"></script>
 {{/addJsRequirement}}
-        
+
 {{=<% %>=}}
     <%# jsonVal %>
     <script>
-        const jsonVal_<% inputId %> = <%&.%>;
+        const jsonVal_<% inputId %> = <% &. %>;
     </script>
     <%/ jsonVal %>
 <%={{ }}=%>
@@ -25,7 +25,7 @@
 
         var container = document.getElementById("{{inputId}}");
         var options = {
-            modes: ['code', 'tree'],
+            modes: [ 'code', 'tree' ],
             onChangeText: function(text) {
                 document.getElementById("hidden_{{inputId}}").value = text;
             }

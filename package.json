@@ -7,7 +7,7 @@
     "dependencies": {
         "@claviska/jquery-minicolors": "~2.3.4",
         "@shopify/draggable": "^1.0.0-beta.8",
-        "@ungap/url-search-params": "0.1.2",
+        "@ungap/url-search-params": "^0.1.4",
         "awesome-bootstrap-checkbox": "1.0.1",
         "beneroch-gmap": "0.3.0",
         "bootstrap": ">=4.3.1",
@@ -15,7 +15,6 @@
         "clipboard": "^2.0.0",
         "components-font-awesome": "~4.7.0",
         "echarts": "^4.2.0",
-        "elfinder-theme-moono": "git+https://github.com/lokothodida/elfinder-theme-moono.git",
         "jquery": "^3.4",
         "jquery-ui-bundle": "1.12.1",
         "jsoneditor": "^5.34.0",
@@ -30,8 +29,8 @@
         "tinymce-i18n": "^19.2.11"
     },
     "devDependencies": {
-        "autoprefixer": "9.5.1",
-        "glob": "7.1.4",
+        "autoprefixer": "^9.7.4",
+        "glob": "^7.1.6",
         "grunt": "1.0.4",
         "grunt-browser-sync": "2.2.0",
         "grunt-contrib-concat": "1.0.1",
@@ -41,14 +40,19 @@
         "grunt-contrib-uglify": "4.0.1",
         "grunt-contrib-watch": "1.1.0",
         "grunt-jscs": "3.0.1",
-        "grunt-jsonlint": "1.1.0",
+        "grunt-jsonlint": "^2.1.1",
         "grunt-notify": "0.4.5",
         "grunt-postcss": "0.9.0",
-        "grunt-sass": "3.0.2",
+        "grunt-sass": "^3.1.0",
         "grunt-svg-sprite": "1.5.0",
-        "load-grunt-config": "1.0.2",
-        "node-sass": "4.12.0",
+        "load-grunt-config": "^3.0.1",
+        "node-sass": "^4.13.1",
         "postcss-banner": "3.0.1",
         "selectizebootstrap": "git+https://github.com/papakay/selectize-bootstrap-4-style.git"
-    }
+    },
+    "browserslist": [
+        "last 2 versions",
+        "> 1%",
+        "ie >= 9"
+    ]
 }

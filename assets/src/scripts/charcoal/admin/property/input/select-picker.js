@@ -5,8 +5,7 @@
  * - silviomoreto/bootstrap-select
  */
 
-Charcoal.Admin.Property_Input_SelectPicker = function (opts)
-{
+Charcoal.Admin.Property_Input_SelectPicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/select';
 
     // Property_Input_SelectPicker properties
@@ -22,8 +21,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype = Object.create(Charcoal.Ad
 Charcoal.Admin.Property_Input_SelectPicker.prototype.constructor = Charcoal.Admin.Property_Input_SelectPicker;
 Charcoal.Admin.Property_Input_SelectPicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_SelectPicker.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_SelectPicker.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.select_selector = opts.data.select_selector || this.select_selector;
@@ -36,8 +34,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.set_properties = function (
     return this;
 };
 
-Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
-{
+Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function () {
     $(this.select_selector).selectpicker(this.select_options);
 
     return this;

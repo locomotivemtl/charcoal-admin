@@ -1,5 +1,4 @@
-Charcoal.Admin.Template_MenuHeader = function ()
-{
+Charcoal.Admin.Template_MenuHeader = function () {
     // toggle-class.js
     // ==========================================================================
     $('.js-toggle-class').click(function (event) {
@@ -19,9 +18,10 @@ Charcoal.Admin.Template_MenuHeader = function ()
 
         var $this = $(this);
 
-        $this.toggleClass('is-open')
-             .siblings('.js-accordion-content')
-             .stop()
-             .slideToggle();
+        $this
+            .toggleClass('is-open')
+            .siblings('.js-accordion-content')
+            .stop()
+            .slideToggle();
     });
 };

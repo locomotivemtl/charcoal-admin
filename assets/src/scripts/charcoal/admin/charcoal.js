@@ -401,8 +401,7 @@ Charcoal.Admin = (function () {
      * @param  {mixed}  error  - The error message.
      * @return {object} - The resolved XHR response structure.
      */
-    Admin.parseJqXhrResponse = function (jqxhr, status, error)
-    {
+    Admin.parseJqXhrResponse = function (jqxhr, status, error) {
         var response = { success: false, feedbacks: [] };
 
         if (jqxhr.responseJSON) {
@@ -411,13 +410,13 @@ Charcoal.Admin = (function () {
 
         if (response.feedbacks.length === 0) {
             if (response.message) {
-                response.feedbacks = Array.isArray(response.message) ?
-                                   response.message
-                                   : [ { msg: response.message } ];
+                response.feedbacks = Array.isArray(response.message)
+                    ? response.message
+                    : [ { msg: response.message } ];
             } else {
-                response.feedbacks = Array.isArray(error) ?
-                                   error
-                                   : [ { msg: error } ];
+                response.feedbacks = Array.isArray(error)
+                    ? error
+                    : [ { msg: error } ];
             }
         }
 
@@ -486,13 +485,13 @@ Charcoal.Admin = (function () {
 
                 if (response.feedbacks.length === 0) {
                     if (response.message) {
-                        response.feedbacks = Array.isArray(response.message) ?
-                                           response.message
-                                           : [ { msg: response.message } ];
+                        response.feedbacks = Array.isArray(response.message)
+                            ? response.message
+                            : [ { msg: response.message } ];
                     } else {
-                        response.feedbacks = Array.isArray(error) ?
-                                           error
-                                           : [ { msg: error } ];
+                        response.feedbacks = Array.isArray(error)
+                            ? error
+                            : [ { msg: error } ];
                     }
                 }
 

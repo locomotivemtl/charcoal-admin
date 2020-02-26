@@ -7,7 +7,7 @@
  * It uses BootstrapDialog to display feedback.
  */
 
-;(function ($, Admin, document, undefined) {
+;(function ($, Admin, document) {
     'use strict';
 
     var $document = $(document),
@@ -40,8 +40,7 @@
      *
      * @class
      */
-    var Manager = function ()
-    {
+    var Manager = function () {
         $(this.init.bind(this));
 
         return this;
@@ -52,11 +51,11 @@
      *
      * @fires document#ready
      */
-    Manager.prototype.init = function ()
-    {
-        $document.off(Event.CLICK)
-                 .on(Event.CLICK, Selector.DATA_CLEAR, this.onClear.bind(this))
-                 .on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
+    Manager.prototype.init = function () {
+        $document
+            .off(Event.CLICK)
+            .on(Event.CLICK, Selector.DATA_CLEAR, this.onClear.bind(this))
+            .on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
     };
 
     /**
@@ -64,8 +63,7 @@
      *
      * @return {Boolean} TRUE if the cache is clearing data otherwise FALSE.
      */
-    Manager.prototype.isFlushing = function ()
-    {
+    Manager.prototype.isFlushing = function () {
         return isFlushing;
     };
 
@@ -74,8 +72,7 @@
      *
      * @return {String|null}
      */
-    Manager.prototype.lastAction = function ()
-    {
+    Manager.prototype.lastAction = function () {
         return lastAction;
     };
 
@@ -84,8 +81,7 @@
      *
      * @return {String|null}
      */
-    Manager.prototype.lastCacheType = function ()
-    {
+    Manager.prototype.lastCacheType = function () {
         return lastCache;
     };
 
@@ -94,8 +90,7 @@
      *
      * @return {Element|null}
      */
-    Manager.prototype.lastTarget = function ()
-    {
+    Manager.prototype.lastTarget = function () {
         return lastTarget;
     };
 
@@ -104,8 +99,7 @@
      *
      * @return {Thenable|null}
      */
-    Manager.prototype.lastXhr = function ()
-    {
+    Manager.prototype.lastXhr = function () {
         return lastXhr;
     };
 
@@ -115,8 +109,7 @@
      * @param  {Element} $trigger - The jQuery element.
      * @return {String|Null}
      */
-    Manager.prototype.resolveType = function ($trigger)
-    {
+    Manager.prototype.resolveType = function ($trigger) {
         return $trigger.data('cacheType') || null;
     };
 
@@ -126,8 +119,7 @@
      * @param  {Element} $trigger - The jQuery element.
      * @return {String|Null}
      */
-    Manager.prototype.resolveKey = function ($trigger)
-    {
+    Manager.prototype.resolveKey = function ($trigger) {
         return $trigger.data('cacheKey') || null;
     };
 
@@ -138,8 +130,7 @@
      * @event  document#click
      * @param  {Event} event - The event handler.
      */
-    Manager.prototype.onClear = function (event)
-    {
+    Manager.prototype.onClear = function (event) {
         event.preventDefault();
 
         var $trigger, type, key;
@@ -165,8 +156,7 @@
      * @event  document#click
      * @param  {Event} event - The event handler.
      */
-    Manager.prototype.onPurge = function (event)
-    {
+    Manager.prototype.onPurge = function (event) {
         event.preventDefault();
 
         var $trigger, type, key;
@@ -191,8 +181,7 @@
      * @param {String} cacheType   - The cache type to flush.
      * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.clear = function (cacheType, cacheKey)
-    {
+    Manager.prototype.clear = function (cacheType, cacheKey) {
         this.flush(Action.CLEAR, cacheType, cacheKey);
     };
 
@@ -202,8 +191,7 @@
      * @param {String} cacheType   - The cache type to flush.
      * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.purge = function (cacheType, cacheKey)
-    {
+    Manager.prototype.purge = function (cacheType, cacheKey) {
         this.flush(Action.PURGE, cacheType, cacheKey);
     };
 
@@ -214,8 +202,7 @@
      * @param {String} cacheType   - The cache type to flush.
      * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.flush = function (cacheAction, cacheType, cacheKey)
-    {
+    Manager.prototype.flush = function (cacheAction, cacheType, cacheKey) {
         if (isFlushing === true) {
             return;
         }
@@ -266,10 +253,10 @@
         };
 
         lastXhr = $.post(settings)
-                   .then(juggle)
-                   .done(done)
-                   .fail(fail)
-                   .always(finalize);
+            .then(juggle)
+            .done(done)
+            .fail(fail)
+            .always(finalize);
     };
 
     /**

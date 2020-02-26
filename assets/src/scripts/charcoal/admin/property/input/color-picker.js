@@ -5,8 +5,7 @@
  * - jquery-minicolors
  */
 
-Charcoal.Admin.Property_Input_ColorPicker = function (opts)
-{
+Charcoal.Admin.Property_Input_ColorPicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/colorpicker';
 
     this.input_id = null;
@@ -21,8 +20,7 @@ Charcoal.Admin.Property_Input_ColorPicker.prototype = Object.create(Charcoal.Adm
 Charcoal.Admin.Property_Input_ColorPicker.prototype.constructor = Charcoal.Admin.Property_Input_ColorPicker;
 Charcoal.Admin.Property_Input_ColorPicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_ColorPicker.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_ColorPicker.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.colorpicker_selector = opts.data.colorpicker_selector || this.colorpicker_selector;
@@ -35,8 +33,7 @@ Charcoal.Admin.Property_Input_ColorPicker.prototype.set_properties = function (o
     return this;
 };
 
-Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = function ()
-{
+Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = function () {
     $(this.colorpicker_selector).minicolors(this.colorpicker_options);
 
     return this;

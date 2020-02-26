@@ -9,7 +9,7 @@
  * - `error`
  */
 
-;(function ($, Admin, document, undefined) {
+;(function ($, Admin) {
     'use strict';
 
     var lvls, defs, alts, arr = [], reset = function () {
@@ -55,8 +55,7 @@
      *
      * @class
      */
-    var Manager = function ()
-    {
+    var Manager = function () {
         this.empty();
 
         if (arguments.length) {
@@ -93,8 +92,7 @@
      * @param  {string} level - A feedback level to resolve.
      * @return {this}
      */
-    Manager.prototype.resolveAliases = function (level)
-    {
+    Manager.prototype.resolveAliases = function (level) {
         if ($.inArray(level, lvls) === -1) {
             throw new TypeError(
                 'Unsupported feedback level, received "' + level +
@@ -138,8 +136,7 @@
      *
      * @return this
      */
-    Manager.prototype.push = function ()
-    {
+    Manager.prototype.push = function () {
         var context = arguments[0];
         var entries = arguments;
 
@@ -233,8 +230,7 @@
      *
      * @return {array}
      */
-    Manager.prototype.availableLevels = function ()
-    {
+    Manager.prototype.availableLevels = function () {
         return lvls;
     };
 
@@ -243,8 +239,7 @@
      *
      * @return {object}
      */
-    Manager.prototype.levels = function ()
-    {
+    Manager.prototype.levels = function () {
         return defs;
     };
 
@@ -253,8 +248,7 @@
      *
      * @return {object}
      */
-    Manager.prototype.level = function (key)
-    {
+    Manager.prototype.level = function (key) {
         return defs[key] || null;
     };
 
@@ -264,8 +258,7 @@
      * @param  {object} [config] - New definitions.
      * @return {this}
      */
-    Manager.prototype.setLevels = function (config)
-    {
+    Manager.prototype.setLevels = function (config) {
         var type = $.type(config);
         if (type !== 'object') {
             throw new TypeError('Level(s) must be an associative array, received ' + type);
@@ -297,8 +290,7 @@
      * @param  {object} [config] - New definitions.
      * @return {this}
      */
-    Manager.prototype.mergeLevels = function (config)
-    {
+    Manager.prototype.mergeLevels = function (config) {
         var type = $.type(config);
         if (type !== 'object') {
             throw new TypeError('Level(s) must be an associative array, received ' + type);
@@ -327,8 +319,7 @@
     /**
      * Actions in the dialog box
      */
-    Manager.prototype.add_action = function (opts)
-    {
+    Manager.prototype.add_action = function (opts) {
         this.actions.push(opts);
 
         return this;
@@ -339,8 +330,7 @@
      *
      * @return this
      */
-    Manager.prototype.dispatch = function ()
-    {
+    Manager.prototype.dispatch = function () {
         if (!this.hasMessages()) {
             return this;
         }
@@ -392,8 +382,7 @@
     /**
      * Reset feedback storages.
      */
-    Manager.prototype.empty = function ()
-    {
+    Manager.prototype.empty = function () {
         reset();
 
         this.actions = [];

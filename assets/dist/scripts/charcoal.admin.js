@@ -1,3 +1,5 @@
+/* eslint-disable dot-notation */
+
 /**
  * Enable each element in the set of matched elements.
  */
@@ -92,7 +94,7 @@ if (!window.CustomEvent || typeof window.CustomEvent !== 'function') {
         _Class.prototype = window.Event.prototype;
 
         return _Class;
-    })();
+    }());
 }
 
 if (!window.Promise) {
@@ -182,7 +184,7 @@ if (!window.Promise) {
         };
 
         return _Class;
-    })();
+    }());
 }
 
 if (!Array.prototype.find) {
@@ -198,7 +200,7 @@ if (!Array.prototype.find) {
      */
     Object.defineProperty(Array.prototype, 'find', {
         value: function (predicate) {
-            if (this == null) {
+            if (this === null || this === undefined) {
                 throw new TypeError('"this" is null or not defined');
             }
 
@@ -228,7 +230,7 @@ if (!Array.prototype.find) {
 if (typeof Object.assign !== 'function') {
     // Must be writable: true, enumerable: false, configurable: true
     Object.defineProperty(Object, 'assign', {
-        value: function assign (target/*, varArgs*/) {
+        value: function (target/*, varArgs*/) {
             'use strict';
             if (target === null || target === undefined) {
                 throw new TypeError('Cannot convert undefined or null to object');
@@ -703,8 +705,7 @@ Charcoal.Admin = (function () {
      * @param  {mixed}  error  - The error message.
      * @return {object} - The resolved XHR response structure.
      */
-    Admin.parseJqXhrResponse = function (jqxhr, status, error)
-    {
+    Admin.parseJqXhrResponse = function (jqxhr, status, error) {
         var response = { success: false, feedbacks: [] };
 
         if (jqxhr.responseJSON) {
@@ -713,13 +714,13 @@ Charcoal.Admin = (function () {
 
         if (response.feedbacks.length === 0) {
             if (response.message) {
-                response.feedbacks = Array.isArray(response.message) ?
-                                   response.message
-                                   : [ { msg: response.message } ];
+                response.feedbacks = Array.isArray(response.message)
+                    ? response.message
+                    : [ { msg: response.message } ];
             } else {
-                response.feedbacks = Array.isArray(error) ?
-                                   error
-                                   : [ { msg: error } ];
+                response.feedbacks = Array.isArray(error)
+                    ? error
+                    : [ { msg: error } ];
             }
         }
 
@@ -788,13 +789,13 @@ Charcoal.Admin = (function () {
 
                 if (response.feedbacks.length === 0) {
                     if (response.message) {
-                        response.feedbacks = Array.isArray(response.message) ?
-                                           response.message
-                                           : [ { msg: response.message } ];
+                        response.feedbacks = Array.isArray(response.message)
+                            ? response.message
+                            : [ { msg: response.message } ];
                     } else {
-                        response.feedbacks = Array.isArray(error) ?
-                                           error
-                                           : [ { msg: error } ];
+                        response.feedbacks = Array.isArray(error)
+                            ? error
+                            : [ { msg: error } ];
                     }
                 }
 
@@ -840,7 +841,7 @@ Charcoal.Admin = (function () {
  * It uses BootstrapDialog to display feedback.
  */
 
-;(function ($, Admin, document, undefined) {
+;(function ($, Admin, document) {
     'use strict';
 
     var $document = $(document),
@@ -873,8 +874,7 @@ Charcoal.Admin = (function () {
      *
      * @class
      */
-    var Manager = function ()
-    {
+    var Manager = function () {
         $(this.init.bind(this));
 
         return this;
@@ -885,11 +885,11 @@ Charcoal.Admin = (function () {
      *
      * @fires document#ready
      */
-    Manager.prototype.init = function ()
-    {
-        $document.off(Event.CLICK)
-                 .on(Event.CLICK, Selector.DATA_CLEAR, this.onClear.bind(this))
-                 .on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
+    Manager.prototype.init = function () {
+        $document
+            .off(Event.CLICK)
+            .on(Event.CLICK, Selector.DATA_CLEAR, this.onClear.bind(this))
+            .on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
     };
 
     /**
@@ -897,8 +897,7 @@ Charcoal.Admin = (function () {
      *
      * @return {Boolean} TRUE if the cache is clearing data otherwise FALSE.
      */
-    Manager.prototype.isFlushing = function ()
-    {
+    Manager.prototype.isFlushing = function () {
         return isFlushing;
     };
 
@@ -907,8 +906,7 @@ Charcoal.Admin = (function () {
      *
      * @return {String|null}
      */
-    Manager.prototype.lastAction = function ()
-    {
+    Manager.prototype.lastAction = function () {
         return lastAction;
     };
 
@@ -917,8 +915,7 @@ Charcoal.Admin = (function () {
      *
      * @return {String|null}
      */
-    Manager.prototype.lastCacheType = function ()
-    {
+    Manager.prototype.lastCacheType = function () {
         return lastCache;
     };
 
@@ -927,8 +924,7 @@ Charcoal.Admin = (function () {
      *
      * @return {Element|null}
      */
-    Manager.prototype.lastTarget = function ()
-    {
+    Manager.prototype.lastTarget = function () {
         return lastTarget;
     };
 
@@ -937,8 +933,7 @@ Charcoal.Admin = (function () {
      *
      * @return {Thenable|null}
      */
-    Manager.prototype.lastXhr = function ()
-    {
+    Manager.prototype.lastXhr = function () {
         return lastXhr;
     };
 
@@ -948,8 +943,7 @@ Charcoal.Admin = (function () {
      * @param  {Element} $trigger - The jQuery element.
      * @return {String|Null}
      */
-    Manager.prototype.resolveType = function ($trigger)
-    {
+    Manager.prototype.resolveType = function ($trigger) {
         return $trigger.data('cacheType') || null;
     };
 
@@ -959,8 +953,7 @@ Charcoal.Admin = (function () {
      * @param  {Element} $trigger - The jQuery element.
      * @return {String|Null}
      */
-    Manager.prototype.resolveKey = function ($trigger)
-    {
+    Manager.prototype.resolveKey = function ($trigger) {
         return $trigger.data('cacheKey') || null;
     };
 
@@ -971,8 +964,7 @@ Charcoal.Admin = (function () {
      * @event  document#click
      * @param  {Event} event - The event handler.
      */
-    Manager.prototype.onClear = function (event)
-    {
+    Manager.prototype.onClear = function (event) {
         event.preventDefault();
 
         var $trigger, type, key;
@@ -998,8 +990,7 @@ Charcoal.Admin = (function () {
      * @event  document#click
      * @param  {Event} event - The event handler.
      */
-    Manager.prototype.onPurge = function (event)
-    {
+    Manager.prototype.onPurge = function (event) {
         event.preventDefault();
 
         var $trigger, type, key;
@@ -1024,8 +1015,7 @@ Charcoal.Admin = (function () {
      * @param {String} cacheType   - The cache type to flush.
      * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.clear = function (cacheType, cacheKey)
-    {
+    Manager.prototype.clear = function (cacheType, cacheKey) {
         this.flush(Action.CLEAR, cacheType, cacheKey);
     };
 
@@ -1035,8 +1025,7 @@ Charcoal.Admin = (function () {
      * @param {String} cacheType   - The cache type to flush.
      * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.purge = function (cacheType, cacheKey)
-    {
+    Manager.prototype.purge = function (cacheType, cacheKey) {
         this.flush(Action.PURGE, cacheType, cacheKey);
     };
 
@@ -1047,8 +1036,7 @@ Charcoal.Admin = (function () {
      * @param {String} cacheType   - The cache type to flush.
      * @param {String} cacheKey    - The cache key to delete.
      */
-    Manager.prototype.flush = function (cacheAction, cacheType, cacheKey)
-    {
+    Manager.prototype.flush = function (cacheAction, cacheType, cacheKey) {
         if (isFlushing === true) {
             return;
         }
@@ -1099,10 +1087,10 @@ Charcoal.Admin = (function () {
         };
 
         lastXhr = $.post(settings)
-                   .then(juggle)
-                   .done(done)
-                   .fail(fail)
-                   .always(finalize);
+            .then(juggle)
+            .done(done)
+            .fail(fail)
+            .always(finalize);
     };
 
     /**
@@ -1232,8 +1220,7 @@ Charcoal.Admin = (function () {
      *
      * @class
      */
-    var Manager = function ()
-    {
+    var Manager = function () {
         // Are the Components and the DOM ready to be used? Set to true once it occurs.
         this.isReady = false;
 
@@ -1247,29 +1234,24 @@ Charcoal.Admin = (function () {
         });
     };
 
-    Manager.prototype.add_property_input = function (opts)
-    {
+    Manager.prototype.add_property_input = function (opts) {
         this.add_component('property_inputs', opts);
     };
 
-    Manager.prototype.add_widget = function (opts)
-    {
+    Manager.prototype.add_widget = function (opts) {
         this.add_component('widgets', opts);
     };
 
-    Manager.prototype.add_template = function (opts)
-    {
+    Manager.prototype.add_template = function (opts) {
         this.add_component('templates', opts);
     };
 
-    Manager.prototype.add_component = function (component_type, opts)
-    {
+    Manager.prototype.add_component = function (component_type, opts) {
         // Figure out which component to instanciate
         var ident = Charcoal.Admin.get_object_name(opts.type);
 
         // Make sure it exists first
         if (typeof(Charcoal.Admin[ident]) === 'function') {
-
             opts.ident = ident;
 
             // Check if component type array exists in components array
@@ -1285,37 +1267,33 @@ Charcoal.Admin = (function () {
      * Retrieve Components
      */
 
-    Manager.prototype.get_property_input = function (id)
-    {
+    Manager.prototype.get_property_input = function (id) {
         return this.get_component('property_inputs', id);
     };
 
-    Manager.prototype.get_widget = function (id)
-    {
+    Manager.prototype.get_widget = function (id) {
         return this.get_component('widgets', id);
     };
 
-    Manager.prototype.get_template = function (id)
-    {
+    Manager.prototype.get_template = function (id) {
         return this.get_component('templates', id);
     };
 
     /**
      * Get component from Type and ID
      *
-     * @param type (widgets, inputs, properties)
-     * @param id
+     * @param component_type (widgets, inputs, properties)
+     * @param component_id
      * @returns {*}
      */
-    Manager.prototype.get_component = function (type, id)
-    {
+    Manager.prototype.get_component = function (component_type, component_id) {
         if (!this.isReady) {
             throw new Error('Components must be rendered.');
         }
 
-        if (type in this.components) {
-            return this.components[type].find(function (component/*, index, components*/) {
-                return component._id === id;
+        if (component_type in this.components) {
+            return this.components[component_type].find(function (component) {
+                return component._id === component_id;
             });
         }
 
@@ -1325,19 +1303,18 @@ Charcoal.Admin = (function () {
     /**
      * Remove component from the manager
      *
-     * @param type (widgets, inputs, properties)
-     * @param id
+     * @param component_type (widgets, inputs, properties)
+     * @param component_id
      * @returns {undefined}
      */
-    Manager.prototype.remove_component = function (type, id)
-    {
+    Manager.prototype.remove_component = function (component_type, component_id) {
         if (!this.isReady) {
             throw new Error('Components must be rendered.');
         }
 
-        if (type in this.components) {
-            this.components[type] = this.components[type].filter(function (c) {
-                return c._id !== id;
+        if (component_type in this.components) {
+            this.components[component_type] = this.components[component_type].filter(function (component) {
+                return component._id !== component_id;
             });
         }
 
@@ -1352,15 +1329,13 @@ Charcoal.Admin = (function () {
      * @param  {Function} fn - A function to execute after the DOM is ready.
      * @return {this}
      */
-    Manager.prototype.ready = function (fn)
-    {
+    Manager.prototype.ready = function (fn) {
         readyList.promise().done(fn);
 
         return this;
     };
 
-    Manager.prototype.render = function ()
-    {
+    Manager.prototype.render = function () {
         var renderEvent = $.Event('render.charcoal.components', {
             relatedTarget: this
         });
@@ -1451,15 +1426,13 @@ Charcoal.Admin = (function () {
      * @see admin/widget/form.js submit_form()
      * @return boolean Success (in case of validation)
      */
-    Manager.prototype.prepare_submit = function ()
-    {
+    Manager.prototype.prepare_submit = function () {
         this.prepare_inputs();
         this.prepare_widgets();
         return true;
     };
 
-    Manager.prototype.prepare_inputs = function ()
-    {
+    Manager.prototype.prepare_inputs = function () {
         // Get inputs
         var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
 
@@ -1494,8 +1467,7 @@ Charcoal.Admin = (function () {
         return true;
     };
 
-    Manager.prototype.prepare_widgets = function ()
-    {
+    Manager.prototype.prepare_widgets = function () {
         // Get inputs
         var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
 
@@ -1540,7 +1512,7 @@ Charcoal.Admin = (function () {
  * Handles bindings for actionable buttons.
  */
 
-;(function ($, document, undefined) {
+;(function ($, document) {
     'use strict';
 
     // Stored for quick usage
@@ -1601,13 +1573,13 @@ Charcoal.Admin = (function () {
             Charcoal.Admin.feedback(jqXHR.responseJSON.feedbacks);
         } else {
             var error   = errorThrown || commonL10n.errorOccurred;
-            Charcoal.Admin.feedback([{
+            Charcoal.Admin.feedback([ {
+                level:   'error',
                 message: commonL10n.errorTemplate.replaceMap({
                     '[[ errorMessage ]]': 'There was an error. Sorry for the inconvenience.',
-                    '[[ errorThrown ]]':  error
-                }),
-                level:   'error'
-            }]);
+                    '[[ errorThrown ]]': error
+                })
+            } ]);
         }
     };
 
@@ -1620,7 +1592,7 @@ Charcoal.Admin = (function () {
     new Charcoal.Admin.ActionManager();
 
 }(jQuery, document));
-;;(function (window, undefined) {
+;;(function (window) {
     'use strict';
 
     /**
@@ -1758,7 +1730,7 @@ Charcoal.Admin = (function () {
  * - `error`
  */
 
-;(function ($, Admin, document, undefined) {
+;(function ($, Admin) {
     'use strict';
 
     var lvls, defs, alts, arr = [], reset = function () {
@@ -1804,8 +1776,7 @@ Charcoal.Admin = (function () {
      *
      * @class
      */
-    var Manager = function ()
-    {
+    var Manager = function () {
         this.empty();
 
         if (arguments.length) {
@@ -1842,8 +1813,7 @@ Charcoal.Admin = (function () {
      * @param  {string} level - A feedback level to resolve.
      * @return {this}
      */
-    Manager.prototype.resolveAliases = function (level)
-    {
+    Manager.prototype.resolveAliases = function (level) {
         if ($.inArray(level, lvls) === -1) {
             throw new TypeError(
                 'Unsupported feedback level, received "' + level +
@@ -1887,8 +1857,7 @@ Charcoal.Admin = (function () {
      *
      * @return this
      */
-    Manager.prototype.push = function ()
-    {
+    Manager.prototype.push = function () {
         var context = arguments[0];
         var entries = arguments;
 
@@ -1982,8 +1951,7 @@ Charcoal.Admin = (function () {
      *
      * @return {array}
      */
-    Manager.prototype.availableLevels = function ()
-    {
+    Manager.prototype.availableLevels = function () {
         return lvls;
     };
 
@@ -1992,8 +1960,7 @@ Charcoal.Admin = (function () {
      *
      * @return {object}
      */
-    Manager.prototype.levels = function ()
-    {
+    Manager.prototype.levels = function () {
         return defs;
     };
 
@@ -2002,8 +1969,7 @@ Charcoal.Admin = (function () {
      *
      * @return {object}
      */
-    Manager.prototype.level = function (key)
-    {
+    Manager.prototype.level = function (key) {
         return defs[key] || null;
     };
 
@@ -2013,8 +1979,7 @@ Charcoal.Admin = (function () {
      * @param  {object} [config] - New definitions.
      * @return {this}
      */
-    Manager.prototype.setLevels = function (config)
-    {
+    Manager.prototype.setLevels = function (config) {
         var type = $.type(config);
         if (type !== 'object') {
             throw new TypeError('Level(s) must be an associative array, received ' + type);
@@ -2046,8 +2011,7 @@ Charcoal.Admin = (function () {
      * @param  {object} [config] - New definitions.
      * @return {this}
      */
-    Manager.prototype.mergeLevels = function (config)
-    {
+    Manager.prototype.mergeLevels = function (config) {
         var type = $.type(config);
         if (type !== 'object') {
             throw new TypeError('Level(s) must be an associative array, received ' + type);
@@ -2076,8 +2040,7 @@ Charcoal.Admin = (function () {
     /**
      * Actions in the dialog box
      */
-    Manager.prototype.add_action = function (opts)
-    {
+    Manager.prototype.add_action = function (opts) {
         this.actions.push(opts);
 
         return this;
@@ -2088,8 +2051,7 @@ Charcoal.Admin = (function () {
      *
      * @return this
      */
-    Manager.prototype.dispatch = function ()
-    {
+    Manager.prototype.dispatch = function () {
         if (!this.hasMessages()) {
             return this;
         }
@@ -2141,8 +2103,7 @@ Charcoal.Admin = (function () {
     /**
      * Reset feedback storages.
      */
-    Manager.prototype.empty = function ()
-    {
+    Manager.prototype.empty = function () {
         reset();
 
         this.actions = [];
@@ -2326,7 +2287,7 @@ Charcoal.Admin = (function () {
  * Charcoal reCAPTCHA Handler
  */
 
-;(function ($, Admin, window, undefined) {
+;(function ($, Admin, window) {
     'use strict';
 
     /**
@@ -2335,8 +2296,7 @@ Charcoal.Admin = (function () {
      * @class
      * @return {this}
      */
-    var Captcha = function ()
-    {
+    var Captcha = function () {
         return this;
     };
 
@@ -2349,8 +2309,7 @@ Charcoal.Admin = (function () {
      *
      * @return {grecaptcha|null} - The Google reCAPTCHA object or NULL.
      */
-    Captcha.prototype.getApi = function ()
-    {
+    Captcha.prototype.getApi = function () {
         return window.grecaptcha || null;
     };
 
@@ -2359,8 +2318,7 @@ Charcoal.Admin = (function () {
      *
      * @return {boolean}
      */
-    Captcha.prototype.hasApi = function ()
-    {
+    Captcha.prototype.hasApi = function () {
         return (typeof window.grecaptcha !== 'undefined');
     };
 
@@ -2372,8 +2330,7 @@ Charcoal.Admin = (function () {
      * @return {boolean} - Returns TRUE if the Google reCAPTCHA API is avialable
      *     and if the widget exists.
      */
-    Captcha.prototype.hasWidget = function (context, selector)
-    {
+    Captcha.prototype.hasWidget = function (context, selector) {
         // Bail early
         if (this.hasApi() === false) {
             return false;
@@ -2394,8 +2351,7 @@ Charcoal.Admin = (function () {
      * @return {boolean} - Returns TRUE if the Google reCAPTCHA API is avialable
      *     and if the widget exists and is invisible.
      */
-    Captcha.prototype.hasInvisibleWidget = function (context, selector)
-    {
+    Captcha.prototype.hasInvisibleWidget = function (context, selector) {
         // Bail early
         if (this.hasApi() === false) {
             return false;
@@ -2905,8 +2861,7 @@ var globalXHR = {};
  *
  * @see widget.js (Charcoal.Admin.Widget
  */
-Charcoal.Admin.Widget_Attachment = function (opts)
-{
+Charcoal.Admin.Widget_Attachment = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this.glyphs = {
@@ -2949,8 +2904,7 @@ Charcoal.Admin.Widget_Attachment.prototype.parent = Charcoal.Admin.Widget.protot
  * @see Component_Manager.render()
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Attachment.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.init = function () {
     var $container = this.element().find('.js-attachment-sortable > .js-grid-container');
     if ($container.length) {
         this.element().on('hidden.bs.collapse', '[data-toggle="collapse"]', function () {
@@ -2979,8 +2933,7 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
  * Check if the widget has something a dirty state that needs to be saved.
  * @return Boolean     Widget dirty of not.
  */
-Charcoal.Admin.Widget_Attachment.prototype.is_dirty = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.is_dirty = function () {
     return this.dirty;
 };
 
@@ -2990,8 +2943,7 @@ Charcoal.Admin.Widget_Attachment.prototype.is_dirty = function ()
  * @param Boolean bool Self explanatory.
  * @return Add_Attachment_Widget Chainable.
  */
-Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool)
-{
+Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool) {
     this.dirty = bool;
     return this;
 };
@@ -3001,8 +2953,7 @@ Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool)
  *
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.listeners = function () {
     // Scope
     var that = this,
         $container = this.element().find('.c-attachments_container > .js-grid-container');
@@ -3030,7 +2981,6 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         })
         .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
             e.preventDefault();
-            var opts = that.opts();
 
             var _this = $(this);
 
@@ -3059,7 +3009,6 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
-                        opts = that.opts();
                         that.join(function () {
                             that.reload();
                         });
@@ -3164,16 +3113,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
  * @param  {jQuery Object} elem Clicked element
  * @return {thisArg}            (Chainable)
  */
-Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
-{
+Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem) {
     if (!elem.data('id') || !elem.data('type')) {
         // Invalid
         return this;
     }
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, id, parent, customOpts, callback)
-{
+Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, id, parent, customOpts, callback) {
     // Id = EDIT mod.
     if (!id) {
         id = 0;
@@ -3269,8 +3216,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
  * @param {object} attachment - The attachment to add to the container.
  * @param {object} container  - The container attachment.
  */
-Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (attachment, container, grouping)
-{
+Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (attachment, container, grouping) {
     var that = this,
         data = {
             obj_type:    container.type,
@@ -3294,8 +3240,7 @@ Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (a
  * This should use mustache templating. That'd be great.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.add = function (obj)
-{
+Charcoal.Admin.Widget_Attachment.prototype.add = function (obj) {
     if (!obj) {
         return false;
     }
@@ -3315,8 +3260,7 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj)
  * [save description]
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.save = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
@@ -3325,8 +3269,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     this.join();
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
-{
+Charcoal.Admin.Widget_Attachment.prototype.join = function (cb) {
     if (!$('#' + this.element().attr('id')).length) {
         return ;
     }
@@ -3342,8 +3285,7 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
         group:       opts.data.group
     };
 
-    this.element().find('.c-attachments_container').find('.js-attachment').each(function (i)
-    {
+    this.element().find('.c-attachments_container').find('.js-attachment').each(function (i) {
         var $this = $(this);
         var id    = $this.data('id');
         var type  = $this.data('type');
@@ -3373,8 +3315,7 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
  * @param  {Function} cb [description]
  * @return {[type]}      [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb)
-{
+Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb) {
     if (!id) {
         // How could this possibly be!
         return false;
@@ -3403,8 +3344,7 @@ Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb)
  * Widget options as output by the widget itself.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.widget_options = function () {
     return this.opts('widget_options');
 };
 ;/* globals moment */
@@ -3420,8 +3360,7 @@ Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Card_Collection = function (opts)
-{
+Charcoal.Admin.Widget_Card_Collection = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     // Widget_Card_Collection properties
@@ -3447,13 +3386,11 @@ Charcoal.Admin.Widget_Card_Collection.prototype.parent = Charcoal.Admin.Widget.p
 /**
  * Necessary for a widget.
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.init = function () {
     this.set_properties().bind_events();
 };
 
-Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function () {
     var opts = this.opts();
 
     this.obj_type           = opts.data.obj_type           || this.obj_type;
@@ -3492,8 +3429,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function ()
     return this;
 };
 
-Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function () {
     var that = this;
 
     var $sortable_table = $('.js-sortable', that.table_selector);
@@ -3573,8 +3509,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function ()
  * @return this chainable
  * @see set_filters
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.add_filter = function (filter)
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.add_filter = function (filter) {
     var filters = this.get_filters();
 
     // Null by default
@@ -3593,8 +3528,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.add_filter = function (filter)
 /**
  * This will overwrite existing filters
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.set_filters = function (filters)
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.set_filters = function (filters) {
     this.filters = filters;
 };
 
@@ -3602,13 +3536,11 @@ Charcoal.Admin.Widget_Card_Collection.prototype.set_filters = function (filters)
  * Getter
  * @return {Object | null} filters
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.get_filters = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.get_filters = function () {
     return this.filters;
 };
 
-Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
     return {
         obj_type:          this.obj_type,
         template:          this.template,
@@ -3630,14 +3562,14 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function ()
 /**
  *
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.reload = function (callback)
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.reload = function (callback) {
     // Call supra class
     Charcoal.Admin.Widget.prototype.reload.call(this, callback);
 
     return this;
 };
-;/* globals commonL10n,formWidgetL10n,URLSearchParams */
+;/* eslint-disable consistent-this */
+/* globals commonL10n,formWidgetL10n,URLSearchParams */
 /**
  * Form widget that manages data sending
  * charcoal/admin/widget/form
@@ -4092,13 +4024,13 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
         var message = (this.is_new_object ? formWidgetL10n.createFailed : formWidgetL10n.updateFailed);
         var error   = errorThrown || commonL10n.errorOccurred;
 
-        Charcoal.Admin.feedback([{
+        Charcoal.Admin.feedback([ {
+            level:   'error',
             message: commonL10n.errorTemplate.replaceMap({
                 '[[ errorMessage ]]': message,
                 '[[ errorThrown ]]':  error
-            }),
-            level:   'error'
-        }]);
+            })
+        } ]);
     }
 };
 
@@ -4399,8 +4331,7 @@ Charcoal.Admin.Widget_Graph = Graph;
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Map = function (opts)
-{
+Charcoal.Admin.Widget_Map = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this._controller = undefined;
@@ -4418,8 +4349,7 @@ Charcoal.Admin.Widget_Map.prototype.parent = Charcoal.Admin.Widget.prototype;
  *
  * @return this
  */
-Charcoal.Admin.Widget_Map.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.init = function () {
     var that = this;
 
     if (typeof google === 'undefined') {
@@ -4440,8 +4370,7 @@ Charcoal.Admin.Widget_Map.prototype.init = function ()
     return this;
 };
 
-Charcoal.Admin.Widget_Map.prototype.activate_map = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.activate_map = function () {
     var default_styles = {
         strokeColor: '#000000',
         strokeOpacity: 0.8,
@@ -4473,8 +4402,8 @@ Charcoal.Admin.Widget_Map.prototype.activate_map = function ()
             coordsType: 'inpage', // array, json? (vs ul li)
             map_mode: 'default'
         },
-        places:{
-            first:{
+        places: {
+            first: {
                 type: 'marker',
                 coords: this.coords(),
             }
@@ -4487,20 +4416,26 @@ Charcoal.Admin.Widget_Map.prototype.activate_map = function ()
         map_options
     );
 
-    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
+    this.controller().set_styles([
+        {
+            featureType: 'poi',
+            elementType: 'all',
+            stylers: [
+                { visibility: 'off' }
+            ]
+        }
+    ]);
 
     this.controller().remove_focus();
     this.controller().init();
 
 };
 
-Charcoal.Admin.Widget_Map.prototype.controller = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.controller = function () {
     return this._controller;
 };
 
-Charcoal.Admin.Widget_Map.prototype.coords = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.coords = function () {
     return this.opts('coords');
 };
 ;/* globals commonL10n, objectRevisionsWidgetL10n */
@@ -4559,7 +4494,7 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
     BootstrapDialog.show({
         title: objectRevisionsWidgetL10n.title,
         message: objectRevisionsWidgetL10n.message,
-        buttons: [{
+        buttons: [ {
             id: 'ok-btn',
             label: objectRevisionsWidgetL10n.restore,
             action: function () {
@@ -4591,7 +4526,7 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
                     }
                 });
             }
-        }]
+        } ]
     });
 };
 
@@ -4903,8 +4838,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.destroy = function () {
  *
  * @see widget.js (Charcoal.Admin.Widget)
  */
-Charcoal.Admin.Widget_Relation = function (opts)
-{
+Charcoal.Admin.Widget_Relation = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this.dirty = false;
@@ -4926,8 +4860,7 @@ Charcoal.Admin.Widget_Relation.prototype.parent = Charcoal.Admin.Widget.prototyp
  * @see Component_Manager.render()
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Relation.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.init = function () {
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
         var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
@@ -4963,8 +4896,7 @@ Charcoal.Admin.Widget_Relation.prototype.init = function ()
  * Check if the widget has something a dirty state that needs to be saved.
  * @return Boolean     Widget dirty of not.
  */
-Charcoal.Admin.Widget_Relation.prototype.is_dirty = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.is_dirty = function () {
     return this.dirty;
 };
 
@@ -4974,8 +4906,7 @@ Charcoal.Admin.Widget_Relation.prototype.is_dirty = function ()
  * @param Boolean bool Self explanatory.
  * @return Widget_Relation Chainable.
  */
-Charcoal.Admin.Widget_Relation.prototype.set_dirty_state = function (bool)
-{
+Charcoal.Admin.Widget_Relation.prototype.set_dirty_state = function (bool) {
     this.dirty = bool;
     return this;
 };
@@ -4985,8 +4916,7 @@ Charcoal.Admin.Widget_Relation.prototype.set_dirty_state = function (bool)
  *
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Relation.prototype.listeners = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.listeners = function () {
     // Scope
     var that = this;
 
@@ -5091,8 +5021,7 @@ Charcoal.Admin.Widget_Relation.prototype.listeners = function ()
  * @param  {Object} widgetOptions A set of options for the dialog creation.
  * @return {void}
  */
-Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widgetOptions, callback)
-{
+Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widgetOptions, callback) {
     widgetOptions = widgetOptions || {};
 
     var sourceOptions = this.opts().data;
@@ -5148,8 +5077,7 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widg
  * This should use mustache templating. That'd be great.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.add = function (obj)
-{
+Charcoal.Admin.Widget_Relation.prototype.add = function (obj) {
     if (!obj) {
         return false;
     }
@@ -5170,8 +5098,7 @@ Charcoal.Admin.Widget_Relation.prototype.add = function (obj)
  * [save description]
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.save = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
@@ -5180,8 +5107,7 @@ Charcoal.Admin.Widget_Relation.prototype.save = function ()
     this.create_relation();
 };
 
-Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb)
-{
+Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb) {
     // Scope
     var that = this;
 
@@ -5218,8 +5144,7 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb)
  * @param  {Function} cb [description]
  * @return {[type]}      [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.remove_relation = function (id, cb)
-{
+Charcoal.Admin.Widget_Relation.prototype.remove_relation = function (id, cb) {
     if (!id) {
         return false;
     }
@@ -5242,8 +5167,7 @@ Charcoal.Admin.Widget_Relation.prototype.remove_relation = function (id, cb)
  * Widget options as output by the widget itself.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.widget_options = function () {
     return this.opts('widget_options');
 };
 ;/**
@@ -5255,8 +5179,7 @@ Charcoal.Admin.Widget_Relation.prototype.widget_options = function ()
  *
  * @param  {Object}  opts Options for widget
  */
-Charcoal.Admin.Widget_Search = function (opts)
-{
+Charcoal.Admin.Widget_Search = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this._elem = undefined;
@@ -5291,13 +5214,11 @@ Charcoal.Admin.Widget_Search.prototype.parent = Charcoal.Admin.Widget.prototype;
  * A list, a table? Definition of a widget includes:
  * - Widget type
  */
-Charcoal.Admin.Widget_Search.prototype.set_remote_widget = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.set_remote_widget = function () {
     // Do something about this.
 };
 
-Charcoal.Admin.Widget_Search.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.init = function () {
     var that  = this,
         $form = this.element();
 
@@ -5319,8 +5240,7 @@ Charcoal.Admin.Widget_Search.prototype.init = function ()
  *
  * @return this
  */
-Charcoal.Admin.Widget_Search.prototype.submit = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.submit = function () {
     var manager, widgets, request, total;
 
     manager = Charcoal.Admin.manager();
@@ -5344,8 +5264,7 @@ Charcoal.Admin.Widget_Search.prototype.submit = function ()
  *
  * @return this
  */
-Charcoal.Admin.Widget_Search.prototype.clear = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.clear = function () {
     this.$input.val('');
     this.submit();
     return this;
@@ -5357,8 +5276,7 @@ Charcoal.Admin.Widget_Search.prototype.clear = function ()
  * @param  {string} query - The search query.
  * @return {object|null} A search request object or NULL.
  */
-Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query)
-{
+Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
     var words, props, request = null, filters = [], sub_filters;
 
     query = query.trim();
@@ -5398,8 +5316,7 @@ Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query)
  * @param  {object} widget  - The widget to search on.
  * @return this
  */
-Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget)
-{
+Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget) {
     if (!widget) {
         return this;
     }
@@ -5434,8 +5351,7 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget)
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Table = function (opts)
-{
+Charcoal.Admin.Widget_Table = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     // Widget_Table properties
@@ -5463,13 +5379,11 @@ Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
 /**
  * Necessary for a widget.
  */
-Charcoal.Admin.Widget_Table.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.init = function () {
     this.set_properties().bind_events();
 };
 
-Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.set_properties = function () {
     var opts = this.opts();
 
     this.obj_type           = opts.data.obj_type           || this.obj_type;
@@ -5490,8 +5404,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
     return this;
 };
 
-Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.bind_events = function () {
     if (this.sortable !== null) {
         this.sortable.destroy();
     }
@@ -5572,8 +5485,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
  * @return this chainable
  * @see set_filters
  */
-Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter)
-{
+Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter) {
     var filters = this.get_filters();
 
     // Null by default
@@ -5592,8 +5504,7 @@ Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter)
 /**
  * This will overwrite existing filters
  */
-Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters)
-{
+Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters) {
     this.filters = filters;
 };
 
@@ -5601,13 +5512,11 @@ Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters)
  * Getter
  * @return {Object | null} filters
  */
-Charcoal.Admin.Widget_Table.prototype.get_filters = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.get_filters = function () {
     return this.filters;
 };
 
-Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
     return {
         obj_type:          this.obj_type,
         template:          this.template,
@@ -5740,8 +5649,7 @@ Charcoal.Admin.Property.prototype.val = function () {
  *
  * @return Object validation feedback
  */
-Charcoal.Admin.Property.prototype.validate = function ()
-{
+Charcoal.Admin.Property.prototype.validate = function () {
     // Validate the current
     return {};
 };
@@ -5751,8 +5659,7 @@ Charcoal.Admin.Property.prototype.validate = function ()
  *
  * @return {this}
  */
-Charcoal.Admin.Property.prototype.save = function ()
-{
+Charcoal.Admin.Property.prototype.save = function () {
     // Default action = nothing
     return this;
 };
@@ -5763,16 +5670,14 @@ Charcoal.Admin.Property.prototype.save = function ()
  * @param  {*} data - Could be a simple message, an array, wtv.
  * @return {void}
  */
-Charcoal.Admin.Property.prototype.error = function (data)
-{
+Charcoal.Admin.Property.prototype.error = function (data) {
     window.console.error(data);
 };
 ;/**
  * Upload File Property Control
  */
 
-Charcoal.Admin.Property_Input_File = function (opts)
-{
+Charcoal.Admin.Property_Input_File = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.file';
     this.input_type = 'charcoal/admin/property/input/file';
 
@@ -5787,8 +5692,7 @@ Charcoal.Admin.Property_Input_File.prototype = Object.create(Charcoal.Admin.Prop
 Charcoal.Admin.Property_Input_File.prototype.constructor = Charcoal.Admin.Property_Input_File;
 Charcoal.Admin.Property_Input_File.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_File.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_File.prototype.init = function () {
     if (!this.input_id) {
         return;
     }
@@ -5805,8 +5709,7 @@ Charcoal.Admin.Property_Input_File.prototype.init = function ()
     this.set_listeners();
 };
 
-Charcoal.Admin.Property_Input_File.prototype.set_listeners = function ()
-{
+Charcoal.Admin.Property_Input_File.prototype.set_listeners = function () {
     if (typeof this.$input === 'undefined') {
         return;
     }
@@ -5820,8 +5723,7 @@ Charcoal.Admin.Property_Input_File.prototype.set_listeners = function ()
     window.elFinderCallback[this.input_id] = this.elfinder_callback.bind(this);
 };
 
-Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
-{
+Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event) {
     event.preventDefault();
 
     this.$hidden.val('');
@@ -5831,8 +5733,8 @@ Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
     this.$input.find('.show-if-no-file').removeClass('d-none');
 };
 
-Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
-{
+Charcoal.Admin.Property_Input_File.prototype.change_file = function (event) {
+    /* eslint-disable no-unused-vars */
     var target, file, src;
 
     target = event.dataTransfer || event.target;
@@ -5843,10 +5745,10 @@ Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
     this.$input.find('.show-if-no-file').addClass('d-none');
     this.$input.find('.form-control-plaintext').html(file);
     this.$preview.empty();
+    /* eslint-enable no-unused-vars */
 };
 
-Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
-{
+Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event) {
     event.preventDefault();
 
     this.dialog = BootstrapDialog.show({
@@ -5860,8 +5762,7 @@ Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
     });
 };
 
-Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/*, elf */)
-{
+Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/*, elf */) {
     if (this.dialog) {
         this.dialog.close();
     }
@@ -5884,8 +5785,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
  * @param {string} input_id ID of the input.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_File.prototype.set_input_id = function (input_id)
-{
+Charcoal.Admin.Property_Input_File.prototype.set_input_id = function (input_id) {
     this.input_id = input_id;
     return this;
 };
@@ -5895,8 +5795,7 @@ Charcoal.Admin.Property_Input_File.prototype.set_input_id = function (input_id)
  * @param {String} input_name Name of the current input
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_File.prototype.set_input_name = function (input_name)
-{
+Charcoal.Admin.Property_Input_File.prototype.set_input_name = function (input_name) {
     this.input_name = input_name;
     return this;
 };
@@ -5906,18 +5805,16 @@ Charcoal.Admin.Property_Input_File.prototype.set_input_name = function (input_na
  * @param {String} input_val Value of the current input
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_File.prototype.set_input_val = function (input_val)
-{
+Charcoal.Admin.Property_Input_File.prototype.set_input_val = function (input_val) {
     this.input_val = input_val;
     return this;
 };
 
-Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_File.prototype.destroy = function () {
     this.$input.off(this.EVENT_NAMESPACE);
 };
-;/* globals Promise,MediaStream,commonL10n,audioPropertyL10n */
-// jscs:disable disallowMultipleLineBreaks
+;/* eslint-disable no-multiple-empty-lines */
+/* globals Promise,MediaStream,commonL10n,audioPropertyL10n */
 /**
  * Interface for saving audio messages
  * Property_Input_Audio JavaScript class
@@ -6043,8 +5940,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
         audioApiSupported  = null,
         recorderAvailable  = null;
 
-    function PropertyInput(opts)
-    {
+    function PropertyInput(opts) {
         this.EVENT_NAMESPACE  = EVENT_KEY;
         this.PROPERTY_IDLE    = PropState.IDLE;
         this.PROPERTY_READY   = PropState.READY;
@@ -6122,8 +6018,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.init = function ()
-    {
+    PropertyInput.prototype.init = function () {
         var $el = this.element();
 
         this.$hidden = $('#' + this.data.hidden_input_id).or('input[type="hidden"]', $el);
@@ -6182,8 +6077,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.boot = function ()
-    {
+    PropertyInput.prototype.boot = function () {
         switch (recorderAvailable) {
             case false:
                 var msg = audioPropertyL10n.missingRecorderPlugin;
@@ -6209,9 +6103,11 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
                      * @type    {jqXHR}
                      */
                     var jqxhr = $.getCachedScript(this.data.recorder_plugin_url);
-                    jqxhr.then(onAfterLoadRecorderScript.bind(this))
-                         .done(onLoadRecorderScript.bind(this))
-                         .catch(onErrorRecorderScript.bind(this));
+
+                    jqxhr
+                        .then(onAfterLoadRecorderScript.bind(this))
+                        .done(onLoadRecorderScript.bind(this))
+                        .catch(onErrorRecorderScript.bind(this));
 
                     // Prevents {@see this.boot()} from stacking.
                     recorderAvailable = jqxhr;
@@ -6234,8 +6130,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Boolean} [retry] - Whether to prompt the user for permission.
      * @return {Promise}
      */
-    PropertyInput.prototype.get_user_media = function (retry)
-    {
+    PropertyInput.prototype.get_user_media = function (retry) {
         if (!this.mediaPromise || retry === true) {
             var mediaPromise, constraints;
 
@@ -6266,8 +6161,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.stop_user_media = function ()
-    {
+    PropertyInput.prototype.stop_user_media = function () {
         if (!this.mediaStream) {
             return;
         }
@@ -6295,8 +6189,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Boolean} [reload] - Whether to reload the audio player.
      * @return {?SimpleAudioElement}
      */
-    PropertyInput.prototype.get_player = function (reload)
-    {
+    PropertyInput.prototype.get_player = function (reload) {
         if (!this.audioPlayer || reload === true) {
             try {
                 this.audioPlayer = this.create_player();
@@ -6315,8 +6208,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Object} [config] - A configuration object.
      * @return {?SimpleAudioElement}
      */
-    PropertyInput.prototype.create_player = function (config)
-    {
+    PropertyInput.prototype.create_player = function (config) {
         var player, settings, errorHandler, playableHandler;
 
         errorHandler = (function (event) {
@@ -6384,8 +6276,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Object}    [config] - A configuration object.
      * @return {?Recorder}
      */
-    PropertyInput.prototype.get_recorder = function (source, config)
-    {
+    PropertyInput.prototype.get_recorder = function (source, config) {
         if (!this.audioRecorder || source) {
             try {
                 this.audioRecorder = this.create_recorder(source, config);
@@ -6406,8 +6297,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the source or options are invalid or if an internal API is obsolete.
      * @return {Recorder}
      */
-    PropertyInput.prototype.create_recorder = function (source, config)
-    {
+    PropertyInput.prototype.create_recorder = function (source, config) {
         var recorder, errorHandler, audioProcessHandler;
 
         recorder = new window.Recorder(source, config);
@@ -6461,8 +6351,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.bind_element_events = function ()
-    {
+    PropertyInput.prototype.bind_element_events = function () {
         var $el, recordHandler, playHandler, stopHandler, resetHandler;
 
         $el = this.element();
@@ -6500,8 +6389,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.bind_stream_events = function ()
-    {
+    PropertyInput.prototype.bind_stream_events = function () {
         if (!(this.mediaStream instanceof MediaStream)) {
             throw new Error('Invalid or missing media stream');
         }
@@ -6539,8 +6427,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the stream is invalid or missing.
      * @return {void}
      */
-    PropertyInput.prototype.setup_stream = function ()
-    {
+    PropertyInput.prototype.setup_stream = function () {
         if (!(this.mediaStream instanceof MediaStream)) {
             throw new Error('Invalid or missing media stream');
         }
@@ -6580,8 +6467,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Boolean} [serve] - Whether to process the buffer (TRUE) or discard it (FALSE).
      * @return {void}
      */
-    PropertyInput.prototype.stop = function (serve)
-    {
+    PropertyInput.prototype.stop = function (serve) {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, 'Stop');
         }
@@ -6606,8 +6492,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.clear = function ()
-    {
+    PropertyInput.prototype.clear = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, 'Clear');
         }
@@ -6648,8 +6533,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {Boolean}
      */
-    PropertyInput.prototype.has_recording = function ()
-    {
+    PropertyInput.prototype.has_recording = function () {
         var player, audioElement;
 
         player = this.get_player();
@@ -6670,8 +6554,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Boolean} [busyOnly] - Whether the "pause" state is included (TRUE) or ignored (FALSE).
      * @return {Boolean}
      */
-    PropertyInput.prototype.is_capturing = function (busyOnly)
-    {
+    PropertyInput.prototype.is_capturing = function (busyOnly) {
         if (this.mediaMode !== MediaMode.CAPTURE) {
             return false;
         }
@@ -6685,8 +6568,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Boolean} [busyOnly] - Whether the "pause" state is included (TRUE) or ignored (FALSE).
      * @return {Boolean}
      */
-    PropertyInput.prototype.is_playing = function (busyOnly)
-    {
+    PropertyInput.prototype.is_playing = function (busyOnly) {
         if (this.mediaMode !== MediaMode.PLAYBACK) {
             return false;
         }
@@ -6700,8 +6582,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Boolean} [busyOnly] - Whether the "pause" state is included (TRUE) or ignored (FALSE).
      * @return {Boolean}
      */
-    PropertyInput.prototype.is_busy = function (busyOnly)
-    {
+    PropertyInput.prototype.is_busy = function (busyOnly) {
         if (busyOnly === true) {
             return (this.mediaState === MediaState.BUSY);
         } else {
@@ -6719,8 +6600,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.toggle_capture = function ()
-    {
+    PropertyInput.prototype.toggle_capture = function () {
         // if (Admin.debug()) {
         //     console.group(DEBUG_KEY, '[Capture]', 'Toggle');
         // }
@@ -6757,8 +6637,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.start_capture = function ()
-    {
+    PropertyInput.prototype.start_capture = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Start');
         }
@@ -6805,8 +6684,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.pause_capture = function ()
-    {
+    PropertyInput.prototype.pause_capture = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Pause');
         }
@@ -6853,8 +6731,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.stop_capture = function (serve)
-    {
+    PropertyInput.prototype.stop_capture = function (serve) {
         serve = (serve !== false);
 
         if (Admin.debug()) {
@@ -6941,8 +6818,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.clear_capture = function ()
-    {
+    PropertyInput.prototype.clear_capture = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Clear');
         }
@@ -6976,8 +6852,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the buffer is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.render_recorded_audio = function (buffers)
-    {
+    PropertyInput.prototype.render_recorded_audio = function (buffers) {
         if (!(Array.isArray(buffers) && buffers.length > 0)) {
             throw new Error('Invalid or empty audio buffer');
         }
@@ -7018,8 +6893,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the blob is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.export_recorded_audio = function (blob)
-    {
+    PropertyInput.prototype.export_recorded_audio = function (blob) {
         if (!((blob instanceof window.Blob) && blob.size > 0)) {
             throw new Error('Invalid or empty audio blob');
         }
@@ -7070,8 +6944,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the recorded audio is invalid or the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.dispatch_recorded_audio = function (data)
-    {
+    PropertyInput.prototype.dispatch_recorded_audio = function (data) {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Dispatch Recording');
         }
@@ -7117,8 +6990,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.toggle_playback = function ()
-    {
+    PropertyInput.prototype.toggle_playback = function () {
         // if (Admin.debug()) {
         //     console.group(DEBUG_KEY, '[Playback]', 'Toggle');
         // }
@@ -7146,8 +7018,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.start_playback = function ()
-    {
+    PropertyInput.prototype.start_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Start');
         }
@@ -7217,8 +7088,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.pause_playback = function ()
-    {
+    PropertyInput.prototype.pause_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Pause');
         }
@@ -7260,8 +7130,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.stop_playback = function ()
-    {
+    PropertyInput.prototype.stop_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Stop');
         }
@@ -7304,8 +7173,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.clear_playback = function ()
-    {
+    PropertyInput.prototype.clear_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Clear');
         }
@@ -7331,8 +7199,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {TypeError} If the visual state is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.visualize = function (visual)
-    {
+    PropertyInput.prototype.visualize = function (visual) {
         if (this.readyState !== PropState.LIVE || this.mediaVisual === visual) {
             return;
         }
@@ -7362,8 +7229,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.create_waveform_visualization = function ()
-    {
+    PropertyInput.prototype.create_waveform_visualization = function () {
         this.pause_visualization();
 
         var draw, canvas, context, analyser, multiplier, amplitude, bufferLength, dataArray;
@@ -7405,8 +7271,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.create_frequency_visualization = function ()
-    {
+    PropertyInput.prototype.create_frequency_visualization = function () {
         this.pause_visualization();
 
         var draw, canvas, context, analyser, multiplier, numBars, bufferLength, dataArray;
@@ -7448,8 +7313,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.clear_visualization = function ()
-    {
+    PropertyInput.prototype.clear_visualization = function () {
         this.pause_visualization();
 
         var canvas  = this.canvasElement,
@@ -7463,8 +7327,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.pause_visualization = function ()
-    {
+    PropertyInput.prototype.pause_visualization = function () {
         if (this.drawVisualizationFrameID) {
             window.cancelAnimationFrame(this.drawVisualizationFrameID);
             this.drawVisualizationFrameID = null;
@@ -7481,8 +7344,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {Number}
      */
-    PropertyInput.prototype.get_record_time = function ()
-    {
+    PropertyInput.prototype.get_record_time = function () {
         if (this.recordingStartDate) {
             return this.recordingDuration + diffInSeconds(this.recordingStartDate);
         }
@@ -7495,8 +7357,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {?Number}
      */
-    PropertyInput.prototype.get_current_time = function ()
-    {
+    PropertyInput.prototype.get_current_time = function () {
         switch (this.mediaMode) {
             case MediaMode.IDLE:
                 return 0;
@@ -7517,8 +7378,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {?Number}
      */
-    PropertyInput.prototype.get_duration = function ()
-    {
+    PropertyInput.prototype.get_duration = function () {
         switch (this.mediaMode) {
             case MediaMode.IDLE:
             case MediaMode.PLAYBACK:
@@ -7542,8 +7402,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Number} seconds - The duration in seconds.
      * @return {?Number}
      */
-    PropertyInput.prototype.fix_duration = function (seconds)
-    {
+    PropertyInput.prototype.fix_duration = function (seconds) {
         if (this.recordingDuration > 0) {
             var diff = Math.abs(seconds - this.recordingDuration);
             if (diff > 1000) {
@@ -7560,8 +7419,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Number} [seconds] - The current time in seconds.
      * @return {void}
      */
-    PropertyInput.prototype.update_time = function (seconds)
-    {
+    PropertyInput.prototype.update_time = function (seconds) {
         var updateTimeCallback;
 
         // TODO: Move to RAF
@@ -7588,8 +7446,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Number} [seconds] - The duration in seconds.
      * @return {void}
      */
-    PropertyInput.prototype.update_duration = function (seconds)
-    {
+    PropertyInput.prototype.update_duration = function (seconds) {
         var updateDurationCallback;
 
         // TODO: Move to RAF
@@ -7620,8 +7477,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.disable_transport_toolbar = function ()
-    {
+    PropertyInput.prototype.disable_transport_toolbar = function () {
         this.recorder_elements.$buttons.disable();
     };
 
@@ -7633,8 +7489,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @throws {TypeError} If the media state is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.toggle_transport_toolbar = function (state, mode)
-    {
+    PropertyInput.prototype.toggle_transport_toolbar = function (state, mode) {
         // if (Admin.debug()) {
         //     console.group(DEBUG_KEY, '[Toolbar]', 'Toggle');
         // }
@@ -7725,8 +7580,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.enable = function ()
-    {
+    PropertyInput.prototype.enable = function () {
         if (isAudioApiSupported()) {
             this.boot();
         }
@@ -7737,8 +7591,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.disable = function ()
-    {
+    PropertyInput.prototype.disable = function () {
         this.disable_transport_toolbar();
         this.clear_visualization();
         this.stop_user_media();
@@ -7749,8 +7602,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {void}
      */
-    PropertyInput.prototype.destroy = function ()
-    {
+    PropertyInput.prototype.destroy = function () {
         this.disable();
 
         this.element().off(this.EVENT_NAMESPACE);
@@ -7772,8 +7624,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {jqXHR}  jqxhr  - The jQuery XHR object.
      * @return {Deferred}
      */
-    function onAfterLoadRecorderScript(script, status, jqxhr)
-    {
+    function onAfterLoadRecorderScript(script, status, jqxhr) {
         /* jshint validthis:true */
         /**
          * @promise #loadedRecorderScript
@@ -7799,8 +7650,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {jqXHR}  [jqxhr]  - The jQuery XHR object.
      * @return {void}
      */
-    function onLoadRecorderScript(/*script, status, jqxhr*/)
-    {
+    function onLoadRecorderScript(/*script, status, jqxhr*/) {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Recorder Plugin Loaded');
@@ -7822,8 +7672,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {String} errorThrown - The textual portion of the HTTP status.
      * @return {void}
      */
-    function onErrorRecorderScript(jqxhr, status, errorThrown)
-    {
+    function onErrorRecorderScript(jqxhr, status, errorThrown) {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Recorder Plugin Failed');
@@ -7854,8 +7703,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {MediaStream} stream - The object representing a stream of media content.
      * @return {void}
      */
-    function onStartedMediaStream(stream)
-    {
+    function onStartedMediaStream(stream) {
         /* jshint validthis:true */
         this.mediaStream = stream;
 
@@ -7893,8 +7741,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Error} err - The error object.
      * @return {void}
      */
-    function onErrorMediaStream(err)
-    {
+    function onErrorMediaStream(err) {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Streaming Failed');
@@ -7924,8 +7771,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @this   PropertyInput
      * @return {void}
      */
-    function onStreamEnded()
-    {
+    function onStreamEnded() {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Streaming Ended');
@@ -7958,8 +7804,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {Boolean}
      */
-    function isRecorderLoaded()
-    {
+    function isRecorderLoaded() {
         return (typeof window.Recorder === 'function');
     }
 
@@ -7968,8 +7813,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {Boolean}
      */
-    function isRecorderAvailable()
-    {
+    function isRecorderAvailable() {
         if (typeof recorderAvailable !== 'boolean') {
             return false;
         }
@@ -7984,8 +7828,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      *
      * @return {Boolean}
      */
-    function isAudioApiSupported()
-    {
+    function isAudioApiSupported() {
         if (typeof audioApiSupported === 'boolean') {
             return audioApiSupported;
         }
@@ -8079,8 +7922,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {String} [msg] - The message to display.
      * @return {void}
      */
-    function reportError(err, msg)
-    {
+    function reportError(err, msg) {
         if (msg === true) {
             if (err instanceof Error) {
                 msg = err.message;
@@ -8106,8 +7948,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Error} err - The media stream error.
      * @return {Error}
      */
-    function normalizeMediaElementError(err)
-    {
+    function normalizeMediaElementError(err) {
         /*
         switch (e.target.error.code) {
             case e.target.error.MEDIA_ERR_ABORTED:
@@ -8137,8 +7978,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Error} err - The media stream error.
      * @return {Error}
      */
-    function normalizeMediaStreamError(err)
-    {
+    function normalizeMediaStreamError(err) {
         if (err.name) {
             switch (err.name) {
                 case 'DevicesNotFoundError':
@@ -8173,8 +8013,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {TypedArray}       dataArray  - The audio data to draw.
      * @return {void}
      */
-    function drawFrequencyGraph(width, height, context, multiplier, numBars, dataArray)
-    {
+    function drawFrequencyGraph(width, height, context, multiplier, numBars, dataArray) {
         var magnitude, offset, i, j;
 
         context.clearRect(0, 0, width, height);
@@ -8206,8 +8045,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {TypedArray}       dataArray  - The audio data to draw.
      * @return {void}
      */
-    function drawWaveformGraph(width, height, context, multiplier, amplitude, dataArray)
-    {
+    function drawWaveformGraph(width, height, context, multiplier, amplitude, dataArray) {
         var datum, max, min, i, j;
 
         context.clearRect(0, 0, width, height);
@@ -8237,8 +8075,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Number} sec - The time in seconds.
      * @return {String}
      */
-    function formatTime(sec)
-    {
+    function formatTime(sec) {
         if (typeof sec !== 'number') {
             return '--:--';
         }
@@ -8263,8 +8100,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Number} n - A number.
      * @return {String}
      */
-    function minSecStr(n)
-    {
+    function minSecStr(n) {
         return (n < 10 ? '0' : '') + n;
     }
 
@@ -8274,8 +8110,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
      * @param  {Date} time - A date/time value.
      * @return {Number}
      */
-    function diffInSeconds(time)
-    {
+    function diffInSeconds(time) {
         return ((Date.now() - time) * 0.001);
     }
 
@@ -8293,8 +8128,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
  * @method Property_Input_Audio_Widget
  * @param Object opts
  */
-Charcoal.Admin.Property_Input_Audio_Widget = function (opts)
-{
+Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.audio.widget';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -8333,8 +8167,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype = Object.create(Charcoal.Ad
 Charcoal.Admin.Property_Input_Audio_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Audio_Widget;
 Charcoal.Admin.Property_Input_Audio_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function () {
     var $el = this.element();
 
     this.$input_text   = $('#' + this.data.text_input_id).or('.js-text-voice-message', $el);
@@ -8355,8 +8188,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function ()
 /**
  * Create tabular navigation
  */
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.bind_events = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.bind_events = function () {
     var that = this;
 
     this.element().on('shown.bs.tab', '[data-toggle="tab"]', function (event) {
@@ -8372,8 +8204,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.bind_events = function ()
  * @param  {String|jQuery} pane - The pane to show.
  * @return {this}
  */
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_pane = function (pane)
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_pane = function (pane) {
     if (typeof pane !== 'string') {
         pane = $(pane).attr('data-pane');
     }
@@ -8392,8 +8223,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_pane = function (pane)
     return this;
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_text = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_text = function () {
     var component = this.text_component;
 
     if (component.enabled) {
@@ -8419,8 +8249,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_text = function ()
     }
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_upload = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_upload = function () {
     var component = this.upload_component;
 
     if (component.enabled) {
@@ -8453,8 +8282,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_upload = function ()
     }
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_capture = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_capture = function () {
     var component = this.capture_component;
 
     if (component.enabled) {
@@ -8510,8 +8338,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_capture = function ()
     }
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
     this.element().off(this.EVENT_NAMESPACE);
 
     if (this.text_component.property) {
@@ -8531,8 +8358,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function ()
  * Upload Audio Property Control
  */
 
-Charcoal.Admin.Property_Input_Audio = function (opts)
-{
+Charcoal.Admin.Property_Input_Audio = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.audio';
     this.input_type = 'charcoal/admin/property/input/audio';
 
@@ -8547,8 +8373,7 @@ Charcoal.Admin.Property_Input_Audio.prototype = Object.create(Charcoal.Admin.Pro
 Charcoal.Admin.Property_Input_Audio.prototype.constructor = Charcoal.Admin.Property_Input_Audio;
 Charcoal.Admin.Property_Input_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event)
-{
+Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event) {
     var audio, target, file, src;
 
     audio = new File();
@@ -8565,8 +8390,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event)
     this.$preview.empty().append(audio);
 };
 
-Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file/*, elf */)
-{
+Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file/*, elf */) {
     if (this.dialog) {
         this.dialog.close();
     }
@@ -8588,8 +8412,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file
  * - jquery-minicolors
  */
 
-Charcoal.Admin.Property_Input_ColorPicker = function (opts)
-{
+Charcoal.Admin.Property_Input_ColorPicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/colorpicker';
 
     this.input_id = null;
@@ -8604,8 +8427,7 @@ Charcoal.Admin.Property_Input_ColorPicker.prototype = Object.create(Charcoal.Adm
 Charcoal.Admin.Property_Input_ColorPicker.prototype.constructor = Charcoal.Admin.Property_Input_ColorPicker;
 Charcoal.Admin.Property_Input_ColorPicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_ColorPicker.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_ColorPicker.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.colorpicker_selector = opts.data.colorpicker_selector || this.colorpicker_selector;
@@ -8618,8 +8440,7 @@ Charcoal.Admin.Property_Input_ColorPicker.prototype.set_properties = function (o
     return this;
 };
 
-Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = function ()
-{
+Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = function () {
     $(this.colorpicker_selector).minicolors(this.colorpicker_options);
 
     return this;
@@ -8634,8 +8455,7 @@ Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = functio
  * @param  {Object}  opts  Options for input property
  */
 
-Charcoal.Admin.Property_Input_DateTimePicker = function (opts)
-{
+Charcoal.Admin.Property_Input_DateTimePicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/datetimepicker';
 
     // Property_Input_DateTimePicker properties
@@ -8650,8 +8470,7 @@ Charcoal.Admin.Property_Input_DateTimePicker.prototype = Object.create(Charcoal.
 Charcoal.Admin.Property_Input_DateTimePicker.prototype.constructor = Charcoal.Admin.Property_Input_DateTimePicker;
 Charcoal.Admin.Property_Input_DateTimePicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_DateTimePicker.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.datetimepicker_selector = opts.data.datetimepicker_selector || this.datetimepicker_selector;
@@ -8664,8 +8483,7 @@ Charcoal.Admin.Property_Input_DateTimePicker.prototype.set_properties = function
     return this;
 };
 
-Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = function ()
-{
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = function () {
     $(this.datetimepicker_selector).datetimepicker(this.datetimepicker_options);
 
     return this;
@@ -8681,8 +8499,7 @@ Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = f
  * @param  {Object}  opts Options for input property
  */
 
-Charcoal.Admin.Property_Input_DualSelect = function (opts)
-{
+Charcoal.Admin.Property_Input_DualSelect = function (opts) {
     this.input_type = 'charcoal/admin/property/input/dualselect';
 
     // Property_Input_DualSelect properties
@@ -8704,13 +8521,11 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.parent = Charcoal.Admin.Prope
  * Init plugin
  * @return {thisArg} Chainable.
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.init = function () {
     this.create_dualselect();
 };
 
-Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.dualselect_selector = opts.dualselect_selector || opts.data.dualselect_selector || this.dualselect_selector;
@@ -8732,8 +8547,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (op
     return this;
 };
 
-Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualselect = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualselect = function () {
     $(this.dualselect_selector).multiselect(this.dualselect_options);
 
     return this;
@@ -8745,8 +8559,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualselect = function 
  * @param {TinyMCE Editor} dualselect The tinymce object.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.set_dualselect = function (dualselect)
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.set_dualselect = function (dualselect) {
     this._dualselect = dualselect;
     return this;
 };
@@ -8755,8 +8568,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.set_dualselect = function (du
  * Returns the dualselect object
  * @return {TinyMCE Editor} dualselect The tinymce object.
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.dualselect = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.dualselect = function () {
     return this._dualselect;
 };
 
@@ -8764,8 +8576,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.dualselect = function ()
  * Destroy what needs to be destroyed
  * @return {TinyMCE Editor} dualselect The tinymce object.
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.destroy = function () {
     var dualselect = this.dualselect();
 
     if (dualselect) {
@@ -8777,8 +8588,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.destroy = function ()
  * Property_Input_Geometry_Widget Javascript class
  *
  */
-Charcoal.Admin.Property_Input_Geometry_Widget = function (data)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     // Input type
     data.input_type = 'charcoal/admin/property/input/geometry-widget';
 
@@ -8801,9 +8611,9 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data)
             };
 
             $.getScript(
-             'https://maps.googleapis.com/maps/api/js?sensor=false' +
-             '&callback=_tmp_google_onload_function&key=' + data.data.map_options.api_key,
-             function () {}
+                'https://maps.googleapis.com/maps/api/js?sensor=false' +
+                '&callback=_tmp_google_onload_function&key=' + data.data.map_options.api_key,
+                function () {}
             );
         } else {
             that.init();
@@ -8816,8 +8626,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype = Object.create(Charcoal
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Geometry_Widget;
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function () {
     if (typeof window._tmp_google_onload_function !== 'undefined') {
         delete window._tmp_google_onload_function;
     }
@@ -8890,7 +8699,15 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
         }
     );
 
-    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
+    this.controller().set_styles([
+        {
+            featureType: 'poi',
+            elementType: 'all',
+            stylers: [
+                { visibility: 'off' }
+            ]
+        }
+    ]);
 
     this.controller().remove_focus();
 
@@ -8911,9 +8728,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
         object_id = key + that.object_index();
     }
 
-    this.element().on('click', function ()
-       {
-
+    this.element().on('click', function () {
         var raw = that.controller().export();
         if (raw && Object.keys(raw.places).length !== 0) {
             return false;
@@ -8923,13 +8738,12 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
             that._startGeometry = true;
 
             switch (type) {
-            case 'marker':
-            case 'line':
-            case 'polygon':
-                that.controller().create_new(type, object_id);
-                break;
-        }
-
+                case 'marker':
+                case 'line':
+                case 'polygon':
+                    that.controller().create_new(type, object_id);
+                    break;
+            }
         }
     });
 
@@ -8940,8 +8754,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
     });
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = function () {
     var related_property = this.data.data.related_property;
     if (!related_property) {
         return false;
@@ -8949,15 +8762,14 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = 
 
     for (var obj in related_property) {
         switch (related_property[obj].obj_type) {
-        case 'charcoal/admin/object/geometry-blueprint':
-            this.related_object_geometry(obj);
-            break;
-    }
+            case 'charcoal/admin/object/geometry-blueprint':
+                this.related_object_geometry(obj);
+                break;
+        }
     }
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry = function (obj)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry = function (obj) {
     // retrieve obj_type
     var type = this.data.data.related_property[obj].obj_type;
     if (!type) {
@@ -9018,8 +8830,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry 
 /**
  * Return {BB.gmap.controller}
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.controller = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.controller = function () {
     return this._controller;
 };
 
@@ -9027,8 +8838,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.controller = function ()
  * This is to prevent any ident duplication
  * Return {Int} Object index
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.object_index = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.object_index = function () {
     return ++this._object_inc;
 };
 
@@ -9036,8 +8846,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.object_index = function 
  * This is to retrieve the defaults map styles
  * Return {Object}
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = function () {
     return {
         strokeColor: '#000000',
         strokeOpacity: 0.8,
@@ -9061,8 +8870,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = functio
  * This is to retrieve the default map options
  * Return {Object}
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_map_options = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_map_options = function () {
     return {
         default_styles: this.default_styles(),
         use_clusterer: false,
@@ -9079,13 +8887,11 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_map_options = fu
     };
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.display_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.display_marker_toolbar = function () {
     this.$map_maker.addClass('is-header-open');
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.hide_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.hide_marker_toolbar = function () {
     this.$map_maker.removeClass('is-header-open');
 };
 
@@ -9093,8 +8899,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.hide_marker_toolbar = fu
  * @var array coords
  * @return string coords (fits for sql geoshit)
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.translate_coords = function (coords)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.translate_coords = function (coords) {
     var i = 0;
     var total = coords.length;
     var ret = [];
@@ -9112,8 +8917,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.translate_coords = funct
  * @var array coords
  * @return reverse string coords (fits for sql geoshit)
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.reverse_translate_coords = function (coords)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.reverse_translate_coords = function (coords) {
     var first_level = coords.split(',');
     var i = 0;
     var total = first_level.length;
@@ -9134,8 +8938,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.reverse_translate_coords
  * - validate
  * @return this (chainable)
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
     // Get raw map datas
     if (!this.controller()) {
         return this;
@@ -9159,8 +8962,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function ()
  * Upload Image Property Control
  */
 
-Charcoal.Admin.Property_Input_Image = function (opts)
-{
+Charcoal.Admin.Property_Input_Image = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
 
@@ -9175,8 +8977,7 @@ Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Pro
 Charcoal.Admin.Property_Input_Image.prototype.constructor = Charcoal.Admin.Property_Input_Image;
 Charcoal.Admin.Property_Input_Image.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
-{
+Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event) {
     var img, target, file, src;
 
     img = new File();
@@ -9193,8 +8994,7 @@ Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
     this.$preview.empty().append(img);
 };
 
-Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file/*, elf */)
-{
+Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file/*, elf */) {
     if (this.dialog) {
         this.dialog.close();
     }
@@ -9214,8 +9014,7 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
  * Property_Input_Map_Widget Javascript class
  *
  */
-Charcoal.Admin.Property_Input_Map_Widget = function (data)
-{
+Charcoal.Admin.Property_Input_Map_Widget = function (data) {
     // Input type
     data.input_type = 'charcoal/admin/property/input/map-widget';
 
@@ -9249,8 +9048,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype = Object.create(Charcoal.Admi
 Charcoal.Admin.Property_Input_Map_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Map_Widget;
 Charcoal.Admin.Property_Input_Map_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
     if (typeof window._tmp_google_onload_function !== 'undefined') {
         delete window._tmp_google_onload_function;
     }
@@ -9344,7 +9142,15 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
         }
     );
 
-    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
+    this.controller().set_styles([
+        {
+            featureType: 'poi',
+            elementType: 'all',
+            stylers: [
+                { visibility: 'off' }
+            ]
+        }
+    ]);
 
     this.controller().remove_focus();
 
@@ -9376,8 +9182,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
         }
     });
 
-    this.element().on('click', '.js-add-marker', function (e)
-    {
+    this.element().on('click', '.js-add-marker', function (e) {
         e.preventDefault();
 
         // Find uniq item ident
@@ -9419,8 +9224,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 /**
  * Return {BB.gmap.controller}
  */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function () {
     return this._controller;
 };
 
@@ -9428,18 +9232,15 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function ()
  * This is to prevent any ident duplication
  * Return {Int} Object index
  */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.object_index = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.object_index = function () {
     return ++this._object_inc;
 };
 
-Charcoal.Admin.Property_Input_Map_Widget.prototype.display_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.display_marker_toolbar = function () {
     this.$map_maker.addClass('is-header-open');
 };
 
-Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = function () {
     this.$map_maker.removeClass('is-header-open');
 };
 
@@ -9452,8 +9253,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = functio
  * - validate
  * @return this (chainable)
  */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
     // Get raw map datas
     var raw = this.controller().export();
 
@@ -9471,8 +9271,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function ()
  * Range Input
  */
 
-Charcoal.Admin.Property_Input_Range = function (opts)
-{
+Charcoal.Admin.Property_Input_Range = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.range';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -9493,8 +9292,7 @@ Charcoal.Admin.Property_Input_Range.prototype = Object.create(Charcoal.Admin.Pro
 Charcoal.Admin.Property_Input_Range.prototype.constructor = Charcoal.Admin.Property_Input_Range;
 Charcoal.Admin.Property_Input_Range.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Range.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Range.prototype.init = function () {
     if (this.data.show_range_value !== true) {
         return;
     }
@@ -9551,13 +9349,11 @@ Charcoal.Admin.Property_Input_Range.prototype.init = function ()
  * @param  {Event}            event   - The change event.
  * @return {void}
  */
-Charcoal.Admin.Property_Input_Range.prototype.on_change = function ($input, $output/*, event*/)
-{
+Charcoal.Admin.Property_Input_Range.prototype.on_change = function ($input, $output/*, event*/) {
     $output.text($output.text().replace(/[\d\.]+/, $input.val()));
 };
 
-Charcoal.Admin.Property_Input_Range.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_Range.prototype.destroy = function () {
     this.element().off(this.EVENT_NAMESPACE);
 
     if (this.$input) {
@@ -9571,8 +9367,7 @@ Charcoal.Admin.Property_Input_Range.prototype.destroy = function ()
  * - silviomoreto/bootstrap-select
  */
 
-Charcoal.Admin.Property_Input_SelectPicker = function (opts)
-{
+Charcoal.Admin.Property_Input_SelectPicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/select';
 
     // Property_Input_SelectPicker properties
@@ -9588,8 +9383,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype = Object.create(Charcoal.Ad
 Charcoal.Admin.Property_Input_SelectPicker.prototype.constructor = Charcoal.Admin.Property_Input_SelectPicker;
 Charcoal.Admin.Property_Input_SelectPicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_SelectPicker.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_SelectPicker.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.select_selector = opts.data.select_selector || this.select_selector;
@@ -9602,13 +9396,13 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.set_properties = function (
     return this;
 };
 
-Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
-{
+Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function () {
     $(this.select_selector).selectpicker(this.select_options);
 
     return this;
 };
-;/* global ClipboardJS */
+;/* eslint-disable consistent-this */
+/* global ClipboardJS */
 /**
  * Selectize Picker
  * Search.
@@ -9728,7 +9522,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             preload: 'focus',
             openOnFocus: true,
             labelField: 'label',
-            searchField: ['value', 'label'],
+            searchField: [ 'value', 'label' ],
             dropdownParent: this.$input.closest('.form-field'),
             render: {},
             onItemRemove: function (value) {
@@ -9844,9 +9638,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 // The object must be created using 2 pop-up
                 form_ident = form_ident.create;
                 title += ' - ' + translations.statusTemplate.replaceMap({
-                        '[[ current ]]': 1,
-                        '[[ total ]]': 2
-                    });
+                    '[[ current ]]': 1,
+                    '[[ total ]]': 2
+                });
                 step = 1;
                 submit_label = 'Next';
             } else if (id && form_ident.update) {
@@ -9854,9 +9648,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
                 if (step === 2) {
                     title += ' - ' + translations.statusTemplate.replaceMap({
-                            '[[ current ]]': 2,
-                            '[[ total ]]': 2
-                        });
+                        '[[ current ]]': 2,
+                        '[[ total ]]': 2
+                    });
                     submit_label = 'Finish';
                 }
             } else {
@@ -10357,10 +10151,11 @@ Selectize.define('buttons', function () {
                     }
                 });
             };
-        })();
+        }());
     };
 });
-;/* global Selectize */
+;/* eslint-disable consistent-this */
+/* global Selectize */
 /**
  * Plugin: "create_on_enter" for selectize.js
  *
@@ -10388,9 +10183,10 @@ Selectize.define('create_on_blur', function () {
             }
             return original.apply(this, arguments);
         };
-    })();
+    }());
 });
-;/* global Selectize */
+;/* eslint-disable consistent-this */
+/* global Selectize */
 /**
  * Plugin: "create_on_enter" for selectize.js
  *
@@ -10418,9 +10214,10 @@ Selectize.define('create_on_enter', function () {
             }
             return original.apply(this, arguments);
         };
-    })();
+    }());
 });
-;/* global Selectize */
+;/* eslint-disable consistent-this */
+/* global Selectize */
 Selectize.define('charcoal_item', function (options) {
     options = $.extend({
         classField: 'class',
@@ -10478,7 +10275,7 @@ Selectize.define('charcoal_item', function (options) {
         }
 
         return self.refreshOption;
-    })();
+    }());
 
     this.settings.onItemAdd = (function (/*value, $item*/) {
         original = null;
@@ -10489,10 +10286,11 @@ Selectize.define('charcoal_item', function (options) {
         }
 
         return self.refreshItem;
-    })();
+    }());
 
 });
-;/**
+;/* eslint-disable consistent-this */
+/**
  * Selectize Picker
  * List version.
  *
@@ -10572,7 +10370,7 @@ Selectize.define('charcoal_item', function (options) {
             persist: true,
             preload: 'focus',
             openOnFocus: true,
-            searchField: ['value', 'label'],
+            searchField: [ 'value', 'label' ],
             dropdownParent: this.$input.closest('.form-field'),
 
             createFilter: function (input) {
@@ -10642,7 +10440,8 @@ Selectize.define('charcoal_item', function (options) {
     Charcoal.Admin.Property_Input_Selectize_List = List;
 
 }(jQuery, document));
-;/* global ClipboardJS */
+;/* eslint-disable consistent-this */
+/* global ClipboardJS */
 /**
  * Selectize Picker
  *
@@ -11055,12 +10854,12 @@ Charcoal.Admin.Property_Input_Text.prototype.init = function () {
  */
 Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function () {
     // New input
-    this.chars_new    = [13];
+    this.chars_new    = [ 13 ];
     // Check to delete current input
-    this.chars_remove = [8, 46];
+    this.chars_remove = [ 8, 46 ];
     // Navigate.
-    this.char_next    = [40];
-    this.char_prev    = [38];
+    this.char_next    = [ 40 ];
+    this.char_prev    = [ 38 ];
 
     this.currentValAmount = 1;
 
@@ -11475,7 +11274,8 @@ Charcoal.Admin.Property_Input_Text.prototype.set_split_on = function (splitOn) {
     this.split_on = splitOn;
     return this;
 };
-;/**
+;/* eslint-disable consistent-this */
+/**
  * TinyMCE implementation for WYSIWYG inputs
  * charcoal/admin/property/input/tinymce
  *
@@ -11486,8 +11286,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_split_on = function (splitOn) {
  * @param  {Object}  opts Options for input property
  */
 
-Charcoal.Admin.Property_Input_Tinymce = function (opts)
-{
+Charcoal.Admin.Property_Input_Tinymce = function (opts) {
     this.input_type = 'charcoal/admin/property/input/tinymce';
 
     // Property_Input_Tinymce properties
@@ -11512,8 +11311,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property
  * Init plugin
  * @return {thisArg} Chainable.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.init = function () {
     this.create_tinymce();
 };
 
@@ -11521,13 +11319,11 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
  * Init plugin
  * @return {thisArg} Chainable.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function () {
     return Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce';
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts) {
     this.input_id = opts.input_id || this.input_id;
     this.editor_options = opts.editor_options || opts.data.editor_options || this.editor_options;
 
@@ -11718,8 +11514,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
     return this;
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function () {
     // Scope
     var that = this;
 
@@ -11753,15 +11548,13 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
     window.tinyMCE.init(this.editor_options);
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_callback = function (file, elf)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_callback = function (file, elf) {
     // pass selected file data to TinyMCE
     parent.tinyMCE.activeEditor.windowManager.getParams().oninsert(file, elf);
     parent.tinyMCE.activeEditor.windowManager.close();
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta) {
     var editor = this;
 
     window.tinyMCE.activeEditor.windowManager.open({
@@ -11816,8 +11609,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (con
  * @param {TinyMCE Editor} editor The tinymce object.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor) {
     this._editor = editor;
     return this;
 };
@@ -11826,8 +11618,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
  * Returns the editor object
  * @return {TinyMCE Editor} editor The tinymce object.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function () {
     return this._editor;
 };
 
@@ -11835,8 +11626,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function ()
  * Destroy what needs to be destroyed
  * @return {TinyMCE Editor} editor The tinymce object.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function () {
     var editor = this.editor();
 
     if (editor) {
@@ -11862,8 +11652,7 @@ Charcoal.Admin.Template.prototype.parent = Charcoal.Admin.Component.prototype;
  * charcoal/admin/template/login
  */
 
-Charcoal.Admin.Template_Login = function (opts)
-{
+Charcoal.Admin.Template_Login = function (opts) {
     // Common Template properties
     this.template_type = 'charcoal/admin/template/login';
 
@@ -11874,14 +11663,12 @@ Charcoal.Admin.Template_Login.prototype = Object.create(Charcoal.Admin.Template.
 Charcoal.Admin.Template_Login.prototype.constructor = Charcoal.Admin.Template_Login;
 Charcoal.Admin.Template_Login.prototype.parent = Charcoal.Admin.Template.prototype;
 
-Charcoal.Admin.Template_Login.prototype.init = function (opts)
-{
+Charcoal.Admin.Template_Login.prototype.init = function (opts) {
     window.console.debug(opts);
     this.bind_events();
 };
 
-Charcoal.Admin.Template_Login.prototype.bind_events = function ()
-{
+Charcoal.Admin.Template_Login.prototype.bind_events = function () {
     var $form = $('#login-form');
 
     /**
@@ -11897,8 +11684,7 @@ Charcoal.Admin.Template_Login.prototype.bind_events = function ()
  * @this    {Charcoal.Admin.Template_Login}
  * @param   {Event} event - The submit event.
  */
-Charcoal.Admin.Template_Login.prototype.onSubmit = function (event)
-{
+Charcoal.Admin.Template_Login.prototype.onSubmit = function (event) {
     event.preventDefault();
 
     var $form   = $(event.currentTarget),
@@ -11915,8 +11701,7 @@ Charcoal.Admin.Template_Login.prototype.onSubmit = function (event)
  * @this  {Charcoal.Admin.Template_Login}
  * @param {HTMLFormElement|jQuery} $form - The form element.
  */
-Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
-{
+Charcoal.Admin.Template_Login.prototype.submitForm = function ($form) {
     var that = this,
         url  = ($form.prop('action') || window.location.href),
         data = $form.serialize();
@@ -11928,43 +11713,43 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
     }
 
     $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
-     .done(function (response) {
-        var nextUrl  = (response.next_url || Charcoal.Admin.admin_url()),
-            message  = (that.parseFeedbackAsHtml(response) || authL10n.authSuccess),
-            redirect = function () {
-                window.location.href = nextUrl;
-            };
+        .done(function (response) {
+            var nextUrl  = (response.next_url || Charcoal.Admin.admin_url()),
+                message  = (that.parseFeedbackAsHtml(response) || authL10n.authSuccess),
+                redirect = function () {
+                    window.location.href = nextUrl;
+                };
 
-        message += '<p>' + authL10n.postLoginRedirect + ' ' +
-                    authL10n.postLoginFallback.replace('[[ url ]]', nextUrl) + '</p>';
+            message += '<p>' + authL10n.postLoginRedirect + ' ' +
+                        authL10n.postLoginFallback.replace('[[ url ]]', nextUrl) + '</p>';
 
-        BootstrapDialog.show({
-            title:    authL10n.loginTitle,
-            message:  message,
-            type:     BootstrapDialog.TYPE_SUCCESS,
-            onhidden: redirect
+            BootstrapDialog.show({
+                title:    authL10n.loginTitle,
+                message:  message,
+                type:     BootstrapDialog.TYPE_SUCCESS,
+                onhidden: redirect
+            });
+
+            setTimeout(redirect, 300);
+        }).fail(function (jqxhr, status, error) {
+            var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+                message  = (that.parseFeedbackAsHtml(response) || authL10n.authFailed),
+                captcha  = Charcoal.Admin.recaptcha(),
+                callback = null;
+
+            if (captcha.hasApi()) {
+                callback = function () {
+                    captcha.getApi().reset();
+                };
+            }
+
+            BootstrapDialog.show({
+                title:    authL10n.loginTitle,
+                message:  message,
+                type:     BootstrapDialog.TYPE_DANGER,
+                onhidden: callback
+            });
         });
-
-        setTimeout(redirect, 300);
-    }).fail(function (jqxhr, status, error) {
-        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = (that.parseFeedbackAsHtml(response) || authL10n.authFailed),
-            captcha  = Charcoal.Admin.recaptcha(),
-            callback = null;
-
-        if (captcha.hasApi()) {
-            callback = function () {
-                captcha.getApi().reset();
-            };
-        }
-
-        BootstrapDialog.show({
-            title:    authL10n.loginTitle,
-            message:  message,
-            type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: callback
-        });
-    });
 };
 
 /**
@@ -11973,8 +11758,7 @@ Charcoal.Admin.Template_Login.prototype.submitForm = function ($form)
  * @param  {array}  entries  - Collection of feedback entries.
  * @return {string|null} - The merged feedback messages as HTML paragraphs.
  */
-Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
-{
+Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries) {
     if (entries.feedbacks) {
         entries = entries.feedbacks;
     }
@@ -12006,8 +11790,7 @@ Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
 
     return out;
 };
-;Charcoal.Admin.Template_MenuHeader = function ()
-{
+;Charcoal.Admin.Template_MenuHeader = function () {
     // toggle-class.js
     // ==========================================================================
     $('.js-toggle-class').click(function (event) {
@@ -12027,10 +11810,11 @@ Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
 
         var $this = $(this);
 
-        $this.toggleClass('is-open')
-             .siblings('.js-accordion-content')
-             .stop()
-             .slideToggle();
+        $this
+            .toggleClass('is-open')
+            .siblings('.js-accordion-content')
+            .stop()
+            .slideToggle();
     });
 };
 ;/* globals authL10n */
@@ -12045,8 +11829,7 @@ Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
  * @todo Implement feedback from server-side
  */
 
-Charcoal.Admin.Template_Account_LostPassword = function (opts)
-{
+Charcoal.Admin.Template_Account_LostPassword = function (opts) {
     // Common Template properties
     this.template_type = 'charcoal/admin/template/account/lost-password';
 
@@ -12057,14 +11840,12 @@ Charcoal.Admin.Template_Account_LostPassword.prototype = Object.create(Charcoal.
 Charcoal.Admin.Template_Account_LostPassword.prototype.constructor = Charcoal.Admin.Template_Account_LostPassword;
 Charcoal.Admin.Template_Account_LostPassword.prototype.parent = Charcoal.Admin.Template.prototype;
 
-Charcoal.Admin.Template_Account_LostPassword.prototype.init = function (opts)
-{
+Charcoal.Admin.Template_Account_LostPassword.prototype.init = function (opts) {
     window.console.debug(opts);
     this.bind_events();
 };
 
-Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function ()
-{
+Charcoal.Admin.Template_Account_LostPassword.prototype.bind_events = function () {
     var $form = $('#lost-password-form');
 
     /**
@@ -12091,43 +11872,42 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.parseFeedbackAsHtml = Cha
  * @this  {Charcoal.Admin.Template_Account_LostPassword}
  * @param {HTMLFormElement|jQuery} $form - The form element.
  */
-Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($form)
-{
+Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($form) {
     var that = this,
         url  = ($form.prop('action') || window.location.href),
         data = $form.serialize();
 
     $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
-     .done(function (response) {
-        var message = that.parseFeedbackAsHtml(response) || authL10n.lostPassSuccess;
+        .done(function (response) {
+            var message = that.parseFeedbackAsHtml(response) || authL10n.lostPassSuccess;
 
-        BootstrapDialog.show({
-            title:    authL10n.lostPassword,
-            message:  message,
-            type:     BootstrapDialog.TYPE_SUCCESS,
-            onhidden: function () {
-                window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=resetpass');
+            BootstrapDialog.show({
+                title:    authL10n.lostPassword,
+                message:  message,
+                type:     BootstrapDialog.TYPE_SUCCESS,
+                onhidden: function () {
+                    window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=resetpass');
+                }
+            });
+        }).fail(function (jqxhr, status, error) {
+            var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+                message  = (that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed),
+                captcha  = Charcoal.Admin.recaptcha(),
+                callback = null;
+
+            if (captcha.hasApi()) {
+                callback = function () {
+                    captcha.getApi().reset();
+                };
             }
-        });
-    }).fail(function (jqxhr, status, error) {
-        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = (that.parseFeedbackAsHtml(response) || authL10n.lostPassFailed),
-            captcha  = Charcoal.Admin.recaptcha(),
-            callback = null;
 
-        if (captcha.hasApi()) {
-            callback = function () {
-                captcha.getApi().reset();
-            };
-        }
-
-        BootstrapDialog.show({
-            title:    authL10n.lostPassword,
-            message:  message,
-            type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: callback
+            BootstrapDialog.show({
+                title:    authL10n.lostPassword,
+                message:  message,
+                type:     BootstrapDialog.TYPE_DANGER,
+                onhidden: callback
+            });
         });
-    });
 };
 ;/* globals authL10n */
 /**
@@ -12141,8 +11921,7 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($f
  * @todo Implement feedback from server-side
  */
 
-Charcoal.Admin.Template_Account_ResetPassword = function (opts)
-{
+Charcoal.Admin.Template_Account_ResetPassword = function (opts) {
     // Common Template properties
     this.template_type = 'charcoal/admin/template/account/reset-password';
 
@@ -12153,14 +11932,12 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype = Object.create(Charcoal
 Charcoal.Admin.Template_Account_ResetPassword.prototype.constructor = Charcoal.Admin.Template_Account_ResetPassword;
 Charcoal.Admin.Template_Account_ResetPassword.prototype.parent = Charcoal.Admin.Template.prototype;
 
-Charcoal.Admin.Template_Account_ResetPassword.prototype.init = function (opts)
-{
+Charcoal.Admin.Template_Account_ResetPassword.prototype.init = function (opts) {
     window.console.debug(opts);
     this.bind_events();
 };
 
-Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function ()
-{
+Charcoal.Admin.Template_Account_ResetPassword.prototype.bind_events = function () {
     var $form = $('#reset-password-form');
 
     /**
@@ -12187,41 +11964,40 @@ Charcoal.Admin.Template_Account_ResetPassword.prototype.parseFeedbackAsHtml = Ch
  * @this  {Charcoal.Admin.Template_Account_ResetPassword}
  * @param {HTMLFormElement|jQuery} $form - The form element.
  */
-Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ($form)
-{
+Charcoal.Admin.Template_Account_ResetPassword.prototype.submitForm = function ($form) {
     var that = this,
         url  = ($form.prop('action') || window.location.href),
         data = $form.serialize();
 
     $.post(url, data, Charcoal.Admin.resolveJqXhrFalsePositive.bind(this), 'json')
-     .done(function (response) {
-        var message = that.parseFeedbackAsHtml(response) || authL10n.resetPassSuccess;
+        .done(function (response) {
+            var message = that.parseFeedbackAsHtml(response) || authL10n.resetPassSuccess;
 
-        BootstrapDialog.show({
-            title:    authL10n.passwordReset,
-            message:  message,
-            type:     BootstrapDialog.TYPE_SUCCESS,
-            onhidden: function () {
-                window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=newpass');
+            BootstrapDialog.show({
+                title:    authL10n.passwordReset,
+                message:  message,
+                type:     BootstrapDialog.TYPE_SUCCESS,
+                onhidden: function () {
+                    window.location.href = response.next_url || Charcoal.Admin.admin_url('login?notice=newpass');
+                }
+            });
+        }).fail(function (jqxhr, status, error) {
+            var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
+                message  = (that.parseFeedbackAsHtml(response) || authL10n.resetPassFailed),
+                captcha = Charcoal.Admin.recaptcha(),
+                callback = null;
+
+            if (captcha.hasApi()) {
+                callback = function () {
+                    captcha.getApi().reset();
+                };
             }
-        });
-    }).fail(function (jqxhr, status, error) {
-        var response = Charcoal.Admin.parseJqXhrResponse(jqxhr, status, error),
-            message  = (that.parseFeedbackAsHtml(response) || authL10n.resetPassFailed),
-            captcha = Charcoal.Admin.recaptcha(),
-            callback = null;
 
-        if (captcha.hasApi()) {
-            callback = function () {
-                captcha.getApi().reset();
-            };
-        }
-
-        BootstrapDialog.show({
-            title:    authL10n.passwordReset,
-            message:  message,
-            type:     BootstrapDialog.TYPE_DANGER,
-            onhidden: callback
+            BootstrapDialog.show({
+                title:    authL10n.passwordReset,
+                message:  message,
+                type:     BootstrapDialog.TYPE_DANGER,
+                onhidden: callback
+            });
         });
-    });
 };

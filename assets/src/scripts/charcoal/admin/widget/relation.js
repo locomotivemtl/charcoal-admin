@@ -6,8 +6,7 @@
  *
  * @see widget.js (Charcoal.Admin.Widget)
  */
-Charcoal.Admin.Widget_Relation = function (opts)
-{
+Charcoal.Admin.Widget_Relation = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this.dirty = false;
@@ -29,8 +28,7 @@ Charcoal.Admin.Widget_Relation.prototype.parent = Charcoal.Admin.Widget.prototyp
  * @see Component_Manager.render()
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Relation.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.init = function () {
     // Necessary assets.
     if (typeof $.fn.sortable !== 'function') {
         var url = 'https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js';
@@ -66,8 +64,7 @@ Charcoal.Admin.Widget_Relation.prototype.init = function ()
  * Check if the widget has something a dirty state that needs to be saved.
  * @return Boolean     Widget dirty of not.
  */
-Charcoal.Admin.Widget_Relation.prototype.is_dirty = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.is_dirty = function () {
     return this.dirty;
 };
 
@@ -77,8 +74,7 @@ Charcoal.Admin.Widget_Relation.prototype.is_dirty = function ()
  * @param Boolean bool Self explanatory.
  * @return Widget_Relation Chainable.
  */
-Charcoal.Admin.Widget_Relation.prototype.set_dirty_state = function (bool)
-{
+Charcoal.Admin.Widget_Relation.prototype.set_dirty_state = function (bool) {
     this.dirty = bool;
     return this;
 };
@@ -88,8 +84,7 @@ Charcoal.Admin.Widget_Relation.prototype.set_dirty_state = function (bool)
  *
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Relation.prototype.listeners = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.listeners = function () {
     // Scope
     var that = this;
 
@@ -194,8 +189,7 @@ Charcoal.Admin.Widget_Relation.prototype.listeners = function ()
  * @param  {Object} widgetOptions A set of options for the dialog creation.
  * @return {void}
  */
-Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widgetOptions, callback)
-{
+Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widgetOptions, callback) {
     widgetOptions = widgetOptions || {};
 
     var sourceOptions = this.opts().data;
@@ -251,8 +245,7 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widg
  * This should use mustache templating. That'd be great.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.add = function (obj)
-{
+Charcoal.Admin.Widget_Relation.prototype.add = function (obj) {
     if (!obj) {
         return false;
     }
@@ -273,8 +266,7 @@ Charcoal.Admin.Widget_Relation.prototype.add = function (obj)
  * [save description]
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.save = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
@@ -283,8 +275,7 @@ Charcoal.Admin.Widget_Relation.prototype.save = function ()
     this.create_relation();
 };
 
-Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb)
-{
+Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb) {
     // Scope
     var that = this;
 
@@ -321,8 +312,7 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb)
  * @param  {Function} cb [description]
  * @return {[type]}      [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.remove_relation = function (id, cb)
-{
+Charcoal.Admin.Widget_Relation.prototype.remove_relation = function (id, cb) {
     if (!id) {
         return false;
     }
@@ -345,7 +335,6 @@ Charcoal.Admin.Widget_Relation.prototype.remove_relation = function (id, cb)
  * Widget options as output by the widget itself.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Relation.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Relation.prototype.widget_options = function () {
     return this.opts('widget_options');
 };

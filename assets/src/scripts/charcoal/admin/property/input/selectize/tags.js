@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /* global ClipboardJS */
 /**
  * Selectize Picker

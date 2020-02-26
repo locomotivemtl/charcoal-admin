@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /* global Selectize */
 /**
  * Plugin: "create_on_enter" for selectize.js
@@ -26,5 +27,5 @@ Selectize.define('create_on_enter', function () {
             }
             return original.apply(this, arguments);
         };
-    })();
+    }());
 });

@@ -13,8 +13,7 @@ var globalXHR = {};
  *
  * @see widget.js (Charcoal.Admin.Widget
  */
-Charcoal.Admin.Widget_Attachment = function (opts)
-{
+Charcoal.Admin.Widget_Attachment = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this.glyphs = {
@@ -57,8 +56,7 @@ Charcoal.Admin.Widget_Attachment.prototype.parent = Charcoal.Admin.Widget.protot
  * @see Component_Manager.render()
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Attachment.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.init = function () {
     var $container = this.element().find('.js-attachment-sortable > .js-grid-container');
     if ($container.length) {
         this.element().on('hidden.bs.collapse', '[data-toggle="collapse"]', function () {
@@ -87,8 +85,7 @@ Charcoal.Admin.Widget_Attachment.prototype.init = function ()
  * Check if the widget has something a dirty state that needs to be saved.
  * @return Boolean     Widget dirty of not.
  */
-Charcoal.Admin.Widget_Attachment.prototype.is_dirty = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.is_dirty = function () {
     return this.dirty;
 };
 
@@ -98,8 +95,7 @@ Charcoal.Admin.Widget_Attachment.prototype.is_dirty = function ()
  * @param Boolean bool Self explanatory.
  * @return Add_Attachment_Widget Chainable.
  */
-Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool)
-{
+Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool) {
     this.dirty = bool;
     return this;
 };
@@ -109,8 +105,7 @@ Charcoal.Admin.Widget_Attachment.prototype.set_dirty_state = function (bool)
  *
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.listeners = function () {
     // Scope
     var that = this,
         $container = this.element().find('.c-attachments_container > .js-grid-container');
@@ -138,7 +133,6 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
         })
         .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
             e.preventDefault();
-            var opts = that.opts();
 
             var _this = $(this);
 
@@ -167,7 +161,6 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
                     if (response.success) {
                         response.obj.id = response.obj_id;
                         that.add(response.obj);
-                        opts = that.opts();
                         that.join(function () {
                             that.reload();
                         });
@@ -272,16 +265,14 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function ()
  * @param  {jQuery Object} elem Clicked element
  * @return {thisArg}            (Chainable)
  */
-Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem)
-{
+Charcoal.Admin.Widget_Attachment.prototype.select_attachment = function (elem) {
     if (!elem.data('id') || !elem.data('type')) {
         // Invalid
         return this;
     }
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, id, parent, customOpts, callback)
-{
+Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, id, parent, customOpts, callback) {
     // Id = EDIT mod.
     if (!id) {
         id = 0;
@@ -377,8 +368,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
  * @param {object} attachment - The attachment to add to the container.
  * @param {object} container  - The container attachment.
  */
-Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (attachment, container, grouping)
-{
+Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (attachment, container, grouping) {
     var that = this,
         data = {
             obj_type:    container.type,
@@ -402,8 +392,7 @@ Charcoal.Admin.Widget_Attachment.prototype.add_object_to_container = function (a
  * This should use mustache templating. That'd be great.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.add = function (obj)
-{
+Charcoal.Admin.Widget_Attachment.prototype.add = function (obj) {
     if (!obj) {
         return false;
     }
@@ -423,8 +412,7 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj)
  * [save description]
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.save = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
@@ -433,8 +421,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function ()
     this.join();
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
-{
+Charcoal.Admin.Widget_Attachment.prototype.join = function (cb) {
     if (!$('#' + this.element().attr('id')).length) {
         return ;
     }
@@ -450,8 +437,7 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
         group:       opts.data.group
     };
 
-    this.element().find('.c-attachments_container').find('.js-attachment').each(function (i)
-    {
+    this.element().find('.c-attachments_container').find('.js-attachment').each(function (i) {
         var $this = $(this);
         var id    = $this.data('id');
         var type  = $this.data('type');
@@ -481,8 +467,7 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb)
  * @param  {Function} cb [description]
  * @return {[type]}      [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb)
-{
+Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb) {
     if (!id) {
         // How could this possibly be!
         return false;
@@ -511,7 +496,6 @@ Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb)
  * Widget options as output by the widget itself.
  * @return {[type]} [description]
  */
-Charcoal.Admin.Widget_Attachment.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Attachment.prototype.widget_options = function () {
     return this.opts('widget_options');
 };

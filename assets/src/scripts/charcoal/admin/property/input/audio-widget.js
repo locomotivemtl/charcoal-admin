@@ -6,8 +6,7 @@
  * @method Property_Input_Audio_Widget
  * @param Object opts
  */
-Charcoal.Admin.Property_Input_Audio_Widget = function (opts)
-{
+Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.audio.widget';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -46,8 +45,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype = Object.create(Charcoal.Ad
 Charcoal.Admin.Property_Input_Audio_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Audio_Widget;
 Charcoal.Admin.Property_Input_Audio_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function () {
     var $el = this.element();
 
     this.$input_text   = $('#' + this.data.text_input_id).or('.js-text-voice-message', $el);
@@ -68,8 +66,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function ()
 /**
  * Create tabular navigation
  */
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.bind_events = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.bind_events = function () {
     var that = this;
 
     this.element().on('shown.bs.tab', '[data-toggle="tab"]', function (event) {
@@ -85,8 +82,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.bind_events = function ()
  * @param  {String|jQuery} pane - The pane to show.
  * @return {this}
  */
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_pane = function (pane)
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_pane = function (pane) {
     if (typeof pane !== 'string') {
         pane = $(pane).attr('data-pane');
     }
@@ -105,8 +101,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_pane = function (pane)
     return this;
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_text = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_text = function () {
     var component = this.text_component;
 
     if (component.enabled) {
@@ -132,8 +127,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_text = function ()
     }
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_upload = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_upload = function () {
     var component = this.upload_component;
 
     if (component.enabled) {
@@ -166,8 +160,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_upload = function ()
     }
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_capture = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_capture = function () {
     var component = this.capture_component;
 
     if (component.enabled) {
@@ -223,8 +216,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_capture = function ()
     }
 };
 
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
     this.element().off(this.EVENT_NAMESPACE);
 
     if (this.text_component.property) {

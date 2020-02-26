@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /**
  * Charcoal Enhancements for TinyMCE
  *
@@ -107,7 +108,7 @@
                 doc = editor.getDoc();
                 dom = editor.dom;
 
-                body_class = ['charcoal-editor'];
+                body_class = [ 'charcoal-editor' ];
 
                 /** Backwards compatibility for projects that use this. */
                 body_class.push('mceContentBody');

@@ -3,8 +3,7 @@
  * Property_Input_Geometry_Widget Javascript class
  *
  */
-Charcoal.Admin.Property_Input_Geometry_Widget = function (data)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     // Input type
     data.input_type = 'charcoal/admin/property/input/geometry-widget';
 
@@ -27,9 +26,9 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data)
             };
 
             $.getScript(
-             'https://maps.googleapis.com/maps/api/js?sensor=false' +
-             '&callback=_tmp_google_onload_function&key=' + data.data.map_options.api_key,
-             function () {}
+                'https://maps.googleapis.com/maps/api/js?sensor=false' +
+                '&callback=_tmp_google_onload_function&key=' + data.data.map_options.api_key,
+                function () {}
             );
         } else {
             that.init();
@@ -42,8 +41,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype = Object.create(Charcoal
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Geometry_Widget;
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function () {
     if (typeof window._tmp_google_onload_function !== 'undefined') {
         delete window._tmp_google_onload_function;
     }
@@ -116,7 +114,15 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
         }
     );
 
-    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
+    this.controller().set_styles([
+        {
+            featureType: 'poi',
+            elementType: 'all',
+            stylers: [
+                { visibility: 'off' }
+            ]
+        }
+    ]);
 
     this.controller().remove_focus();
 
@@ -137,9 +143,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
         object_id = key + that.object_index();
     }
 
-    this.element().on('click', function ()
-       {
-
+    this.element().on('click', function () {
         var raw = that.controller().export();
         if (raw && Object.keys(raw.places).length !== 0) {
             return false;
@@ -149,13 +153,12 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
             that._startGeometry = true;
 
             switch (type) {
-            case 'marker':
-            case 'line':
-            case 'polygon':
-                that.controller().create_new(type, object_id);
-                break;
-        }
-
+                case 'marker':
+                case 'line':
+                case 'polygon':
+                    that.controller().create_new(type, object_id);
+                    break;
+            }
         }
     });
 
@@ -166,8 +169,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function ()
     });
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = function () {
     var related_property = this.data.data.related_property;
     if (!related_property) {
         return false;
@@ -175,15 +177,14 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = 
 
     for (var obj in related_property) {
         switch (related_property[obj].obj_type) {
-        case 'charcoal/admin/object/geometry-blueprint':
-            this.related_object_geometry(obj);
-            break;
-    }
+            case 'charcoal/admin/object/geometry-blueprint':
+                this.related_object_geometry(obj);
+                break;
+        }
     }
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry = function (obj)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry = function (obj) {
     // retrieve obj_type
     var type = this.data.data.related_property[obj].obj_type;
     if (!type) {
@@ -244,8 +245,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry 
 /**
  * Return {BB.gmap.controller}
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.controller = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.controller = function () {
     return this._controller;
 };
 
@@ -253,8 +253,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.controller = function ()
  * This is to prevent any ident duplication
  * Return {Int} Object index
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.object_index = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.object_index = function () {
     return ++this._object_inc;
 };
 
@@ -262,8 +261,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.object_index = function 
  * This is to retrieve the defaults map styles
  * Return {Object}
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = function () {
     return {
         strokeColor: '#000000',
         strokeOpacity: 0.8,
@@ -287,8 +285,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_styles = functio
  * This is to retrieve the default map options
  * Return {Object}
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_map_options = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_map_options = function () {
     return {
         default_styles: this.default_styles(),
         use_clusterer: false,
@@ -305,13 +302,11 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.default_map_options = fu
     };
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.display_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.display_marker_toolbar = function () {
     this.$map_maker.addClass('is-header-open');
 };
 
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.hide_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.hide_marker_toolbar = function () {
     this.$map_maker.removeClass('is-header-open');
 };
 
@@ -319,8 +314,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.hide_marker_toolbar = fu
  * @var array coords
  * @return string coords (fits for sql geoshit)
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.translate_coords = function (coords)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.translate_coords = function (coords) {
     var i = 0;
     var total = coords.length;
     var ret = [];
@@ -338,8 +332,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.translate_coords = funct
  * @var array coords
  * @return reverse string coords (fits for sql geoshit)
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.reverse_translate_coords = function (coords)
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.reverse_translate_coords = function (coords) {
     var first_level = coords.split(',');
     var i = 0;
     var total = first_level.length;
@@ -360,8 +353,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.reverse_translate_coords
  * - validate
  * @return this (chainable)
  */
-Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function ()
-{
+Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
     // Get raw map datas
     if (!this.controller()) {
         return this;

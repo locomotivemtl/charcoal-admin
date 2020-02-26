@@ -2,8 +2,7 @@
  * Range Input
  */
 
-Charcoal.Admin.Property_Input_Range = function (opts)
-{
+Charcoal.Admin.Property_Input_Range = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.range';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -24,8 +23,7 @@ Charcoal.Admin.Property_Input_Range.prototype = Object.create(Charcoal.Admin.Pro
 Charcoal.Admin.Property_Input_Range.prototype.constructor = Charcoal.Admin.Property_Input_Range;
 Charcoal.Admin.Property_Input_Range.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Range.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Range.prototype.init = function () {
     if (this.data.show_range_value !== true) {
         return;
     }
@@ -82,13 +80,11 @@ Charcoal.Admin.Property_Input_Range.prototype.init = function ()
  * @param  {Event}            event   - The change event.
  * @return {void}
  */
-Charcoal.Admin.Property_Input_Range.prototype.on_change = function ($input, $output/*, event*/)
-{
+Charcoal.Admin.Property_Input_Range.prototype.on_change = function ($input, $output/*, event*/) {
     $output.text($output.text().replace(/[\d\.]+/, $input.val()));
 };
 
-Charcoal.Admin.Property_Input_Range.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_Range.prototype.destroy = function () {
     this.element().off(this.EVENT_NAMESPACE);
 
     if (this.$input) {

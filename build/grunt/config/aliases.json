@@ -19,9 +19,8 @@
     ],
 
     "scripts": [
+        "eslint",
         "concat",
-        "jscs",
-        "jshint",
         "uglify"
     ],
 

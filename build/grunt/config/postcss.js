@@ -4,9 +4,7 @@ module.exports = function (grunt, options)
         options: {
             map: false,
             processors: [
-                require('autoprefixer')({
-                    browsers: [ 'last 2 versions', '> 1%', 'ie >= 9' ]
-                }),
+                require('autoprefixer')(),
                 require('postcss-banner')({
                     banner: grunt.template.process('! <%= package.title %> - <%= grunt.template.today("yyyy-mm-dd") %> ', { data: options })
                 })

@@ -7,8 +7,7 @@
  *
  * @param  {Object}  opts Options for widget
  */
-Charcoal.Admin.Widget_Search = function (opts)
-{
+Charcoal.Admin.Widget_Search = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this._elem = undefined;
@@ -43,13 +42,11 @@ Charcoal.Admin.Widget_Search.prototype.parent = Charcoal.Admin.Widget.prototype;
  * A list, a table? Definition of a widget includes:
  * - Widget type
  */
-Charcoal.Admin.Widget_Search.prototype.set_remote_widget = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.set_remote_widget = function () {
     // Do something about this.
 };
 
-Charcoal.Admin.Widget_Search.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.init = function () {
     var that  = this,
         $form = this.element();
 
@@ -71,8 +68,7 @@ Charcoal.Admin.Widget_Search.prototype.init = function ()
  *
  * @return this
  */
-Charcoal.Admin.Widget_Search.prototype.submit = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.submit = function () {
     var manager, widgets, request, total;
 
     manager = Charcoal.Admin.manager();
@@ -96,8 +92,7 @@ Charcoal.Admin.Widget_Search.prototype.submit = function ()
  *
  * @return this
  */
-Charcoal.Admin.Widget_Search.prototype.clear = function ()
-{
+Charcoal.Admin.Widget_Search.prototype.clear = function () {
     this.$input.val('');
     this.submit();
     return this;
@@ -109,8 +104,7 @@ Charcoal.Admin.Widget_Search.prototype.clear = function ()
  * @param  {string} query - The search query.
  * @return {object|null} A search request object or NULL.
  */
-Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query)
-{
+Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
     var words, props, request = null, filters = [], sub_filters;
 
     query = query.trim();
@@ -150,8 +144,7 @@ Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query)
  * @param  {object} widget  - The widget to search on.
  * @return this
  */
-Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget)
-{
+Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget) {
     if (!widget) {
         return this;
     }

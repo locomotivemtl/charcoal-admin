@@ -54,7 +54,7 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
     BootstrapDialog.show({
         title: objectRevisionsWidgetL10n.title,
         message: objectRevisionsWidgetL10n.message,
-        buttons: [{
+        buttons: [ {
             id: 'ok-btn',
             label: objectRevisionsWidgetL10n.restore,
             action: function () {
@@ -86,7 +86,7 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
                     }
                 });
             }
-        }]
+        } ]
     });
 };
 

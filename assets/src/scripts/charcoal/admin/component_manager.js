@@ -21,8 +21,7 @@
      *
      * @class
      */
-    var Manager = function ()
-    {
+    var Manager = function () {
         // Are the Components and the DOM ready to be used? Set to true once it occurs.
         this.isReady = false;
 
@@ -36,29 +35,24 @@
         });
     };
 
-    Manager.prototype.add_property_input = function (opts)
-    {
+    Manager.prototype.add_property_input = function (opts) {
         this.add_component('property_inputs', opts);
     };
 
-    Manager.prototype.add_widget = function (opts)
-    {
+    Manager.prototype.add_widget = function (opts) {
         this.add_component('widgets', opts);
     };
 
-    Manager.prototype.add_template = function (opts)
-    {
+    Manager.prototype.add_template = function (opts) {
         this.add_component('templates', opts);
     };
 
-    Manager.prototype.add_component = function (component_type, opts)
-    {
+    Manager.prototype.add_component = function (component_type, opts) {
         // Figure out which component to instanciate
         var ident = Charcoal.Admin.get_object_name(opts.type);
 
         // Make sure it exists first
         if (typeof(Charcoal.Admin[ident]) === 'function') {
-
             opts.ident = ident;
 
             // Check if component type array exists in components array
@@ -74,37 +68,33 @@
      * Retrieve Components
      */
 
-    Manager.prototype.get_property_input = function (id)
-    {
+    Manager.prototype.get_property_input = function (id) {
         return this.get_component('property_inputs', id);
     };
 
-    Manager.prototype.get_widget = function (id)
-    {
+    Manager.prototype.get_widget = function (id) {
         return this.get_component('widgets', id);
     };
 
-    Manager.prototype.get_template = function (id)
-    {
+    Manager.prototype.get_template = function (id) {
         return this.get_component('templates', id);
     };
 
     /**
      * Get component from Type and ID
      *
-     * @param type (widgets, inputs, properties)
-     * @param id
+     * @param component_type (widgets, inputs, properties)
+     * @param component_id
      * @returns {*}
      */
-    Manager.prototype.get_component = function (type, id)
-    {
+    Manager.prototype.get_component = function (component_type, component_id) {
         if (!this.isReady) {
             throw new Error('Components must be rendered.');
         }
 
-        if (type in this.components) {
-            return this.components[type].find(function (component/*, index, components*/) {
-                return component._id === id;
+        if (component_type in this.components) {
+            return this.components[component_type].find(function (component) {
+                return component._id === component_id;
             });
         }
 
@@ -114,19 +104,18 @@
     /**
      * Remove component from the manager
      *
-     * @param type (widgets, inputs, properties)
-     * @param id
+     * @param component_type (widgets, inputs, properties)
+     * @param component_id
      * @returns {undefined}
      */
-    Manager.prototype.remove_component = function (type, id)
-    {
+    Manager.prototype.remove_component = function (component_type, component_id) {
         if (!this.isReady) {
             throw new Error('Components must be rendered.');
         }
 
-        if (type in this.components) {
-            this.components[type] = this.components[type].filter(function (c) {
-                return c._id !== id;
+        if (component_type in this.components) {
+            this.components[component_type] = this.components[component_type].filter(function (component) {
+                return component._id !== component_id;
             });
         }
 
@@ -141,15 +130,13 @@
      * @param  {Function} fn - A function to execute after the DOM is ready.
      * @return {this}
      */
-    Manager.prototype.ready = function (fn)
-    {
+    Manager.prototype.ready = function (fn) {
         readyList.promise().done(fn);
 
         return this;
     };
 
-    Manager.prototype.render = function ()
-    {
+    Manager.prototype.render = function () {
         var renderEvent = $.Event('render.charcoal.components', {
             relatedTarget: this
         });
@@ -240,15 +227,13 @@
      * @see admin/widget/form.js submit_form()
      * @return boolean Success (in case of validation)
      */
-    Manager.prototype.prepare_submit = function ()
-    {
+    Manager.prototype.prepare_submit = function () {
         this.prepare_inputs();
         this.prepare_widgets();
         return true;
     };
 
-    Manager.prototype.prepare_inputs = function ()
-    {
+    Manager.prototype.prepare_inputs = function () {
         // Get inputs
         var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
 
@@ -283,8 +268,7 @@
         return true;
     };
 
-    Manager.prototype.prepare_widgets = function ()
-    {
+    Manager.prototype.prepare_widgets = function () {
         // Get inputs
         var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
 

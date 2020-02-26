@@ -1,5 +1,5 @@
+/* eslint-disable no-multiple-empty-lines */
 /* globals Promise,MediaStream,commonL10n,audioPropertyL10n */
-// jscs:disable disallowMultipleLineBreaks
 /**
  * Interface for saving audio messages
  * Property_Input_Audio JavaScript class
@@ -125,8 +125,7 @@
         audioApiSupported  = null,
         recorderAvailable  = null;
 
-    function PropertyInput(opts)
-    {
+    function PropertyInput(opts) {
         this.EVENT_NAMESPACE  = EVENT_KEY;
         this.PROPERTY_IDLE    = PropState.IDLE;
         this.PROPERTY_READY   = PropState.READY;
@@ -204,8 +203,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.init = function ()
-    {
+    PropertyInput.prototype.init = function () {
         var $el = this.element();
 
         this.$hidden = $('#' + this.data.hidden_input_id).or('input[type="hidden"]', $el);
@@ -264,8 +262,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.boot = function ()
-    {
+    PropertyInput.prototype.boot = function () {
         switch (recorderAvailable) {
             case false:
                 var msg = audioPropertyL10n.missingRecorderPlugin;
@@ -291,9 +288,11 @@
                      * @type    {jqXHR}
                      */
                     var jqxhr = $.getCachedScript(this.data.recorder_plugin_url);
-                    jqxhr.then(onAfterLoadRecorderScript.bind(this))
-                         .done(onLoadRecorderScript.bind(this))
-                         .catch(onErrorRecorderScript.bind(this));
+
+                    jqxhr
+                        .then(onAfterLoadRecorderScript.bind(this))
+                        .done(onLoadRecorderScript.bind(this))
+                        .catch(onErrorRecorderScript.bind(this));
 
                     // Prevents {@see this.boot()} from stacking.
                     recorderAvailable = jqxhr;
@@ -316,8 +315,7 @@
      * @param  {Boolean} [retry] - Whether to prompt the user for permission.
      * @return {Promise}
      */
-    PropertyInput.prototype.get_user_media = function (retry)
-    {
+    PropertyInput.prototype.get_user_media = function (retry) {
         if (!this.mediaPromise || retry === true) {
             var mediaPromise, constraints;
 
@@ -348,8 +346,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.stop_user_media = function ()
-    {
+    PropertyInput.prototype.stop_user_media = function () {
         if (!this.mediaStream) {
             return;
         }
@@ -377,8 +374,7 @@
      * @param  {Boolean} [reload] - Whether to reload the audio player.
      * @return {?SimpleAudioElement}
      */
-    PropertyInput.prototype.get_player = function (reload)
-    {
+    PropertyInput.prototype.get_player = function (reload) {
         if (!this.audioPlayer || reload === true) {
             try {
                 this.audioPlayer = this.create_player();
@@ -397,8 +393,7 @@
      * @param  {Object} [config] - A configuration object.
      * @return {?SimpleAudioElement}
      */
-    PropertyInput.prototype.create_player = function (config)
-    {
+    PropertyInput.prototype.create_player = function (config) {
         var player, settings, errorHandler, playableHandler;
 
         errorHandler = (function (event) {
@@ -466,8 +461,7 @@
      * @param  {Object}    [config] - A configuration object.
      * @return {?Recorder}
      */
-    PropertyInput.prototype.get_recorder = function (source, config)
-    {
+    PropertyInput.prototype.get_recorder = function (source, config) {
         if (!this.audioRecorder || source) {
             try {
                 this.audioRecorder = this.create_recorder(source, config);
@@ -488,8 +482,7 @@
      * @throws {Error} If the source or options are invalid or if an internal API is obsolete.
      * @return {Recorder}
      */
-    PropertyInput.prototype.create_recorder = function (source, config)
-    {
+    PropertyInput.prototype.create_recorder = function (source, config) {
         var recorder, errorHandler, audioProcessHandler;
 
         recorder = new window.Recorder(source, config);
@@ -543,8 +536,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.bind_element_events = function ()
-    {
+    PropertyInput.prototype.bind_element_events = function () {
         var $el, recordHandler, playHandler, stopHandler, resetHandler;
 
         $el = this.element();
@@ -582,8 +574,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.bind_stream_events = function ()
-    {
+    PropertyInput.prototype.bind_stream_events = function () {
         if (!(this.mediaStream instanceof MediaStream)) {
             throw new Error('Invalid or missing media stream');
         }
@@ -621,8 +612,7 @@
      * @throws {Error} If the stream is invalid or missing.
      * @return {void}
      */
-    PropertyInput.prototype.setup_stream = function ()
-    {
+    PropertyInput.prototype.setup_stream = function () {
         if (!(this.mediaStream instanceof MediaStream)) {
             throw new Error('Invalid or missing media stream');
         }
@@ -662,8 +652,7 @@
      * @param  {Boolean} [serve] - Whether to process the buffer (TRUE) or discard it (FALSE).
      * @return {void}
      */
-    PropertyInput.prototype.stop = function (serve)
-    {
+    PropertyInput.prototype.stop = function (serve) {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, 'Stop');
         }
@@ -688,8 +677,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.clear = function ()
-    {
+    PropertyInput.prototype.clear = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, 'Clear');
         }
@@ -730,8 +718,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {Boolean}
      */
-    PropertyInput.prototype.has_recording = function ()
-    {
+    PropertyInput.prototype.has_recording = function () {
         var player, audioElement;
 
         player = this.get_player();
@@ -752,8 +739,7 @@
      * @param  {Boolean} [busyOnly] - Whether the "pause" state is included (TRUE) or ignored (FALSE).
      * @return {Boolean}
      */
-    PropertyInput.prototype.is_capturing = function (busyOnly)
-    {
+    PropertyInput.prototype.is_capturing = function (busyOnly) {
         if (this.mediaMode !== MediaMode.CAPTURE) {
             return false;
         }
@@ -767,8 +753,7 @@
      * @param  {Boolean} [busyOnly] - Whether the "pause" state is included (TRUE) or ignored (FALSE).
      * @return {Boolean}
      */
-    PropertyInput.prototype.is_playing = function (busyOnly)
-    {
+    PropertyInput.prototype.is_playing = function (busyOnly) {
         if (this.mediaMode !== MediaMode.PLAYBACK) {
             return false;
         }
@@ -782,8 +767,7 @@
      * @param  {Boolean} [busyOnly] - Whether the "pause" state is included (TRUE) or ignored (FALSE).
      * @return {Boolean}
      */
-    PropertyInput.prototype.is_busy = function (busyOnly)
-    {
+    PropertyInput.prototype.is_busy = function (busyOnly) {
         if (busyOnly === true) {
             return (this.mediaState === MediaState.BUSY);
         } else {
@@ -801,8 +785,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.toggle_capture = function ()
-    {
+    PropertyInput.prototype.toggle_capture = function () {
         // if (Admin.debug()) {
         //     console.group(DEBUG_KEY, '[Capture]', 'Toggle');
         // }
@@ -839,8 +822,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.start_capture = function ()
-    {
+    PropertyInput.prototype.start_capture = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Start');
         }
@@ -887,8 +869,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.pause_capture = function ()
-    {
+    PropertyInput.prototype.pause_capture = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Pause');
         }
@@ -935,8 +916,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.stop_capture = function (serve)
-    {
+    PropertyInput.prototype.stop_capture = function (serve) {
         serve = (serve !== false);
 
         if (Admin.debug()) {
@@ -1023,8 +1003,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.clear_capture = function ()
-    {
+    PropertyInput.prototype.clear_capture = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Clear');
         }
@@ -1058,8 +1037,7 @@
      * @throws {Error} If the buffer is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.render_recorded_audio = function (buffers)
-    {
+    PropertyInput.prototype.render_recorded_audio = function (buffers) {
         if (!(Array.isArray(buffers) && buffers.length > 0)) {
             throw new Error('Invalid or empty audio buffer');
         }
@@ -1100,8 +1078,7 @@
      * @throws {Error} If the blob is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.export_recorded_audio = function (blob)
-    {
+    PropertyInput.prototype.export_recorded_audio = function (blob) {
         if (!((blob instanceof window.Blob) && blob.size > 0)) {
             throw new Error('Invalid or empty audio blob');
         }
@@ -1152,8 +1129,7 @@
      * @throws {Error} If the recorded audio is invalid or the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.dispatch_recorded_audio = function (data)
-    {
+    PropertyInput.prototype.dispatch_recorded_audio = function (data) {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Capture]', 'Dispatch Recording');
         }
@@ -1199,8 +1175,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.toggle_playback = function ()
-    {
+    PropertyInput.prototype.toggle_playback = function () {
         // if (Admin.debug()) {
         //     console.group(DEBUG_KEY, '[Playback]', 'Toggle');
         // }
@@ -1228,8 +1203,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.start_playback = function ()
-    {
+    PropertyInput.prototype.start_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Start');
         }
@@ -1299,8 +1273,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.pause_playback = function ()
-    {
+    PropertyInput.prototype.pause_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Pause');
         }
@@ -1342,8 +1315,7 @@
      * @throws {Error} If the audio player is unavailable.
      * @return {void}
      */
-    PropertyInput.prototype.stop_playback = function ()
-    {
+    PropertyInput.prototype.stop_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Stop');
         }
@@ -1386,8 +1358,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.clear_playback = function ()
-    {
+    PropertyInput.prototype.clear_playback = function () {
         if (Admin.debug()) {
             console.group(DEBUG_KEY, '[Playback]', 'Clear');
         }
@@ -1413,8 +1384,7 @@
      * @throws {TypeError} If the visual state is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.visualize = function (visual)
-    {
+    PropertyInput.prototype.visualize = function (visual) {
         if (this.readyState !== PropState.LIVE || this.mediaVisual === visual) {
             return;
         }
@@ -1444,8 +1414,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.create_waveform_visualization = function ()
-    {
+    PropertyInput.prototype.create_waveform_visualization = function () {
         this.pause_visualization();
 
         var draw, canvas, context, analyser, multiplier, amplitude, bufferLength, dataArray;
@@ -1487,8 +1456,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.create_frequency_visualization = function ()
-    {
+    PropertyInput.prototype.create_frequency_visualization = function () {
         this.pause_visualization();
 
         var draw, canvas, context, analyser, multiplier, numBars, bufferLength, dataArray;
@@ -1530,8 +1498,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.clear_visualization = function ()
-    {
+    PropertyInput.prototype.clear_visualization = function () {
         this.pause_visualization();
 
         var canvas  = this.canvasElement,
@@ -1545,8 +1512,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.pause_visualization = function ()
-    {
+    PropertyInput.prototype.pause_visualization = function () {
         if (this.drawVisualizationFrameID) {
             window.cancelAnimationFrame(this.drawVisualizationFrameID);
             this.drawVisualizationFrameID = null;
@@ -1563,8 +1529,7 @@
      *
      * @return {Number}
      */
-    PropertyInput.prototype.get_record_time = function ()
-    {
+    PropertyInput.prototype.get_record_time = function () {
         if (this.recordingStartDate) {
             return this.recordingDuration + diffInSeconds(this.recordingStartDate);
         }
@@ -1577,8 +1542,7 @@
      *
      * @return {?Number}
      */
-    PropertyInput.prototype.get_current_time = function ()
-    {
+    PropertyInput.prototype.get_current_time = function () {
         switch (this.mediaMode) {
             case MediaMode.IDLE:
                 return 0;
@@ -1599,8 +1563,7 @@
      *
      * @return {?Number}
      */
-    PropertyInput.prototype.get_duration = function ()
-    {
+    PropertyInput.prototype.get_duration = function () {
         switch (this.mediaMode) {
             case MediaMode.IDLE:
             case MediaMode.PLAYBACK:
@@ -1624,8 +1587,7 @@
      * @param  {Number} seconds - The duration in seconds.
      * @return {?Number}
      */
-    PropertyInput.prototype.fix_duration = function (seconds)
-    {
+    PropertyInput.prototype.fix_duration = function (seconds) {
         if (this.recordingDuration > 0) {
             var diff = Math.abs(seconds - this.recordingDuration);
             if (diff > 1000) {
@@ -1642,8 +1604,7 @@
      * @param  {Number} [seconds] - The current time in seconds.
      * @return {void}
      */
-    PropertyInput.prototype.update_time = function (seconds)
-    {
+    PropertyInput.prototype.update_time = function (seconds) {
         var updateTimeCallback;
 
         // TODO: Move to RAF
@@ -1670,8 +1631,7 @@
      * @param  {Number} [seconds] - The duration in seconds.
      * @return {void}
      */
-    PropertyInput.prototype.update_duration = function (seconds)
-    {
+    PropertyInput.prototype.update_duration = function (seconds) {
         var updateDurationCallback;
 
         // TODO: Move to RAF
@@ -1702,8 +1662,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.disable_transport_toolbar = function ()
-    {
+    PropertyInput.prototype.disable_transport_toolbar = function () {
         this.recorder_elements.$buttons.disable();
     };
 
@@ -1715,8 +1674,7 @@
      * @throws {TypeError} If the media state is invalid.
      * @return {void}
      */
-    PropertyInput.prototype.toggle_transport_toolbar = function (state, mode)
-    {
+    PropertyInput.prototype.toggle_transport_toolbar = function (state, mode) {
         // if (Admin.debug()) {
         //     console.group(DEBUG_KEY, '[Toolbar]', 'Toggle');
         // }
@@ -1807,8 +1765,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.enable = function ()
-    {
+    PropertyInput.prototype.enable = function () {
         if (isAudioApiSupported()) {
             this.boot();
         }
@@ -1819,8 +1776,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.disable = function ()
-    {
+    PropertyInput.prototype.disable = function () {
         this.disable_transport_toolbar();
         this.clear_visualization();
         this.stop_user_media();
@@ -1831,8 +1787,7 @@
      *
      * @return {void}
      */
-    PropertyInput.prototype.destroy = function ()
-    {
+    PropertyInput.prototype.destroy = function () {
         this.disable();
 
         this.element().off(this.EVENT_NAMESPACE);
@@ -1854,8 +1809,7 @@
      * @param  {jqXHR}  jqxhr  - The jQuery XHR object.
      * @return {Deferred}
      */
-    function onAfterLoadRecorderScript(script, status, jqxhr)
-    {
+    function onAfterLoadRecorderScript(script, status, jqxhr) {
         /* jshint validthis:true */
         /**
          * @promise #loadedRecorderScript
@@ -1881,8 +1835,7 @@
      * @param  {jqXHR}  [jqxhr]  - The jQuery XHR object.
      * @return {void}
      */
-    function onLoadRecorderScript(/*script, status, jqxhr*/)
-    {
+    function onLoadRecorderScript(/*script, status, jqxhr*/) {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Recorder Plugin Loaded');
@@ -1904,8 +1857,7 @@
      * @param  {String} errorThrown - The textual portion of the HTTP status.
      * @return {void}
      */
-    function onErrorRecorderScript(jqxhr, status, errorThrown)
-    {
+    function onErrorRecorderScript(jqxhr, status, errorThrown) {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Recorder Plugin Failed');
@@ -1936,8 +1888,7 @@
      * @param  {MediaStream} stream - The object representing a stream of media content.
      * @return {void}
      */
-    function onStartedMediaStream(stream)
-    {
+    function onStartedMediaStream(stream) {
         /* jshint validthis:true */
         this.mediaStream = stream;
 
@@ -1975,8 +1926,7 @@
      * @param  {Error} err - The error object.
      * @return {void}
      */
-    function onErrorMediaStream(err)
-    {
+    function onErrorMediaStream(err) {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Streaming Failed');
@@ -2006,8 +1956,7 @@
      * @this   PropertyInput
      * @return {void}
      */
-    function onStreamEnded()
-    {
+    function onStreamEnded() {
         /* jshint validthis:true */
         if (Admin.debug()) {
             console.log(DEBUG_KEY, 'Streaming Ended');
@@ -2040,8 +1989,7 @@
      *
      * @return {Boolean}
      */
-    function isRecorderLoaded()
-    {
+    function isRecorderLoaded() {
         return (typeof window.Recorder === 'function');
     }
 
@@ -2050,8 +1998,7 @@
      *
      * @return {Boolean}
      */
-    function isRecorderAvailable()
-    {
+    function isRecorderAvailable() {
         if (typeof recorderAvailable !== 'boolean') {
             return false;
         }
@@ -2066,8 +2013,7 @@
      *
      * @return {Boolean}
      */
-    function isAudioApiSupported()
-    {
+    function isAudioApiSupported() {
         if (typeof audioApiSupported === 'boolean') {
             return audioApiSupported;
         }
@@ -2161,8 +2107,7 @@
      * @param  {String} [msg] - The message to display.
      * @return {void}
      */
-    function reportError(err, msg)
-    {
+    function reportError(err, msg) {
         if (msg === true) {
             if (err instanceof Error) {
                 msg = err.message;
@@ -2188,8 +2133,7 @@
      * @param  {Error} err - The media stream error.
      * @return {Error}
      */
-    function normalizeMediaElementError(err)
-    {
+    function normalizeMediaElementError(err) {
         /*
         switch (e.target.error.code) {
             case e.target.error.MEDIA_ERR_ABORTED:
@@ -2219,8 +2163,7 @@
      * @param  {Error} err - The media stream error.
      * @return {Error}
      */
-    function normalizeMediaStreamError(err)
-    {
+    function normalizeMediaStreamError(err) {
         if (err.name) {
             switch (err.name) {
                 case 'DevicesNotFoundError':
@@ -2255,8 +2198,7 @@
      * @param  {TypedArray}       dataArray  - The audio data to draw.
      * @return {void}
      */
-    function drawFrequencyGraph(width, height, context, multiplier, numBars, dataArray)
-    {
+    function drawFrequencyGraph(width, height, context, multiplier, numBars, dataArray) {
         var magnitude, offset, i, j;
 
         context.clearRect(0, 0, width, height);
@@ -2288,8 +2230,7 @@
      * @param  {TypedArray}       dataArray  - The audio data to draw.
      * @return {void}
      */
-    function drawWaveformGraph(width, height, context, multiplier, amplitude, dataArray)
-    {
+    function drawWaveformGraph(width, height, context, multiplier, amplitude, dataArray) {
         var datum, max, min, i, j;
 
         context.clearRect(0, 0, width, height);
@@ -2319,8 +2260,7 @@
      * @param  {Number} sec - The time in seconds.
      * @return {String}
      */
-    function formatTime(sec)
-    {
+    function formatTime(sec) {
         if (typeof sec !== 'number') {
             return '--:--';
         }
@@ -2345,8 +2285,7 @@
      * @param  {Number} n - A number.
      * @return {String}
      */
-    function minSecStr(n)
-    {
+    function minSecStr(n) {
         return (n < 10 ? '0' : '') + n;
     }
 
@@ -2356,8 +2295,7 @@
      * @param  {Date} time - A date/time value.
      * @return {Number}
      */
-    function diffInSeconds(time)
-    {
+    function diffInSeconds(time) {
         return ((Date.now() - time) * 0.001);
     }
 

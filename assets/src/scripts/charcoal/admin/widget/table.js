@@ -9,8 +9,7 @@
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Table = function (opts)
-{
+Charcoal.Admin.Widget_Table = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     // Widget_Table properties
@@ -38,13 +37,11 @@ Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
 /**
  * Necessary for a widget.
  */
-Charcoal.Admin.Widget_Table.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.init = function () {
     this.set_properties().bind_events();
 };
 
-Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.set_properties = function () {
     var opts = this.opts();
 
     this.obj_type           = opts.data.obj_type           || this.obj_type;
@@ -65,8 +62,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function ()
     return this;
 };
 
-Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.bind_events = function () {
     if (this.sortable !== null) {
         this.sortable.destroy();
     }
@@ -147,8 +143,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function ()
  * @return this chainable
  * @see set_filters
  */
-Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter)
-{
+Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter) {
     var filters = this.get_filters();
 
     // Null by default
@@ -167,8 +162,7 @@ Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter)
 /**
  * This will overwrite existing filters
  */
-Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters)
-{
+Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters) {
     this.filters = filters;
 };
 
@@ -176,13 +170,11 @@ Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters)
  * Getter
  * @return {Object | null} filters
  */
-Charcoal.Admin.Widget_Table.prototype.get_filters = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.get_filters = function () {
     return this.filters;
 };
 
-Charcoal.Admin.Widget_Table.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
     return {
         obj_type:          this.obj_type,
         template:          this.template,

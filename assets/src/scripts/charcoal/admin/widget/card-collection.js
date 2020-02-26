@@ -11,8 +11,7 @@
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Card_Collection = function (opts)
-{
+Charcoal.Admin.Widget_Card_Collection = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     // Widget_Card_Collection properties
@@ -38,13 +37,11 @@ Charcoal.Admin.Widget_Card_Collection.prototype.parent = Charcoal.Admin.Widget.p
 /**
  * Necessary for a widget.
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.init = function () {
     this.set_properties().bind_events();
 };
 
-Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function () {
     var opts = this.opts();
 
     this.obj_type           = opts.data.obj_type           || this.obj_type;
@@ -83,8 +80,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function ()
     return this;
 };
 
-Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function () {
     var that = this;
 
     var $sortable_table = $('.js-sortable', that.table_selector);
@@ -164,8 +160,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function ()
  * @return this chainable
  * @see set_filters
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.add_filter = function (filter)
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.add_filter = function (filter) {
     var filters = this.get_filters();
 
     // Null by default
@@ -184,8 +179,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.add_filter = function (filter)
 /**
  * This will overwrite existing filters
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.set_filters = function (filters)
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.set_filters = function (filters) {
     this.filters = filters;
 };
 
@@ -193,13 +187,11 @@ Charcoal.Admin.Widget_Card_Collection.prototype.set_filters = function (filters)
  * Getter
  * @return {Object | null} filters
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.get_filters = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.get_filters = function () {
     return this.filters;
 };
 
-Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function ()
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
     return {
         obj_type:          this.obj_type,
         template:          this.template,
@@ -221,8 +213,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function ()
 /**
  *
  */
-Charcoal.Admin.Widget_Card_Collection.prototype.reload = function (callback)
-{
+Charcoal.Admin.Widget_Card_Collection.prototype.reload = function (callback) {
     // Call supra class
     Charcoal.Admin.Widget.prototype.reload.call(this, callback);
 

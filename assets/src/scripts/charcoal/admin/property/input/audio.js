@@ -3,8 +3,7 @@
  * Upload Audio Property Control
  */
 
-Charcoal.Admin.Property_Input_Audio = function (opts)
-{
+Charcoal.Admin.Property_Input_Audio = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.audio';
     this.input_type = 'charcoal/admin/property/input/audio';
 
@@ -19,8 +18,7 @@ Charcoal.Admin.Property_Input_Audio.prototype = Object.create(Charcoal.Admin.Pro
 Charcoal.Admin.Property_Input_Audio.prototype.constructor = Charcoal.Admin.Property_Input_Audio;
 Charcoal.Admin.Property_Input_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event)
-{
+Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event) {
     var audio, target, file, src;
 
     audio = new File();
@@ -37,8 +35,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event)
     this.$preview.empty().append(audio);
 };
 
-Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file/*, elf */)
-{
+Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file/*, elf */) {
     if (this.dialog) {
         this.dialog.close();
     }

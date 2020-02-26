@@ -40,7 +40,7 @@
             }
 
             return lang;
-        })(),
+        }()),
 
         // Start elFinder (REQUIRED)
         start = function (elFinder, editors, config, translations) {
@@ -154,7 +154,10 @@
                                             function (Encoding) {
                                                 if (Encoding && Encoding.convert) {
                                                     fm.registRawStringDecoder(function (s) {
-                                                        return Encoding.convert(s, { to:'UNICODE',type:'string' });
+                                                        return Encoding.convert(s, {
+                                                            to: 'UNICODE',
+                                                            type: 'string'
+                                                        });
                                                     });
                                                 }
                                             }
@@ -209,4 +212,4 @@
 
     load();
 
-})();
+}());

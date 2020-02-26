@@ -2,7 +2,7 @@
  * Charcoal reCAPTCHA Handler
  */
 
-;(function ($, Admin, window, undefined) {
+;(function ($, Admin, window) {
     'use strict';
 
     /**
@@ -11,8 +11,7 @@
      * @class
      * @return {this}
      */
-    var Captcha = function ()
-    {
+    var Captcha = function () {
         return this;
     };
 
@@ -25,8 +24,7 @@
      *
      * @return {grecaptcha|null} - The Google reCAPTCHA object or NULL.
      */
-    Captcha.prototype.getApi = function ()
-    {
+    Captcha.prototype.getApi = function () {
         return window.grecaptcha || null;
     };
 
@@ -35,8 +33,7 @@
      *
      * @return {boolean}
      */
-    Captcha.prototype.hasApi = function ()
-    {
+    Captcha.prototype.hasApi = function () {
         return (typeof window.grecaptcha !== 'undefined');
     };
 
@@ -48,8 +45,7 @@
      * @return {boolean} - Returns TRUE if the Google reCAPTCHA API is avialable
      *     and if the widget exists.
      */
-    Captcha.prototype.hasWidget = function (context, selector)
-    {
+    Captcha.prototype.hasWidget = function (context, selector) {
         // Bail early
         if (this.hasApi() === false) {
             return false;
@@ -70,8 +66,7 @@
      * @return {boolean} - Returns TRUE if the Google reCAPTCHA API is avialable
      *     and if the widget exists and is invisible.
      */
-    Captcha.prototype.hasInvisibleWidget = function (context, selector)
-    {
+    Captcha.prototype.hasInvisibleWidget = function (context, selector) {
         // Bail early
         if (this.hasApi() === false) {
             return false;

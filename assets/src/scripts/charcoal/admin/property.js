@@ -115,8 +115,7 @@ Charcoal.Admin.Property.prototype.val = function () {
  *
  * @return Object validation feedback
  */
-Charcoal.Admin.Property.prototype.validate = function ()
-{
+Charcoal.Admin.Property.prototype.validate = function () {
     // Validate the current
     return {};
 };
@@ -126,8 +125,7 @@ Charcoal.Admin.Property.prototype.validate = function ()
  *
  * @return {this}
  */
-Charcoal.Admin.Property.prototype.save = function ()
-{
+Charcoal.Admin.Property.prototype.save = function () {
     // Default action = nothing
     return this;
 };
@@ -138,7 +136,6 @@ Charcoal.Admin.Property.prototype.save = function ()
  * @param  {*} data - Could be a simple message, an array, wtv.
  * @return {void}
  */
-Charcoal.Admin.Property.prototype.error = function (data)
-{
+Charcoal.Admin.Property.prototype.error = function (data) {
     window.console.error(data);
 };

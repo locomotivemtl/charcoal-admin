@@ -7,8 +7,7 @@
  * @param  {Object}  opts Options for widget
  */
 
-Charcoal.Admin.Widget_Map = function (opts)
-{
+Charcoal.Admin.Widget_Map = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
     this._controller = undefined;
@@ -26,8 +25,7 @@ Charcoal.Admin.Widget_Map.prototype.parent = Charcoal.Admin.Widget.prototype;
  *
  * @return this
  */
-Charcoal.Admin.Widget_Map.prototype.init = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.init = function () {
     var that = this;
 
     if (typeof google === 'undefined') {
@@ -48,8 +46,7 @@ Charcoal.Admin.Widget_Map.prototype.init = function ()
     return this;
 };
 
-Charcoal.Admin.Widget_Map.prototype.activate_map = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.activate_map = function () {
     var default_styles = {
         strokeColor: '#000000',
         strokeOpacity: 0.8,
@@ -81,8 +78,8 @@ Charcoal.Admin.Widget_Map.prototype.activate_map = function ()
             coordsType: 'inpage', // array, json? (vs ul li)
             map_mode: 'default'
         },
-        places:{
-            first:{
+        places: {
+            first: {
                 type: 'marker',
                 coords: this.coords(),
             }
@@ -95,19 +92,25 @@ Charcoal.Admin.Widget_Map.prototype.activate_map = function ()
         map_options
     );
 
-    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
+    this.controller().set_styles([
+        {
+            featureType: 'poi',
+            elementType: 'all',
+            stylers: [
+                { visibility: 'off' }
+            ]
+        }
+    ]);
 
     this.controller().remove_focus();
     this.controller().init();
 
 };
 
-Charcoal.Admin.Widget_Map.prototype.controller = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.controller = function () {
     return this._controller;
 };
 
-Charcoal.Admin.Widget_Map.prototype.coords = function ()
-{
+Charcoal.Admin.Widget_Map.prototype.coords = function () {
     return this.opts('coords');
 };

@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /* globals commonL10n,formWidgetL10n,URLSearchParams */
 /**
  * Form widget that manages data sending
@@ -453,13 +454,13 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
         var message = (this.is_new_object ? formWidgetL10n.createFailed : formWidgetL10n.updateFailed);
         var error   = errorThrown || commonL10n.errorOccurred;
 
-        Charcoal.Admin.feedback([{
+        Charcoal.Admin.feedback([ {
+            level:   'error',
             message: commonL10n.errorTemplate.replaceMap({
                 '[[ errorMessage ]]': message,
                 '[[ errorThrown ]]':  error
-            }),
-            level:   'error'
-        }]);
+            })
+        } ]);
     }
 };
 

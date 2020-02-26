@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /* global ClipboardJS */
 /**
  * Selectize Picker
@@ -49,7 +50,7 @@
 
     Selectize.prototype.init = function () {};
 
-    // Used of selectize_init in order 
+    // Used of selectize_init in order
     // to avoid the re-execution of init() function on Charcoal.Admin.manager().render();
     Selectize.prototype.selectize_init = function () {
         this.init_selectize();
@@ -118,7 +119,7 @@
             preload: 'focus',
             openOnFocus: true,
             labelField: 'label',
-            searchField: ['value', 'label'],
+            searchField: [ 'value', 'label' ],
             dropdownParent: this.$input.closest('.form-field'),
             render: {},
             onItemRemove: function (value) {
@@ -234,9 +235,9 @@
                 // The object must be created using 2 pop-up
                 form_ident = form_ident.create;
                 title += ' - ' + translations.statusTemplate.replaceMap({
-                        '[[ current ]]': 1,
-                        '[[ total ]]': 2
-                    });
+                    '[[ current ]]': 1,
+                    '[[ total ]]': 2
+                });
                 step = 1;
                 submit_label = 'Next';
             } else if (id && form_ident.update) {
@@ -244,9 +245,9 @@
 
                 if (step === 2) {
                     title += ' - ' + translations.statusTemplate.replaceMap({
-                            '[[ current ]]': 2,
-                            '[[ total ]]': 2
-                        });
+                        '[[ current ]]': 2,
+                        '[[ total ]]': 2
+                    });
                     submit_label = 'Finish';
                 }
             } else {

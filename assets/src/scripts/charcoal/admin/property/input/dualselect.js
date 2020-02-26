@@ -9,8 +9,7 @@
  * @param  {Object}  opts Options for input property
  */
 
-Charcoal.Admin.Property_Input_DualSelect = function (opts)
-{
+Charcoal.Admin.Property_Input_DualSelect = function (opts) {
     this.input_type = 'charcoal/admin/property/input/dualselect';
 
     // Property_Input_DualSelect properties
@@ -32,13 +31,11 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.parent = Charcoal.Admin.Prope
  * Init plugin
  * @return {thisArg} Chainable.
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.init = function () {
     this.create_dualselect();
 };
 
-Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.dualselect_selector = opts.dualselect_selector || opts.data.dualselect_selector || this.dualselect_selector;
@@ -60,8 +57,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.set_properties = function (op
     return this;
 };
 
-Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualselect = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualselect = function () {
     $(this.dualselect_selector).multiselect(this.dualselect_options);
 
     return this;
@@ -73,8 +69,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.create_dualselect = function 
  * @param {TinyMCE Editor} dualselect The tinymce object.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.set_dualselect = function (dualselect)
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.set_dualselect = function (dualselect) {
     this._dualselect = dualselect;
     return this;
 };
@@ -83,8 +78,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.set_dualselect = function (du
  * Returns the dualselect object
  * @return {TinyMCE Editor} dualselect The tinymce object.
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.dualselect = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.dualselect = function () {
     return this._dualselect;
 };
 
@@ -92,8 +86,7 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.dualselect = function ()
  * Destroy what needs to be destroyed
  * @return {TinyMCE Editor} dualselect The tinymce object.
  */
-Charcoal.Admin.Property_Input_DualSelect.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_DualSelect.prototype.destroy = function () {
     var dualselect = this.dualselect();
 
     if (dualselect) {

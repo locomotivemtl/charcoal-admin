@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /**
  * TinyMCE implementation for WYSIWYG inputs
  * charcoal/admin/property/input/tinymce
@@ -9,8 +10,7 @@
  * @param  {Object}  opts Options for input property
  */
 
-Charcoal.Admin.Property_Input_Tinymce = function (opts)
-{
+Charcoal.Admin.Property_Input_Tinymce = function (opts) {
     this.input_type = 'charcoal/admin/property/input/tinymce';
 
     // Property_Input_Tinymce properties
@@ -35,8 +35,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.parent = Charcoal.Admin.Property
  * Init plugin
  * @return {thisArg} Chainable.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.init = function () {
     this.create_tinymce();
 };
 
@@ -44,13 +43,11 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function ()
  * Init plugin
  * @return {thisArg} Chainable.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function () {
     return Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce';
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts) {
     this.input_id = opts.input_id || this.input_id;
     this.editor_options = opts.editor_options || opts.data.editor_options || this.editor_options;
 
@@ -241,8 +238,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
     return this;
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function () {
     // Scope
     var that = this;
 
@@ -276,15 +272,13 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function ()
     window.tinyMCE.init(this.editor_options);
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_callback = function (file, elf)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_callback = function (file, elf) {
     // pass selected file data to TinyMCE
     parent.tinyMCE.activeEditor.windowManager.getParams().oninsert(file, elf);
     parent.tinyMCE.activeEditor.windowManager.close();
 };
 
-Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta) {
     var editor = this;
 
     window.tinyMCE.activeEditor.windowManager.open({
@@ -339,8 +333,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (con
  * @param {TinyMCE Editor} editor The tinymce object.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor) {
     this._editor = editor;
     return this;
 };
@@ -349,8 +342,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_editor = function (editor)
  * Returns the editor object
  * @return {TinyMCE Editor} editor The tinymce object.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function () {
     return this._editor;
 };
 
@@ -358,8 +350,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.editor = function ()
  * Destroy what needs to be destroyed
  * @return {TinyMCE Editor} editor The tinymce object.
  */
-Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function () {
     var editor = this.editor();
 
     if (editor) {

@@ -1,25 +1,24 @@
-// jscs:disable maximumLineLength, safeContextKeyword, requireDotNotation
-/* jshint ignore:start */
+/* eslint-disable consistent-this, dot-notation */
 (function (root, factory) {
-
     'use strict';
 
     // CommonJS module is defined
     if (typeof module !== 'undefined' && module.exports) {
         module.exports = factory(require('jquery'), require('bootstrap'));
+        return;
     }
+
     // AMD module is defined
-    else if (typeof define === 'function' && define.amd) {
-        define('bootstrap-dialog', ['jquery', 'bootstrap'], function ($) {
+    if (typeof define === 'function' && define.amd) {
+        define('bootstrap-dialog', [ 'jquery', 'bootstrap' ], function ($) {
             return factory($);
         });
-    } else {
-        // planted over the root!
-        root.BootstrapDialog = factory(root.jQuery);
+
+        return;
     }
-
+    // planted over the root!
+    root.BootstrapDialog = factory(root.jQuery);
 }(this, function ($) {
-
     /* ================================================
      * Definition of BootstrapDialogModal.
      * Extend Bootstrap Modal and override some functions.
@@ -89,11 +88,9 @@
                 .attr('aria-hidden', true)
                 .off('click.dismiss.bs.modal');
 
-            $.support.transition && this.$element.hasClass('fade') ?
-              this.$element
-                  .one('bsTransitionEnd', $.proxy(this.hideModal, this))
-                  .emulateTransitionEnd(300) :
-              this.hideModal();
+            $.support.transition && this.$element.hasClass('fade')
+                ? this.$element.one('bsTransitionEnd', $.proxy(this.hideModal, this)).emulateTransitionEnd(300)
+                : this.hideModal();
         }
     };
     BootstrapDialogModal.METHODS_TO_OVERRIDE['v3.3'] = {
@@ -159,7 +156,11 @@
     };
 
     // Add compatible methods.
-    BootstrapDialogModal.prototype = $.extend(BootstrapDialogModal.prototype, Modal.prototype, BootstrapDialogModal.METHODS_TO_OVERRIDE[BootstrapDialogModal.getModalVersion()]);
+    BootstrapDialogModal.prototype = $.extend(
+        BootstrapDialogModal.prototype,
+        Modal.prototype,
+        BootstrapDialogModal.METHODS_TO_OVERRIDE[BootstrapDialogModal.getModalVersion()]
+    );
 
     /* ================================================
      * Definition of BootstrapDialog.
@@ -525,12 +526,14 @@
         },
         updateType: function () {
             if (this.isRealized()) {
-                var types = [BootstrapDialog.TYPE_DEFAULT,
-                  BootstrapDialog.TYPE_INFO,
-                  BootstrapDialog.TYPE_PRIMARY,
-                  BootstrapDialog.TYPE_SUCCESS,
-                  BootstrapDialog.TYPE_WARNING,
-                  BootstrapDialog.TYPE_DANGER];
+                var types = [
+                    BootstrapDialog.TYPE_DEFAULT,
+                    BootstrapDialog.TYPE_INFO,
+                    BootstrapDialog.TYPE_PRIMARY,
+                    BootstrapDialog.TYPE_SUCCESS,
+                    BootstrapDialog.TYPE_WARNING,
+                    BootstrapDialog.TYPE_DANGER
+                ];
 
                 this.getModal().removeClass(types.join(' ')).addClass(this.getType());
             }
@@ -572,7 +575,7 @@
                 // Button size
                 $.each(this.options.buttons, function (index, button) {
                     var $button = dialog.getButton(button.id);
-                    var buttonSizes = ['btn-lg', 'btn-sm', 'btn-xs'];
+                    var buttonSizes = [ 'btn-lg', 'btn-sm', 'btn-xs' ];
                     var sizeClassSpecified = false;
                     if (typeof button['cssClass'] === 'string') {
                         var btnClasses = button['cssClass'].split(' ');
@@ -903,33 +906,31 @@
 
             // Enable / Disable
             $button.toggleEnable = function (enable) {
-                var $this = this;
                 if (typeof enable !== 'undefined') {
-                    $this.prop('disabled', !enable).toggleClass('disabled', !enable);
+                    this.prop('disabled', !enable).toggleClass('disabled', !enable);
                 } else {
-                    $this.prop('disabled', !$this.prop('disabled'));
+                    this.prop('disabled', !this.prop('disabled'));
                 }
 
-                return $this;
+                return this;
             };
+
             $button.enable = function () {
-                var $this = this;
-                $this.toggleEnable(true);
+                this.toggleEnable(true);
 
-                return $this;
+                return this;
             };
-            $button.disable = function () {
-                var $this = this;
-                $this.toggleEnable(false);
 
-                return $this;
+            $button.disable = function () {
+                this.toggleEnable(false);
+
+                return this;
             };
 
             // Icon spinning, helpful for indicating ajax loading status.
             $button.toggleSpin = function (spin) {
-                var $this = this;
-                var dialog = $this.dialog;
-                var $icon = $this.find('.' + dialog.getNamespace('button-icon'));
+                var dialog = this.dialog;
+                var $icon  = this.find('.' + dialog.getNamespace('button-icon'));
                 if (typeof spin === 'undefined') {
                     spin = !($button.find('.icon-spin').length > 0);
                 }
@@ -941,19 +942,19 @@
                     $button.find('.icon-spin').remove();
                 }
 
-                return $this;
+                return this;
             };
+
             $button.spin = function () {
-                var $this = this;
-                $this.toggleSpin(true);
+                this.toggleSpin(true);
 
-                return $this;
+                return this;
             };
-            $button.stopSpin = function () {
-                var $this = this;
-                $this.toggleSpin(false);
 
-                return $this;
+            $button.stopSpin = function () {
+                this.toggleSpin(false);
+
+                return this;
             };
 
             return this;
@@ -1087,7 +1088,10 @@
 
             // ESC key support
             this.getModal().on('keyup', { dialog: this }, function (event) {
-                event.which === 27 && event.data.dialog.isClosable() && event.data.dialog.canCloseByKeyboard() && event.data.dialog.close();
+                event.which === 27 &&
+                event.data.dialog.isClosable() &&
+                event.data.dialog.canCloseByKeyboard() &&
+                event.data.dialog.close();
             });
 
             // Button hotkey
@@ -1103,7 +1107,10 @@
         },
         handleModalBackdropEvent: function () {
             this.getModal().on('click', { dialog: this }, function (event) {
-                $(event.target).hasClass('modal-backdrop') && event.data.dialog.isClosable() && event.data.dialog.canCloseByBackdrop() && event.data.dialog.close();
+                $(event.target).hasClass('modal-backdrop') &&
+                event.data.dialog.isClosable() &&
+                event.data.dialog.canCloseByBackdrop() &&
+                event.data.dialog.close();
             });
 
             return this;
@@ -1310,7 +1317,7 @@
             });
         }
         if (confirmOptions.btnOKClass === null) {
-            confirmOptions.btnOKClass = ['btn', confirmOptions.type.split('-')[1]].join('-');
+            confirmOptions.btnOKClass = [ 'btn', confirmOptions.type.split('-')[1] ].join('-');
         }
 
         var dialog = new BootstrapDialog(confirmOptions);
@@ -1350,8 +1357,9 @@
      */
     BootstrapDialog.warning = function (message, callback) {
         return new BootstrapDialog({
-            type: BootstrapDialog.TYPE_WARNING,
-            message: message
+            type:     BootstrapDialog.TYPE_WARNING,
+            message:  message,
+            callback: callback
         }).open();
     };
 
@@ -1363,8 +1371,9 @@
      */
     BootstrapDialog.danger = function (message, callback) {
         return new BootstrapDialog({
-            type: BootstrapDialog.TYPE_DANGER,
-            message: message
+            type:     BootstrapDialog.TYPE_DANGER,
+            message:  message,
+            callback: callback
         }).open();
     };
 
@@ -1376,11 +1385,11 @@
      */
     BootstrapDialog.success = function (message, callback) {
         return new BootstrapDialog({
-            type: BootstrapDialog.TYPE_SUCCESS,
-            message: message
+            type:     BootstrapDialog.TYPE_SUCCESS,
+            message:  message,
+            callback: callback
         }).open();
     };
 
     return BootstrapDialog;
 }));
-/* jshint ignore:end */

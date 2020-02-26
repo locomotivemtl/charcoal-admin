@@ -3,8 +3,7 @@
  * Property_Input_Map_Widget Javascript class
  *
  */
-Charcoal.Admin.Property_Input_Map_Widget = function (data)
-{
+Charcoal.Admin.Property_Input_Map_Widget = function (data) {
     // Input type
     data.input_type = 'charcoal/admin/property/input/map-widget';
 
@@ -38,8 +37,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype = Object.create(Charcoal.Admi
 Charcoal.Admin.Property_Input_Map_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Map_Widget;
 Charcoal.Admin.Property_Input_Map_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
     if (typeof window._tmp_google_onload_function !== 'undefined') {
         delete window._tmp_google_onload_function;
     }
@@ -133,7 +131,15 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
         }
     );
 
-    this.controller().set_styles([{ featureType:'poi',elementType:'all',stylers:[{ visibility:'off' }] }]);
+    this.controller().set_styles([
+        {
+            featureType: 'poi',
+            elementType: 'all',
+            stylers: [
+                { visibility: 'off' }
+            ]
+        }
+    ]);
 
     this.controller().remove_focus();
 
@@ -165,8 +171,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
         }
     });
 
-    this.element().on('click', '.js-add-marker', function (e)
-    {
+    this.element().on('click', '.js-add-marker', function (e) {
         e.preventDefault();
 
         // Find uniq item ident
@@ -208,8 +213,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function ()
 /**
  * Return {BB.gmap.controller}
  */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function () {
     return this._controller;
 };
 
@@ -217,18 +221,15 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function ()
  * This is to prevent any ident duplication
  * Return {Int} Object index
  */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.object_index = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.object_index = function () {
     return ++this._object_inc;
 };
 
-Charcoal.Admin.Property_Input_Map_Widget.prototype.display_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.display_marker_toolbar = function () {
     this.$map_maker.addClass('is-header-open');
 };
 
-Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = function () {
     this.$map_maker.removeClass('is-header-open');
 };
 
@@ -241,8 +242,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = functio
  * - validate
  * @return this (chainable)
  */
-Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function ()
-{
+Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
     // Get raw map datas
     var raw = this.controller().export();
 

@@ -5,7 +5,7 @@
  * Handles bindings for actionable buttons.
  */
 
-;(function ($, document, undefined) {
+;(function ($, document) {
     'use strict';
 
     // Stored for quick usage
@@ -66,13 +66,13 @@
             Charcoal.Admin.feedback(jqXHR.responseJSON.feedbacks);
         } else {
             var error   = errorThrown || commonL10n.errorOccurred;
-            Charcoal.Admin.feedback([{
+            Charcoal.Admin.feedback([ {
+                level:   'error',
                 message: commonL10n.errorTemplate.replaceMap({
                     '[[ errorMessage ]]': 'There was an error. Sorry for the inconvenience.',
-                    '[[ errorThrown ]]':  error
-                }),
-                level:   'error'
-            }]);
+                    '[[ errorThrown ]]': error
+                })
+            } ]);
         }
     };
 

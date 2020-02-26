@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /* global Selectize */
 Selectize.define('charcoal_item', function (options) {
     options = $.extend({
@@ -56,7 +57,7 @@ Selectize.define('charcoal_item', function (options) {
         }
 
         return self.refreshOption;
-    })();
+    }());
 
     this.settings.onItemAdd = (function (/*value, $item*/) {
         original = null;
@@ -67,6 +68,6 @@ Selectize.define('charcoal_item', function (options) {
         }
 
         return self.refreshItem;
-    })();
+    }());
 
 });

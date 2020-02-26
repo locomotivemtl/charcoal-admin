@@ -1,3 +1,5 @@
+/* eslint-disable dot-notation */
+
 /**
  * Enable each element in the set of matched elements.
  */
@@ -92,7 +94,7 @@ if (!window.CustomEvent || typeof window.CustomEvent !== 'function') {
         _Class.prototype = window.Event.prototype;
 
         return _Class;
-    })();
+    }());
 }
 
 if (!window.Promise) {
@@ -182,7 +184,7 @@ if (!window.Promise) {
         };
 
         return _Class;
-    })();
+    }());
 }
 
 if (!Array.prototype.find) {
@@ -198,7 +200,7 @@ if (!Array.prototype.find) {
      */
     Object.defineProperty(Array.prototype, 'find', {
         value: function (predicate) {
-            if (this == null) {
+            if (this === null || this === undefined) {
                 throw new TypeError('"this" is null or not defined');
             }
 
@@ -228,7 +230,7 @@ if (!Array.prototype.find) {
 if (typeof Object.assign !== 'function') {
     // Must be writable: true, enumerable: false, configurable: true
     Object.defineProperty(Object, 'assign', {
-        value: function assign (target/*, varArgs*/) {
+        value: function (target/*, varArgs*/) {
             'use strict';
             if (target === null || target === undefined) {
                 throw new TypeError('Cannot convert undefined or null to object');

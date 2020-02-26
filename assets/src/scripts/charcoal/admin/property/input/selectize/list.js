@@ -1,3 +1,4 @@
+/* eslint-disable consistent-this */
 /**
  * Selectize Picker
  * List version.
@@ -78,7 +79,7 @@
             persist: true,
             preload: 'focus',
             openOnFocus: true,
-            searchField: ['value', 'label'],
+            searchField: [ 'value', 'label' ],
             dropdownParent: this.$input.closest('.form-field'),
 
             createFilter: function (input) {

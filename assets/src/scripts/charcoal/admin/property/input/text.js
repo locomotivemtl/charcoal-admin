@@ -82,12 +82,12 @@ Charcoal.Admin.Property_Input_Text.prototype.init = function () {
  */
 Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function () {
     // New input
-    this.chars_new    = [13];
+    this.chars_new    = [ 13 ];
     // Check to delete current input
-    this.chars_remove = [8, 46];
+    this.chars_remove = [ 8, 46 ];
     // Navigate.
-    this.char_next    = [40];
-    this.char_prev    = [38];
+    this.char_next    = [ 40 ];
+    this.char_prev    = [ 38 ];
 
     this.currentValAmount = 1;
 

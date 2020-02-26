@@ -2,8 +2,7 @@
  * Upload Image Property Control
  */
 
-Charcoal.Admin.Property_Input_Image = function (opts)
-{
+Charcoal.Admin.Property_Input_Image = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
 
@@ -18,8 +17,7 @@ Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Pro
 Charcoal.Admin.Property_Input_Image.prototype.constructor = Charcoal.Admin.Property_Input_Image;
 Charcoal.Admin.Property_Input_Image.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
-{
+Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event) {
     var img, target, file, src;
 
     img = new File();
@@ -36,8 +34,7 @@ Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event)
     this.$preview.empty().append(img);
 };
 
-Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file/*, elf */)
-{
+Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file/*, elf */) {
     if (this.dialog) {
         this.dialog.close();
     }

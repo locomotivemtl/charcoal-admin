@@ -2,8 +2,7 @@
  * Upload File Property Control
  */
 
-Charcoal.Admin.Property_Input_File = function (opts)
-{
+Charcoal.Admin.Property_Input_File = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.file';
     this.input_type = 'charcoal/admin/property/input/file';
 
@@ -18,8 +17,7 @@ Charcoal.Admin.Property_Input_File.prototype = Object.create(Charcoal.Admin.Prop
 Charcoal.Admin.Property_Input_File.prototype.constructor = Charcoal.Admin.Property_Input_File;
 Charcoal.Admin.Property_Input_File.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_File.prototype.init = function ()
-{
+Charcoal.Admin.Property_Input_File.prototype.init = function () {
     if (!this.input_id) {
         return;
     }
@@ -36,8 +34,7 @@ Charcoal.Admin.Property_Input_File.prototype.init = function ()
     this.set_listeners();
 };
 
-Charcoal.Admin.Property_Input_File.prototype.set_listeners = function ()
-{
+Charcoal.Admin.Property_Input_File.prototype.set_listeners = function () {
     if (typeof this.$input === 'undefined') {
         return;
     }
@@ -51,8 +48,7 @@ Charcoal.Admin.Property_Input_File.prototype.set_listeners = function ()
     window.elFinderCallback[this.input_id] = this.elfinder_callback.bind(this);
 };
 
-Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
-{
+Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event) {
     event.preventDefault();
 
     this.$hidden.val('');
@@ -62,8 +58,8 @@ Charcoal.Admin.Property_Input_File.prototype.remove_file = function (event)
     this.$input.find('.show-if-no-file').removeClass('d-none');
 };
 
-Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
-{
+Charcoal.Admin.Property_Input_File.prototype.change_file = function (event) {
+    /* eslint-disable no-unused-vars */
     var target, file, src;
 
     target = event.dataTransfer || event.target;
@@ -74,10 +70,10 @@ Charcoal.Admin.Property_Input_File.prototype.change_file = function (event)
     this.$input.find('.show-if-no-file').addClass('d-none');
     this.$input.find('.form-control-plaintext').html(file);
     this.$preview.empty();
+    /* eslint-enable no-unused-vars */
 };
 
-Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
-{
+Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event) {
     event.preventDefault();
 
     this.dialog = BootstrapDialog.show({
@@ -91,8 +87,7 @@ Charcoal.Admin.Property_Input_File.prototype.load_elfinder = function (event)
     });
 };
 
-Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/*, elf */)
-{
+Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/*, elf */) {
     if (this.dialog) {
         this.dialog.close();
     }
@@ -115,8 +110,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
  * @param {string} input_id ID of the input.
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_File.prototype.set_input_id = function (input_id)
-{
+Charcoal.Admin.Property_Input_File.prototype.set_input_id = function (input_id) {
     this.input_id = input_id;
     return this;
 };
@@ -126,8 +120,7 @@ Charcoal.Admin.Property_Input_File.prototype.set_input_id = function (input_id)
  * @param {String} input_name Name of the current input
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_File.prototype.set_input_name = function (input_name)
-{
+Charcoal.Admin.Property_Input_File.prototype.set_input_name = function (input_name) {
     this.input_name = input_name;
     return this;
 };
@@ -137,13 +130,11 @@ Charcoal.Admin.Property_Input_File.prototype.set_input_name = function (input_na
  * @param {String} input_val Value of the current input
  * @return {thisArg} Chainable
  */
-Charcoal.Admin.Property_Input_File.prototype.set_input_val = function (input_val)
-{
+Charcoal.Admin.Property_Input_File.prototype.set_input_val = function (input_val) {
     this.input_val = input_val;
     return this;
 };
 
-Charcoal.Admin.Property_Input_File.prototype.destroy = function ()
-{
+Charcoal.Admin.Property_Input_File.prototype.destroy = function () {
     this.$input.off(this.EVENT_NAMESPACE);
 };

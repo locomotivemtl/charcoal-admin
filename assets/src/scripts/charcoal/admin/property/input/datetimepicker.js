@@ -8,8 +8,7 @@
  * @param  {Object}  opts  Options for input property
  */
 
-Charcoal.Admin.Property_Input_DateTimePicker = function (opts)
-{
+Charcoal.Admin.Property_Input_DateTimePicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/datetimepicker';
 
     // Property_Input_DateTimePicker properties
@@ -24,8 +23,7 @@ Charcoal.Admin.Property_Input_DateTimePicker.prototype = Object.create(Charcoal.
 Charcoal.Admin.Property_Input_DateTimePicker.prototype.constructor = Charcoal.Admin.Property_Input_DateTimePicker;
 Charcoal.Admin.Property_Input_DateTimePicker.prototype.parent = Charcoal.Admin.Property.prototype;
 
-Charcoal.Admin.Property_Input_DateTimePicker.prototype.set_properties = function (opts)
-{
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.set_properties = function (opts) {
     this.input_id = opts.id || this.input_id;
 
     this.datetimepicker_selector = opts.data.datetimepicker_selector || this.datetimepicker_selector;
@@ -38,8 +36,7 @@ Charcoal.Admin.Property_Input_DateTimePicker.prototype.set_properties = function
     return this;
 };
 
-Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = function ()
-{
+Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = function () {
     $(this.datetimepicker_selector).datetimepicker(this.datetimepicker_options);
 
     return this;

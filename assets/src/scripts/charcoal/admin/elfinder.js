@@ -9,7 +9,7 @@
 
 (function () {
     'use strict';
-    var jqver = '3.2.1',    // jQuery
+    var jqver = '3.4.1',    // jQuery
         uiver = '1.12.1',   // jQuery UI version
         cdnjs = 'https://cdnjs.cloudflare.com/ajax/libs',
 
@@ -40,7 +40,7 @@
             }
 
             return lang;
-        })(),
+        }()),
 
         // Start elFinder (REQUIRED)
         start = function (elFinder, editors, config, translations) {
@@ -154,7 +154,10 @@
                                             function (Encoding) {
                                                 if (Encoding && Encoding.convert) {
                                                     fm.registRawStringDecoder(function (s) {
-                                                        return Encoding.convert(s, { to:'UNICODE',type:'string' });
+                                                        return Encoding.convert(s, {
+                                                            to: 'UNICODE',
+                                                            type: 'string'
+                                                        });
                                                     });
                                                 }
                                             }
@@ -209,4 +212,4 @@
 
     load();
 
-})();
+}());

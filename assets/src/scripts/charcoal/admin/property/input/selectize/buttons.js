@@ -101,6 +101,6 @@ Selectize.define('buttons', function () {
                     }
                 });
             };
-        })();
+        }());
     };
 });

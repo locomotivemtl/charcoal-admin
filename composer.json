@@ -28,7 +28,7 @@
         "psr/cache": "^1.0",
         "psr/http-message": "^1.0",
         "paragonie/random_compat": ">=2",
-        "studio-42/elfinder": "~2.1.48",
+        "studio-42/elfinder": "2.1.53",
         "barryvdh/elfinder-flysystem-driver": "^0.2.1",
         "locomotivemtl/charcoal-app": "~0.8.1",
         "locomotivemtl/charcoal-cache": "~0.1",

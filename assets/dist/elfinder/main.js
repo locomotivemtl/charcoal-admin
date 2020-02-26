@@ -9,7 +9,7 @@
 
 (function () {
     'use strict';
-    var jqver = '3.2.1',    // jQuery
+    var jqver = '3.4.1',    // jQuery
         uiver = '1.12.1',   // jQuery UI version
         cdnjs = 'https://cdnjs.cloudflare.com/ajax/libs',
 

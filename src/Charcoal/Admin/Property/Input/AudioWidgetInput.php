@@ -276,7 +276,7 @@ class AudioWidgetInput extends AudioInput
         if (!in_array($activePane, $validPanes)) {
             throw new InvalidArgumentException(sprintf(
                 'Invalid input "%s" for Audio Property Input',
-                $status
+                $activePane
             ));
         }
 

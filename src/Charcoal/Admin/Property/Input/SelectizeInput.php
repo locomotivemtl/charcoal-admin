@@ -488,16 +488,24 @@ class SelectizeInput extends SelectInput
             $optgroupProp = $model->p($this->optgroupProperty());
 
             if ($optgroupProp instanceof ObjectProperty) {
-                $collection = $this->collectionLoader()
-                     ->setModel($optgroupProp['objType'])
-                     ->addFilter([
-                         'property' => 'active',
-                         'value'    => 1
-                     ])
-                     ->setCallback([$this, 'mapObjToOptgroup'])
-                     ->load();
+                $method = [ $this, 'mapObjToOptgroup' ];
 
-                $optgroups = array_map([$this, 'mapObjToOptgroup'], $collection->values());
+                $loader = $this->collectionLoader()->setModel($optgroupProp['objType']);
+
+                if ($loader->source()->tableExists()) {
+                    $loader->addFilter([
+                        'property' => 'active',
+                        'value'    => 1,
+                    ]);
+
+                    $loader->setCallback($method);
+                    $collection = $loader->load();
+
+                    $optgroups = array_map($method, $collection->values());
+                } else {
+                    $optgroups = [];
+                }
+
                 $options['optgroups'] = $optgroups;
             } elseif ($optgroupProp instanceof SelectablePropertyInterface) {
                 $optgroups = array_values($optgroupProp->choices());
@@ -705,14 +713,17 @@ class SelectizeInput extends SelectInput
                 return $choices;
             }
 
-            $loader = $this->collectionLoader();
-            $loader->reset()
-                ->setModel($model)
-                ->addFilter([
-                    'property' => $model->key(),
-                    'value' => $val,
-                    'operator' => 'IN'
-                ]);
+            $loader = $this->collectionLoader()->reset()->setModel($model);
+
+            if (!$loader->source()->tableExists()) {
+                return [];
+            }
+
+            $loader->addFilter([
+                'property' => $model->key(),
+                'operator' => 'IN',
+                'value'    => $val,
+            ]);
 
             $collection = $loader->load();
 

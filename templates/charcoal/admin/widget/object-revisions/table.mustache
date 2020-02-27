@@ -1,0 +1,22 @@
+<table class="table table-bordered table-hover">
+    <thead>
+        <th class="text-center">
+            <span aria-hidden="true">#</span>
+            <span class="sr-only">{{# _t }}Revision #{{/ _t }}</span>
+        </th>
+        <th>{{# _t }}Date{{/ _t }}</th>
+        <th>{{# _t }}Author{{/ _t }}</th>
+        <th>{{# _t }}Changeset{{/ _t }}</th>
+        <th>{{# _t }}Options{{/ _t }}</th>
+    </thead>
+    <tbody>
+        {{# objectRevisions }}
+            {{> charcoal/admin/widget/object-revisions/tbody-row }}
+        {{/ objectRevisions }}
+        {{^ objectRevisions }}
+            <tr class="js-table-row">
+                <td colspan="5" class="text-center">{{# _t }}No history of changes{{/ _t }}</td>
+            </tr>
+        {{/ objectRevisions }}
+    </tbody>
+</table>

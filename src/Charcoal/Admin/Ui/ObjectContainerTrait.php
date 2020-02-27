@@ -5,6 +5,7 @@ namespace Charcoal\Admin\Ui;
 use Exception;
 use RuntimeException;
 use InvalidArgumentException;
+use ReflectionClass;
 
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
@@ -45,6 +46,13 @@ trait ObjectContainerTrait
      * @var ModelInterface $obj
      */
     protected $obj;
+
+    /**
+     * Holds a list of all model labels.
+     *
+     * @var string[]
+     */
+    protected static $objLabelCache = [];
 
     /**
      * Holds a list of all renderable classes.
@@ -388,6 +396,41 @@ trait ObjectContainerTrait
     }
 
     /**
+     * Retrieve the model's human-readable name.
+     *
+     * @param  ModelInterface $obj The model to lookup.
+     * @return string
+     */
+    protected function getSingularLabelFromObj(ModelInterface $obj)
+    {
+        $key = get_class($obj);
+
+        if (isset(static::$labelCache[$key])) {
+            return static::$labelCache[$key];
+        }
+
+        $metadata = $obj->metadata();
+
+        if (isset($metadata['labels']['singular_name'])) {
+            $label = $metadata['labels']['singular_name'];
+        } elseif (isset($metadata['labels']['singularName'])) {
+            $label = $metadata['labels']['singularName'];
+        } else {
+            $label = null;
+        }
+
+        if (is_array($label)) {
+            $label = reset($label);
+        } else {
+            $label = (new ReflectionClass($obj))->getShortName();
+        }
+
+        static::$labelCache[$key] = $label;
+
+        return static::$labelCache[$key];
+    }
+
+    /**
      * Determine if the model implements {@see \Charcoal\View\ViewableInterface}.
      *
      * @param  string|object $obj      Object type or instance to test.
@@ -397,10 +440,6 @@ trait ObjectContainerTrait
     protected function isObjRenderable($obj, $toString = false)
     {
         if (is_string($obj)) {
-            if (!method_exists($this, 'modelFactory')) {
-                return false;
-            }
-
             $obj = $this->modelFactory()->get($obj);
         }
 

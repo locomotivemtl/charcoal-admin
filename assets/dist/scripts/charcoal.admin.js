@@ -4497,34 +4497,45 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
         buttons: [ {
             id: 'ok-btn',
             label: objectRevisionsWidgetL10n.restore,
-            action: function () {
+            action: function (dialog) {
+                console.group('Restore Revision!');
+                dialog.close();
+
                 $.ajax({
                     url: url,
                     type: 'POST',
                     data: data,
+                    dataType: 'json',
                     success: function (response) {
+                        console.group('Restore Success?');
                         if (response.success) {
+                            console.log('Restored!');
                             window.location.reload();
                         } else {
+                            console.log('Failed!');
                             Charcoal.Admin.feedback().push([
                                 {
-                                    msg: objectRevisionsWidgetL10n.restoreError,
-                                    level: 'error'
+                                    level: 'error',
+                                    message: objectRevisionsWidgetL10n.restoreError
                                 }
                             ]);
                             Charcoal.Admin.feedback().dispatch();
+                            console.groupEnd();
                         }
                     },
                     error: function () {
+                        console.group('Restore Failed!');
                         Charcoal.Admin.feedback().push([
                             {
-                                msg: objectRevisionsWidgetL10n.restoreError,
-                                level: 'error'
+                                level: 'error',
+                                message: objectRevisionsWidgetL10n.restoreError
                             }
                         ]);
                         Charcoal.Admin.feedback().dispatch();
+                        console.groupEnd();
                     }
                 });
+                console.groupEnd();
             }
         } ]
     });

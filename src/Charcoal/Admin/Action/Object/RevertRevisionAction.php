@@ -10,6 +10,7 @@ use Psr\Http\Message\RequestInterface;
 use Psr\Http\Message\ResponseInterface;
 
 // From 'charcoal-object'
+use Charcoal\Object\ObjectRevisionInterface;
 use Charcoal\Object\RevisionableInterface;
 
 // From 'charcoal-admin'
@@ -55,7 +56,9 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
     protected function validDataFromRequest()
     {
         return array_merge([
-            'obj_type', 'obj_id', 'rev_num'
+            'obj_type',
+            'obj_id',
+            'rev_num',
         ], parent::validDataFromRequest());
     }
 
@@ -107,10 +110,38 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
                 '{{ errorMessage }}' => $failMessage
             ]);
 
-            $obj    = $this->obj();
-            $revNum = $this->revNum();
-            $rev    = $obj->revisionNum($revNum);
-            $revTs  = $rev->revTs();
+            $obj = $this->obj();
+            if (!($obj instanceof RevisionableInterface)) {
+                $this->setSuccess(false);
+
+                $this->addFeedback('error', strtr('{{ model }} does not support revisions', [
+                    '{{ model }}' => $this->getSingularLabelFromObj($obj),
+                ]));
+
+                return $response->withStatus(400);
+            }
+
+            $revNum   = $this->revNum();
+            $revision = $obj->revisionNum($revNum);
+            if (!$revision['id']) {
+                $this->setSuccess(false);
+
+                if ($revision->source()->tableExists()) {
+                    $this->addFeedback('error', strtr('Revision #{{ revNum }} does not exist for {{ model }}', [
+                        '{{ model }}'  => $this->getSingularLabelFromObj($obj),
+                        '{{ revNum }}' => $revNum,
+                    ]));
+
+                    return $response->withStatus(404);
+                }
+
+                $this->addFeedback('error', strtr('No revisions available for {{ model }}', [
+                    '{{ model }}' => $this->getSingularLabelFromObj($obj),
+                ]));
+
+                return $response->withStatus(404);
+            }
+
             $result = $obj->revertToRevision($revNum);
 
             if ($result) {
@@ -119,13 +150,13 @@ class RevertRevisionAction extends AdminAction implements ObjectContainerInterfa
                 );
 
                 $this->addFeedback('success', strtr($doneMessage, [
-                    '{{ revisionDate }}' => $revTs->format('Y-m-d @ H:i:s')
+                    '{{ revisionDate }}' => $revision['revTs']->format('Y-m-d @ H:i:s'),
                 ]));
                 $this->addFeedback('success', strtr($translator->translate('Restored Revision: {{ revisionNum }}'), [
-                    '{{ revisionNum }}' => $revNum
+                    '{{ revisionNum }}' => $revNum,
                 ]));
                 $this->addFeedback('success', strtr($translator->translate('Reverted Object: {{ objId }}'), [
-                    '{{ objId }}' => $obj->id()
+                    '{{ objId }}' => $obj->id(),
                 ]));
                 $this->setSuccess(true);
 

@@ -57,19 +57,22 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
         buttons: [ {
             id: 'ok-btn',
             label: objectRevisionsWidgetL10n.restore,
-            action: function () {
+            action: function (dialog) {
+                dialog.close();
+
                 $.ajax({
                     url: url,
                     type: 'POST',
                     data: data,
+                    dataType: 'json',
                     success: function (response) {
                         if (response.success) {
                             window.location.reload();
                         } else {
                             Charcoal.Admin.feedback().push([
                                 {
-                                    msg: objectRevisionsWidgetL10n.restoreError,
-                                    level: 'error'
+                                    level: 'error',
+                                    message: objectRevisionsWidgetL10n.restoreError
                                 }
                             ]);
                             Charcoal.Admin.feedback().dispatch();
@@ -78,8 +81,8 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
                     error: function () {
                         Charcoal.Admin.feedback().push([
                             {
-                                msg: objectRevisionsWidgetL10n.restoreError,
-                                level: 'error'
+                                level: 'error',
+                                message: objectRevisionsWidgetL10n.restoreError
                             }
                         ]);
                         Charcoal.Admin.feedback().dispatch();

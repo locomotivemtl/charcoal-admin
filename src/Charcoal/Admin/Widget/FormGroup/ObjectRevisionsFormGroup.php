@@ -5,8 +5,11 @@ namespace Charcoal\Admin\Widget\FormGroup;
 // From 'pimple/pimple'
 use Pimple\Container;
 
-// From 'locomotivemtl/charcoal-factory'
-use Charcoal\Factory\FactoryInterface;
+// From 'charcoal-core'
+use Charcoal\Model\ModelFactoryTrait;
+
+// From 'charcoal-object'
+use Charcoal\Object\ObjectRevisionInterface;
 
 // From 'locomotivemtl/charcoal-ui'
 use Charcoal\Ui\FormGroup\AbstractFormGroup;
@@ -14,14 +17,21 @@ use Charcoal\Ui\FormGroup\AbstractFormGroup;
 /**
  * Form Group: Object Revisions List
  */
-class ObjectRevisionsFormGroup extends AbstractFormGroup
+class ObjectRevisionsFormGroup extends AbstractFormGroup implements
+    ObjectRevisionsInterface
 {
+    use ObjectRevisionsTrait;
+    use ModelFactoryTrait;
+
     /**
-     * Store the factory instance for the current class.
-     *
-     * @var FactoryInterface
+     * @var string
      */
-    private $modelFactory;
+    private $objType;
+
+    /**
+     * @var string|integer
+     */
+    private $objId;
 
     /**
      * @return boolean
@@ -32,71 +42,31 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     }
 
     /**
-     * Retrieve the current object type from the GET parameters.
+     * Retrieve the object type to be revised.
      *
      * @return string
      */
     public function objType()
     {
-        return filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+        if ($this->objType === null) {
+            $this->objType = filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+        }
+
+        return $this->objType;
     }
 
     /**
-     * Retrieve the current object ID from the GET parameters.
+     * Retrieve the object ID to be revised.
      *
-     * @return string
+     * @return string|integer
      */
     public function objId()
     {
-        return filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
-    }
-
-    /**
-     * @return array
-     */
-    public function objectRevisions()
-    {
-        if (!$this->objType() || !$this->objId()) {
-            return [];
+        if ($this->objId === null) {
+            $this->objId = filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
         }
 
-        $target = $this->modelFactory->create($this->objType());
-        $target->setId($this->objId());
-
-        $lastRevision = $target->latestRevision();
-        $propLabel    = '<span title="%1$s">%2$s</code>';
-
-        $callback = function(&$obj) use ($lastRevision, $target, $propLabel) {
-            $dataDiff = $obj['dataDiff'];
-            $obj->revTsDisplay = $obj['revTs']->format('Y-m-d H:i:s');
-            $obj->numDiff = count($dataDiff);
-
-            if (isset($dataDiff[0])) {
-                $props = array_keys($dataDiff[0]);
-                $props = array_diff($props, [ 'last_modified', 'last_modified_by' ]);
-
-                $changedProps = [];
-                $droppedProps = [];
-                foreach ($props as $p) {
-                    if ($target->hasProperty($p)) {
-                        $label = $target->p($p)['label'];
-                        $changedProps[] = sprintf($propLabel, $p, $label);
-                    } else {
-                        $label = ucwords(str_replace([ '.', '_' ], ' ', $p));
-                        $droppedProps[] = sprintf($propLabel, $p, $label);
-                    }
-                }
-                $obj->changedProperties = implode(', ', $changedProps);
-                $obj->droppedProperties = implode(', ', $droppedProps);
-            } else {
-                $obj->changedProperties = '';
-                $obj->droppedProperties = '';
-            }
-
-            $obj->allowRevert = ($lastRevision['revNum'] != $obj['revNum']);
-        };
-
-        return $target->allRevisions($callback);
+        return $this->objId;
     }
 
     /**
@@ -109,6 +79,6 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup
     {
         parent::setDependencies($container);
 
-        $this->modelFactory = $container['model/factory'];
+        $this->setModelFactory($container['model/factory']);
     }
 }

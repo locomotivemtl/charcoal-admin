@@ -17,49 +17,21 @@
 {{/ showHeader }}
 <div class="o-container c-form-widget_group_content">
     <fieldset>
-        <table class="table table-bordered table-hover">
-            <thead>
-                <th class="text-center">
-                    <span aria-hidden="true">#</span>
-                    <span class="sr-only">{{# _t }}Revision #{{/ _t }}</span>
-                </th>
-                <th>{{# _t }}Date{{/ _t }}</th>
-                <th>{{# _t }}Author{{/ _t }}</th>
-                <th>{{# _t }}Changeset{{/ _t }}</th>
-                <th>{{# _t }}Options{{/ _t }}</th>
-            </thead>
-            <tbody>
-                {{# objectRevisions }}
-                    <tr class="js-table-row">
-                        <td class="text-center">{{ revNum }}</td>
-                        <td>{{ revTsDisplay }}</td>
-                        <td>{{ revUser }}</td>
-                        <td>{{& changedProperties }}{{# droppedProperties }}<br><strong>{{# _t }}Deprecated{{/ _t }}</strong>: {{& . }}{{/ droppedProperties }}</td>
-                        <td>
-                            {{# allowRevert }}
-                                <button class="js-obj-revert btn btn-secondary" data-rev-num="{{ revNum }}" type="button">
-                                    <span aria-hidden="true">{{# _t }}Restore{{/ _t }}</span>
-                                    <span class="sr-only">{{# _t }}Restore This Revision{{/ _t }}</span>
-                                </button>
-                            {{/ allowRevert }}
-                        </td>
-                    </tr>
-                {{/ objectRevisions }}
-                {{^ objectRevisions }}
-                    <tr class="js-table-row">
-                        <td colspan="5" class="text-center">{{# _t }}No history of changes{{/ _t }}</td>
-                    </tr>
-                {{/ objectRevisions }}
-            </tbody>
-        </table>
+        {{> charcoal/admin/widget/object-revisions/table }}
         {{> charcoal/admin/template/inc.notes }}
     </fieldset>
 </div>
 
+{{# addJsRequirement }}
+    <script rel="l10n">
+        {{> charcoal/admin/l10n/object-revisions.js }}
+    </script>
+{{/ addJsRequirement }}
+
 {{# addJs }}
     <script>
-        $(document).ready(function() {
-            $('.js-obj-revert').on('click', function(event) {
+        $(document).ready(function () {
+            $('.js-obj-revert').on('click', function (event) {
                 event.preventDefault();
 
                 var url = Charcoal.Admin.admin_url() + 'object/revert-revision';
@@ -70,41 +42,44 @@
                 };
                 console.debug(data);
                 BootstrapDialog.show({
-                    title: '{{# _t }}Restore This Revision{{/ _t }}',
-                    message: '{{# _t }}Are you sure you want to restore this revision?{{/ _t }} {{# _t }}Any changes made since this revision will be canceled.{{/ _t }}',
-                    buttons: [{
+                    title: objectRevisionsWidgetL10n.title,
+                    message: objectRevisionsWidgetL10n.message,
+                    buttons: [ {
                         id: 'ok-btn',
-                        label: '{{# _t }}Restore{{/ _t }}',
-                        action: function(dialog) {
+                        label: objectRevisionsWidgetL10n.restore,,
+                        action: function (dialog) {
+                            dialog.close();
+
                             $.ajax({
                                 url: url,
                                 type: 'POST',
                                 data: data,
+                                dataType: 'json',
                                 success: function (response) {
                                     if (response.success) {
                                         window.location.reload();
                                     } else {
                                         Charcoal.Admin.feedback().push([
                                             {
-                                                msg: '{{# _t }}Error:{{/ _t }} {{# _t }}Unable to revert to the revision.{{/ _t }}',
-                                                level: 'error'
+                                                level: 'error',
+                                                message: objectRevisionsWidgetL10n.restoreError
                                             }
                                         ]);
                                         Charcoal.Admin.feedback().dispatch();
                                     }
                                 },
-                                error: function() {
+                                error: function () {
                                     Charcoal.Admin.feedback().push([
                                         {
-                                            msg: '{{# _t }}Error:{{/ _t }} {{# _t }}Unable to revert to the revision.{{/ _t }}',
-                                            level: 'error'
+                                            level: 'error',
+                                            message: objectRevisionsWidgetL10n.restoreError
                                         }
                                     ]);
                                     Charcoal.Admin.feedback().dispatch();
                                 }
                             })
                         }
-                    }]
+                    } ]
                 });
             });
         });

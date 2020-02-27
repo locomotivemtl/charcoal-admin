@@ -69,18 +69,25 @@ class LoadAction extends BaseLoadAction
             $selectizeInput = $this->selectizeInput();
             $sp = $selectizeInput->p();
 
-            $searchField = isset($selectizeInput->selectizeOptions()['searchField']) ?
-                $selectizeInput->selectizeOptions()['searchField'] :
-                $selectizeInput->choiceObjMap()['label'];
+            $searchField = isset($selectizeInput->selectizeOptions()['searchField'])
+                ? $selectizeInput->selectizeOptions()['searchField']
+                : $selectizeInput->choiceObjMap()['label'];
 
             if ($this->query()) {
-                $sp->setFilters(array_merge($sp->filters(), [
-                    [
-                        'property' => $searchField,
-                        'operator' => 'LIKE',
-                        'value' => '%'.$this->query().'%'
-                    ]
-                ]));
+                $query = [
+                    'property' => $searchField,
+                    'operator' => 'LIKE',
+                    'value'    => '%'.$this->query().'%',
+                ];
+
+                $filters = $sp->filters();
+                if (is_array($filters)) {
+                    array_push($filters, $query);
+                } else {
+                    $filters = [ $query ];
+                }
+
+                $sp->setFilters($filters);
             }
 
             $choices = $sp->choices();

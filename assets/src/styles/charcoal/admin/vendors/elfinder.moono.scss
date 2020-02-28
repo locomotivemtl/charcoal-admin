@@ -9,6 +9,8 @@
  * - `.elfinder-cwd-icon` : Removed background property.
  * - `.elfinder-cwd-icon-postscript:before` : Removed content property.
  * - `.elfinder .elfinder-path` : Added padding property.
+ * - `.elfinder-ui-navbar-hidden` : Added class to hide UI plugins "tree" and "places".
+ * - `.elfinder-ui-path-hidden` : Added class to hide UI plugin "path".
  * - FontAwesome is required externally
  *
  * @link    https://github.com/lokothodida/elfinder-theme-moono/commit/76fd96c
@@ -1072,4 +1074,14 @@
     font-size: 11px;
     padding: 5px;
     margin: 0 0 5px 6px;
+}
+/* UI */
+.elfinder.elfinder-ui-navbar-hidden .elfinder-navbar {
+    display: none !important;
+}
+.elfinder.elfinder-ui-path-hidden .elfinder-statusbar .elfinder-path {
+    display: none !important;
+}
+.elfinder.elfinder-ui-path-hidden .elfinder-statusbar .elfinder-stat-selected {
+    margin-left: 0;
 }

@@ -40,7 +40,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file
         this.dialog.close();
     }
 
-    if (file && file.path) {
+    if (file && file.url) {
         var $audio = $('<audio controls src="' + file.url + '" class="js-file-audio">' + audioPropertyL10n.unsupportedElement + '</audio>');
 
         this.$input.find('.hide-if-no-file').removeClass('d-none');

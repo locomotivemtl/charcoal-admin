@@ -4498,7 +4498,6 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
             id: 'ok-btn',
             label: objectRevisionsWidgetL10n.restore,
             action: function (dialog) {
-                console.group('Restore Revision!');
                 dialog.close();
 
                 $.ajax({
@@ -4507,12 +4506,9 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
                     data: data,
                     dataType: 'json',
                     success: function (response) {
-                        console.group('Restore Success?');
                         if (response.success) {
-                            console.log('Restored!');
                             window.location.reload();
                         } else {
-                            console.log('Failed!');
                             Charcoal.Admin.feedback().push([
                                 {
                                     level: 'error',
@@ -4520,11 +4516,9 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
                                 }
                             ]);
                             Charcoal.Admin.feedback().dispatch();
-                            console.groupEnd();
                         }
                     },
                     error: function () {
-                        console.group('Restore Failed!');
                         Charcoal.Admin.feedback().push([
                             {
                                 level: 'error',
@@ -4532,10 +4526,8 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.revert = function (event) {
                             }
                         ]);
                         Charcoal.Admin.feedback().dispatch();
-                        console.groupEnd();
                     }
                 });
-                console.groupEnd();
             }
         } ]
     });
@@ -5778,7 +5770,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
         this.dialog.close();
     }
 
-    if (file && file.path) {
+    if (file && file.url) {
         this.$input.find('.hide-if-no-file').removeClass('d-none');
         this.$input.find('.show-if-no-file').addClass('d-none');
         this.$input.find('.form-control-plaintext').html(file.name);
@@ -8406,7 +8398,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file
         this.dialog.close();
     }
 
-    if (file && file.path) {
+    if (file && file.url) {
         var $audio = $('<audio controls src="' + file.url + '" class="js-file-audio">' + audioPropertyL10n.unsupportedElement + '</audio>');
 
         this.$input.find('.hide-if-no-file').removeClass('d-none');
@@ -9010,7 +9002,7 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
         this.dialog.close();
     }
 
-    if (file && file.path) {
+    if (file && file.url) {
         var $img = $('<img src="' + file.url + '" style="max-width: 100%">');
 
         this.$input.find('.hide-if-no-file').removeClass('d-none');

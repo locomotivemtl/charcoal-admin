@@ -39,7 +39,7 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
         this.dialog.close();
     }
 
-    if (file && file.path) {
+    if (file && file.url) {
         var $img = $('<img src="' + file.url + '" style="max-width: 100%">');
 
         this.$input.find('.hide-if-no-file').removeClass('d-none');

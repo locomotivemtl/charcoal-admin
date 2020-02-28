@@ -92,7 +92,7 @@ Charcoal.Admin.Property_Input_File.prototype.elfinder_callback = function (file/
         this.dialog.close();
     }
 
-    if (file && file.path) {
+    if (file && file.url) {
         this.$input.find('.hide-if-no-file').removeClass('d-none');
         this.$input.find('.show-if-no-file').addClass('d-none');
         this.$input.find('.form-control-plaintext').html(file.name);

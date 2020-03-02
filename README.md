@@ -32,7 +32,7 @@ $ composer require locomotivemtl/charcoal-admin
 -   [locomotivemtl/charcoal-object](https://github.com/locomotivemtl/charcoal-object)
     -   Object definition (Content and UserData), behaviors and tools.
 -	[locomotivemtl/charcoal-user](https://github.com/locomotivemtl/charcoal-user)
-	-	User defintion (as Charcoal Model), authentication and authorization (with Zend ACL).
+	-	User defintion (as Charcoal Model), authentication and authorization (with Laminas ACL).
 
 > 👉 Development dependencies are described in the _Development_ section of this README file.
 

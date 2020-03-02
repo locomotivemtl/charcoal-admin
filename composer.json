@@ -30,6 +30,7 @@
         "barryvdh/elfinder-flysystem-driver": "^0.2.1",
         "guzzlehttp/guzzle": "^6.3",
         "kriswallsmith/assetic": "^1.4",
+        "laminas/laminas-permissions-acl": "^2.7",
         "locomotivemtl/charcoal-app": "~0.8.1",
         "locomotivemtl/charcoal-cache": "~0.1",
         "locomotivemtl/charcoal-cms": "~0.8",

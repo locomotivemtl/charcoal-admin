@@ -8,10 +8,10 @@ use RuntimeException;
 // From Pimple
 use Pimple\Container;
 
-// From 'zendframework/zend-permissions-acl'
-use Zend\Permissions\Acl\Acl;
-use Zend\Permissions\Acl\Role\GenericRole as Role;
-use Zend\Permissions\Acl\Resource\GenericResource as Resource;
+// From 'laminas/laminas-permissions-acl'
+use Laminas\Permissions\Acl\Acl;
+use Laminas\Permissions\Acl\Role\GenericRole as Role;
+use Laminas\Permissions\Acl\Resource\GenericResource as Resource;
 
 // From 'charcoal-core'
 use Charcoal\Loader\CollectionLoader;

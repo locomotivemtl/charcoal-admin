@@ -6,9 +6,9 @@ namespace Charcoal\Admin\ServiceProvider;
 use Pimple\Container;
 use Pimple\ServiceProviderInterface;
 
-// From 'zendframework/zend-permissions'
-use Zend\Permissions\Acl\Acl;
-use Zend\Permissions\Acl\Resource\GenericResource as AclResource;
+// From 'laminas/laminas-permissions-acl'
+use Laminas\Permissions\Acl\Acl;
+use Laminas\Permissions\Acl\Resource\GenericResource as AclResource;
 
 // From 'charcoal-user'
 use Charcoal\User\Acl\Manager as AclManager;
@@ -20,7 +20,7 @@ use Charcoal\User\Acl\Manager as AclManager;
  *
  * ## Services
  *
- * - `admin/acl` A Zend ACL instance containing the admin resources / permissions.
+ * - `admin/acl` A Laminas ACL instance containing the admin resources / permissions.
  *
  * ## Dependencies
  *

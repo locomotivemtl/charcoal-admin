@@ -124,7 +124,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.validate_group_conditions = function 
  * @return self
  */
 Charcoal.Admin.Widget_Quick_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
-    var $group  = this.$form.find('#form_group_' + group);
+    var $group  = this.$form.find('#' + group);
     var $inputs = $group.find('select, input, textarea');
     animate     = animate || true;
 

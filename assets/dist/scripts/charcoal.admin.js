@@ -3797,7 +3797,7 @@ Charcoal.Admin.Widget_Form.prototype.validate_group_conditions = function (targe
  * @return self
  */
 Charcoal.Admin.Widget_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
-    var $group  = this.$form.find('#form_group_' + group);
+    var $group  = this.$form.find('#' + group);
     var $inputs = $group.find('select, input, textarea');
     animate     = animate !== undefined ? animate : true;
 
@@ -4686,7 +4686,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.validate_group_conditions = function 
  * @return self
  */
 Charcoal.Admin.Widget_Quick_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
-    var $group  = this.$form.find('#form_group_' + group);
+    var $group  = this.$form.find('#' + group);
     var $inputs = $group.find('select, input, textarea');
     animate     = animate || true;
 
@@ -5682,6 +5682,7 @@ Charcoal.Admin.Property.prototype.error = function (data) {
 
 Charcoal.Admin.Property_Input_File = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.file';
+    Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/file';
 
     this.opts   = opts;
@@ -8364,6 +8365,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
 Charcoal.Admin.Property_Input_Audio = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.audio';
     this.input_type = 'charcoal/admin/property/input/audio';
+    Charcoal.Admin.Property.call(this, opts);
 
     this.opts   = opts;
     this.data   = opts.data;
@@ -8417,6 +8419,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file
 
 Charcoal.Admin.Property_Input_ColorPicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/colorpicker';
+    Charcoal.Admin.Property.call(this, opts);
 
     this.input_id = null;
 
@@ -8460,6 +8463,7 @@ Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = functio
 
 Charcoal.Admin.Property_Input_DateTimePicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/datetimepicker';
+    Charcoal.Admin.Property.call(this, opts);
 
     // Property_Input_DateTimePicker properties
     this.input_id = null;
@@ -8504,6 +8508,7 @@ Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = f
 
 Charcoal.Admin.Property_Input_DualSelect = function (opts) {
     this.input_type = 'charcoal/admin/property/input/dualselect';
+    Charcoal.Admin.Property.call(this, opts);
 
     // Property_Input_DualSelect properties
     this.input_id = null;
@@ -8966,6 +8971,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
  */
 
 Charcoal.Admin.Property_Input_Image = function (opts) {
+    Charcoal.Admin.Property.call(this, opts);
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
 
@@ -9371,6 +9377,7 @@ Charcoal.Admin.Property_Input_Range.prototype.destroy = function () {
  */
 
 Charcoal.Admin.Property_Input_SelectPicker = function (opts) {
+    Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/select';
 
     // Property_Input_SelectPicker properties
@@ -9417,6 +9424,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 ;(function () {
 
     var Selectize = function (opts) {
+        Charcoal.Admin.Property.call(this, opts);
         this.input_type = 'charcoal/admin/property/input/selectize';
 
         // Property_Input_Selectize properties
@@ -10788,6 +10796,8 @@ Charcoal.Admin.Property_Input_Text = function (opts) {
     this.opts       = opts;
     this.data       = opts.data;
 
+    Charcoal.Admin.Property.call(this, opts);
+
     // Required
     this.set_input_id(this.opts.id);
 
@@ -11290,6 +11300,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_split_on = function (splitOn) {
  */
 
 Charcoal.Admin.Property_Input_Tinymce = function (opts) {
+    Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/tinymce';
 
     // Property_Input_Tinymce properties

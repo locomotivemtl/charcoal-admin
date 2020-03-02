@@ -10,6 +10,7 @@
 
 Charcoal.Admin.Property_Input_DateTimePicker = function (opts) {
     this.input_type = 'charcoal/admin/property/input/datetimepicker';
+    Charcoal.Admin.Property.call(this, opts);
 
     // Property_Input_DateTimePicker properties
     this.input_id = null;

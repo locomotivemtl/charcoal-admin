@@ -6,6 +6,7 @@
 Charcoal.Admin.Property_Input_Audio = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.audio';
     this.input_type = 'charcoal/admin/property/input/audio';
+    Charcoal.Admin.Property.call(this, opts);
 
     this.opts   = opts;
     this.data   = opts.data;

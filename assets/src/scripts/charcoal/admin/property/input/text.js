@@ -13,6 +13,8 @@ Charcoal.Admin.Property_Input_Text = function (opts) {
     this.opts       = opts;
     this.data       = opts.data;
 
+    Charcoal.Admin.Property.call(this, opts);
+
     // Required
     this.set_input_id(this.opts.id);
 

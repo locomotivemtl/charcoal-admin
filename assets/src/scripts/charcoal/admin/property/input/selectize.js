@@ -11,6 +11,7 @@
 ;(function () {
 
     var Selectize = function (opts) {
+        Charcoal.Admin.Property.call(this, opts);
         this.input_type = 'charcoal/admin/property/input/selectize';
 
         // Property_Input_Selectize properties

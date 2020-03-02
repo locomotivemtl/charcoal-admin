@@ -11,6 +11,7 @@
  */
 
 Charcoal.Admin.Property_Input_Tinymce = function (opts) {
+    Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/tinymce';
 
     // Property_Input_Tinymce properties

@@ -11,6 +11,7 @@
 
 Charcoal.Admin.Property_Input_DualSelect = function (opts) {
     this.input_type = 'charcoal/admin/property/input/dualselect';
+    Charcoal.Admin.Property.call(this, opts);
 
     // Property_Input_DualSelect properties
     this.input_id = null;

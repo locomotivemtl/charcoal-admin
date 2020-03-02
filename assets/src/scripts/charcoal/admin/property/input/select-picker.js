@@ -6,6 +6,7 @@
  */
 
 Charcoal.Admin.Property_Input_SelectPicker = function (opts) {
+    Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/select';
 
     // Property_Input_SelectPicker properties

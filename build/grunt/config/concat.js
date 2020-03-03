@@ -47,7 +47,7 @@ module.exports = {
             '<%= paths.npm %>/moment/min/moment.min.js',
             '<%= paths.npm %>/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js',
             // BB Map
-            '<%= paths.npm %>/beneroch-gmap/assets/scripts/dist/bb.gmap.js',
+            '<%= paths.npm %>/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',
             // Bootstrap Select
             '<%= paths.npm %>/bootstrap-select/dist/js/bootstrap-select.js',
             // jQuery MiniColors

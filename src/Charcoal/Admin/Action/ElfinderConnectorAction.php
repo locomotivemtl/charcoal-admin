@@ -474,6 +474,7 @@ class ElfinderConnectorAction extends AdminAction
 
             $startPath = $formProperty['uploadPath'];
             $isPublic  = $formProperty['publicAccess'];
+            $acceptedMimetypes = $formProperty['acceptedMimetypes'];
             $basePath  = $isPublic ? $this->publicPath : $this->basePath;
 
             if (!file_exists($basePath.$startPath)) {
@@ -484,6 +485,14 @@ class ElfinderConnectorAction extends AdminAction
                 $disk['startPath'] = $startPath;
             }
 
+            if ($acceptedMimetypes) {
+                $disk['uploadAllow'] = array_merge(
+                    isset($disk['uploadAllow'])
+                        ? $disk['uploadAllow']
+                        : [],
+                    $acceptedMimetypes
+                );
+            }
             return [ $disk ];
         }
 

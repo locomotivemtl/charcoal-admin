@@ -65,28 +65,29 @@
                             This input will be posted on save / update if a file is selected.
                         --}}
                         {{! charcoal/admin/property/input/file/control }}
-                        <div class="form-group">
-                            {{# showFileUpload }}
-                                <input
-                                    type="file"
-                                    id="{{ inputId }}"
-                                    name="{{ audioInputName }}"
-                                    class="js-file-input"
-                                    {{# accept }}accept="{{ . }}"{{/ accept }}
-                                    {{# readOnly }}readonly{{/ readOnly }}
-                                    {{# required }}required{{/ required }}
-                                    {{# disabled }}disabled{{/ disabled }}
-                                >
-                            {{/ showFileUpload }}
-                            {{# showFilePicker }}
-                                <button type="button" class="btn btn-primary js-elfinder">{{ chooseButtonLabel }}</button>
-                            {{/ showFilePicker }}
-                            {{^ showFilePreview }}
-                                <button type="button" class="btn btn-link js-remove-file hide-if-no-file{{^ audioInputVal }} d-none{{/ audioInputVal }}">{{ removeButtonLabel }}</button>
-                            {{/ showFilePreview }}
+                        <div id="{{ inputId }}">
+                            <div class="form-group" >
+                                {{# showFileUpload }}
+                                    <input
+                                        type="file"
+                                        name="{{ audioInputName }}"
+                                        class="js-file-input"
+                                        {{# accept }}accept="{{ . }}"{{/ accept }}
+                                        {{# readOnly }}readonly{{/ readOnly }}
+                                        {{# required }}required{{/ required }}
+                                        {{# disabled }}disabled{{/ disabled }}
+                                    >
+                                {{/ showFileUpload }}
+                                {{# showFilePicker }}
+                                    <button type="button" class="btn btn-primary js-elfinder">{{ chooseButtonLabel }}</button>
+                                {{/ showFilePicker }}
+                                {{^ showFilePreview }}
+                                    <button type="button" class="btn btn-link js-remove-file hide-if-no-file{{^ audioInputVal }} d-none{{/ audioInputVal }}">{{ removeButtonLabel }}</button>
+                                {{/ showFilePreview }}
+                            </div>
+                            {{> charcoal/admin/property/input/file/preview-container }}
+                            {{> charcoal/admin/property/input/file/placeholder-container }}
                         </div>
-                        {{> charcoal/admin/property/input/file/preview-container }}
-                        {{> charcoal/admin/property/input/file/placeholder-container }}
                     {{/ uploadPropertyContext }}
                 </div>
             {{/ uploadEnabled }}

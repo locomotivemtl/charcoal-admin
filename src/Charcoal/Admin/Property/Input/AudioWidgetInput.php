@@ -663,6 +663,35 @@ class AudioWidgetInput extends AudioInput
     }
 
     /**
+     * Necessary evil to render the file picker URL
+     * with the correct object model context.
+     *
+     * @see \Charcoal\Admin\Property\Input\TinymceInput::prepareFilePickerUrl()
+     *
+     * @return callable|null
+     */
+    public function prepareFilePickerUrl()
+    {
+        if (!$this->showFilePicker()) {
+            return null;
+        }
+
+        //if ($this->filePickerUrl !== null) {
+        // return null;
+        //}
+
+        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ uploadInputId }}';
+        $uri = '{{# withAdminUrl }}elfinder?'.$uri.'{{/ withAdminUrl }}';
+
+        return function ($noop, LambdaHelper $helper) use ($uri) {
+            $uri = $helper->render($uri);
+            $this->setFilePickerUrl($uri);
+
+            return null;
+        };
+    }
+
+    /**
      * Retrieve the control's data options for JavaScript components.
      *
      * @return array

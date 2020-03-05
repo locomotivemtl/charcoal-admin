@@ -88,20 +88,20 @@ class NestedWidgetFormGroup extends AbstractFormGroup implements
     public function widgetId()
     {
         if (!$this->widgetId) {
-            $this->widgetId = uniqid();
+            $this->widgetId = 'nested_widget_'.uniqid();
         }
 
         return $this->widgetId;
     }
 
-        /**
-         * Retrieve the current form group
-         *
-         * @return self
-         */
+    /**
+     * Retrieve the current form group
+     *
+     * @return self
+     */
     public function currentFromGroup()
     {
-            return $this;
+        return $this;
     }
 
     /**

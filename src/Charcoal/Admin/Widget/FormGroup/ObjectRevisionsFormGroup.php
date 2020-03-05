@@ -35,6 +35,35 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup implements
     private $objId;
 
     /**
+     * @var string $widgetId
+     */
+    public $widgetId;
+
+
+    /**
+     * @param string $widgetId The widget identifier.
+     * @return self
+     */
+    public function setWidgetId($widgetId)
+    {
+        $this->widgetId = $widgetId;
+
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function widgetId()
+    {
+        if (!$this->widgetId) {
+            $this->widgetId = 'widget_'.uniqid();
+        }
+
+        return $this->widgetId;
+    }
+
+    /**
      * @return boolean
      */
     public function active()

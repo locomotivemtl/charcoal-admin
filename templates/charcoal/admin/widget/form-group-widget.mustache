@@ -12,12 +12,12 @@
 --}}
 
 {{# showHeader }}
-<header class="o-header -small">
-    {{# showTitle }}
-        <h3>{{ title }}</h3>
-    {{/ showTitle }}
-    {{> charcoal/admin/template/inc.description }}
-</header>
+    <header class="o-header -small">
+        {{# showTitle }}
+            <h3>{{ title }}</h3>
+        {{/ showTitle }}
+        {{> charcoal/admin/template/inc.description }}
+    </header>
 {{/ showHeader }}
 <div class="o-container c-form-widget_group_content">
     <fieldset>
@@ -27,11 +27,10 @@
             {{/ showDescription }}
         {{/ showHeader }}
         {{# showNotesAbove }}
-        <div class="form-text mb-4">
-            {{> charcoal/admin/template/inc.notes }}
-        </div>
+            <div class="form-text mb-4">
+                {{> charcoal/admin/template/inc.notes }}
+            </div>
         {{/ showNotesAbove }}
-
         {{> charcoal/admin/widget/form-group/form-properties }}
         {{^ showNotesAbove }}
             {{> charcoal/admin/template/inc.notes }}

@@ -5,7 +5,7 @@ namespace Charcoal\Admin\Widget;
 // From 'charcoal-object'
 use Charcoal\Object\ObjectRevisionInterface;
 
-// From 'charcoal-admim'
+// From 'charcoal-admin'
 use Charcoal\Admin\AdminWidget;
 use Charcoal\Admin\Ui\ObjectRevisionsInterface;
 use Charcoal\Admin\Ui\ObjectRevisionsTrait;

@@ -8,8 +8,9 @@ use Pimple\Container;
 // From 'charcoal-core'
 use Charcoal\Model\ModelFactoryTrait;
 
-// From 'charcoal-object'
-use Charcoal\Object\ObjectRevisionInterface;
+// From 'charcoal-admin'
+use Charcoal\Admin\Ui\ObjectRevisionsInterface;
+use Charcoal\Admin\Ui\ObjectRevisionsTrait;
 
 // From 'locomotivemtl/charcoal-ui'
 use Charcoal\Ui\FormGroup\AbstractFormGroup;

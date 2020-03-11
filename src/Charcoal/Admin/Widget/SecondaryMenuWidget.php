@@ -548,7 +548,7 @@ class SecondaryMenuWidget extends AdminWidget implements
      */
     public function setDisplayOptions(array $options)
     {
-        $this->displayOptions = $options;
+        $this->displayOptions = array_replace($this->defaultDisplayOptions(), $options);
 
         return $this;
     }
@@ -672,7 +672,7 @@ class SecondaryMenuWidget extends AdminWidget implements
 
             $displayOptions = $this->displayOptions();
             if (isset($group['display_options'])) {
-                $displayOptions = array_merge($displayOptions, $group['display_options']);
+                $displayOptions = array_replace($displayOptions, $group['display_options']);
             }
 
             $group['collapsed'] = $displayOptions['collapsed'];

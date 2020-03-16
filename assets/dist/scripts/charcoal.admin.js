@@ -10792,11 +10792,11 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_clipboard = function
  */
 
 Charcoal.Admin.Property_Input_Text = function (opts) {
+    Charcoal.Admin.Property.call(this, opts);
+
     this.input_type = 'charcoal/admin/property/input/text';
     this.opts       = opts;
     this.data       = opts.data;
-
-    Charcoal.Admin.Property.call(this, opts);
 
     // Required
     this.set_input_id(this.opts.id);

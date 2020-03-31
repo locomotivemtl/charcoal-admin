@@ -33,7 +33,7 @@
         "laminas/laminas-permissions-acl": "^2.7",
         "locomotivemtl/charcoal-app": "~0.8.1",
         "locomotivemtl/charcoal-cache": "~0.1",
-        "locomotivemtl/charcoal-cms": "~0.8",
+        "locomotivemtl/charcoal-cms": "~0.9",
         "locomotivemtl/charcoal-core": "~0.6",
         "locomotivemtl/charcoal-email": "~0.4",
         "locomotivemtl/charcoal-object": "~0.7",

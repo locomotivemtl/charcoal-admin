@@ -2,6 +2,7 @@
 
 namespace Charcoal\Admin\Widget;
 
+use Charcoal\Admin\Ui\ActionContainerTrait;
 use UnexpectedValueException;
 use InvalidArgumentException;
 
@@ -29,6 +30,7 @@ class ObjectFormWidget extends FormWidget implements
     ObjectContainerInterface
 {
     use ObjectContainerTrait;
+    use ActionContainerTrait;
 
     /**
      * @var string
@@ -196,6 +198,14 @@ class ObjectFormWidget extends FormWidget implements
         } else {
             return $action;
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function jsActionPrefix()
+    {
+        return 'js-form';
     }
 
     /**
@@ -512,6 +522,14 @@ class ObjectFormWidget extends FormWidget implements
             }
         }
 
+        $save = [
+            'label'      => (string)$this->submitLabel(),
+            'ident'      => 'save',
+            'buttonType' => 'submit',
+            'priority'   => 90
+        ];
+
+        $objFormData['testActions'] = $this->parseAsObjectFormActions([$save]);
         $formSidebars = [];
 
         if (isset($adminMetadata['form_sidebars'])) {
@@ -536,6 +554,55 @@ class ObjectFormWidget extends FormWidget implements
         }
 
         return $objFormData;
+    }
+
+    /**
+     * Parse the given actions as object actions.
+     *
+     * @param  array $actions Actions to resolve.
+     * @return array
+     */
+    protected function parseAsObjectFormActions(array $actions)
+    {
+        $sidebarActions = [];
+        foreach ($actions as $ident => $action) {
+            $ident  = $this->parseActionIdent($ident, $action);
+            $action = $this->parseActionItem($action, $ident, true);
+
+            if (!isset($action['priority'])) {
+                $action['priority'] = $this->actionsPriority++;
+            }
+
+            if ($action['actions']) {
+                $action['actions']    = $this->parseAsObjectFormActions($action['actions']);
+                $action['hasActions'] = !!array_filter($action['actions'], function ($action) {
+                    return $action['active'];
+                });
+            }
+
+            if (isset($sidebarActions[$ident])) {
+                $hasPriority = ($action['priority'] > $sidebarActions[$ident]['priority']);
+                if ($hasPriority || $action['isSubmittable']) {
+                    $sidebarActions[$ident] = array_replace($sidebarActions[$ident], $action);
+                } else {
+                    $sidebarActions[$ident] = array_replace($action, $sidebarActions[$ident]);
+                }
+            } else {
+                $sidebarActions[$ident] = $action;
+            }
+        }
+
+        usort($sidebarActions, [ $this, 'sortActionsByPriority' ]);
+
+        while (($first = reset($sidebarActions)) && $first['isSeparator']) {
+            array_shift($sidebarActions);
+        }
+
+        while (($last = end($sidebarActions)) && $last['isSeparator']) {
+            array_pop($sidebarActions);
+        }
+
+        return $sidebarActions;
     }
 
     /**

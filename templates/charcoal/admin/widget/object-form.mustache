@@ -16,6 +16,14 @@
             {{# hasGroups }}
                 {{> charcoal/admin/template/form/groups }}
             {{/ hasGroups }}
+            {{# testActions }}
+            <div class="o-section"></div>
+            <div class="o-section">
+                <div class="btn-group-vertical c-form-widget_actions" role="group">
+                {{> charcoal/admin/widget/actions }}
+                </div>
+            </div>
+            {{/ testActions }}
         </div>
 
         {{# sidebars }}

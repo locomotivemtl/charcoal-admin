@@ -15,9 +15,8 @@
 
 --}}
 <div class="o-toolbox" id="{{ inputId }}">
-    <div class="o-toolbox_actions">
-        <div class="btn-group-vertical btn-group-toggle d-flex h-100" role="group" aria-label="{{# _t }}Mapping Actions{{/ _t }}" data-toggle="buttons">
-
+    <div class="o-toolbox_actions" role="toolbar" aria-label="{{# _t }}Mapping Tools{{/ _t }}">
+        <div class="btn-group-vertical btn-group-toggle d-flex h-75" role="group" data-toggle="buttons">
             <label class="o-toolbox_button btn btn-outline-dark btn-lg active js-display-marker-toolbox">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-map-marker"></use></svg>
                 <input
@@ -29,7 +28,6 @@
                     value="display_marker_toolbar">
                 <span class="sr-only">{{# _t }}Add Marker{{/ _t }}</span>
             </label>
-
             <label class="o-toolbox_button btn btn-outline-dark btn-lg js-add-line">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-map-path"></use></svg>
                 <input
@@ -40,7 +38,6 @@
                     value="add_line">
                 <span class="sr-only">{{# _t }}Add Line{{/ _t }}</span>
             </label>
-
             <label class="o-toolbox_button btn btn-outline-dark btn-lg js-add-polygon">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-map-region"></use></svg>
                 <input
@@ -51,14 +48,15 @@
                     value="add_polygon">
                 <span class="sr-only">{{# _t }}Add Polygon{{/ _t }}</span>
             </label>
-
+        </div>
+        <div class="btn-group-vertical d-flex h-25" role="group">
             <button type="button" class="o-toolbox_button btn btn-danger js-reset">
                 <span class="fa fa-lg fa-refresh" aria-hidden="true"></span>
                 <span class="sr-only">{{# _t }}Reset{{/ _t }}</span>
             </button>
             {{! Added this here to keep this button's integration, but cannot be used yet with the plugin }}
             {{!--
-            <button type="button" class="btn btn-secondary">
+            <button type="button" class="o-toolbox_button btn btn-secondary">
                 <svg class="o-toolbox_icon" role="img"><use xlink:href="[[ baseUrl ]]assets/admin/images/svgs.svg#icon-map-area"></use></svg>
                 <span class="sr-only">[[# _t ]]Find My Location[[/ _t ]]</span>
             </button>

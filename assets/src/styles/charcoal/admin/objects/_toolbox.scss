@@ -16,19 +16,47 @@
     float: left;
     height: 100%;
     width: rem(60px);
+
+    .btn-group-vertical.h-60 {
+        height: 60%;
+    }
+
+    .btn-group-vertical.h-40 {
+        height: 40%;
+    }
+
+    .btn-group-vertical + .btn-group-vertical {
+        margin-top: 0;
+    }
+
+    .btn-group-vertical .o-toolbox_button {
+        height: 100%;
+
+        &:first-child {
+            border-top-right-radius: 0;
+        }
+
+        &:last-child {
+            border-bottom-right-radius: 0;
+        }
+    }
+
+    .btn-group-vertical:not(:only-child):first-child {
+        .o-toolbox_button:last-child {
+            border-bottom-left-radius: 0;
+        }
+    }
+
+    .btn-group-vertical:not(:only-child):not(:first-child) {
+        .o-toolbox_button:first-child {
+            border-top-left-radius: 0;
+            margin-top: -$btn-border-width;
+        }
+    }
 }
 
 .o-toolbox_button {
-    height: 100%;
     border-color: $input-border-color;
-
-    &:first-child {
-        border-top-right-radius: 0;
-    }
-
-    &:last-child {
-        border-bottom-right-radius: 0;
-    }
 }
 
 .o-toolbox_content {

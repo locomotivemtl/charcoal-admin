@@ -3,34 +3,33 @@
 // ==========================================================================
 
 .form-control.minicolors-input {
-    padding-left: $input-height-inner + $input-padding-y;
+    padding-left: calc(#{$input-line-height * 1em} + #{$input-padding-y * 2});
 
     + .minicolors-swatch {
-        top:    $input-padding-y;
-        left:   $input-padding-y;
-        width:  $input-height-inner - $input-padding-y;
-        height: $input-height-inner - $input-padding-y;
+        top:       $input-padding-y;
+        left:      $input-padding-y;
+        width:     $input-line-height * 1em;
+        height:    $input-line-height * 1em;
+        font-size: $input-font-size;
     }
 
     &.form-control-lg {
-        padding-left: $input-height-inner-lg + $input-padding-y-lg;
+        padding-left: calc(#{$input-line-height-lg * 1em} + #{$input-padding-y-lg * 2});
 
         + .minicolors-swatch {
-            top:    $input-padding-y-lg;
-            left:   $input-padding-y-lg;
-            width:  $input-height-inner-lg - $input-padding-y-lg;
-            height: $input-height-inner-lg - $input-padding-y-lg;
+            top:       $input-padding-y-lg;
+            left:      $input-padding-y-lg;
+            font-size: $input-font-size-lg;
         }
     }
 
     &.form-control-sm {
-        padding-left: $input-height-inner-sm + $input-padding-y-sm;
+        padding-left: calc(#{$input-line-height-sm * 1em} + #{$input-padding-y-sm * 2});
 
         + .minicolors-swatch {
-            top:    $input-padding-y-sm;
-            left:   $input-padding-y-sm;
-            width:  $input-height-inner-sm - $input-padding-y-sm;
-            height: $input-height-inner-sm - $input-padding-y-sm;
+            top:       $input-padding-y-sm;
+            left:      $input-padding-y-sm;
+            font-size: $input-font-size-sm;
         }
     }
 }

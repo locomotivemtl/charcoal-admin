@@ -107,15 +107,27 @@ class FileInput extends AbstractPropertyInput
     }
 
     /**
-     * Retrieving a comma-separated list of unique file type specifiers.
+     * Retrieve a comma-separated list of default file type specifiers.
+     *
+     * This method concatenates the file property's "acceptedMimetypes".
+     *
+     * @return string
+     */
+    public function getDefaultAccept()
+    {
+        $types = $this->property()['acceptedMimetypes'];
+        return implode(',', $types);
+    }
+
+    /**
+     * Retrieve a comma-separated list of unique file type specifiers.
      *
      * @return string
      */
     public function accept()
     {
         if ($this->accept === null) {
-            $types = $this->property()['acceptedMimetypes'];
-            return implode(',', $types);
+            return $this->getDefaultAccept();
         }
 
         return $this->accept;

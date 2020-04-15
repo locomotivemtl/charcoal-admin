@@ -11,6 +11,16 @@ use Charcoal\Admin\Property\Input\FileInput;
 class AudioInput extends FileInput
 {
     /**
+     * Retrieve list of default file type specifiers.
+     *
+     * @return string
+     */
+    public function getDefaultAccept()
+    {
+        return 'audio/*';
+    }
+
+    /**
      * @return string|null
      */
     public function filePreview()

@@ -14,6 +14,16 @@ class ImageInput extends FileInput
     use ImageAttributesTrait;
 
     /**
+     * Retrieve list of default file type specifiers.
+     *
+     * @return string
+     */
+    public function getDefaultAccept()
+    {
+        return 'image/*';
+    }
+
+    /**
      * @return string|null
      */
     public function filePreview()

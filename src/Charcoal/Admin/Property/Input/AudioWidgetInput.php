@@ -220,7 +220,7 @@ class AudioWidgetInput extends AudioInput
      */
     public function recorderPluginUrl()
     {
-        if (!$this->showFilePicker()) {
+        if (!$this->captureEnabled()) {
             return null;
         }
 
@@ -228,8 +228,10 @@ class AudioWidgetInput extends AudioInput
     }
 
     /**
-     * Necessary evil to render the audio recording plugin URL
-     * with the correct object model context.
+     * Render the recording plugin URL with the correct object model context.
+     *
+     * This method (a necessary evil) allows one to customize the URL
+     * without duplicating the template view.
      *
      * @see \Charcoal\Admin\Property\Input\FileInput::prepareFilePickerUrl()
      * @see \Charcoal\Admin\Property\Input\TinymceInput::prepareFilePickerUrl()
@@ -238,10 +240,6 @@ class AudioWidgetInput extends AudioInput
      */
     public function prepareRecorderPluginUrl()
     {
-        if ($this->recorderPluginUrl !== null) {
-            return null;
-        }
-
         $uri = 'assets/admin/scripts/vendors/recorderjs/recorder.js';
         $uri = '{{# withBaseUrl }}'.$uri.'{{/ withBaseUrl }}';
 

@@ -33,17 +33,11 @@ class ImageInput extends FileInput
      */
     protected function defaultChooseButtonLabel()
     {
-        return $this->translator()->translation('Choose Image…');
-    }
-
-    /**
-     * Retrieve the default label for the file removal button.
-     *
-     * @return \Charcoal\Translator\Translation|string|null
-     */
-    protected function defaultRemoveButtonLabel()
-    {
-        return $this->translator()->translation('Remove Image');
+        if ($this->property()['multiple']) {
+            return $this->translator()->translation('Choose image…');
+        } else {
+            return $this->translator()->translation('Choose images…');
+        }
     }
 
     /**

@@ -437,7 +437,11 @@ class FileInput extends AbstractPropertyInput
      */
     protected function defaultChooseButtonLabel()
     {
-        return $this->translator()->translation('Choose File…');
+        if ($this->property()['multiple']) {
+            return $this->translator()->translation('Choose file…');
+        } else {
+            return $this->translator()->translation('Choose files…');
+        }
     }
 
     /**
@@ -447,7 +451,11 @@ class FileInput extends AbstractPropertyInput
      */
     protected function defaultRemoveButtonLabel()
     {
-        return $this->translator()->translation('Remove File');
+        if ($this->property()['multiple']) {
+            return $this->translator()->translation('Clear selected file');
+        } else {
+            return $this->translator()->translation('Clear selected files');
+        }
     }
 
     /**

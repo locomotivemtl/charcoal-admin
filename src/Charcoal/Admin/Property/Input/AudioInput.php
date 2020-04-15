@@ -22,14 +22,4 @@ class AudioInput extends FileInput
 
         return '';
     }
-
-    /**
-     * Retrieve the default label for the file removal button.
-     *
-     * @return \Charcoal\Translator\Translation|string|null
-     */
-    protected function defaultRemoveButtonLabel()
-    {
-        return $this->translator()->translation('Remove Audio');
-    }
 }

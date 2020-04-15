@@ -20,20 +20,38 @@ Charcoal.Admin.Property_Input_Audio.prototype.constructor = Charcoal.Admin.Prope
 Charcoal.Admin.Property_Input_Audio.prototype.parent = Charcoal.Admin.Property.prototype;
 
 Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event) {
-    var audio, target, file, src;
+    this.$input.find('.hide-if-no-file').addClass('d-none');
+    this.$input.find('.show-if-no-file').removeClass('d-none');
 
-    audio = new File();
+    this.$previewText.empty();
+    this.$previewFile.empty();
 
-    target = event.dataTransfer || event.target;
-    file   = target && target.files && target.files[0];
-    src    = URL.createObjectURL(file);
+    if (event.target && event.target.files && event.target.files[0])  {
+        var reader, file;
 
-    audio.src = src;
+        file   = event.target.files[0];
+        reader = new FileReader();
 
-    this.$input.find('.hide-if-no-file').removeClass('d-none');
-    this.$input.find('.show-if-no-file').addClass('d-none');
-    this.$input.find('.form-control-plaintext').html(file);
-    this.$preview.empty().append(audio);
+        reader.addEventListener('loadend', (function () {
+            var audio = new Audio();
+
+            console.log('[Property_Input_Audio.change_file]', file);
+
+            audio.innerHTML = audioPropertyL10n.unsupportedElement;
+            audio.controls  = true;
+            audio.title     = file.name;
+            audio.src       = reader.result;
+            audio.load();
+
+            this.$input.find('.hide-if-no-file').removeClass('d-none');
+            this.$input.find('.show-if-no-file').addClass('d-none');
+
+            this.$previewFile.append(audio);
+            this.$previewText.html(file.name);
+        }).bind(this), false);
+
+        reader.readAsDataURL(file);
+    }
 };
 
 Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file/*, elf */) {
@@ -41,13 +59,24 @@ Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file
         this.dialog.close();
     }
 
-    if (file && file.url) {
-        var $audio = $('<audio controls src="' + file.url + '" class="js-file-audio">' + audioPropertyL10n.unsupportedElement + '</audio>');
+    this.$input.find('.hide-if-no-file').addClass('d-none');
+    this.$input.find('.show-if-no-file').removeClass('d-none');
 
+    this.$previewText.empty();
+    this.$previewFile.empty();
+
+    if (file && file.url) {
+        var path, $audio;
+
+        path    = decodeURI(file.url).replace(Charcoal.Admin.base_url(), '');
+        $audio = $('<audio controls src="' + file.url + '" class="js-file-audio">' + audioPropertyL10n.unsupportedElement + '</audio>');
+
+        console.log('[Property_Input_Audio.elfinder_callback]', file);
+
+        this.$hidden.val(path);
         this.$input.find('.hide-if-no-file').removeClass('d-none');
         this.$input.find('.show-if-no-file').addClass('d-none');
-        this.$input.find('.form-control-plaintext').html(file.name);
-        this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
-        this.$preview.empty().append($audio);
+        this.$previewText.html(file.name);
+        this.$previewFile.append($audio);
     }
 };

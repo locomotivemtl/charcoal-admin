@@ -19,20 +19,37 @@ Charcoal.Admin.Property_Input_Image.prototype.constructor = Charcoal.Admin.Prope
 Charcoal.Admin.Property_Input_Image.prototype.parent = Charcoal.Admin.Property.prototype;
 
 Charcoal.Admin.Property_Input_Image.prototype.change_file = function (event) {
-    var img, target, file, src;
+    this.$input.find('.hide-if-no-file').addClass('d-none');
+    this.$input.find('.show-if-no-file').removeClass('d-none');
 
-    img = new File();
+    this.$previewText.empty();
+    this.$previewFile.empty();
 
-    target = event.dataTransfer || event.target;
-    file   = target && target.files && target.files[0];
-    src    = URL.createObjectURL(file);
+    if (event.target && event.target.files && event.target.files[0])  {
+        var reader, file;
 
-    img.src = src;
+        file   = event.target.files[0];
+        reader = new FileReader();
 
-    this.$input.find('.hide-if-no-file').removeClass('d-none');
-    this.$input.find('.show-if-no-file').addClass('d-none');
-    this.$input.find('.form-control-plaintext').html(file);
-    this.$preview.empty().append(img);
+        reader.addEventListener('loadend', (function () {
+            var image = new Image();
+
+            console.log('[Property_Input_Image.change_file]', file);
+
+            image.style = 'max-width: 100%';
+            image.title = file.name;
+            image.src   = reader.result;
+            image.load();
+
+            this.$input.find('.hide-if-no-file').removeClass('d-none');
+            this.$input.find('.show-if-no-file').addClass('d-none');
+
+            this.$previewFile.append(image);
+            this.$previewText.html(file.name);
+        }).bind(this), false);
+
+        reader.readAsDataURL(file);
+    }
 };
 
 Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file/*, elf */) {
@@ -40,13 +57,24 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
         this.dialog.close();
     }
 
-    if (file && file.url) {
-        var $img = $('<img src="' + file.url + '" style="max-width: 100%">');
+    this.$input.find('.hide-if-no-file').addClass('d-none');
+    this.$input.find('.show-if-no-file').removeClass('d-none');
 
+    this.$previewText.empty();
+    this.$previewFile.empty();
+
+    if (file && file.url) {
+        var path, $image;
+
+        path    = decodeURI(file.url).replace(Charcoal.Admin.base_url(), '');
+        $image = $('<img src="' + file.url + '" style="max-width: 100%">');
+
+        console.log('[Property_Input_Image.elfinder_callback]', file);
+
+        this.$hidden.val(path);
         this.$input.find('.hide-if-no-file').removeClass('d-none');
         this.$input.find('.show-if-no-file').addClass('d-none');
-        this.$input.find('.form-control-plaintext').html(file.name);
-        this.$hidden.val(decodeURI(file.url).replace(Charcoal.Admin.base_url(), ''));
-        this.$preview.empty().append($img);
+        this.$previewText.html(file.name);
+        this.$previewFile.append($image);
     }
 };

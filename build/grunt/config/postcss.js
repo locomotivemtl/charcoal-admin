@@ -6,7 +6,9 @@ module.exports = function (grunt, options)
             processors: [
                 require('autoprefixer')(),
                 require('postcss-banner')({
-                    banner: grunt.template.process('! <%= package.title %> - <%= grunt.template.today("yyyy-mm-dd") %> ', { data: options })
+                    banner: grunt.template.process('<%= package.name %>', { data: options }),
+                    inline: true,
+                    important: true
                 })
             ]
         },

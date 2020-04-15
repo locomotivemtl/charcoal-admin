@@ -240,15 +240,30 @@ class AudioWidgetInput extends AudioInput
      */
     public function prepareRecorderPluginUrl()
     {
-        $uri = 'assets/admin/scripts/vendors/recorderjs/recorder.js';
-        $uri = '{{# withBaseUrl }}'.$uri.'{{/ withBaseUrl }}';
+        $uri = $this->getRecorderPluginUrlTemplate();
 
         return function ($noop, LambdaHelper $helper) use ($uri) {
             $uri = $helper->render($uri);
-            $this->recorderPluginUrl = $uri;
+            $this->setRecorderPluginUrl($uri);
 
             return null;
         };
+    }
+
+    /**
+     * Retrieve the elFinder connector URL template for rendering.
+     *
+     * This method is overriden to change the `callback` value to reflect
+     * the correct input control ID.
+     *
+     * @return string
+     */
+    protected function getRecorderPluginUrlTemplate()
+    {
+        $uri = 'assets/admin/scripts/vendors/recorderjs/recorder.js';
+        $uri = '{{# withBaseUrl }}'.$uri.'{{/ withBaseUrl }}';
+
+        return $uri;
     }
 
     /**
@@ -661,32 +676,19 @@ class AudioWidgetInput extends AudioInput
     }
 
     /**
-     * Necessary evil to render the file picker URL
-     * with the correct object model context.
+     * Retrieve the elFinder connector URL template for rendering.
      *
-     * @see \Charcoal\Admin\Property\Input\TinymceInput::prepareFilePickerUrl()
+     * This method is overriden to change the `callback` value to reflect
+     * the correct input control ID.
      *
-     * @return callable|null
+     * @return string
      */
-    public function prepareFilePickerUrl()
+    protected function getFilePickerUrlTemplate()
     {
-        if (!$this->showFilePicker()) {
-            return null;
-        }
-
-        //if ($this->filePickerUrl !== null) {
-        // return null;
-        //}
-
         $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ uploadInputId }}';
         $uri = '{{# withAdminUrl }}elfinder?'.$uri.'{{/ withAdminUrl }}';
 
-        return function ($noop, LambdaHelper $helper) use ($uri) {
-            $uri = $helper->render($uri);
-            $this->setFilePickerUrl($uri);
-
-            return null;
-        };
+        return $uri;
     }
 
     /**

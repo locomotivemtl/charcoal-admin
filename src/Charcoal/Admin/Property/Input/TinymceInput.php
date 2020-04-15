@@ -228,8 +228,10 @@ class TinymceInput extends TextareaInput
     }
 
     /**
-     * Necessary evil to render the file picker URL
-     * with the correct object model context.
+     * Render the file picker URL with the correct object model context.
+     *
+     * This method (a necessary evil) allows one to customize the URL
+     * without duplicating the template view.
      *
      * @see \Charcoal\Admin\Property\Input\FileInput::prepareFilePickerUrl()
      *
@@ -241,19 +243,27 @@ class TinymceInput extends TextareaInput
             return null;
         }
 
-        // if ($this->filePickerUrl !== null) {
-            // return null;
-        // }
-
-        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ inputId }}';
-        $uri = '{{# withAdminUrl }}elfinder?'.$uri.'{{/ withAdminUrl }}';
+        $uri = $this->getFilePickerUrlTemplate();
 
         return function ($noop, LambdaHelper $helper) use ($uri) {
             $uri = $helper->render($uri);
-            $this->filePickerUrl = $uri;
+            $this->setFilePickerUrl($uri);
 
             return null;
         };
+    }
+
+    /**
+     * Retrieve the elFinder connector URL template for rendering.
+     *
+     * @return string
+     */
+    protected function getFilePickerUrlTemplate()
+    {
+        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ p.ident }}&callback={{ inputId }}';
+        $uri = '{{# withAdminUrl }}elfinder?'.$uri.'{{/ withAdminUrl }}';
+
+        return $uri;
     }
 
     /**

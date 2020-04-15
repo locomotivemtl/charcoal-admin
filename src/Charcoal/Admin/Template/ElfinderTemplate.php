@@ -379,9 +379,10 @@ class ElfinderTemplate extends AdminTemplate
     }
 
     /**
-     * Necessary evil to render the elFinder connector URL with the correct object model context.
+     * Render the elFinder connector URL with the correct object model context.
      *
-     * This method allows one to customize the URL without duplicating the template view.
+     * This method (a necessary evil) allows one to customize the URL
+     * without duplicating the template view.
      *
      * @see \Charcoal\Admin\Property\Input\FileInput::prepareFilePickerUrl()
      *
@@ -389,15 +390,27 @@ class ElfinderTemplate extends AdminTemplate
      */
     public function prepareElfinderConnectorUrl()
     {
-        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ propertyIdent }}';
-        $uri = '{{# withAdminUrl }}elfinder-connector?'.$uri.'{{/ withAdminUrl }}';
+        $uri = $this->getElfinderConnectorUrlTemplate();
 
         return function ($noop, LambdaHelper $helper) use ($uri) {
             $uri = $helper->render($uri);
-            $this->elfinderConnectorUrl = $uri;
+            $this->setElfinderConnectorUrl($uri);
 
             return null;
         };
+    }
+
+    /**
+     * Retrieve the elFinder connector URL template for rendering.
+     *
+     * @return string
+     */
+    protected function getElfinderConnectorUrlTemplate()
+    {
+        $uri = 'obj_type={{ objType }}&obj_id={{ objId }}&property={{ propertyIdent }}';
+        $uri = '{{# withAdminUrl }}elfinder-connector?'.$uri.'{{/ withAdminUrl }}';
+
+        return $uri;
     }
 
     /**

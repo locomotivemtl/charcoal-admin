@@ -150,7 +150,6 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_upload = function () {
             id:   this.data.upload_input_id,
             type: component.property_type,
             data: {
-                file_input_id:   this.data.upload_input_id,
                 hidden_input_id: this.data.hidden_input_id,
                 input_name:      this.data.input_name,
                 dialog_title:    this.data.dialog_title,
@@ -177,8 +176,13 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init_capture = function () 
             return;
         }
 
-        if ((!component.property_class.is_recorder_available() && !this.data.recorder_plugin_url) || !this.data.hidden_input_id) {
-            console.error('[Property_Input_Audio_Widget]', 'Missing recorder library or hidden input');
+        if (!component.property_class.is_recorder_available() && !this.data.recorder_plugin_url) {
+            console.error('[Property_Input_Audio_Widget]', 'Missing recorder library');
+            return;
+        }
+
+        if (!this.data.hidden_input_id) {
+            console.error('[Property_Input_Audio_Widget]', 'Missing hidden input');
             return;
         }
 

@@ -12,6 +12,7 @@ use Charcoal\Property\ModelStructureProperty;
 use Charcoal\Property\PropertyInterface;
 
 // From 'charcoal-ui'
+use Charcoal\Ui\ConditionalizableInterface;
 use Charcoal\Ui\FormGroup\AbstractFormGroup;
 use Charcoal\Ui\FormGroup\FormGroupInterface;
 use Charcoal\Ui\FormInput\FormInputInterface;
@@ -514,6 +515,12 @@ class StructureFormGroup extends FormGroupWidget implements
      */
     public function formProperties()
     {
+        if ($this instanceof ConditionalizableInterface) {
+            if ($this->condition() !== null && !$this->resolvedCondition()) {
+                return [];
+            }
+        }
+
         $this->finalizeStructure();
 
         $store = $this->storageProperty();

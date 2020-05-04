@@ -277,7 +277,7 @@ class TagsInput extends AbstractSelectableInput
         ];
 
         if ($prop instanceof ObjectProperty) {
-            if ($prop->objType()) {
+            if ($prop['objType']) {
                 $data['pattern']  = $prop['pattern'];
                 $data['obj_type'] = $prop['objType'];
             }
@@ -355,6 +355,15 @@ class TagsInput extends AbstractSelectableInput
         return $this;
     }
 
+    /**
+     * Get the collection loader.
+     *
+     * @return CollectionLoader
+     */
+    private function collectionLoader()
+    {
+        return $this->collectionLoader;
+    }
 
     /**
      * Convert the given value into selectize picker choices.
@@ -378,7 +387,7 @@ class TagsInput extends AbstractSelectableInput
             $prop = $this->property();
             $val = $prop->parseVal($val);
 
-            if (!$prop->multiple()) {
+            if (!$prop['multiple']) {
                 $val = (array)$val;
             }
 

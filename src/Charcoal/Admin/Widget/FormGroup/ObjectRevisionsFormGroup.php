@@ -12,6 +12,9 @@ use Charcoal\Model\ModelFactoryTrait;
 use Charcoal\Admin\Ui\ObjectRevisionsInterface;
 use Charcoal\Admin\Ui\ObjectRevisionsTrait;
 
+// From 'charcoal-ui'
+use Charcoal\Admin\Ui\ObjectContainerInterface;
+
 // From 'locomotivemtl/charcoal-ui'
 use Charcoal\Ui\FormGroup\AbstractFormGroup;
 
@@ -71,6 +74,7 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup implements
         return parent::active() && $this->objType() && $this->objId();
     }
 
+
     /**
      * Retrieve the object type to be revised.
      *
@@ -78,12 +82,13 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup implements
      */
     public function objType()
     {
-        if ($this->objType === null) {
-            $this->objType = filter_input(INPUT_GET, 'obj_type', FILTER_SANITIZE_STRING);
+        if ($this->objType === null && $this->form() instanceof ObjectContainerInterface) {
+            $this->objType = $this->form()->objType();
         }
 
         return $this->objType;
     }
+
 
     /**
      * Retrieve the object ID to be revised.
@@ -92,8 +97,8 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup implements
      */
     public function objId()
     {
-        if ($this->objId === null) {
-            $this->objId = filter_input(INPUT_GET, 'obj_id', FILTER_SANITIZE_STRING);
+        if ($this->objId === null && $this->form() instanceof ObjectContainerInterface) {
+            $this->objId = $this->form()->objId();
         }
 
         return $this->objId;
@@ -110,5 +115,8 @@ class ObjectRevisionsFormGroup extends AbstractFormGroup implements
         parent::setDependencies($container);
 
         $this->setModelFactory($container['model/factory']);
+
+        $this->objType = $container['request']->getParam('obj_type');
+        $this->objId = $container['request']->getParam('obj_id');
     }
 }

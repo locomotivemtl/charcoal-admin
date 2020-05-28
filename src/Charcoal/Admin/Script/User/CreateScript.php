@@ -78,7 +78,7 @@ class CreateScript extends AdminScript implements
                 'longPrefix'  => 'roles',
                 'description' => 'The user role'
             ],
-            'display_name' => [
+            'displayName' => [
                 'prefix'      => 'n',
                 'longPrefix'  => 'name',
                 'description' => 'The user display name'
@@ -186,9 +186,9 @@ class CreateScript extends AdminScript implements
                 'property'   => $climate->arguments->get('roles'),
                 'validation' => null,
             ],
-            'display_name' => [
+            'displayName' => [
                 'label'      => $translator->translate('Please enter a name: '),
-                'property'   => $climate->arguments->get('display_name'),
+                'property'   => $climate->arguments->get('displayName'),
                 'validation' => null,
             ],
         ];

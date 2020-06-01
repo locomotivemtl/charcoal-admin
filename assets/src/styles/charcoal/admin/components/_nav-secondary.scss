@@ -59,7 +59,7 @@
     }
 
     flex: 1 1 0;
-    overflow-y: scroll;
+    overflow-y: auto;
 
     .has-nav-open & {
         transform: translateX(0%);

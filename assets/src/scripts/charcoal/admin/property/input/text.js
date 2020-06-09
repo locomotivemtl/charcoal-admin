@@ -504,3 +504,7 @@ Charcoal.Admin.Property_Input_Text.prototype.set_split_on = function (splitOn) {
     this.split_on = splitOn;
     return this;
 };
+
+Charcoal.Admin.Property_Input_Text.prototype.destroy()
+{
+}

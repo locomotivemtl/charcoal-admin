@@ -3,6 +3,12 @@
  * Property_Input_Geometry_Widget Javascript class
  *
  */
+
+const EVENT_NAMESPACE = 'geolocation';
+const EVENT = {
+    GOOGLE_MAP_LOADED: `google-map-loaded.${EVENT_NAMESPACE}`
+};
+
 Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     // Input type
     data.input_type = 'charcoal/admin/property/input/geometry-widget';
@@ -18,22 +24,29 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     this._object_inc = 0;
     this._startGeometry = false;
 
-    setTimeout(function () {
-        if (typeof google === 'undefined') {
-            // If google is undefined,
-            window._tmp_google_onload_function = function () {
-                that.init();
-            };
+    this._map_options = data.data.map_options;
+    // Never send multiple true to BB gmap
+    this._map_options.multiple = false;
 
+    if (typeof google === 'undefined') {
+        if (window._geolocation_tmp_google !== true) {
+            window._geolocation_tmp_google = true;
             $.getScript(
                 'https://maps.googleapis.com/maps/api/js?sensor=false' +
-                '&callback=_tmp_google_onload_function&key=' + data.data.map_options.api_key,
+                '&callback=_geolocation_tmp_google_onload_function&key=' + this._map_options.api_key,
                 function () {}
             );
-        } else {
-            that.init();
+
+            // If google is undefined,
+            window._geolocation_tmp_google_onload_function = function () {
+                document.dispatchEvent(new Event(EVENT.GOOGLE_MAP_LOADED));
+            };
         }
-    }, 2000);
+
+        document.addEventListener(EVENT.GOOGLE_MAP_LOADED, (e) => {
+            this.init();
+        }, { once: true })
+    }
 
 };
 
@@ -61,7 +74,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function () {
     var default_styles = this.default_styles();
     var map_options = this.default_map_options();
 
-    map_options = $.extend(true, map_options, _data.data);
+    map_options = $.extend(true, map_options, this._map_options);
 
     // Get current map state from DB
     // This is located in the hidden input
@@ -226,7 +239,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry 
             var default_styles = that.default_styles();
             var map_options = that.default_map_options();
 
-            map_options = $.extend(true, map_options, that.data.data);
+            map_options = $.extend(true, map_options, that._map_options);
 
             var object1  = {
                 paths:     that.reverse_translate_coords(geometry),

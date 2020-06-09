@@ -8159,7 +8159,21 @@ Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
     this.data    = opts.data;
     this.data.id = this.opts.id;
 
+    // Navigation
+    this.active_pane = this.data.active_pane || 'text';
+
+    this.init();
+};
+
+Charcoal.Admin.Property_Input_Audio_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Audio_Widget;
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
+
+Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function () {
+    var $el = this.element();
+
     // Properties for each audio type
+    // Since all components can be destroyed, we need to make sure they're initialized with the widget.
     this.text_component    = {
         enabled:        false,
         property:       null,
@@ -8179,19 +8193,6 @@ Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
         property_class: Charcoal.Admin.Property_Input_Audio
     };
 
-    // Navigation
-    this.active_pane = this.data.active_pane || 'text';
-
-    this.init();
-};
-
-Charcoal.Admin.Property_Input_Audio_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Audio_Widget;
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
-
-Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function () {
-    var $el = this.element();
-
     this.$input_text   = $('#' + this.data.text_input_id).or('.js-text-voice-message', $el);
     this.$input_file   = $('#' + this.data.upload_input_id).or('.js-file-input', $el);
     this.$input_hidden = $('#' + this.data.hidden_input_id).or('.js-file-input-hidden', $el);
@@ -8203,6 +8204,9 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function () {
     this.bind_events();
 
     if (this.active_pane) {
+        // This ensures the current pane is initialized even if it's already showing.
+        // It fixes an issue with AdminManager::render()
+        this.init_pane($('#' + this.data.id + '_' + this.active_pane + '_tab'));
         $('#' + this.data.id + '_' + this.active_pane + '_tab').tab('show');
     }
 };
@@ -8369,14 +8373,17 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
 
     if (this.text_component.property) {
         this.text_component.property.destroy();
+        Charcoal.Admin.manager().remove_component('property_inputs', this.text_component.property);
     }
 
     if (this.upload_component.property) {
         this.upload_component.property.destroy();
+        Charcoal.Admin.manager().remove_component('property_inputs', this.upload_component.property);
     }
 
     if (this.capture_component.property) {
         this.capture_component.property.destroy();
+        Charcoal.Admin.manager().remove_component('property_inputs', this.capture_component.property);
     }
 };
 ;/* globals audioPropertyL10n */

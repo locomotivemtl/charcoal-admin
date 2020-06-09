@@ -3,12 +3,6 @@
  * Property_Input_Geometry_Widget Javascript class
  *
  */
-
-const EVENT_NAMESPACE = 'geolocation';
-const EVENT = {
-    GOOGLE_MAP_LOADED: `google-map-loaded.${EVENT_NAMESPACE}`
-};
-
 Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     // Input type
     data.input_type = 'charcoal/admin/property/input/geometry-widget';
@@ -28,6 +22,11 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     // Never send multiple true to BB gmap
     this._map_options.multiple = false;
 
+    var EVENT_NAMESPACE = 'geolocation';
+    var EVENT = {
+        GOOGLE_MAP_LOADED: 'google-map-loaded.' + EVENT_NAMESPACE
+    };
+
     if (typeof google === 'undefined') {
         if (window._geolocation_tmp_google !== true) {
             window._geolocation_tmp_google = true;
@@ -43,8 +42,8 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
             };
         }
 
-        document.addEventListener(EVENT.GOOGLE_MAP_LOADED, (e) => {
-            this.init();
+        document.addEventListener(EVENT.GOOGLE_MAP_LOADED, function () {
+            that.init();
         }, { once: true })
     }
 

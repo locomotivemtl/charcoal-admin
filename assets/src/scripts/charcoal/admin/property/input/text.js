@@ -505,6 +505,5 @@ Charcoal.Admin.Property_Input_Text.prototype.set_split_on = function (splitOn) {
     return this;
 };
 
-Charcoal.Admin.Property_Input_Text.prototype.destroy()
-{
+Charcoal.Admin.Property_Input_Text.prototype.destroy = function () {
 }

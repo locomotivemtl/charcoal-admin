@@ -36,6 +36,7 @@ Charcoal.Admin.Widget = function (opts) {
     this._widget_id;
     this._widget_type;
     /* jshint ignore:end */
+    this._suppress_feedback = false;
 
     if (opts.widget_id) {
         this._widget_id = opts.widget_id;
@@ -43,6 +44,10 @@ Charcoal.Admin.Widget = function (opts) {
 
     if (opts.widget_type) {
         this._widget_type = opts.widget_type;
+    }
+
+    if ('suppress_feedback' in opts) {
+        this._suppress_feedback = opts.suppress_feedback;
     }
 
     return this;
@@ -71,6 +76,18 @@ Charcoal.Admin.Widget.prototype.widget_type = function () {
  */
 Charcoal.Admin.Widget.prototype.widget_options = function () {
     return this.opts();
+};
+
+Charcoal.Admin.Widget.prototype.suppress_feedback = function (flag) {
+    if (arguments.length) {
+        if (typeof flag === 'boolean') {
+            this._suppress_feedback = flag;
+        } else {
+            throw new TypeError('Must be a boolean, received ' + (typeof flag));
+        }
+    }
+
+    return this._suppress_feedback || false;
 };
 
 /**

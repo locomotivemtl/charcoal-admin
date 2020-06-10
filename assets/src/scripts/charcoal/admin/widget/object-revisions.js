@@ -106,7 +106,7 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.request_failed = Charcoal.Admin
 Charcoal.Admin.Widget_Object_Revisions.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
 
 Charcoal.Admin.Widget_Object_Revisions.prototype.request_success = function ($form, $trigger, response/* ... */) {
-    if (response.feedbacks && !this.suppress_feedback) {
+    if (response.feedbacks && !this.suppress_feedback()) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 

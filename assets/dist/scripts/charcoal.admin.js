@@ -2102,12 +2102,12 @@ Charcoal.Admin = (function () {
         var grouped = this.getMessagesMap();
 
         for (key in grouped) {
-            level       = this.level(key);
+            level   = this.level(key);
             buttons = [];
             if (this.actions.length) {
                 for (var action, k = 0; k < this.actions.length; k++) {
                     action = this.actions[k];
-                    action = $.extend(action,{
+                    action = $.extend(action, {
                         label:  action.label,
                         action: action.callback
                     });
@@ -2620,6 +2620,7 @@ Charcoal.Admin.Widget = function (opts) {
     this._widget_id;
     this._widget_type;
     /* jshint ignore:end */
+    this._suppress_feedback = false;
 
     if (opts.widget_id) {
         this._widget_id = opts.widget_id;
@@ -2627,6 +2628,10 @@ Charcoal.Admin.Widget = function (opts) {
 
     if (opts.widget_type) {
         this._widget_type = opts.widget_type;
+    }
+
+    if ('suppress_feedback' in opts) {
+        this._suppress_feedback = opts.suppress_feedback;
     }
 
     return this;
@@ -2655,6 +2660,18 @@ Charcoal.Admin.Widget.prototype.widget_type = function () {
  */
 Charcoal.Admin.Widget.prototype.widget_options = function () {
     return this.opts();
+};
+
+Charcoal.Admin.Widget.prototype.suppress_feedback = function (flag) {
+    if (arguments.length) {
+        if (typeof flag === 'boolean') {
+            this._suppress_feedback = flag;
+        } else {
+            throw new TypeError('Must be a boolean, received ' + (typeof flag));
+        }
+    }
+
+    return this._suppress_feedback || false;
 };
 
 /**
@@ -3657,7 +3674,6 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.form_selector     = null;
     this.form_working      = false;
     this.submitted_via     = null;
-    this.suppress_feedback = false;
     this.is_new_object     = false;
     this.xhr               = null;
     this.useDefaultAction  = false;
@@ -4054,7 +4070,7 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
     }
 
     if (!this.useDefaultAction && this.is_new_object) {
-        this.suppress_feedback = true;
+        this.suppress_feedback(true);
 
         if (response.next_url) {
             window.location.href = Charcoal.Admin.admin_url() + response.next_url;
@@ -4099,14 +4115,16 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function ($form, $trigger,
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_complete = function ($form, $trigger/*, .... */) {
-    if (!this.suppress_feedback) {
+    if (!this.suppress_feedback()) {
         Charcoal.Admin.feedback().dispatch();
         this.enable_form($form, $trigger);
     }
 
     this.submitted_via = null;
 
-    this.form_working = this.is_new_object = this.suppress_feedback = false;
+    this.suppress_feedback(false);
+
+    this.form_working = this.is_new_object = false;
 };
 
 /**
@@ -4311,7 +4329,7 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
                     },
                     // Complete
                     function () {
-                        if (!that.suppress_feedback) {
+                        if (!that.suppress_feedback()) {
                             Charcoal.Admin.feedback().dispatch();
                         }
                     }
@@ -4641,7 +4659,7 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.request_failed = Charcoal.Admin
 Charcoal.Admin.Widget_Object_Revisions.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
 
 Charcoal.Admin.Widget_Object_Revisions.prototype.request_success = function ($form, $trigger, response/* ... */) {
-    if (response.feedbacks && !this.suppress_feedback) {
+    if (response.feedbacks && !this.suppress_feedback()) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 
@@ -4678,7 +4696,6 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
 
     this.group_conditions = opts.data.group_conditions;
     this.form_working = false;
-    this.suppress_feedback = opts.suppress_feedback || false;
     this.is_new_object = false;
     this.xhr = null;
     this.obj_id = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
@@ -4903,7 +4920,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_failed = Charcoal.Admin.Widge
 Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */) {
-    if (response.feedbacks && !this.suppress_feedback) {
+    if (response.feedbacks && !this.suppress_feedback()) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 

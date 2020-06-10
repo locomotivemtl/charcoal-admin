@@ -370,12 +370,12 @@
         var grouped = this.getMessagesMap();
 
         for (key in grouped) {
-            level       = this.level(key);
+            level   = this.level(key);
             buttons = [];
             if (this.actions.length) {
                 for (var action, k = 0; k < this.actions.length; k++) {
                     action = this.actions[k];
-                    action = $.extend(action,{
+                    action = $.extend(action, {
                         label:  action.label,
                         action: action.callback
                     });

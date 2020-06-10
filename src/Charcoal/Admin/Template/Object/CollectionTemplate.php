@@ -30,6 +30,20 @@ class CollectionTemplate extends AdminTemplate implements
     use DashboardContainerTrait;
 
     /**
+     * The search widget instance.
+     *
+     * @var SearchWidget
+     */
+    protected $searchWidget;
+
+    /**
+     * Tracks whether the search widget was processed.
+     *
+     * @var boolean
+     */
+    protected $didSearchWidget = false;
+
+    /**
      * @param RequestInterface $request PSR-7 request.
      * @return boolean
      */
@@ -54,22 +68,59 @@ class CollectionTemplate extends AdminTemplate implements
     }
 
     /**
-     * Sets the search widget accodingly
-     * Uses the "default_search_list" ident that should point
-     * on ident in the "lists"
+     * Retrieve the search widget, if available,
      *
-     * @return \Charcoal\Admin\Widget\SearchWidget
+     * Uses the "default_search_list" ident that should point
+     * on ident in the "lists".
+     *
+     * @return SearchWidget|null
      */
     public function searchWidget()
     {
-        $widget = $this->widgetFactory()->create(SearchWidget::class);
-        $widget->setObjType($this->objType());
+        if ($this->searchWidget === null && $this->didSearchWidget === false) {
+            $this->searchWidget    = $this->createSearchWidget();
+            $this->didSearchWidget = true;
+        }
 
-        $listIdent = $this->metadataListIdent();
+        return $this->searchWidget;
+    }
+
+    /**
+     * Create the search widget.
+     *
+     * @return SearchWidget|null
+     */
+    protected function createSearchWidget()
+    {
+        $config = $this->dashboardConfig();
+
+        if (isset($config['search']) && $config['search'] === false) {
+            return null;
+        }
+
+        if (isset($config['search'])) {
+            if ($config['search'] === false) {
+                return null;
+            }
+
+            $widgetData = $config['search'];
+        } else {
+            $widgetData = [];
+        }
+
+        if (isset($widgetData['type'])) {
+            $widgetType = $widgetData['type'];
+        } else {
+            $widgetType = SearchWidget::class;
+        }
+
+        $widget = $this->widgetFactory()->create($widgetType);
+        $widget->setObjType($this->objType());
+        $widget->setData($widgetData);
 
         // Note that if the ident doesn't match a list,
         // it will return basicly every properties of the object
-        $widget->setCollectionIdent($listIdent);
+        $widget->setCollectionIdent($this->metadataListIdent());
 
         return $widget;
     }

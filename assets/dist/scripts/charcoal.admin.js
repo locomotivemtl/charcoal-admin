@@ -2727,35 +2727,70 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
         url:         url,
         data:        JSON.stringify(data),
         dataType:    'json',
-        contentType: 'application/json',
-        success: function (response) {
-            if (typeof response.widget_id === 'string') {
-                var wid = response.widget_id;
-                that.set_id(wid);
-                that.add_opts('id', wid);
-                that.add_opts('widget_id', wid);
-
-                if (with_data) {
-                    that.add_opts('data', response.widget_data);
-                }
-
-                that.widget_id = wid;
-                that.anim_out(function () {
-                    that.element().replaceWith(response.widget_html);
-                    that.set_element($('#' + that.id()));
-
-                    // Pure dompe.
-                    that.element().removeClass('is-loading');
-                    that.element().hide().fadeIn();
-                    that.init();
-                    // Callback
-                    if (typeof callback === 'function') {
-                        callback.call(that, response);
-                    }
-                });
-            }
-        }
+        contentType: 'application/json'
     });
+
+    var success, failure, complete;
+
+    success = function (response) {
+        if (typeof response.widget_id !== 'string') {
+            response.feedbacks.push({
+                level: 'error',
+                message: widgetL10n.loadingFailed
+            });
+
+            failure.call(this, response);
+            return;
+        }
+
+        var wid = response.widget_id;
+        that.set_id(wid);
+        that.add_opts('id', wid);
+        that.add_opts('widget_id', wid);
+
+        if (with_data) {
+            that.add_opts('data', response.widget_data);
+        }
+
+        that.widget_id = wid;
+        that.anim_out(function () {
+            that.element().replaceWith(response.widget_html);
+            that.set_element($('#' + that.id()));
+
+            // Pure dompe.
+            that.element().removeClass('is-loading');
+            that.element().hide().fadeIn();
+            that.init();
+            // Callback
+            if (typeof callback === 'function') {
+                callback.call(that, response);
+            }
+        });
+    };
+
+    failure = function (response) {
+        if (response.feedbacks.length) {
+            Charcoal.Admin.feedback(response.feedbacks);
+        } else {
+            Charcoal.Admin.feedback([ {
+                level:   'error',
+                message: widgetL10n.loadingFailed
+            } ]);
+        }
+    };
+
+    complete = function () {
+        if (!that.suppress_feedback()) {
+            Charcoal.Admin.feedback().dispatch();
+        }
+    };
+
+    Charcoal.Admin.resolveSimpleJsonXhr(
+        this.reloadXHR,
+        success,
+        failure,
+        complete
+    );
 
     return this;
 };

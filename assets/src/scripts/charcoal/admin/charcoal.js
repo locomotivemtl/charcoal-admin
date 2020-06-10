@@ -468,6 +468,12 @@ Charcoal.Admin = (function () {
             jqxhr.done(function (response, status, jqxhr) {
                 response = $.extend({ success: true, feedbacks: [] }, response);
 
+                if (response.feedbacks.length === 0 && response.message) {
+                    response.feedbacks = Array.isArray(response.message)
+                        ? response.message
+                        : [ { level: 'notice', message: response.message } ];
+                }
+
                 /**
                  * Fires when the request succeeds.
                  *

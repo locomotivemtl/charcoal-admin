@@ -755,8 +755,9 @@ Charcoal.Admin = (function () {
      * Note: This decorator expects the data type to be 'json'.
      *
      * This function will handle all nitty gritty of processing a promise,
-     * resolving false positives (such as a successful HTTP response containing an unsuccessful body),
-     * and chaining the developer's given callbacks.
+     * resolving false positives (such as a successful HTTP response
+     * containing an unsuccessful body), running the appropriate callback
+     * without affecting its context, and providing a standard response format.
      *
      * @param  {jqXHR}        jqxhr      - A jqXHR object.
      * @param  {simpleDone}   [success]  - A function to be called if the request succeeds.
@@ -770,6 +771,12 @@ Charcoal.Admin = (function () {
         if (typeof success === 'function') {
             jqxhr.done(function (response, status, jqxhr) {
                 response = $.extend({ success: true, feedbacks: [] }, response);
+
+                if (response.feedbacks.length === 0 && response.message) {
+                    response.feedbacks = Array.isArray(response.message)
+                        ? response.message
+                        : [ { level: 'notice', message: response.message } ];
+                }
 
                 /**
                  * Fires when the request succeeds.

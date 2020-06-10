@@ -14,9 +14,6 @@ Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
     this.data    = opts.data;
     this.data.id = opts.id;
 
-    // Navigation
-    this.active_pane = this.data.active_pane || 'text';
-
     this.init();
 };
 
@@ -47,6 +44,9 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.init = function () {
         property_type:  'charcoal/admin/property/input/audio',
         property_class: Charcoal.Admin.Property_Input_Audio
     };
+
+    // Navigation
+    this.active_pane = this.data.active_pane || 'text';
 
     this.$input_text   = $('#' + this.data.text_input_id).or('.js-text-voice-message', $el);
     this.$input_file   = $('#' + this.data.upload_input_id).or('.js-file-input', $el);
@@ -228,16 +228,13 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
 
     if (this.text_component.property) {
         this.text_component.property.destroy();
-        Charcoal.Admin.manager().remove_component('property_inputs', this.text_component.property);
     }
 
     if (this.upload_component.property) {
         this.upload_component.property.destroy();
-        Charcoal.Admin.manager().remove_component('property_inputs', this.upload_component.property);
     }
 
     if (this.capture_component.property) {
         this.capture_component.property.destroy();
-        Charcoal.Admin.manager().remove_component('property_inputs', this.capture_component.property);
     }
 };

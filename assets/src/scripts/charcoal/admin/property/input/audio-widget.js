@@ -11,9 +11,8 @@ Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
 
     Charcoal.Admin.Property.call(this, opts);
 
-    this.opts    = opts;
     this.data    = opts.data;
-    this.data.id = this.opts.id;
+    this.data.id = opts.id;
 
     // Navigation
     this.active_pane = this.data.active_pane || 'text';

@@ -9,9 +9,8 @@ Charcoal.Admin.Property_Input_Range = function (opts) {
 
     this.input_type = 'charcoal/admin/property/input/range';
 
-    this.opts    = opts;
     this.data    = opts.data;
-    this.data.id = this.opts.id;
+    this.data.id = opts.id;
 
     this.$output = null;
     this.$input  = null;

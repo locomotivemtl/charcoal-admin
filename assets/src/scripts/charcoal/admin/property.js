@@ -15,7 +15,6 @@ Charcoal.Admin.Property = function (opts) {
     this._ident;
     this._val;
     this._input_type;
-    this.data;
     /* jshint ignore:end */
 
     if (opts) {
@@ -30,8 +29,6 @@ Charcoal.Admin.Property = function (opts) {
         if (typeof opts.input_type !== 'undefined') {
             this.set_input_type(opts.input_type);
         }
-
-        this.data = opts;
     }
 
     return this;

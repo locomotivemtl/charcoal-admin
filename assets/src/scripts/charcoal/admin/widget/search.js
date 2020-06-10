@@ -27,7 +27,7 @@ Charcoal.Admin.Widget_Search = function (opts) {
         return false;
     }
 
-    this.opts   = opts;
+    this.data   = opts.data;
     this.$input = null;
 
     return this;
@@ -110,7 +110,7 @@ Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
     query = query.trim();
     if (query) {
         words = query.split(/\s/);
-        props = this.opts.data.properties || [];
+        props = this.data.properties || [];
         $.each(words, function (i, word) {
             sub_filters = [];
             $.each(props, function (j, prop) {

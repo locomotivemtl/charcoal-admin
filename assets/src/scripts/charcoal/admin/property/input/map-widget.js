@@ -47,7 +47,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
         return false;
     }
 
-    var _data = this.data;
+    var _data = this.opts();
 
     // Shouldn't happen at that point
     if (typeof _data.id === 'undefined') {
@@ -148,7 +148,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
 
     var key = 'object';
 
-    this.element().on('change', '[name="' + this.data.controls_name + '"]', function (event) {
+    this.element().on('change', '[name="' + this.opts('controls_name') + '"]', function (event) {
         var type = $(event.currentTarget).val();
         switch (type) {
             case 'display_marker_toolbar':

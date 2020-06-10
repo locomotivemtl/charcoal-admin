@@ -5314,7 +5314,7 @@ Charcoal.Admin.Widget_Search = function (opts) {
         return false;
     }
 
-    this.opts   = opts;
+    this.data   = opts.data;
     this.$input = null;
 
     return this;
@@ -5397,7 +5397,7 @@ Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
     query = query.trim();
     if (query) {
         words = query.split(/\s/);
-        props = this.opts.data.properties || [];
+        props = this.data.properties || [];
         $.each(words, function (i, word) {
             sub_filters = [];
             $.each(props, function (j, prop) {
@@ -5664,7 +5664,6 @@ Charcoal.Admin.Property = function (opts) {
     this._ident;
     this._val;
     this._input_type;
-    this.data;
     /* jshint ignore:end */
 
     if (opts) {
@@ -5679,8 +5678,6 @@ Charcoal.Admin.Property = function (opts) {
         if (typeof opts.input_type !== 'undefined') {
             this.set_input_type(opts.input_type);
         }
-
-        this.data = opts;
     }
 
     return this;
@@ -5797,11 +5794,10 @@ Charcoal.Admin.Property_Input_File = function (opts) {
     Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/file';
 
-    this.opts   = opts;
     this.data   = opts.data;
     this.dialog = null;
 
-    this.set_input_id(this.opts.id).init();
+    this.set_input_id(opts.id).init();
 };
 
 Charcoal.Admin.Property_Input_File.prototype = Object.create(Charcoal.Admin.Property.prototype);
@@ -6093,7 +6089,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function () {
         Admin.Property.call(this, opts);
 
         this.data    = opts.data;
-        this.data.id = this.opts.id;
+        this.data.id = opts.id;
 
         this.readyState  = PropState.IDLE;
         this.mediaMode   = MediaMode.IDLE;
@@ -8267,9 +8263,8 @@ Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
 
     Charcoal.Admin.Property.call(this, opts);
 
-    this.opts    = opts;
     this.data    = opts.data;
-    this.data.id = this.opts.id;
+    this.data.id = opts.id;
 
     // Navigation
     this.active_pane = this.data.active_pane || 'text';
@@ -8508,11 +8503,10 @@ Charcoal.Admin.Property_Input_Audio = function (opts) {
     this.input_type = 'charcoal/admin/property/input/audio';
     Charcoal.Admin.Property.call(this, opts);
 
-    this.opts   = opts;
     this.data   = opts.data;
     this.dialog = null;
 
-    this.set_input_id(this.opts.id).init();
+    this.set_input_id(opts.id).init();
 };
 
 Charcoal.Admin.Property_Input_Audio.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
@@ -9157,11 +9151,10 @@ Charcoal.Admin.Property_Input_Image = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
 
-    this.opts   = opts;
     this.data   = opts.data;
     this.dialog = null;
 
-    this.set_input_id(this.opts.id).init();
+    this.set_input_id(opts.id).init();
 };
 
 Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
@@ -9277,7 +9270,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
         return false;
     }
 
-    var _data = this.data;
+    var _data = this.opts();
 
     // Shouldn't happen at that point
     if (typeof _data.id === 'undefined') {
@@ -9378,7 +9371,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
 
     var key = 'object';
 
-    this.element().on('change', '[name="' + this.data.controls_name + '"]', function (event) {
+    this.element().on('change', '[name="' + this.opts('controls_name') + '"]', function (event) {
         var type = $(event.currentTarget).val();
         switch (type) {
             case 'display_marker_toolbar':
@@ -9497,9 +9490,8 @@ Charcoal.Admin.Property_Input_Range = function (opts) {
 
     this.input_type = 'charcoal/admin/property/input/range';
 
-    this.opts    = opts;
     this.data    = opts.data;
-    this.data.id = this.opts.id;
+    this.data.id = opts.id;
 
     this.$output = null;
     this.$input  = null;
@@ -11005,11 +10997,11 @@ Charcoal.Admin.Property_Input_Text = function (opts) {
     Charcoal.Admin.Property.call(this, opts);
 
     this.input_type = 'charcoal/admin/property/input/text';
-    this.opts       = opts;
-    this.data       = opts.data;
+
+    this.data = opts.data;
 
     // Required
-    this.set_input_id(this.opts.id);
+    this.set_input_id(opts.id);
 
     // Dispatches the data
     this.set_data(this.data);

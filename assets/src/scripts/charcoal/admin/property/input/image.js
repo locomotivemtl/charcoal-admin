@@ -7,11 +7,10 @@ Charcoal.Admin.Property_Input_Image = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
 
-    this.opts   = opts;
     this.data   = opts.data;
     this.dialog = null;
 
-    this.set_input_id(this.opts.id).init();
+    this.set_input_id(opts.id).init();
 };
 
 Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);

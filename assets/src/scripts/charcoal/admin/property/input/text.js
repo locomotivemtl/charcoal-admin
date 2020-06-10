@@ -12,11 +12,11 @@ Charcoal.Admin.Property_Input_Text = function (opts) {
     Charcoal.Admin.Property.call(this, opts);
 
     this.input_type = 'charcoal/admin/property/input/text';
-    this.opts       = opts;
-    this.data       = opts.data;
+
+    this.data = opts.data;
 
     // Required
-    this.set_input_id(this.opts.id);
+    this.set_input_id(opts.id);
 
     // Dispatches the data
     this.set_data(this.data);

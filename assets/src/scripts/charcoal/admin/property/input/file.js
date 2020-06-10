@@ -7,11 +7,10 @@ Charcoal.Admin.Property_Input_File = function (opts) {
     Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/file';
 
-    this.opts   = opts;
     this.data   = opts.data;
     this.dialog = null;
 
-    this.set_input_id(this.opts.id).init();
+    this.set_input_id(opts.id).init();
 };
 
 Charcoal.Admin.Property_Input_File.prototype = Object.create(Charcoal.Admin.Property.prototype);

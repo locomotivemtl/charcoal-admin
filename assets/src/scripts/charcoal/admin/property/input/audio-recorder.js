@@ -144,7 +144,7 @@
         Admin.Property.call(this, opts);
 
         this.data    = opts.data;
-        this.data.id = this.opts.id;
+        this.data.id = opts.id;
 
         this.readyState  = PropState.IDLE;
         this.mediaMode   = MediaMode.IDLE;

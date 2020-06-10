@@ -564,7 +564,7 @@ Charcoal.Admin.Widget_Form.prototype.request_url = function () {
 };
 
 /**
- * Handle the "delete" button / action.
+ * Handle the "revision" button / action.
  */
 Charcoal.Admin.Widget_Form.prototype.view_revision = function (/* form */) {
     var type = this.obj_type,
@@ -627,6 +627,18 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
         (params.has('secondary_menu') ? 'secondary_menu=' + params.get('secondary_menu') + '&' : '') +
         'obj_type=' + this.obj_type;
 
+    if (!that.obj_type || !that.obj_id) {
+        var error = {
+            level: 'warning',
+            message: commonL10n.errorTemplate.replaceMap({
+                '[[ errorMessage ]]': formWidgetL10n.deleteFailed,
+                '[[ errorThrown ]]': commonL10n.invalidObject
+            })
+        };
+        Charcoal.Admin.feedback([ error ]).dispatch();
+        return;
+    }
+
     BootstrapDialog.confirm({
         title:      formWidgetL10n.confirmDeletion,
         type:       BootstrapDialog.TYPE_DANGER,
@@ -639,18 +651,37 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
                     obj_type: that.obj_type,
                     obj_id:   that.obj_id
                 };
-                $.ajax({
+                var xhr = $.ajax({
                     method:   'POST',
                     url:      url,
                     data:     data,
                     dataType: 'json'
-                }).done(function (response) {
-                    if (response.success) {
-                        window.location.href = successUrl;
-                    } else {
-                        window.alert(formWidgetL10n.deleteFailed);
-                    }
                 });
+
+                Charcoal.Admin.resolveSimpleJsonXhr(
+                    xhr,
+                    // Success
+                    function () {
+                        window.location.href = successUrl;
+                    },
+                    // Failure
+                    function (response) {
+                        if (response.feedbacks.length) {
+                            Charcoal.Admin.feedback(response.feedbacks);
+                        } else {
+                            Charcoal.Admin.feedback([ {
+                                level:   'error',
+                                message: formWidgetL10n.deleteFailed
+                            } ]);
+                        }
+                    },
+                    // Complete
+                    function () {
+                        if (!that.suppress_feedback) {
+                            Charcoal.Admin.feedback().dispatch();
+                        }
+                    }
+                );
             }
         }
     });

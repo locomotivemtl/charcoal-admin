@@ -173,6 +173,7 @@
 "An error occurred while logging in";"Une erreur est survenue lors de la connexion"
 "{{ errorMessage }}: {{ errorThrown }}";"{{ errorMessage }} : {{ errorThrown }}"
 "[[ errorMessage ]]: [[ errorThrown ]]";"[[ errorMessage ]] : [[ errorThrown ]]"
+"Invalid object type or ID";"Le type ou l'ID de l'objet est invalide"
 "Invalid email or password";"Courriel ou mot de passe invalide"
 "You are now logged out.";"Votre déconnexion a bien été effectuée."
 "An error occurred while logging out";"Une erreur est survenue lors de la déconnexion"

@@ -448,7 +448,12 @@ Charcoal.Admin = (function () {
     /**
      * Resolves the given promise.
      *
-     * Note: Expects the data type to be 'json'.
+     * Note: This decorator expects the data type to be 'json'.
+     *
+     * This function will handle all nitty gritty of processing a promise,
+     * resolving false positives (such as a successful HTTP response
+     * containing an unsuccessful body), running the appropriate callback
+     * without affecting its context, and providing a standard response format.
      *
      * @param  {jqXHR}        jqxhr      - A jqXHR object.
      * @param  {simpleDone}   [success]  - A function to be called if the request succeeds.

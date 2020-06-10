@@ -716,11 +716,11 @@ Charcoal.Admin = (function () {
             if (response.message) {
                 response.feedbacks = Array.isArray(response.message)
                     ? response.message
-                    : [ { msg: response.message } ];
+                    : [ { level: 'error', message: response.message } ];
             } else {
                 response.feedbacks = Array.isArray(error)
                     ? error
-                    : [ { msg: error } ];
+                    : [ { level: 'error', message: error } ];
             }
         }
 
@@ -752,7 +752,11 @@ Charcoal.Admin = (function () {
     /**
      * Resolves the given promise.
      *
-     * Note: Expects the data type to be 'json'.
+     * Note: This decorator expects the data type to be 'json'.
+     *
+     * This function will handle all nitty gritty of processing a promise,
+     * resolving false positives (such as a successful HTTP response containing an unsuccessful body),
+     * and chaining the developer's given callbacks.
      *
      * @param  {jqXHR}        jqxhr      - A jqXHR object.
      * @param  {simpleDone}   [success]  - A function to be called if the request succeeds.
@@ -791,11 +795,11 @@ Charcoal.Admin = (function () {
                     if (response.message) {
                         response.feedbacks = Array.isArray(response.message)
                             ? response.message
-                            : [ { msg: response.message } ];
+                            : [ { level: 'error', message: response.message } ];
                     } else {
                         response.feedbacks = Array.isArray(error)
                             ? error
-                            : [ { msg: error } ];
+                            : [ { level: 'error', message: error } ];
                     }
                 }
 
@@ -4134,7 +4138,7 @@ Charcoal.Admin.Widget_Form.prototype.request_url = function () {
 };
 
 /**
- * Handle the "delete" button / action.
+ * Handle the "revision" button / action.
  */
 Charcoal.Admin.Widget_Form.prototype.view_revision = function (/* form */) {
     var type = this.obj_type,
@@ -4197,6 +4201,18 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
         (params.has('secondary_menu') ? 'secondary_menu=' + params.get('secondary_menu') + '&' : '') +
         'obj_type=' + this.obj_type;
 
+    if (!that.obj_type || !that.obj_id) {
+        var error = {
+            level: 'warning',
+            message: commonL10n.errorTemplate.replaceMap({
+                '[[ errorMessage ]]': formWidgetL10n.deleteFailed,
+                '[[ errorThrown ]]': commonL10n.invalidObject
+            })
+        };
+        Charcoal.Admin.feedback([ error ]).dispatch();
+        return;
+    }
+
     BootstrapDialog.confirm({
         title:      formWidgetL10n.confirmDeletion,
         type:       BootstrapDialog.TYPE_DANGER,
@@ -4209,18 +4225,37 @@ Charcoal.Admin.Widget_Form.prototype.delete_object = function (/* form */) {
                     obj_type: that.obj_type,
                     obj_id:   that.obj_id
                 };
-                $.ajax({
+                var xhr = $.ajax({
                     method:   'POST',
                     url:      url,
                     data:     data,
                     dataType: 'json'
-                }).done(function (response) {
-                    if (response.success) {
-                        window.location.href = successUrl;
-                    } else {
-                        window.alert(formWidgetL10n.deleteFailed);
-                    }
                 });
+
+                Charcoal.Admin.resolveSimpleJsonXhr(
+                    xhr,
+                    // Success
+                    function () {
+                        window.location.href = successUrl;
+                    },
+                    // Failure
+                    function (response) {
+                        if (response.feedbacks.length) {
+                            Charcoal.Admin.feedback(response.feedbacks);
+                        } else {
+                            Charcoal.Admin.feedback([ {
+                                level:   'error',
+                                message: formWidgetL10n.deleteFailed
+                            } ]);
+                        }
+                    },
+                    // Complete
+                    function () {
+                        if (!that.suppress_feedback) {
+                            Charcoal.Admin.feedback().dispatch();
+                        }
+                    }
+                );
             }
         }
     });

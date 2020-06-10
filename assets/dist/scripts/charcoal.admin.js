@@ -3483,6 +3483,7 @@ Charcoal.Admin.Widget_Card_Collection = function (opts) {
     this.obj_type       = null;
     this.widget_id      = null;
     this.table_selector = null;
+    this.search_query   = null;
     this.filters        = {};
     this.orders         = {};
     this.pagination     = {
@@ -3513,18 +3514,37 @@ Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function () {
     this.widget_id          = opts.id                      || this.widget_id;
     this.table_selector     = '#' + this.widget_id;
     this.template           = opts.data.template           || this.template;
-    this.properties         = opts.data.properties         || this.properties;
-    this.properties_options = opts.data.properties_options || this.properties_options;
-    this.filters            = opts.data.filters            || this.filters;
-    this.orders             = opts.data.orders             || this.orders;
-    this.pagination         = opts.data.pagination         || this.pagination;
-    this.list_actions       = opts.data.list_actions       || this.list_actions;
-    this.object_actions     = opts.data.object_actions     || this.object_actions;
     this.card_template      = opts.data.card_template      || this.card_template;
     this.num_columns        = opts.data.num_columns        || this.num_columns;
+    this.collection_ident   = opts.data.collection_ident   || 'default'; // @todo remove the hardcoded shit
 
-    // @todo remove the hardcoded shit
-    this.collection_ident = opts.data.collection_ident || 'default';
+    if (('properties' in opts.data) && Array.isArray(opts.data.properties)) {
+        this.properties = opts.data.properties;
+    }
+
+    if (('properties_options' in opts.data) && $.isPlainObject(opts.data.properties_options)) {
+        this.properties_options = opts.data.properties_options;
+    }
+
+    if (('filters' in opts.data) && Array.isArray(opts.data.filters)) {
+        this.filters = opts.data.filters;
+    }
+
+    if (('orders' in opts.data) && Array.isArray(opts.data.orders)) {
+        this.orders = opts.data.orders;
+    }
+
+    if (('pagination' in opts.data) && $.isPlainObject(opts.data.pagination)) {
+        this.pagination = opts.data.pagination;
+    }
+
+    if (('list_actions' in opts.data) && Array.isArray(opts.data.list_actions)) {
+        this.list_actions = opts.data.list_actions;
+    }
+
+    if (('object_actions' in opts.data) && Array.isArray(opts.data.object_actions)) {
+        this.object_actions = opts.data.object_actions;
+    }
 
     switch (opts.lang) {
         case 'fr':
@@ -3666,6 +3686,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
         collection_config: {
             properties:         this.properties,
             properties_options: this.properties_options,
+            search_query:       this.search_query,
             filters:            this.filters,
             orders:             this.orders,
             pagination:         this.pagination,
@@ -3673,16 +3694,6 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
             object_actions:     this.object_actions
         }
     };
-};
-
-/**
- *
- */
-Charcoal.Admin.Widget_Card_Collection.prototype.reload = function (callback) {
-    // Call supra class
-    Charcoal.Admin.Widget.prototype.reload.call(this, callback);
-
-    return this;
 };
 ;/* eslint-disable consistent-this */
 /* globals commonL10n,formWidgetL10n,URLSearchParams */
@@ -5352,6 +5363,9 @@ Charcoal.Admin.Widget_Search = function (opts) {
     this.data   = opts.data;
     this.$input = null;
 
+    this._search_filters = false;
+    this._search_query   = false;
+
     return this;
 };
 
@@ -5391,20 +5405,11 @@ Charcoal.Admin.Widget_Search.prototype.init = function () {
  * @return this
  */
 Charcoal.Admin.Widget_Search.prototype.submit = function () {
-    var manager, widgets, request, total;
+    this.set_search_query(this.$input.val());
 
-    manager = Charcoal.Admin.manager();
-    widgets = manager.components.widgets;
+    Charcoal.Admin.manager().components.widgets.forEach(this.dispatch.bind(this));
 
-    total = widgets.length;
-    if (total > 0) {
-        request = this.prepare_request(this.$input.val());
-        console.log('Search.submit', request);
-
-        for (var i = 0; i < total; i++) {
-            this.dispatch(request, widgets[i]);
-        }
-    }
+    this.set_search_query(null);
 
     return this;
 };
@@ -5415,21 +5420,45 @@ Charcoal.Admin.Widget_Search.prototype.submit = function () {
  * @return this
  */
 Charcoal.Admin.Widget_Search.prototype.clear = function () {
+    this._search_search  = false;
+    this._search_filters = false;
+
     this.$input.val('');
     this.submit();
     return this;
 };
 
 /**
- * Prepares a search request from a query.
+ * Parse a search query.
+ *
+ * @param  {string} query - The search query.
+ * @return {string|null} A search query or NULL.
+ */
+Charcoal.Admin.Widget_Search.prototype.parse_search_query = function (query) {
+    if (typeof query !== 'string') {
+        return null;
+    }
+
+    query = query.trim();
+
+    if (query.length === 0) {
+        return null;
+    }
+
+    return query;
+};
+
+/**
+ * Parse a search query into query filters.
  *
  * @param  {string} query - The search query.
  * @return {object|null} A search request object or NULL.
  */
-Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
+Charcoal.Admin.Widget_Search.prototype.parse_search_filters = function (query) {
     var words, props, request = null, filters = [], sub_filters;
 
-    query = query.trim();
+    query = this.parse_search_query(query);
+
     if (query) {
         words = query.split(/\s/);
         props = this.data.properties || [];
@@ -5460,35 +5489,76 @@ Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
 };
 
 /**
- * Dispatches the event to all widgets that can listen to it
+ * Set the search query.
  *
- * @param  {object} request - The search request.
- * @param  {object} widget  - The widget to search on.
- * @return this
+ * @param  {string} query - The search query.
+ * @return {void}
  */
-Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget) {
-    if (!widget) {
+Charcoal.Admin.Widget_Search.prototype.set_search_query = function (query) {
+    this._search_search  = this.parse_search_query(query);
+    this._search_filters = false;
+};
+
+/**
+ * Get the search query.
+ *
+ * @return {string|null} The search query or NULL.
+ */
+Charcoal.Admin.Widget_Search.prototype.search_query = function () {
+    if (this._search_search === false) {
+        return null;
+    }
+
+    return this._search_search;
+};
+
+/**
+ * Get the search filters.
+ *
+ * @return {object|null} The query filters object or NULL.
+ */
+Charcoal.Admin.Widget_Search.prototype.search_filters = function () {
+    if (this._search_filters === false) {
+        this._search_filters = this.parse_search_filters(this._search_search);
+    }
+
+    return this._search_filters;
+};
+
+/**
+ * Assign the search query or filters on any searchable widget and dispatch request.
+ *
+ * @param  {object} widget - The widget to search on.
+ * @return void
+ */
+Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
+    // Bail early if no widget or if widget is self
+    if (!widget || widget === this) {
+        return;
+    }
+
+    var is_searchable = (typeof widget.set_search_query === 'function');
+    var is_filterable = (typeof widget.set_filters === 'function');
+
+    if (!is_searchable && !is_filterable) {
         return this;
     }
 
-    if (typeof widget.set_filters !== 'function') {
-        return this;
+    if (is_searchable) {
+        var query = this.search_query();
+        widget.set_search_query(query);
+    }
+
+    if (is_filterable) {
+        var filters = this.search_filters();
+        widget.set_filters(filters ? [ filters ] : []);
     }
 
     if (typeof widget.pagination !== 'undefined') {
         widget.pagination.page = 1;
     }
 
-    var filters = [];
-    if (request) {
-        filters.push(request);
-    }
-
-    widget.set_filters(filters);
-
     widget.reload();
-
-    return this;
 };
 ;/**
  * Table widget used for listing collections of objects
@@ -5508,6 +5578,7 @@ Charcoal.Admin.Widget_Table = function (opts) {
     this.obj_type       = null;
     this.widget_id      = null;
     this.table_selector = null;
+    this.search_query   = null;
     this.filters        = {};
     this.orders         = {};
     this.pagination     = {
@@ -5540,16 +5611,35 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function () {
     this.widget_id          = opts.id                      || this.widget_id;
     this.table_selector     = '#' + this.widget_id;
     this.template           = opts.data.template           || this.template;
-    this.properties         = opts.data.properties         || this.properties;
-    this.properties_options = opts.data.properties_options || this.properties_options;
-    this.filters            = opts.data.filters            || this.filters;
-    this.orders             = opts.data.orders             || this.orders;
-    this.pagination         = opts.data.pagination         || this.pagination;
-    this.list_actions       = opts.data.list_actions       || this.list_actions;
-    this.object_actions     = opts.data.object_actions     || this.object_actions;
+    this.collection_ident   = opts.data.collection_ident   || 'default'; // @todo remove the hardcoded shit
 
-    // @todo remove the hardcoded shit
-    this.collection_ident = opts.data.collection_ident || 'default';
+    if (('properties' in opts.data) && Array.isArray(opts.data.properties)) {
+        this.properties = opts.data.properties;
+    }
+
+    if (('properties_options' in opts.data) && $.isPlainObject(opts.data.properties_options)) {
+        this.properties_options = opts.data.properties_options;
+    }
+
+    if (('filters' in opts.data) && Array.isArray(opts.data.filters)) {
+        this.filters = opts.data.filters;
+    }
+
+    if (('orders' in opts.data) && Array.isArray(opts.data.orders)) {
+        this.orders = opts.data.orders;
+    }
+
+    if (('pagination' in opts.data) && $.isPlainObject(opts.data.pagination)) {
+        this.pagination = opts.data.pagination;
+    }
+
+    if (('list_actions' in opts.data) && Array.isArray(opts.data.list_actions)) {
+        this.list_actions = opts.data.list_actions;
+    }
+
+    if (('object_actions' in opts.data) && Array.isArray(opts.data.object_actions)) {
+        this.object_actions = opts.data.object_actions;
+    }
 
     return this;
 };
@@ -5666,6 +5756,25 @@ Charcoal.Admin.Widget_Table.prototype.get_filters = function () {
     return this.filters;
 };
 
+/**
+ * Set the user search query
+ *
+ * @param  {string|null} query
+ * @return {void}
+ */
+Charcoal.Admin.Widget_Table.prototype.set_search_query = function (query) {
+    this.search_query = query;
+};
+
+/**
+ * Get the user search query
+ *
+ * @return {string|null}
+ */
+Charcoal.Admin.Widget_Table.prototype.get_search_query = function () {
+    return this.search_query;
+};
+
 Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
     return {
         obj_type:          this.obj_type,
@@ -5674,6 +5783,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
         collection_config: {
             properties:         this.properties,
             properties_options: this.properties_options,
+            search_query:       this.search_query,
             filters:            this.filters,
             orders:             this.orders,
             pagination:         this.pagination,

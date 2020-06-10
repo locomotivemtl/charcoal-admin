@@ -18,6 +18,7 @@ Charcoal.Admin.Widget_Card_Collection = function (opts) {
     this.obj_type       = null;
     this.widget_id      = null;
     this.table_selector = null;
+    this.search_query   = null;
     this.filters        = {};
     this.orders         = {};
     this.pagination     = {
@@ -48,18 +49,37 @@ Charcoal.Admin.Widget_Card_Collection.prototype.set_properties = function () {
     this.widget_id          = opts.id                      || this.widget_id;
     this.table_selector     = '#' + this.widget_id;
     this.template           = opts.data.template           || this.template;
-    this.properties         = opts.data.properties         || this.properties;
-    this.properties_options = opts.data.properties_options || this.properties_options;
-    this.filters            = opts.data.filters            || this.filters;
-    this.orders             = opts.data.orders             || this.orders;
-    this.pagination         = opts.data.pagination         || this.pagination;
-    this.list_actions       = opts.data.list_actions       || this.list_actions;
-    this.object_actions     = opts.data.object_actions     || this.object_actions;
     this.card_template      = opts.data.card_template      || this.card_template;
     this.num_columns        = opts.data.num_columns        || this.num_columns;
+    this.collection_ident   = opts.data.collection_ident   || 'default'; // @todo remove the hardcoded shit
 
-    // @todo remove the hardcoded shit
-    this.collection_ident = opts.data.collection_ident || 'default';
+    if (('properties' in opts.data) && Array.isArray(opts.data.properties)) {
+        this.properties = opts.data.properties;
+    }
+
+    if (('properties_options' in opts.data) && $.isPlainObject(opts.data.properties_options)) {
+        this.properties_options = opts.data.properties_options;
+    }
+
+    if (('filters' in opts.data) && Array.isArray(opts.data.filters)) {
+        this.filters = opts.data.filters;
+    }
+
+    if (('orders' in opts.data) && Array.isArray(opts.data.orders)) {
+        this.orders = opts.data.orders;
+    }
+
+    if (('pagination' in opts.data) && $.isPlainObject(opts.data.pagination)) {
+        this.pagination = opts.data.pagination;
+    }
+
+    if (('list_actions' in opts.data) && Array.isArray(opts.data.list_actions)) {
+        this.list_actions = opts.data.list_actions;
+    }
+
+    if (('object_actions' in opts.data) && Array.isArray(opts.data.object_actions)) {
+        this.object_actions = opts.data.object_actions;
+    }
 
     switch (opts.lang) {
         case 'fr':
@@ -201,6 +221,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
         collection_config: {
             properties:         this.properties,
             properties_options: this.properties_options,
+            search_query:       this.search_query,
             filters:            this.filters,
             orders:             this.orders,
             pagination:         this.pagination,
@@ -208,14 +229,4 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
             object_actions:     this.object_actions
         }
     };
-};
-
-/**
- *
- */
-Charcoal.Admin.Widget_Card_Collection.prototype.reload = function (callback) {
-    // Call supra class
-    Charcoal.Admin.Widget.prototype.reload.call(this, callback);
-
-    return this;
 };

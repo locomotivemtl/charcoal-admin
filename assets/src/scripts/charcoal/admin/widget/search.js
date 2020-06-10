@@ -30,6 +30,9 @@ Charcoal.Admin.Widget_Search = function (opts) {
     this.data   = opts.data;
     this.$input = null;
 
+    this._search_filters = false;
+    this._search_query   = false;
+
     return this;
 };
 
@@ -69,20 +72,11 @@ Charcoal.Admin.Widget_Search.prototype.init = function () {
  * @return this
  */
 Charcoal.Admin.Widget_Search.prototype.submit = function () {
-    var manager, widgets, request, total;
+    this.set_search_query(this.$input.val());
 
-    manager = Charcoal.Admin.manager();
-    widgets = manager.components.widgets;
+    Charcoal.Admin.manager().components.widgets.forEach(this.dispatch.bind(this));
 
-    total = widgets.length;
-    if (total > 0) {
-        request = this.prepare_request(this.$input.val());
-        console.log('Search.submit', request);
-
-        for (var i = 0; i < total; i++) {
-            this.dispatch(request, widgets[i]);
-        }
-    }
+    this.set_search_query(null);
 
     return this;
 };
@@ -93,21 +87,45 @@ Charcoal.Admin.Widget_Search.prototype.submit = function () {
  * @return this
  */
 Charcoal.Admin.Widget_Search.prototype.clear = function () {
+    this._search_search  = false;
+    this._search_filters = false;
+
     this.$input.val('');
     this.submit();
     return this;
 };
 
 /**
- * Prepares a search request from a query.
+ * Parse a search query.
+ *
+ * @param  {string} query - The search query.
+ * @return {string|null} A search query or NULL.
+ */
+Charcoal.Admin.Widget_Search.prototype.parse_search_query = function (query) {
+    if (typeof query !== 'string') {
+        return null;
+    }
+
+    query = query.trim();
+
+    if (query.length === 0) {
+        return null;
+    }
+
+    return query;
+};
+
+/**
+ * Parse a search query into query filters.
  *
  * @param  {string} query - The search query.
  * @return {object|null} A search request object or NULL.
  */
-Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
+Charcoal.Admin.Widget_Search.prototype.parse_search_filters = function (query) {
     var words, props, request = null, filters = [], sub_filters;
 
-    query = query.trim();
+    query = this.parse_search_query(query);
+
     if (query) {
         words = query.split(/\s/);
         props = this.data.properties || [];
@@ -138,33 +156,74 @@ Charcoal.Admin.Widget_Search.prototype.prepare_request = function (query) {
 };
 
 /**
- * Dispatches the event to all widgets that can listen to it
+ * Set the search query.
  *
- * @param  {object} request - The search request.
- * @param  {object} widget  - The widget to search on.
- * @return this
+ * @param  {string} query - The search query.
+ * @return {void}
  */
-Charcoal.Admin.Widget_Search.prototype.dispatch = function (request, widget) {
-    if (!widget) {
+Charcoal.Admin.Widget_Search.prototype.set_search_query = function (query) {
+    this._search_search  = this.parse_search_query(query);
+    this._search_filters = false;
+};
+
+/**
+ * Get the search query.
+ *
+ * @return {string|null} The search query or NULL.
+ */
+Charcoal.Admin.Widget_Search.prototype.search_query = function () {
+    if (this._search_search === false) {
+        return null;
+    }
+
+    return this._search_search;
+};
+
+/**
+ * Get the search filters.
+ *
+ * @return {object|null} The query filters object or NULL.
+ */
+Charcoal.Admin.Widget_Search.prototype.search_filters = function () {
+    if (this._search_filters === false) {
+        this._search_filters = this.parse_search_filters(this._search_search);
+    }
+
+    return this._search_filters;
+};
+
+/**
+ * Assign the search query or filters on any searchable widget and dispatch request.
+ *
+ * @param  {object} widget - The widget to search on.
+ * @return void
+ */
+Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
+    // Bail early if no widget or if widget is self
+    if (!widget || widget === this) {
+        return;
+    }
+
+    var is_searchable = (typeof widget.set_search_query === 'function');
+    var is_filterable = (typeof widget.set_filters === 'function');
+
+    if (!is_searchable && !is_filterable) {
         return this;
     }
 
-    if (typeof widget.set_filters !== 'function') {
-        return this;
+    if (is_searchable) {
+        var query = this.search_query();
+        widget.set_search_query(query);
+    }
+
+    if (is_filterable) {
+        var filters = this.search_filters();
+        widget.set_filters(filters ? [ filters ] : []);
     }
 
     if (typeof widget.pagination !== 'undefined') {
         widget.pagination.page = 1;
     }
 
-    var filters = [];
-    if (request) {
-        filters.push(request);
-    }
-
-    widget.set_filters(filters);
-
     widget.reload();
-
-    return this;
 };

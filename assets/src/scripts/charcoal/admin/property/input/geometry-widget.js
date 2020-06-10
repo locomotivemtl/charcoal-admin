@@ -63,7 +63,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function () {
         return false;
     }
 
-    var _data = this.data;
+    var _data = this.opts();
 
     // Shouldn't happen at that point
     if (typeof _data.id === 'undefined') {
@@ -182,7 +182,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.init = function () {
 };
 
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = function () {
-    var related_property = this.data.data.related_property;
+    var related_property = this.opts().data.related_property;
     if (!related_property) {
         return false;
     }
@@ -198,7 +198,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.link_related_property = 
 
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.related_object_geometry = function (obj) {
     // retrieve obj_type
-    var type = this.data.data.related_property[obj].obj_type;
+    var type = this.opts().data.related_property[obj].obj_type;
     if (!type) {
         return false;
     }

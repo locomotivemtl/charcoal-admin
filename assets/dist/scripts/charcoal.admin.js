@@ -1744,23 +1744,25 @@ Charcoal.Admin = (function () {
 ;(function ($, Admin) {
     'use strict';
 
-    var lvls, defs, alts, arr = [], reset = function () {
-        lvls = DEFAULTS.supported.slice();
-        defs = $.extend({}, DEFAULTS.definitions);
-        alts = $.extend({}, DEFAULTS.aliases);
+    var lvls, modes, defs, alts, arr = [], reset = function () {
+        lvls  = DEFAULTS.supported.slice();
+        modes = DEFAULTS.displayModes.slice();
+        defs  = $.extend({}, DEFAULTS.definitions);
+        alts  = $.extend({}, DEFAULTS.aliases);
     };
 
     var DEFAULTS = {
+        displayModes: [ 'dialog', 'toast' ],
         supported: [ 'success', 'info', 'notice', 'warning', 'error', 'danger' ],
         definitions: {
             success: {
                 title:   commonL10n.success,
-                display: 'notification',
+                display: 'toast',
                 type:    BootstrapDialog.TYPE_SUCCESS
             },
             notice: {
                 title:   commonL10n.notice,
-                display: 'notification',
+                display: 'toast',
                 type:    BootstrapDialog.TYPE_INFO,
                 alias:   [ 'info' ]
             },
@@ -2049,12 +2051,41 @@ Charcoal.Admin = (function () {
     };
 
     /**
+     * Get display mode override
+     */
+    Manager.prototype.getDisplay = function () {
+        return this.display;
+    };
+
+    /**
+     * Set display mode override
+     */
+    Manager.prototype.setDisplay = function (mode) {
+        if ($.inArray(mode, modes) === -1 && mode !== null) {
+            throw new TypeError(
+                'Unsupported display mode, received "' + mode +
+                '". Must be one of: null, ' + modes.join(', ')
+            );
+        }
+
+        this.display = mode;
+        return this;
+    };
+
+    /**
      * Actions in the dialog box
      */
-    Manager.prototype.add_action = function (opts) {
+    Manager.prototype.addAction = function (opts) {
         this.actions.push(opts);
 
         return this;
+    };
+
+    /**
+     * Alias of {@see Manager.prototype.addAction}
+     */
+    Manager.prototype.add_action = function (opts) {
+        return this.addAction(opts);
     };
 
     /**
@@ -2092,8 +2123,21 @@ Charcoal.Admin = (function () {
                 buttons: buttons
             };
 
-            switch (level.display) {
-                case 'notification':
+            var override = this.getDisplay(),
+                display  = null;
+
+            switch (override) {
+                case 'dialog':
+                case 'toast':
+                    display = override;
+                    break;
+                default:
+                    display = level.display;
+                    break;
+            }
+
+            switch (display) {
+                case 'toast':
                     config.dismissible = buttons.length === 0;
                     new Notification(config);
                     break;
@@ -2117,6 +2161,7 @@ Charcoal.Admin = (function () {
     Manager.prototype.empty = function () {
         reset();
 
+        this.display = null;
         this.actions = [];
         this.storage = [];
     };
@@ -2249,31 +2294,39 @@ Charcoal.Admin = (function () {
 
         this.$elem.appendTo('.c-notifications').addClass('show');
 
-        this.$elem.on('mouseover.charcoal.feedback', { notification: this }, function (event) {
-            window.clearTimeout(event.data.notification.closeTimer);
-        });
-
-        this.$elem.on('mouseout.charcoal.feedback', { notification: this }, function (event) {
-            var notification = event.data.notification;
-            notification.closeTimer = window.setTimeout(function () {
-                notification.$elem.alert('close');
-            }, notification.config.delay);
-        });
-
         this.$elem.on('closed.bs.alert', { notification: this }, function (event) {
-            event.data.notification.$elem.off('.charcoal.feedback');
-            window.clearTimeout(event.data.notification.closeTimer);
+            var notification = event.data.notification;
+            notification.$elem.off('.charcoal.feedback');
+            if (notification.closeTimer) {
+                window.clearTimeout(notification.closeTimer);
+            }
         });
 
-        this.closeTimer = window.setTimeout(
-            $.proxy(
-                function () {
-                    this.$elem.alert('close');
-                },
-                this
-            ),
-            this.config.delay
-        );
+        if (typeof this.config.delay === 'number' && this.config.delay > 0) {
+            this.$elem.on('mouseover.charcoal.feedback', { notification: this }, function (event) {
+                var notification = event.data.notification;
+                if (notification.closeTimer) {
+                    window.clearTimeout(notification.closeTimer);
+                }
+            });
+
+            this.$elem.on('mouseout.charcoal.feedback', { notification: this }, function (event) {
+                var notification = event.data.notification;
+                notification.closeTimer = window.setTimeout(function () {
+                    notification.$elem.alert('close');
+                }, notification.config.delay);
+            });
+
+            this.closeTimer = window.setTimeout(
+                $.proxy(
+                    function () {
+                        this.$elem.alert('close');
+                    },
+                    this
+                ),
+                this.config.delay
+            );
+        }
 
         return this;
     };

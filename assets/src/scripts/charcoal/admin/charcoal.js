@@ -412,11 +412,11 @@ Charcoal.Admin = (function () {
             if (response.message) {
                 response.feedbacks = Array.isArray(response.message)
                     ? response.message
-                    : [ { msg: response.message } ];
+                    : [ { level: 'error', message: response.message } ];
             } else {
                 response.feedbacks = Array.isArray(error)
                     ? error
-                    : [ { msg: error } ];
+                    : [ { level: 'error', message: error } ];
             }
         }
 
@@ -487,11 +487,11 @@ Charcoal.Admin = (function () {
                     if (response.message) {
                         response.feedbacks = Array.isArray(response.message)
                             ? response.message
-                            : [ { msg: response.message } ];
+                            : [ { level: 'error', message: response.message } ];
                     } else {
                         response.feedbacks = Array.isArray(error)
                             ? error
-                            : [ { msg: error } ];
+                            : [ { level: 'error', message: error } ];
                     }
                 }
 

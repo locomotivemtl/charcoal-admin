@@ -135,7 +135,7 @@ class CreateScript extends AdminScript implements
 
             if (!$createTable ->confirmed()) {
                 $climate->red()->out("\nError. User could not be created.");
-                return null;
+                return;
             }
             $user->source()->createTable();
             $msg = $this->translator()->translate('Database table created for "{{ objType }}".', [

@@ -127,6 +127,23 @@ class CreateScript extends AdminScript implements
         $prompts    = $this->userPrompts();
         $properties = $user->properties(array_keys($prompts));
 
+        if ($user->source()->tableExists() === false) {
+            $createConfirm = $this->translator()->translate('The database table for "{{ objType }} doesn\'t exist. Would you like to create it?".', [
+                '{{ objType }}' => $user->objType()
+            ]);
+            $createTable = $climate->confirm($createConfirm);
+
+            if (!$createTable ->confirmed()) {
+                $climate->red()->out("\nError. User could not be created.");
+                return null;
+            }
+            $user->source()->createTable();
+            $msg = $this->translator()->translate('Database table created for "{{ objType }}".', [
+                '{{ objType }}' => $user->objType()
+            ]);
+            $climate->green()->out("\n".$msg);
+        }
+
         $vals = [];
         foreach ($properties as $prop) {
             if (!in_array($prop->ident(), array_keys($prompts))) {
@@ -230,6 +247,7 @@ class CreateScript extends AdminScript implements
             ));
         }
         $user = $this->modelFactory()->create(User::class);
+
         $user->loadFrom('email', $email);
         if ($user['id'] !== null) {
             throw new Exception(sprintf(

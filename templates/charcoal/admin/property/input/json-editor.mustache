@@ -4,38 +4,38 @@
 
     `charcoal/admin/property/input/json-editor`
 --}}
-<input type="hidden" id="hidden_{{inputId}}" name="{{inputName}}" value="" />
-<div id="{{inputId}}" style="height:30em;"></div>
+<input type="hidden" id="hidden_{{ inputId }}" name="{{ inputName }}" value="" />
+<div id="{{ inputId }}" style="height:30em;"></div>
 
-{{#addJsRequirement}}
+{{# addJsRequirement }}
     <link href="/assets/admin/scripts/vendors/jsoneditor/jsoneditor.css" rel="stylesheet" type="text/css">
     <script src="/assets/admin/scripts/vendors/jsoneditor/jsoneditor.js"></script>
-{{/addJsRequirement}}
+{{/ addJsRequirement }}
 
 {{=<% %>=}}
     <%# jsonVal %>
     <script>
-        const jsonVal_<% inputId %> = <% &. %>;
+        const jsonVal_<% inputId %> = <%& . %>;
     </script>
     <%/ jsonVal %>
 <%={{ }}=%>
 
-{{#addJs}}
+{{# addJs }}
     <script>
 
-        var container = document.getElementById("{{inputId}}");
+        var container = document.getElementById("{{ inputId }}");
         var options = {
             modes: [ 'code', 'tree' ],
             onChangeText: function(text) {
-                document.getElementById("hidden_{{inputId}}").value = text;
+                document.getElementById("hidden_{{ inputId }}").value = text;
             }
         };
         var editor = new JSONEditor(container, options);
 
-        {{#jsonVal}}
-            editor.set(jsonVal_{{inputId}});
-            document.getElementById("hidden_{{inputId}}").value = editor.getText();
-        {{/jsonVal}}
+        {{# jsonVal }}
+            editor.set(jsonVal_{{ inputId }});
+            document.getElementById("hidden_{{ inputId }}").value = editor.getText();
+        {{/ jsonVal }}
 
     </script>
-{{/addJs}}
+{{/ addJs }}

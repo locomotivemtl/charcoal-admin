@@ -11149,6 +11149,7 @@ Charcoal.Admin.Property_Input_Text = function (opts) {
     this.set_data(this.data);
 
     // Run the plugin or whatever is necessary
+    this.multiple_initialized = false;
     this.initialisation = true;
     this.init();
     this.initialisation = false;
@@ -11199,8 +11200,7 @@ Charcoal.Admin.Property_Input_Text.prototype.init = function () {
 
     // OG element.
     this.$input = $('#' + this.input_id);
-
-    if (this.multiple) {
+    if (this.multiple && !this.multiple_initialized) {
         this.init_multiple();
     }
 };
@@ -11210,6 +11210,7 @@ Charcoal.Admin.Property_Input_Text.prototype.init = function () {
  * @return {thisArg} Chainable
  */
 Charcoal.Admin.Property_Input_Text.prototype.init_multiple = function () {
+    this.multiple_initialized = true;
     // New input
     this.chars_new    = [ 13 ];
     // Check to delete current input

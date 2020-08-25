@@ -103,7 +103,7 @@
 .jsoneditor-contextmenu {
   position: absolute;
   box-sizing: content-box;
-  z-index: 1;
+  z-index: 2;
 }
 
 .jsoneditor-contextmenu .jsoneditor-menu {
@@ -634,8 +634,12 @@ div.jsoneditor-value.jsoneditor-null {
   color: #004ed0;
 }
 
+div.jsoneditor-value.jsoneditor-color-value {
+  color: #1a1a1a;
+}
+
 div.jsoneditor-value.jsoneditor-invalid {
-  color: #000000;
+  color: #1a1a1a;
 }
 
 div.jsoneditor-readonly {

@@ -24,8 +24,8 @@
  * Copyright (c) 2011-2020 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 8.6.1
- * @date    2020-02-17
+ * @version 9.0.4
+ * @date    2020-08-15
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -235,7 +235,9 @@ function repair(jsString) {
   // TODO: refactor this function, it's too large and complicated now
   // escape all single and double quotes inside strings
   var chars = [];
-  var i = 0; // If JSON starts with a function (characters/digits/"_-"), remove this function.
+  var i = 0;
+  var indent = 0;
+  var isLineSeparatedJson = false; // If JSON starts with a function (characters/digits/"_-"), remove this function.
   // This is useful for "stripping" JSONP objects to become JSON
   // For example: /* some comment */ function_12321321 ( [{"a":"b"}] ); => [{"a":"b"}]
 
@@ -308,26 +310,56 @@ function repair(jsString) {
     }
 
     return jsString[iNext];
+  } // get at the first non-white space character starting at the current character
+
+
+  function currNonWhiteSpace() {
+    var iNext = i;
+
+    while (iNext < jsString.length && isWhiteSpace(jsString[iNext])) {
+      iNext++;
+    }
+
+    return jsString[iNext];
   } // skip a block comment '/* ... */'
 
 
   function skipBlockComment() {
-    i += 2;
+    if (curr() === '/' && next() === '*') {
+      i += 2;
 
-    while (i < jsString.length && (curr() !== '*' || next() !== '/')) {
-      i++;
+      while (i < jsString.length && (curr() !== '*' || next() !== '/')) {
+        i++;
+      }
+
+      i += 2;
+
+      if (curr() === '\n') {
+        i++;
+      }
     }
-
-    i += 2;
   } // skip a comment '// ...'
 
 
   function skipComment() {
-    i += 2;
+    if (curr() === '/' && next() === '/') {
+      i += 2;
 
-    while (i < jsString.length && curr() !== '\n') {
+      while (i < jsString.length && curr() !== '\n') {
+        i++;
+      }
+    }
+  }
+
+  function parseWhiteSpace() {
+    var whitespace = '';
+
+    while (i < jsString.length && isWhiteSpace(curr())) {
+      whitespace += curr();
       i++;
     }
+
+    return whitespace;
   }
   /**
    * parse single or double quoted string. Returns the parsed string
@@ -452,13 +484,19 @@ function repair(jsString) {
   }
 
   while (i < jsString.length) {
+    skipBlockComment();
+    skipComment();
     var c = curr();
 
-    if (c === '/' && next() === '*') {
-      skipBlockComment();
-    } else if (c === '/' && next() === '/') {
-      skipComment();
-    } else if (isSpecialWhiteSpace(c)) {
+    if (c === '{') {
+      indent++;
+    }
+
+    if (c === '}') {
+      indent--;
+    }
+
+    if (isSpecialWhiteSpace(c)) {
       // special white spaces (like non breaking space)
       chars.push(' ');
       i++;
@@ -472,6 +510,22 @@ function repair(jsString) {
       chars.push(parseString(quoteRight));
     } else if (c === quoteDblLeft) {
       chars.push(parseString(quoteDblRight));
+    } else if (c === '}') {
+      // check for missing comma between objects
+      chars.push(c);
+      i++;
+      var whitespaces = parseWhiteSpace();
+      skipBlockComment();
+
+      if (currNonWhiteSpace() === '{') {
+        chars.push(',');
+
+        if (indent === 0) {
+          isLineSeparatedJson = true;
+        }
+      }
+
+      chars.push(whitespaces);
     } else if (c === ',' && [']', '}'].indexOf(nextNonWhiteSpace()) !== -1) {
       // skip trailing commas
       i++;
@@ -485,6 +539,11 @@ function repair(jsString) {
       chars.push(c);
       i++;
     }
+  }
+
+  if (isLineSeparatedJson) {
+    chars.unshift('[\n');
+    chars.push('\n]');
   }
 
   return chars.join('');
@@ -842,21 +901,29 @@ function getInnerText(element, buffer) {
 
   if (first) {
     buffer = {
-      text: '',
+      _text: '',
       flush: function flush() {
-        var text = this.text;
-        this.text = '';
+        var text = this._text;
+        this._text = '';
         return text;
       },
       set: function set(text) {
-        this.text = text;
+        this._text = text;
       }
     };
   } // text node
 
 
   if (element.nodeValue) {
-    return buffer.flush() + element.nodeValue;
+    // remove return characters and the whitespace surrounding return characters
+    var trimmedValue = element.nodeValue.replace(/\s*\n\s*/g, '');
+
+    if (trimmedValue !== '') {
+      return buffer.flush() + trimmedValue;
+    } else {
+      // ignore empty text
+      return '';
+    }
   } // divs or other HTML elements
 
 
@@ -872,7 +939,10 @@ function getInnerText(element, buffer) {
         var prevName = prevChild ? prevChild.nodeName : undefined;
 
         if (prevName && prevName !== 'DIV' && prevName !== 'P' && prevName !== 'BR') {
-          innerText += '\n';
+          if (innerText !== '') {
+            innerText += '\n';
+          }
+
           buffer.flush();
         }
 
@@ -887,15 +957,6 @@ function getInnerText(element, buffer) {
     }
 
     return innerText;
-  } else {
-    if (element.nodeName === 'P' && getInternetExplorerVersion() !== -1) {
-      // On Internet Explorer, a <p> with hasChildNodes()==false is
-      // rendered with a new line. Note that a <p> with
-      // hasChildNodes()==true is rendered without a new line
-      // Other browsers always ensure there is a <br> inside the <p>,
-      // and if not, the <p> does not render a new line
-      return buffer.flush();
-    }
   } // br or unknown
 
 
@@ -2375,9 +2436,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * @constructor
  */
 
-var ContextMenu =
-/*#__PURE__*/
-function () {
+var ContextMenu = /*#__PURE__*/function () {
   function ContextMenu(items, options) {
     _classCallCheck(this, ContextMenu);
 
@@ -2473,7 +2532,9 @@ function () {
               buttonExpand.type = 'button';
               domItem.buttonExpand = buttonExpand;
               buttonExpand.className = 'jsoneditor-expand';
-              buttonExpand.innerHTML = '<div class="jsoneditor-expand"></div>';
+              var buttonExpandInner = document.createElement('div');
+              buttonExpandInner.className = 'jsoneditor-expand';
+              buttonExpand.appendChild(buttonExpandInner);
 
               _li2.appendChild(buttonExpand);
 
@@ -2512,7 +2573,13 @@ function () {
             createMenuItems(ul, domSubItems, item.submenu);
           } else {
             // no submenu, just a button with clickhandler
-            button.innerHTML = '<div class="jsoneditor-icon"></div>' + '<div class="jsoneditor-text">' + Object(_i18n__WEBPACK_IMPORTED_MODULE_2__[/* translate */ "c"])(item.text) + '</div>';
+            var icon = document.createElement('div');
+            icon.className = 'jsoneditor-icon';
+            button.appendChild(icon);
+            var text = document.createElement('div');
+            text.className = 'jsoneditor-text';
+            text.appendChild(document.createTextNode(Object(_i18n__WEBPACK_IMPORTED_MODULE_2__[/* translate */ "c"])(item.text)));
+            button.appendChild(text);
           }
 
           domItems.push(domItem);
@@ -2831,7 +2898,6 @@ function () {
 }(); // currently displayed context menu, a singleton. We may only have one visible context menu
 
 ContextMenu.visibleMenu = undefined;
-/* unused harmony default export */ var _unused_webpack_default_export = (ContextMenu);
 
 /***/ }),
 /* 4 */
@@ -3003,7 +3069,11 @@ function showSortModal(container, json, onSort, options) {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "showTransformModal", function() { return /* binding */ showTransformModal; });
 
 // EXTERNAL MODULE: ./node_modules/picomodal/src/picoModal.js
 var picoModal = __webpack_require__(13);
@@ -3219,7 +3289,6 @@ var util = __webpack_require__(0);
 var constants = __webpack_require__(2);
 
 // CONCATENATED MODULE: ./src/js/showTransformModal.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showTransformModal", function() { return showTransformModal; });
 
 
 
@@ -3277,7 +3346,7 @@ function showTransformModal(_ref) {
 
     if (!Array.isArray(value)) {
       wizard.style.fontStyle = 'italic';
-      wizard.innerHTML = '(wizard not available for objects, only for arrays)';
+      wizard.textContent = '(wizard not available for objects, only for arrays)';
     }
 
     var sortablePaths = Object(util["getChildPaths"])(json);
@@ -3475,9 +3544,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * @constructor
  */
 
-var ModeSwitcher =
-/*#__PURE__*/
-function () {
+var ModeSwitcher = /*#__PURE__*/function () {
   function ModeSwitcher(container, modes, current, onSwitch) {
     _classCallCheck(this, ModeSwitcher);
 
@@ -3553,7 +3620,7 @@ function () {
     var box = document.createElement('button');
     box.type = 'button';
     box.className = 'jsoneditor-modes jsoneditor-separator';
-    box.innerHTML = currentTitle + ' &#x25BE;';
+    box.textContent = currentTitle + " \u25BE";
     box.title = Object(_i18n__WEBPACK_IMPORTED_MODULE_1__[/* translate */ "c"])('modeEditorTitle');
 
     box.onclick = function () {
@@ -3624,9 +3691,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var FocusTracker =
-/*#__PURE__*/
-function () {
+var FocusTracker = /*#__PURE__*/function () {
   function FocusTracker(config) {
     _classCallCheck(this, FocusTracker);
 
@@ -3943,7 +4008,7 @@ var util = {
       var i;
 
       for (i in a) {
-        if (i in el) el[i] = a[i];else if ("html" === i) el.innerHTML = a[i];else if ("text" === i) {
+        if (i in el) el[i] = a[i];else if ("html" === i) el.textContent = a[i];else if ("text" === i) {
           var t = d.createTextNode(a[i]);
           el.appendChild(t);
         } else el.setAttribute(i, a[i]);
@@ -4045,7 +4110,7 @@ function appendItem(item, parent, custom) {
   util.removeClass(item, "excluded");
 
   if (!custom) {
-    item.innerHTML = item.textContent;
+    item.textContent = item.textContent + ''; // clear highlighting
   }
 }
 /**
@@ -4544,7 +4609,7 @@ var addTag = function addTag(item) {
     util.each(tags, function (i, tg) {
       docFrag.appendChild(tg);
     });
-    this.label.innerHTML = "";
+    this.label.textContent = "";
   } else {
     docFrag.appendChild(tag);
   }
@@ -4630,7 +4695,7 @@ var clearSearch = function clearSearch() {
       util.removeClass(item, "excluded"); // Remove the span element for underlining matched items
 
       if (!this.customOption) {
-        item.innerHTML = item.textContent;
+        item.textContent = item.textContent + ''; // clear highlighting
       }
     }, this);
   }
@@ -4638,19 +4703,24 @@ var clearSearch = function clearSearch() {
 /**
  * Query matching for searches
  * @param  {string} query
- * @param  {HTMLOptionElement} option
- * @return {bool}
+ * @param  {string} text
  */
 
 
-var match = function match(query, option) {
-  var result = new RegExp(query, "i").exec(option.textContent);
+var match = function match(query, text) {
+  var result = new RegExp(query, "i").exec(text);
 
   if (result) {
-    return option.textContent.replace(result[0], "<span class='selectr-match'>" + result[0] + "</span>");
+    var start = result.index;
+    var end = result.index + result[0].length;
+    return {
+      before: text.substring(0, start),
+      match: text.substring(start, end),
+      after: text.substring(end)
+    };
   }
 
-  return false;
+  return null;
 }; // Main Lib
 
 
@@ -5062,7 +5132,7 @@ Selectr.prototype.destroy = function () {
   }
 
   if (this.config.data) {
-    this.el.innerHTML = "";
+    this.el.textContent = "";
   } // Remove the className from select element
 
 
@@ -5133,7 +5203,7 @@ Selectr.prototype.select = function (index) {
     addTag.call(this, item);
   } else {
     var data = this.data ? this.data[index] : option;
-    this.label.innerHTML = this.customSelected ? this.config.renderSelection(data) : option.textContent;
+    this.label.textContent = this.customSelected ? this.config.renderSelection(data) : option.textContent;
     this.selectedValue = option.value;
     this.selectedIndex = index;
     util.each(this.options, function (i, o) {
@@ -5188,7 +5258,7 @@ Selectr.prototype.deselect = function (index, force) {
       return false;
     }
 
-    this.label.innerHTML = "";
+    this.label.textContent = "";
     this.selectedValue = null;
     this.el.selectedIndex = this.selectedIndex = -1;
     util.removeClass(this.container, "has-selected");
@@ -5442,7 +5512,17 @@ Selectr.prototype.search = function (string) {
         util.removeClass(item, "excluded"); // Underline the matching results
 
         if (!this.customOption) {
-          item.innerHTML = match(string, option);
+          item.textContent = '';
+          var result = match(string, option.textContent);
+
+          if (result) {
+            item.appendChild(document.createTextNode(result.before));
+            var highlight = document.createElement('span');
+            highlight.className = 'selectr-match';
+            highlight.appendChild(document.createTextNode(result.match));
+            item.appendChild(highlight);
+            item.appendChild(document.createTextNode(result.after));
+          }
         }
       } else {
         util.addClass(item, "excluded");
@@ -5704,7 +5784,7 @@ Selectr.prototype.setPlaceholder = function (placeholder) {
     placeholder = "No options available";
   }
 
-  this.placeEl.innerHTML = placeholder;
+  this.placeEl.textContent = placeholder;
 };
 /**
  * Paginate the option list
@@ -5744,7 +5824,7 @@ Selectr.prototype.setMessage = function (message, close) {
 
 Selectr.prototype.removeMessage = function () {
   util.removeClass(this.container, "notice");
-  this.notice.innerHTML = "";
+  this.notice.textContent = "";
 };
 /**
  * Keep the dropdown within the window
@@ -6602,9 +6682,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * @property {function (number)} onChangeHeight
  * @constructor
  */
-var ErrorTable =
-/*#__PURE__*/
-function () {
+var ErrorTable = /*#__PURE__*/function () {
   function ErrorTable(config) {
     _classCallCheck(this, ErrorTable);
 
@@ -6621,7 +6699,7 @@ function () {
     var additionalErrorsIndication = document.createElement('div');
     additionalErrorsIndication.style.display = 'none';
     additionalErrorsIndication.className = 'jsoneditor-additional-errors fadein';
-    additionalErrorsIndication.innerHTML = 'Scroll for more &#9663;';
+    additionalErrorsIndication.textContent = "Scroll for more \u25BF";
     this.dom.additionalErrorsIndication = additionalErrorsIndication;
     validationErrorsContainer.appendChild(additionalErrorsIndication);
     var validationErrorIcon = document.createElement('span');
@@ -6680,17 +6758,12 @@ function () {
       if (this.errorTableVisible && errors.length > 0) {
         var validationErrors = document.createElement('div');
         validationErrors.className = 'jsoneditor-validation-errors';
-        validationErrors.innerHTML = '<table class="jsoneditor-text-errors"><tbody></tbody></table>';
-        var tbody = validationErrors.getElementsByTagName('tbody')[0];
+        var table = document.createElement('table');
+        table.className = 'jsoneditor-text-errors';
+        validationErrors.appendChild(table);
+        var tbody = document.createElement('tbody');
+        table.appendChild(tbody);
         errors.forEach(function (error) {
-          var message;
-
-          if (typeof error === 'string') {
-            message = '<td colspan="2"><pre>' + error + '</pre></td>';
-          } else {
-            message = '<td>' + (error.dataPath || '') + '</td>' + '<td><pre>' + error.message + '</pre></td>';
-          }
-
           var line;
 
           if (!isNaN(error.line)) {
@@ -6714,7 +6787,36 @@ function () {
             trEl.className += ' validation-error';
           }
 
-          trEl.innerHTML = '<td><button class="jsoneditor-schema-error"></button></td><td style="white-space:nowrap;">' + (!isNaN(line) ? 'Ln ' + line : '') + '</td>' + message;
+          var td1 = document.createElement('td');
+          var button = document.createElement('button');
+          button.className = 'jsoneditor-schema-error';
+          td1.appendChild(button);
+          trEl.appendChild(td1);
+          var td2 = document.createElement('td');
+          td2.style = 'white-space: nowrap;';
+          td2.textContent = !isNaN(line) ? 'Ln ' + line : '';
+          trEl.appendChild(td2);
+
+          if (typeof error === 'string') {
+            var td34 = document.createElement('td');
+            td34.colSpan = 2;
+            var pre = document.createElement('pre');
+            pre.appendChild(document.createTextNode(error));
+            td34.appendChild(pre);
+            trEl.appendChild(td34);
+          } else {
+            var td3 = document.createElement('td');
+            td3.appendChild(document.createTextNode(error.dataPath || ''));
+            trEl.appendChild(td3);
+            var td4 = document.createElement('td');
+
+            var _pre = document.createElement('pre');
+
+            _pre.appendChild(document.createTextNode(error.message));
+
+            td4.appendChild(_pre);
+            trEl.appendChild(td4);
+          }
 
           trEl.onclick = function () {
             _this.onFocusLine(line);
@@ -6815,7 +6917,11 @@ module.exports = ace;
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "textModeMixins", function() { return /* binding */ textModeMixins; });
 
 // EXTERNAL MODULE: ./src/js/ace/index.js
 var ace = __webpack_require__(15);
@@ -6895,7 +7001,6 @@ var tryRequireThemeJsonEditor = __webpack_require__(21);
 var jmespathQuery = __webpack_require__(4);
 
 // CONCATENATED MODULE: ./src/js/textmode.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "textModeMixins", function() { return textModeMixins; });
 
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
@@ -6943,8 +7048,11 @@ textmode.create = function (container) {
     this.indentation = Number(options.indentation);
   } else {
     this.indentation = 2; // number of spaces
-  } // grab ace from options if provided
+  } // language
 
+
+  Object(i18n["b" /* setLanguages */])(this.options.languages);
+  Object(i18n["a" /* setLanguage */])(this.options.language); // grab ace from options if provided
 
   var _ace = options.ace ? options.ace : ace_default.a; // TODO: make the option options.ace deprecated, it's not needed anymore (see #309)
   // determine mode
@@ -7133,7 +7241,7 @@ textmode.create = function (container) {
     if (this.mode === 'code') {
       var poweredBy = document.createElement('a');
       poweredBy.appendChild(document.createTextNode('powered by ace'));
-      poweredBy.href = 'http://ace.ajax.org';
+      poweredBy.href = 'https://ace.c9.io/';
       poweredBy.target = '_blank';
       poweredBy.className = 'jsoneditor-poweredBy';
 
@@ -8802,20 +8910,39 @@ if (typeof Element !== 'undefined') {
       polyfill(window.DocumentType.prototype);
     }
   })();
+} // simple polyfill for Array.findIndex
+
+
+if (!Array.prototype.findIndex) {
+  // eslint-disable-next-line no-extend-native
+  Object.defineProperty(Array.prototype, 'findIndex', {
+    value: function value(predicate) {
+      for (var i = 0; i < this.length; i++) {
+        var element = this[i];
+
+        if (predicate.call(this, element, i, this)) {
+          return i;
+        }
+      }
+
+      return -1;
+    },
+    configurable: true,
+    writable: true
+  });
 } // Polyfill for Array.find
 
 
 if (!Array.prototype.find) {
   // eslint-disable-next-line no-extend-native
-  Array.prototype.find = function (callback) {
-    for (var i = 0; i < this.length; i++) {
-      var element = this[i];
-
-      if (callback.call(this, element, i, this)) {
-        return element;
-      }
-    }
-  };
+  Object.defineProperty(Array.prototype, 'find', {
+    value: function value(predicate) {
+      var i = this.findIndex(predicate);
+      return this[i];
+    },
+    configurable: true,
+    writable: true
+  });
 } // Polyfill for String.trim
 
 
@@ -11008,6 +11135,7 @@ var _require3 = __webpack_require__(26),
 var _require4 = __webpack_require__(0),
     clear = _require4.clear,
     extend = _require4.extend,
+    getInnerText = _require4.getInnerText,
     getInternetExplorerVersion = _require4.getInternetExplorerVersion,
     parse = _require4.parse;
 
@@ -11181,10 +11309,10 @@ function JSONEditor(container, options, json) {
  */
 
 
-JSONEditor.modes = {}; // debounce interval for JSON schema vaidation in milliseconds
+JSONEditor.modes = {}; // debounce interval for JSON schema validation in milliseconds
 
 JSONEditor.prototype.DEBOUNCE_INTERVAL = 150;
-JSONEditor.VALID_OPTIONS = ['ajv', 'schema', 'schemaRefs', 'templates', 'ace', 'theme', 'autocomplete', 'onChange', 'onChangeJSON', 'onChangeText', 'onEditable', 'onError', 'onEvent', 'onModeChange', 'onNodeName', 'onValidate', 'onCreateMenu', 'onSelectionChange', 'onTextSelectionChange', 'onClassName', 'onFocus', 'onBlur', 'colorPicker', 'onColorPicker', 'timestampTag', 'timestampFormat', 'escapeUnicode', 'history', 'search', 'mode', 'modes', 'name', 'indentation', 'sortObjectKeys', 'navigationBar', 'statusBar', 'mainMenuBar', 'languages', 'language', 'enableSort', 'enableTransform', 'maxVisibleChilds', 'onValidationError', 'modalAnchor', 'popupAnchor', 'createQuery', 'executeQuery', 'queryDescription'];
+JSONEditor.VALID_OPTIONS = ['ajv', 'schema', 'schemaRefs', 'templates', 'ace', 'theme', 'autocomplete', 'onChange', 'onChangeJSON', 'onChangeText', 'onEditable', 'onError', 'onEvent', 'onModeChange', 'onNodeName', 'onValidate', 'onCreateMenu', 'onSelectionChange', 'onTextSelectionChange', 'onClassName', 'onFocus', 'onBlur', 'colorPicker', 'onColorPicker', 'timestampTag', 'timestampFormat', 'escapeUnicode', 'history', 'search', 'mode', 'modes', 'name', 'indentation', 'sortObjectKeys', 'navigationBar', 'statusBar', 'mainMenuBar', 'languages', 'language', 'enableSort', 'enableTransform', 'limitDragging', 'maxVisibleChilds', 'onValidationError', 'modalAnchor', 'popupAnchor', 'createQuery', 'executeQuery', 'queryDescription'];
 /**
  * Create the JSONEditor
  * @param {Element} container    Container element
@@ -11416,15 +11544,15 @@ JSONEditor.prototype.setSchema = function (schema, schemaRefs) {
  */
 
 
-JSONEditor.prototype.validate = function () {} // must be implemented by treemode and textmode
-
+JSONEditor.prototype.validate = function () {// must be implemented by treemode and textmode
+};
 /**
  * Refresh the rendered contents
  */
-;
 
-JSONEditor.prototype.refresh = function () {} // can be implemented by treemode and textmode
 
+JSONEditor.prototype.refresh = function () {// can be implemented by treemode and textmode
+};
 /**
  * Register a plugin with one ore multiple modes for the JSON Editor.
  *
@@ -11444,7 +11572,7 @@ JSONEditor.prototype.refresh = function () {} // can be implemented by treemode 
  *
  * @param {Object | Array} mode  A mode object or an array with multiple mode objects.
  */
-;
+
 
 JSONEditor.registerMode = function (mode) {
   var i, prop;
@@ -11494,7 +11622,8 @@ JSONEditor.Ajv = Ajv;
 JSONEditor.VanillaPicker = VanillaPicker; // expose some utils (this is undocumented, unofficial)
 
 JSONEditor.showTransformModal = showTransformModal;
-JSONEditor.showSortModal = showSortModal; // default export for TypeScript ES6 projects
+JSONEditor.showSortModal = showSortModal;
+JSONEditor.getInnerText = getInnerText; // default export for TypeScript ES6 projects
 
 JSONEditor["default"] = JSONEditor;
 module.exports = JSONEditor;
@@ -11556,7 +11685,11 @@ exports.tryRequireAjv = function () {
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "treeModeMixins", function() { return /* binding */ treeModeMixins; });
 
 // EXTERNAL MODULE: ./src/js/vanilla-picker/index.js
 var vanilla_picker = __webpack_require__(12);
@@ -11576,9 +11709,7 @@ function _defineProperties(target, props) { for (var i = 0; i < props.length; i+
 
 function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
 
-var Highlighter =
-/*#__PURE__*/
-function () {
+var Highlighter = /*#__PURE__*/function () {
   function Highlighter() {
     _classCallCheck(this, Highlighter);
 
@@ -11693,9 +11824,7 @@ function NodeHistory_createClass(Constructor, protoProps, staticProps) { if (pro
  * @param {JSONEditor} editor
  */
 
-var NodeHistory_NodeHistory =
-/*#__PURE__*/
-function () {
+var NodeHistory_NodeHistory = /*#__PURE__*/function () {
   function NodeHistory(editor) {
     NodeHistory_classCallCheck(this, NodeHistory);
 
@@ -12055,9 +12184,7 @@ function SearchBox_createClass(Constructor, protoProps, staticProps) { if (proto
  *                                          create the search box
  */
 
-var SearchBox_SearchBox =
-/*#__PURE__*/
-function () {
+var SearchBox_SearchBox = /*#__PURE__*/function () {
   function SearchBox(editor, container) {
     SearchBox_classCallCheck(this, SearchBox);
 
@@ -12299,16 +12426,16 @@ function () {
           var resultCount = this.results.length;
 
           if (resultCount === 0) {
-            this.dom.results.innerHTML = 'no&nbsp;results';
+            this.dom.results.textContent = "no\xA0results";
           } else if (resultCount === 1) {
-            this.dom.results.innerHTML = '1&nbsp;result';
+            this.dom.results.textContent = "1\xA0result";
           } else if (resultCount > MAX_SEARCH_RESULTS) {
-            this.dom.results.innerHTML = MAX_SEARCH_RESULTS + '+&nbsp;results';
+            this.dom.results.textContent = MAX_SEARCH_RESULTS + "+\xA0results";
           } else {
-            this.dom.results.innerHTML = resultCount + '&nbsp;results';
+            this.dom.results.textContent = resultCount + "\xA0results";
           }
         } else {
-          this.dom.results.innerHTML = '';
+          this.dom.results.textContent = '';
         }
       }
     }
@@ -12436,9 +12563,7 @@ function TreePath_createClass(Constructor, protoProps, staticProps) { if (protoP
  * @constructor
  */
 
-var TreePath_TreePath =
-/*#__PURE__*/
-function () {
+var TreePath_TreePath = /*#__PURE__*/function () {
   function TreePath(container, root) {
     TreePath_classCallCheck(this, TreePath);
 
@@ -12460,7 +12585,7 @@ function () {
   TreePath_createClass(TreePath, [{
     key: "reset",
     value: function reset() {
-      this.path.innerHTML = Object(i18n["c" /* translate */])('selectNode');
+      this.path.textContent = Object(i18n["c" /* translate */])('selectNode');
     }
     /**
      * Renders the component UI according to a given path objects
@@ -12472,7 +12597,7 @@ function () {
     key: "setPath",
     value: function setPath(pathObjs) {
       var me = this;
-      this.path.innerHTML = '';
+      this.path.textContent = '';
 
       if (pathObjs && pathObjs.length) {
         pathObjs.forEach(function (pathObj, idx) {
@@ -12486,7 +12611,7 @@ function () {
           if (pathObj.children.length) {
             sepEl = document.createElement('span');
             sepEl.className = 'jsoneditor-treepath-seperator';
-            sepEl.innerHTML = '&#9658;';
+            sepEl.textContent = "\u25BA";
 
             sepEl.onclick = function () {
               me.contentMenuClicked = true;
@@ -12516,7 +12641,7 @@ function () {
               var showAllBtn = document.createElement('span');
               showAllBtn.className = 'jsoneditor-treepath-show-all-btn';
               showAllBtn.title = 'show all path';
-              showAllBtn.innerHTML = '...';
+              showAllBtn.textContent = '...';
               showAllBtn.onclick = _onShowAllClick.bind(me, pathObjs);
               me.path.insertBefore(showAllBtn, me.path.firstChild);
             }
@@ -12654,7 +12779,7 @@ function appendNodeFactory(Node) {
 
     var tdAppend = document.createElement('td');
     var domText = document.createElement('div');
-    domText.innerHTML = '(' + Object(i18n["c" /* translate */])('empty') + ')';
+    domText.appendChild(document.createTextNode('(' + Object(i18n["c" /* translate */])('empty') + ')'));
     domText.className = 'jsoneditor-readonly';
     tdAppend.appendChild(domText);
     dom.td = tdAppend;
@@ -12696,7 +12821,7 @@ function appendNodeFactory(Node) {
     var domText = dom.text;
 
     if (domText) {
-      domText.innerHTML = '(' + Object(i18n["c" /* translate */])('empty') + ' ' + this.parent.type + ')';
+      domText.firstChild.nodeValue = '(' + Object(i18n["c" /* translate */])('empty') + ' ' + this.parent.type + ')';
     } // attach or detach the contents of the append node:
     // hide when the parent has childs, show when the parent has no childs
 
@@ -12749,32 +12874,31 @@ function appendNodeFactory(Node) {
 
   AppendNode.prototype.showContextMenu = function (anchor, onClose) {
     var node = this;
-    var titles = Node.TYPE_TITLES;
     var appendSubmenu = [{
       text: Object(i18n["c" /* translate */])('auto'),
       className: 'jsoneditor-type-auto',
-      title: titles.auto,
+      title: Object(i18n["c" /* translate */])('autoType'),
       click: function click() {
         node._onAppend('', '', 'auto');
       }
     }, {
       text: Object(i18n["c" /* translate */])('array'),
       className: 'jsoneditor-type-array',
-      title: titles.array,
+      title: Object(i18n["c" /* translate */])('arrayType'),
       click: function click() {
         node._onAppend('', []);
       }
     }, {
       text: Object(i18n["c" /* translate */])('object'),
       className: 'jsoneditor-type-object',
-      title: titles.object,
+      title: Object(i18n["c" /* translate */])('objectType'),
       click: function click() {
         node._onAppend('', {});
       }
     }, {
       text: Object(i18n["c" /* translate */])('string'),
       className: 'jsoneditor-type-string',
-      title: titles.string,
+      title: Object(i18n["c" /* translate */])('stringType'),
       click: function click() {
         node._onAppend('', '', 'string');
       }
@@ -13016,6 +13140,8 @@ var constants = __webpack_require__(2);
 // CONCATENATED MODULE: ./src/js/Node.js
 
 
+var _this4 = undefined;
+
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function Node_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13046,9 +13172,7 @@ function Node_createClass(Constructor, protoProps, staticProps) { if (protoProps
  *                                          'object', or 'string'.
  */
 
-var Node_Node =
-/*#__PURE__*/
-function () {
+var Node_Node = /*#__PURE__*/function () {
   function Node(editor, params) {
     Node_classCallCheck(this, Node);
 
@@ -13473,9 +13597,9 @@ function () {
   }, {
     key: "setValue",
     value: function setValue(value, type) {
-      var childValue, child, visible;
+      var childValue, child;
       var i, j;
-      var notUpdateDom = false;
+      var updateDom = false;
       var previousChilds = this.childs;
       this.type = this._getType(value); // check if type corresponds with the provided type
 
@@ -13508,8 +13632,8 @@ function () {
               child = new Node(this.editor, {
                 value: childValue
               });
-              visible = i < this.getMaxVisibleChilds();
-              this.appendChild(child, visible, notUpdateDom);
+              var visible = i < this.getMaxVisibleChilds();
+              this.appendChild(child, visible, updateDom);
             }
           }
         } // cleanup redundant childs
@@ -13517,7 +13641,7 @@ function () {
 
 
         for (j = this.childs.length; j >= value.length; j--) {
-          this.removeChild(this.childs[j], notUpdateDom);
+          this.removeChild(this.childs[j], updateDom);
         }
       } else if (this.type === 'object') {
         // object
@@ -13529,7 +13653,7 @@ function () {
 
         for (j = this.childs.length - 1; j >= 0; j--) {
           if (!Node_hasOwnProperty(value, this.childs[j].field)) {
-            this.removeChild(this.childs[j], notUpdateDom);
+            this.removeChild(this.childs[j], updateDom);
           }
         }
 
@@ -13540,20 +13664,23 @@ function () {
             childValue = value[childField];
 
             if (childValue !== undefined && !(childValue instanceof Function)) {
-              child = this.findChildByProperty(childField);
+              var _child = this.findChildByProperty(childField);
 
-              if (child) {
+              if (_child) {
                 // reuse existing child, keep its state
-                child.setField(childField, true);
-                child.setValue(childValue);
+                _child.setField(childField, true);
+
+                _child.setValue(childValue);
               } else {
-                // create a new child
-                child = new Node(this.editor, {
+                // create a new child, append to the end
+                var newChild = new Node(this.editor, {
                   field: childField,
                   value: childValue
                 });
-                visible = i < this.getMaxVisibleChilds();
-                this.appendChild(child, visible, notUpdateDom);
+
+                var _visible = i < this.getMaxVisibleChilds();
+
+                this.appendChild(newChild, _visible, updateDom);
               }
             }
 
@@ -13561,10 +13688,11 @@ function () {
           }
         }
 
-        this.value = ''; // sort object keys
+        this.value = ''; // sort object keys during initialization. Must not trigger an onChange action
 
         if (this.editor.options.sortObjectKeys === true) {
-          this.sort([], 'asc');
+          var triggerAction = false;
+          this.sort([], 'asc', triggerAction);
         }
       } else {
         // value
@@ -14132,11 +14260,14 @@ function () {
      * Only applicable when Node value is of type array or object
      * @param {Node} node
      * @param {Node} beforeNode
+     * @param {boolean} [updateDom]  If true (default), the DOM of both parent
+     *                               node and appended node will be updated
+     *                               (child count, indexes)
      */
 
   }, {
     key: "moveBefore",
-    value: function moveBefore(node, beforeNode) {
+    value: function moveBefore(node, beforeNode, updateDom) {
       if (this._hasChilds()) {
         // create a temporary row, to prevent the scroll position from jumping
         // when removing the node
@@ -14156,12 +14287,13 @@ function () {
           // the this.childs.length + 1 is to reckon with the node that we're about to add
           if (this.childs.length + 1 > this.visibleChilds) {
             var lastVisibleNode = this.childs[this.visibleChilds - 1];
-            this.insertBefore(node, lastVisibleNode);
+            this.insertBefore(node, lastVisibleNode, updateDom);
           } else {
-            this.appendChild(node);
+            var visible = true;
+            this.appendChild(node, visible, updateDom);
           }
         } else {
-          this.insertBefore(node, beforeNode);
+          this.insertBefore(node, beforeNode, updateDom);
         }
 
         if (tbody) {
@@ -14174,11 +14306,14 @@ function () {
      * Only applicable when Node value is of type array or object
      * @param {Node} node
      * @param {Node} beforeNode
+     * @param {boolean} [updateDom]  If true (default), the DOM of both parent
+     *                               node and appended node will be updated
+     *                               (child count, indexes)
      */
 
   }, {
     key: "insertBefore",
-    value: function insertBefore(node, beforeNode) {
+    value: function insertBefore(node, beforeNode, updateDom) {
       if (this._hasChilds()) {
         this.visibleChilds++; // initialize field value if needed
 
@@ -14220,12 +14355,14 @@ function () {
           this.showChilds();
         }
 
-        this.updateDom({
-          updateIndexes: true
-        });
-        node.updateDom({
-          recurse: true
-        });
+        if (updateDom !== false) {
+          this.updateDom({
+            updateIndexes: true
+          });
+          node.updateDom({
+            recurse: true
+          });
+        }
       }
     }
     /**
@@ -14623,34 +14760,21 @@ function () {
       } else if (this.type === 'object') {
         if (_typeof(json) !== 'object' || !json) {
           return false;
-        } // TODO: for better efficiency, we could create a property `isDuplicate` on all of the childs
-        // and keep that up to date. This should make deepEqual about 20% faster.
+        } // we reckon with the order of the properties too.
 
 
-        var props = {};
-        var propCount = 0;
+        var props = Object.keys(json);
 
-        for (i = 0; i < this.childs.length; i++) {
-          var child = this.childs[i];
-
-          if (!props[child.field]) {
-            // We can have childs with duplicate field names.
-            // We take the first, and ignore the others.
-            props[child.field] = true;
-            propCount++;
-
-            if (!(child.field in json)) {
-              return false;
-            }
-
-            if (!child.deepEqual(json[child.field])) {
-              return false;
-            }
-          }
+        if (this.childs.length !== props.length) {
+          return false;
         }
 
-        if (propCount !== Object.keys(json).length) {
-          return false;
+        for (i = 0; i < props.length; i++) {
+          var child = this.childs[i];
+
+          if (child.field !== props[i] || !child.deepEqual(json[child.field])) {
+            return false;
+          }
         }
       } else {
         if (this.value !== json) {
@@ -14672,6 +14796,12 @@ function () {
 
       if (this.dom.value && this.type !== 'array' && this.type !== 'object') {
         this.valueInnerText = Object(util["getInnerText"])(this.dom.value);
+
+        if (this.valueInnerText === '' && this.dom.value.innerHTML !== '') {
+          // When clearing the contents, often a <br/> remains, messing up the
+          // styling of the empty text box. Therefore we remove the <br/>
+          this.dom.value.textContent = '';
+        }
       }
 
       if (this.valueInnerText !== undefined) {
@@ -14899,13 +15029,13 @@ function () {
 
             this.dom.select.option = document.createElement('option');
             this.dom.select.option.value = '';
-            this.dom.select.option.innerHTML = '--';
+            this.dom.select.option.textContent = '--';
             this.dom.select.appendChild(this.dom.select.option); // Iterate all enum values and add them as options
 
             for (var i = 0; i < this["enum"].length; i++) {
               this.dom.select.option = document.createElement('option');
               this.dom.select.option.value = this["enum"][i];
-              this.dom.select.option.innerHTML = this["enum"][i];
+              this.dom.select.option.textContent = this["enum"][i];
 
               if (this.dom.select.option.value === this.value) {
                 this.dom.select.option.selected = true;
@@ -14925,7 +15055,7 @@ function () {
           if (this.schema && !Node_hasOwnProperty(this.schema, 'oneOf') && !Node_hasOwnProperty(this.schema, 'anyOf') && !Node_hasOwnProperty(this.schema, 'allOf')) {
             this.valueFieldHTML = this.dom.tdValue.innerHTML;
             this.dom.tdValue.style.visibility = 'hidden';
-            this.dom.tdValue.innerHTML = '';
+            this.dom.tdValue.textContent = '';
           } else {
             delete this.valueFieldHTML;
           }
@@ -14949,12 +15079,11 @@ function () {
             this.dom.tdColor = document.createElement('td');
             this.dom.tdColor.className = 'jsoneditor-tree';
             this.dom.tdColor.appendChild(this.dom.color);
-            this.dom.tdValue.parentNode.insertBefore(this.dom.tdColor, this.dom.tdValue); // this is a bit hacky, overriding the text color like this. find a nicer solution
-
-            this.dom.value.style.color = '#1A1A1A';
-          } // update the color background
+            this.dom.tdValue.parentNode.insertBefore(this.dom.tdColor, this.dom.tdValue);
+          } // update styling of value and color background
 
 
+          Object(util["addClassName"])(this.dom.value, 'jsoneditor-color-value');
           this.dom.color.style.backgroundColor = value;
         } else {
           // cleanup color picker when displayed
@@ -14980,7 +15109,7 @@ function () {
           }
 
           if (!title) {
-            this.dom.date.innerHTML = new Date(value).toISOString();
+            this.dom.date.textContent = new Date(value).toISOString();
           } else {
             while (this.dom.date.firstChild) {
               this.dom.date.removeChild(this.dom.date.firstChild);
@@ -15011,7 +15140,7 @@ function () {
         this.dom.tdColor.parentNode.removeChild(this.dom.tdColor);
         delete this.dom.tdColor;
         delete this.dom.color;
-        this.dom.value.style.color = '';
+        Object(util["removeClassName"])(this.dom.value, 'jsoneditor-color-value');
       }
     }
     /**
@@ -15074,6 +15203,12 @@ function () {
 
       if (this.dom.field && this.fieldEditable) {
         this.fieldInnerText = Object(util["getInnerText"])(this.dom.field);
+
+        if (this.fieldInnerText === '' && this.dom.field.innerHTML !== '') {
+          // When clearing the contents, often a <br/> remains, messing up the
+          // styling of the empty text box. Therefore we remove the <br/>
+          this.dom.field.textContent = '';
+        }
       }
 
       if (this.fieldInnerText !== undefined) {
@@ -15433,7 +15568,14 @@ function () {
           }
         }
 
-        domField.innerHTML = this._escapeHTML(fieldText);
+        var escapedField = this._escapeHTML(fieldText);
+
+        if (document.activeElement !== domField || escapedField !== this._unescapeHTML(Object(util["getInnerText"])(domField))) {
+          // only update if it not has the focus or when there is an actual change,
+          // else you would needlessly loose the caret position when changing tabs
+          // or whilst typing
+          domField.innerHTML = escapedField;
+        }
 
         this._updateSchema();
       } // apply value to DOM
@@ -15445,7 +15587,14 @@ function () {
         if (this.type === 'array' || this.type === 'object') {
           this.updateNodeName();
         } else {
-          domValue.innerHTML = this._escapeHTML(this.value);
+          var escapedValue = this._escapeHTML(this.value);
+
+          if (document.activeElement !== domValue || escapedValue !== this._unescapeHTML(Object(util["getInnerText"])(domValue))) {
+            // only update if it not has the focus or when there is an actual change,
+            // else you would needlessly loose the caret position when changing tabs
+            // or whilst typing
+            domValue.innerHTML = escapedValue;
+          }
         }
       } // apply styling to the table row
 
@@ -15549,7 +15698,7 @@ function () {
             var childField = child.dom.field;
 
             if (childField) {
-              childField.innerHTML = index;
+              childField.textContent = index;
             }
           });
         } else if (this.type === 'object') {
@@ -15577,10 +15726,10 @@ function () {
 
       if (this.type === 'array') {
         domValue = document.createElement('div');
-        domValue.innerHTML = '[...]';
+        domValue.textContent = '[...]';
       } else if (this.type === 'object') {
         domValue = document.createElement('div');
-        domValue.innerHTML = '{...}';
+        domValue.textContent = '{...}';
       } else {
         if (!this.editable.value && Object(util["isUrl"])(this.value)) {
           // create a link in case of read-only editor and value containing an url
@@ -15732,7 +15881,7 @@ function () {
 
 
       if (type === 'change' && target === dom.checkbox) {
-        this.dom.value.innerHTML = !this.value;
+        this.dom.value.textContent = String(!this.value);
 
         this._getDomValue();
 
@@ -15741,7 +15890,7 @@ function () {
 
 
       if (type === 'change' && target === dom.select) {
-        this.dom.value.innerHTML = dom.select.value;
+        this.dom.value.innerHTML = this._escapeHTML(dom.select.value);
 
         this._getDomValue();
 
@@ -15765,8 +15914,9 @@ function () {
 
               var escapedValue = this._escapeHTML(this.value);
 
-              if (domValue.innerHTML !== escapedValue) {
-                // only update if changed, else you lose the caret position when changing tabs for example
+              if (escapedValue !== this._unescapeHTML(Object(util["getInnerText"])(domValue))) {
+                // only update when there is an actual change, else you loose the
+                // caret position when changing tabs or whilst typing
                 domValue.innerHTML = escapedValue;
               }
 
@@ -15830,8 +15980,9 @@ function () {
 
               var escapedField = this._escapeHTML(this.field);
 
-              if (domField.innerHTML !== escapedField) {
-                // only update if changed, else you lose the caret position when changing tabs for example
+              if (escapedField !== this._unescapeHTML(Object(util["getInnerText"])(domField))) {
+                // only update when there is an actual change, else you loose the
+                // caret position when changing tabs or whilst typing
                 domField.innerHTML = escapedField;
               }
 
@@ -16513,12 +16664,17 @@ function () {
      * or 'array'.
      * @param {String[] | string} path  Path of the child value to be compared
      * @param {String} direction        Sorting direction. Available values: "asc", "desc"
+     * @param {boolean} [triggerAction=true]  If true (default), a user action will be
+     *                                        triggered, creating an entry in history
+     *                                        and invoking onChange.
      * @private
      */
 
   }, {
     key: "sort",
     value: function sort(path, direction) {
+      var triggerAction = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : true;
+
       if (typeof path === 'string') {
         path = Object(util["parsePath"])(path);
       }
@@ -16568,13 +16724,15 @@ function () {
 
       this._updateDomIndexes();
 
-      this.editor._onAction('sort', {
-        path: this.getInternalPath(),
-        oldChilds: oldChilds,
-        newChilds: this.childs
-      });
-
       this.showChilds();
+
+      if (triggerAction === true) {
+        this.editor._onAction('sort', {
+          path: this.getInternalPath(),
+          oldChilds: oldChilds,
+          newChilds: this.childs
+        });
+      }
     }
     /**
      * Replace the value of the node, keep it's state
@@ -17032,7 +17190,6 @@ function () {
     key: "showContextMenu",
     value: function showContextMenu(anchor, onClose) {
       var node = this;
-      var titles = Node.TYPE_TITLES;
       var items = [];
 
       if (this.editable.value) {
@@ -17043,28 +17200,28 @@ function () {
           submenu: [{
             text: Object(i18n["c" /* translate */])('auto'),
             className: 'jsoneditor-type-auto' + (this.type === 'auto' ? ' jsoneditor-selected' : ''),
-            title: titles.auto,
+            title: Object(i18n["c" /* translate */])('autoType'),
             click: function click() {
               node._onChangeType('auto');
             }
           }, {
             text: Object(i18n["c" /* translate */])('array'),
             className: 'jsoneditor-type-array' + (this.type === 'array' ? ' jsoneditor-selected' : ''),
-            title: titles.array,
+            title: Object(i18n["c" /* translate */])('arrayType'),
             click: function click() {
               node._onChangeType('array');
             }
           }, {
             text: Object(i18n["c" /* translate */])('object'),
             className: 'jsoneditor-type-object' + (this.type === 'object' ? ' jsoneditor-selected' : ''),
-            title: titles.object,
+            title: Object(i18n["c" /* translate */])('objectType'),
             click: function click() {
               node._onChangeType('object');
             }
           }, {
             text: Object(i18n["c" /* translate */])('string'),
             className: 'jsoneditor-type-string' + (this.type === 'string' ? ' jsoneditor-selected' : ''),
-            title: titles.string,
+            title: Object(i18n["c" /* translate */])('stringType'),
             click: function click() {
               node._onChangeType('string');
             }
@@ -17128,28 +17285,28 @@ function () {
           var appendSubmenu = [{
             text: Object(i18n["c" /* translate */])('auto'),
             className: 'jsoneditor-type-auto',
-            title: titles.auto,
+            title: Object(i18n["c" /* translate */])('autoType'),
             click: function click() {
               node._onAppend('', '', 'auto');
             }
           }, {
             text: Object(i18n["c" /* translate */])('array'),
             className: 'jsoneditor-type-array',
-            title: titles.array,
+            title: Object(i18n["c" /* translate */])('arrayType'),
             click: function click() {
               node._onAppend('', []);
             }
           }, {
             text: Object(i18n["c" /* translate */])('object'),
             className: 'jsoneditor-type-object',
-            title: titles.object,
+            title: Object(i18n["c" /* translate */])('objectType'),
             click: function click() {
               node._onAppend('', {});
             }
           }, {
             text: Object(i18n["c" /* translate */])('string'),
             className: 'jsoneditor-type-string',
-            title: titles.string,
+            title: Object(i18n["c" /* translate */])('stringType'),
             click: function click() {
               node._onAppend('', '', 'string');
             }
@@ -17171,28 +17328,28 @@ function () {
         var insertSubmenu = [{
           text: Object(i18n["c" /* translate */])('auto'),
           className: 'jsoneditor-type-auto',
-          title: titles.auto,
+          title: Object(i18n["c" /* translate */])('autoType'),
           click: function click() {
             node._onInsertBefore('', '', 'auto');
           }
         }, {
           text: Object(i18n["c" /* translate */])('array'),
           className: 'jsoneditor-type-array',
-          title: titles.array,
+          title: Object(i18n["c" /* translate */])('arrayType'),
           click: function click() {
             node._onInsertBefore('', []);
           }
         }, {
           text: Object(i18n["c" /* translate */])('object'),
           className: 'jsoneditor-type-object',
-          title: titles.object,
+          title: Object(i18n["c" /* translate */])('objectType'),
           click: function click() {
             node._onInsertBefore('', {});
           }
         }, {
           text: Object(i18n["c" /* translate */])('string'),
           className: 'jsoneditor-type-string',
-          title: titles.string,
+          title: Object(i18n["c" /* translate */])('stringType'),
           click: function click() {
             node._onInsertBefore('', '', 'string');
           }
@@ -17426,7 +17583,7 @@ function () {
           }
         }
 
-        this.dom.value.innerHTML = this.type === 'object' ? '{' + (nodeName || count) + '}' : '[' + (nodeName || count) + ']';
+        this.dom.value.textContent = this.type === 'object' ? '{' + (nodeName || count) + '}' : '[' + (nodeName || count) + ']';
       }
     }
     /**
@@ -17590,7 +17747,7 @@ Node_Node.onDrag = function (nodes, event) {
       }
     }
 
-    if (nodePrev) {
+    if (nodePrev && (editor.options.limitDragging === false || nodePrev.parent === nodes[0].parent)) {
       nodes.forEach(function (node) {
         nodePrev.parent.moveBefore(node, nodePrev);
       });
@@ -17666,7 +17823,7 @@ Node_Node.onDrag = function (nodes, event) {
         } // move the node when its position is changed
 
 
-        if (nodeNext && nodeNext.dom.tr && trLast.nextSibling !== nodeNext.dom.tr) {
+        if (nodeNext && (editor.options.limitDragging === false || nodeNext.parent === nodes[0].parent) && nodeNext.dom.tr && nodeNext.dom.tr !== trLast.nextSibling) {
           nodes.forEach(function (node) {
             nodeNext.parent.moveBefore(node, nodeNext);
           });
@@ -17932,7 +18089,7 @@ Node_Node.onDuplicate = function (nodes) {
       if (clones[0].parent.type === 'object') {
         // when duplicating a single object property,
         // set focus to the field and keep the original field name
-        clones[0].dom.field.innerHTML = nodes[0].field;
+        clones[0].dom.field.innerHTML = _this4._escapeHTML(nodes[0].field);
         clones[0].focus('field');
       } else {
         clones[0].focus();
@@ -18020,15 +18177,8 @@ Node_Node.blurNodes = function (nodes) {
   } else {
     parent.focus();
   }
-}; // titles with explanation for the different types
-
-
-Node_Node.TYPE_TITLES = {
-  auto: Object(i18n["c" /* translate */])('autoType'),
-  object: Object(i18n["c" /* translate */])('objectType'),
-  array: Object(i18n["c" /* translate */])('arrayType'),
-  string: Object(i18n["c" /* translate */])('stringType')
 }; // helper function to get the internal path of a node
+
 
 function getInternalPath(node) {
   return node.getInternalPath();
@@ -18113,7 +18263,7 @@ function autocomplete(config) {
       refresh: function refresh(token, array) {
         elem.style.visibility = 'hidden';
         ix = 0;
-        elem.innerHTML = '';
+        elem.textContent = '';
         var vph = window.innerHeight || document.documentElement.clientHeight;
         var rect = elem.parentNode.getBoundingClientRect();
         var distanceToTop = rect.top - 6; // heuristic give 6px
@@ -18133,7 +18283,11 @@ function autocomplete(config) {
           divRow.onmouseout = onMouseOut;
           divRow.onmousedown = onMouseDown;
           divRow.__hint = row;
-          divRow.innerHTML = row.substring(0, token.length) + '<b>' + row.substring(token.length) + '</b>';
+          divRow.textContent = '';
+          divRow.appendChild(document.createTextNode(row.substring(0, token.length)));
+          var b = document.createElement('b');
+          b.appendChild(document.createTextNode(row.substring(token.length)));
+          divRow.appendChild(b);
           elem.appendChild(divRow);
           return divRow;
         });
@@ -18231,11 +18385,9 @@ function autocomplete(config) {
       spacer.style.fontFamily = fontFamily;
       spacer.style.fontWeight = 'normal';
       document.body.appendChild(spacer);
-    } // Used to encode an HTML string into a plain text.
-    // taken from http://stackoverflow.com/questions/1219860/javascript-jquery-html-encoding
+    }
 
-
-    spacer.innerHTML = String(text).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/'/g, '&#39;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+    spacer.textContent = text;
     return spacer.getBoundingClientRect().right;
   }
 
@@ -18496,7 +18648,6 @@ function autocomplete(config) {
 var jmespathQuery = __webpack_require__(4);
 
 // CONCATENATED MODULE: ./src/js/treemode.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "treeModeMixins", function() { return treeModeMixins; });
 
 
 
@@ -18617,6 +18768,7 @@ treemode._setOptions = function (options) {
     autocomplete: null,
     navigationBar: true,
     mainMenuBar: true,
+    limitDragging: false,
     onSelectionChange: null,
     colorPicker: true,
     onColorPicker: function onColorPicker(parent, color, onChange) {
@@ -18656,7 +18808,11 @@ treemode._setOptions = function (options) {
   if (options) {
     Object.keys(options).forEach(function (prop) {
       _this.options[prop] = options[prop];
-    });
+    }); // default limitDragging to true when a JSON schema is defined
+
+    if (options.limitDragging == null && options.schema != null) {
+      this.options.limitDragging = true;
+    }
   } // compile a JSON schema validator if a JSON schema is provided
 
 
@@ -19735,7 +19891,7 @@ treemode._updateTreePath = function (pathNodes) {
   }
 
   function getName(node) {
-    return node.parent ? node.parent.type === 'array' ? node.index : node.field : node.type;
+    return node.parent ? node.parent.type === 'array' ? node.index : node.field : node.field || node.type;
   }
 };
 /**
@@ -20383,7 +20539,11 @@ var treeModeMixins = [{
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
+// ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
+
+// EXPORTS
+__webpack_require__.d(__webpack_exports__, "previewModeMixins", function() { return /* binding */ previewModeMixins; });
 
 // EXTERNAL MODULE: ./src/js/i18n.js
 var i18n = __webpack_require__(1);
@@ -20426,9 +20586,7 @@ function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _d
  * @param {number} limit    Maximum size of all items in history
  * @constructor
  */
-var History =
-/*#__PURE__*/
-function () {
+var History = /*#__PURE__*/function () {
   function History(onChange, calculateItemSize, limit) {
     _classCallCheck(this, History);
 
@@ -20516,7 +20674,6 @@ function () {
 var jmespathQuery = __webpack_require__(4);
 
 // CONCATENATED MODULE: ./src/js/previewmode.js
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "previewModeMixins", function() { return previewModeMixins; });
 
 
 
@@ -20559,8 +20716,11 @@ previewmode.create = function (container) {
     this.indentation = Number(options.indentation);
   } else {
     this.indentation = 2; // number of spaces
-  } // determine mode
+  } // language
 
+
+  Object(i18n["b" /* setLanguages */])(this.options.languages);
+  Object(i18n["a" /* setLanguage */])(this.options.language); // determine mode
 
   this.mode = 'preview';
   var me = this;
@@ -20593,7 +20753,7 @@ previewmode.create = function (container) {
   this.dom.busy = document.createElement('div');
   this.dom.busy.className = 'jsoneditor-busy';
   this.dom.busyContent = document.createElement('span');
-  this.dom.busyContent.innerHTML = 'busy...';
+  this.dom.busyContent.textContent = 'busy...';
   this.dom.busy.appendChild(this.dom.busyContent);
   this.content.appendChild(this.dom.busy);
   this.dom.previewContent = document.createElement('pre');

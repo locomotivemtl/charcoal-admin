@@ -302,7 +302,8 @@ if (!String.prototype.replacePairs) {
         }
     });
 }
-;var Charcoal = Charcoal || {};
+
+var Charcoal = Charcoal || {};
 
 /**
  * Charcoal.Admin is meant to act like a static class that can be safely used without being instanciated.
@@ -843,7 +844,8 @@ Charcoal.Admin = (function () {
     return Admin;
 
 }());
-;/* globals cacheL10n */
+
+/* globals cacheL10n */
 /**
  * Charcoal Cache Manager
  *
@@ -1208,7 +1210,8 @@ Charcoal.Admin = (function () {
     Admin.cache();
 
 }(jQuery, Charcoal.Admin, document));
-;/**
+
+/**
  * Charcoal Component Manager
  *
  * Implements its own deferred "ready list" based on `jQuery.fn.ready`.
@@ -1516,7 +1519,8 @@ Charcoal.Admin = (function () {
     Charcoal.Admin.ComponentManager = Manager;
 
 }(jQuery, document));
-;/* globals commonL10n */
+
+/* globals commonL10n */
 /**
  * Charcoal Action
  *
@@ -1603,7 +1607,8 @@ Charcoal.Admin = (function () {
     new Charcoal.Admin.ActionManager();
 
 }(jQuery, document));
-;;(function (window) {
+
+;(function (window) {
     'use strict';
 
     /**
@@ -1730,7 +1735,8 @@ Charcoal.Admin = (function () {
     window.SimpleAudioElement = SimpleAudioElement;
 
 }(window));
-;/* globals commonL10n */
+
+/* globals commonL10n */
 /**
  * Charcoal Feedback Manager
  *
@@ -2347,7 +2353,8 @@ Charcoal.Admin = (function () {
     Admin.FeedbackEntry = Entry;
 
 }(jQuery, Charcoal.Admin, document));
-;/**
+
+/**
  * Charcoal reCAPTCHA Handler
  */
 
@@ -2432,7 +2439,8 @@ Charcoal.Admin = (function () {
     Admin.ReCaptcha = Captcha;
 
 }(jQuery, Charcoal.Admin, window));
-;/**
+
+/**
  * Abstract Component
  *
  * @param  {Object} opts - The component instance arguments.
@@ -2582,7 +2590,8 @@ Charcoal.Admin.Component.prototype.init = function () {
 Charcoal.Admin.Component.prototype.destroy = function () {
     // Do nothing
 };
-;/* globals widgetL10n */
+
+/* globals widgetL10n */
 
 /**
  * Base Widget (charcoal/admin/widget)
@@ -2962,7 +2971,8 @@ Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callb
 
     BootstrapDialog.confirm(opts);
 };
-;/* globals commonL10n,attachmentWidgetL10n */
+
+/* globals commonL10n,attachmentWidgetL10n */
 
 /**
  * Keep track of XHR by group
@@ -3463,7 +3473,8 @@ Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb) {
 Charcoal.Admin.Widget_Attachment.prototype.widget_options = function () {
     return this.opts('widget_options');
 };
-;/* globals moment */
+
+/* globals moment */
 /**
  * Table widget used for listing collections of objects
  * charcoal/admin/widget/table
@@ -3695,7 +3706,8 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
         }
     };
 };
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /* globals commonL10n,formWidgetL10n,URLSearchParams */
 /**
  * Form widget that manages data sending
@@ -4428,7 +4440,8 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
         });
     }
 };
-;/* globals echarts, widgetL10n */
+
+/* globals echarts, widgetL10n */
 /**
  * Graph widget used to display graphical charts
  * charcoal/admin/widget/graph
@@ -4481,7 +4494,8 @@ Graph.prototype.echartsOptions = function () {
 };
 
 Charcoal.Admin.Widget_Graph = Graph;
-;/**
+
+/**
  * Map sidebar
  *
  * According lat, lon or address must be specified
@@ -4597,7 +4611,8 @@ Charcoal.Admin.Widget_Map.prototype.controller = function () {
 Charcoal.Admin.Widget_Map.prototype.coords = function () {
     return this.opts('coords');
 };
-;/* globals commonL10n, objectRevisionsWidgetL10n */
+
+/* globals commonL10n, objectRevisionsWidgetL10n */
 /**
  * Quick form is called by JS and must be
  * added in the component manager manually.
@@ -4719,7 +4734,8 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.request_success = function ($fo
         });
     }
 };
-;/* globals commonL10n */
+
+/* globals commonL10n */
 /**
  * Quick form is called by JS and must be
  * added in the component manager manually.
@@ -4991,7 +5007,8 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $t
 Charcoal.Admin.Widget_Quick_Form.prototype.destroy = function () {
     this.$form.off('charcoal.quick.form');
 };
-;/* globals commonL10n,relationWidgetL10n */
+
+/* globals commonL10n,relationWidgetL10n */
 /**
  * Relation widget
  * You can associate a specific object to another
@@ -5331,7 +5348,8 @@ Charcoal.Admin.Widget_Relation.prototype.remove_relation = function (id, cb) {
 Charcoal.Admin.Widget_Relation.prototype.widget_options = function () {
     return this.opts('widget_options');
 };
-;/**
+
+/**
  * Search widget used for filtering a list
  * charcoal/admin/widget/search
  *
@@ -5560,7 +5578,8 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
 
     widget.reload();
 };
-;/**
+
+/**
  * Table widget used for listing collections of objects
  * charcoal/admin/widget/table
  *
@@ -5792,7 +5811,8 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
         }
     };
 };
-;/**
+
+/**
  * Base Property Input (charcoal/admin/property/input)
  *
  * Should mimic the PHP equivalent AbstractProperty
@@ -5930,7 +5950,8 @@ Charcoal.Admin.Property.prototype.save = function () {
 Charcoal.Admin.Property.prototype.error = function (data) {
     window.console.error(data);
 };
-;/**
+
+/**
  * Upload File Property Control
  */
 
@@ -6088,7 +6109,8 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function () {
     this.$input.off(this.EVENT_NAMESPACE);
     this.$file.off(this.EVENT_NAMESPACE);
 };
-;/* eslint-disable no-multiple-empty-lines */
+
+/* eslint-disable no-multiple-empty-lines */
 /* globals Promise,MediaStream,commonL10n,audioPropertyL10n */
 /**
  * Interface for saving audio messages
@@ -8395,7 +8417,8 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function () {
     Admin.Property_Input_Audio_Recorder = PropertyInput;
 
 }(jQuery, Charcoal.Admin, window, document));
-;/**
+
+/**
  * Interface for saving audio messages
  * Property_Input_Audio JavaScript class
  * charcoal/admin/property/input/audio
@@ -8635,7 +8658,8 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
         this.capture_component.property.destroy();
     }
 };
-;/* globals audioPropertyL10n */
+
+/* globals audioPropertyL10n */
 /**
  * Upload Audio Property Control
  */
@@ -8716,7 +8740,8 @@ Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file
         this.$previewFile.append($audio);
     }
 };
-;/**
+
+/**
  * Color picker
  *
  * Require
@@ -8757,7 +8782,8 @@ Charcoal.Admin.Property_Input_ColorPicker.prototype.create_colorpicker = functio
 
     return this;
 };
-;/**
+
+/**
  * DateTime picker that manages datetime properties
  * charcoal/admin/property/input/datetimepicker
  *
@@ -8801,7 +8827,8 @@ Charcoal.Admin.Property_Input_DateTimePicker.prototype.create_datetimepicker = f
 
     return this;
 };
-;/**
+
+/**
  * TinyMCE implementation for WYSIWYG inputs
  * charcoal/admin/property/input/tinymce
  *
@@ -8897,7 +8924,8 @@ Charcoal.Admin.Property_Input_DualSelect.prototype.destroy = function () {
         dualselect.remove();
     }
 };
-;/***
+
+/***
  * `charcoal/admin/property/input/geometry-widget`
  * Property_Input_Geometry_Widget Javascript class
  *
@@ -9284,7 +9312,8 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
 
     return this;
 };
-;/**
+
+/**
  * Upload Image Property Control
  */
 
@@ -9363,7 +9392,8 @@ Charcoal.Admin.Property_Input_Image.prototype.elfinder_callback = function (file
         this.$previewFile.append($image);
     }
 };
-;/***
+
+/***
  * `charcoal/admin/property/input/map-widget`
  * Property_Input_Map_Widget Javascript class
  *
@@ -9621,7 +9651,8 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
 
     return this;
 };
-;/**
+
+/**
  * Range Input
  */
 
@@ -9713,7 +9744,8 @@ Charcoal.Admin.Property_Input_Range.prototype.destroy = function () {
         this.$input.off(this.EVENT_NAMESPACE);
     }
 };
-;/**
+
+/**
  * Select Picker
  *
  * Require
@@ -9755,7 +9787,8 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
     return this;
 };
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /* global ClipboardJS */
 /**
  * Selectize Picker
@@ -10330,7 +10363,8 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     Charcoal.Admin.Property_Input_Selectize = Selectize;
 
 }(jQuery, document));
-;/* global Selectize */
+
+/* global Selectize */
 Selectize.define('btn_remove', function (options) {
     options = $.extend({
         label: '<span class="fa fa-trash-o"></span>',
@@ -10362,7 +10396,8 @@ Selectize.define('btn_remove', function (options) {
         multiUpdate(this, options);
     }
 });
-;/* global Selectize */
+
+/* global Selectize */
 Selectize.define('btn_update', function (options) {
     options = $.extend({
         label: '<span class="fa fa-pencil"></span>',
@@ -10403,7 +10438,8 @@ Selectize.define('btn_update', function (options) {
         multiUpdate(this, options);
     }
 });
-;/* global Selectize */
+
+/* global Selectize */
 Selectize.define('buttons', function () {
     /**
      * Escapes a string for use within HTML.
@@ -10509,7 +10545,8 @@ Selectize.define('buttons', function () {
         }());
     };
 });
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /* global Selectize */
 /**
  * Plugin: "create_on_enter" for selectize.js
@@ -10540,7 +10577,8 @@ Selectize.define('create_on_blur', function () {
         };
     }());
 });
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /* global Selectize */
 /**
  * Plugin: "create_on_enter" for selectize.js
@@ -10571,7 +10609,8 @@ Selectize.define('create_on_enter', function () {
         };
     }());
 });
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /* global Selectize */
 Selectize.define('charcoal_item', function (options) {
     options = $.extend({
@@ -10644,7 +10683,8 @@ Selectize.define('charcoal_item', function (options) {
     }());
 
 });
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /**
  * Selectize Picker
  * List version.
@@ -10795,7 +10835,8 @@ Selectize.define('charcoal_item', function (options) {
     Charcoal.Admin.Property_Input_Selectize_List = List;
 
 }(jQuery, document));
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /* global ClipboardJS */
 /**
  * Selectize Picker
@@ -11125,7 +11166,8 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.init_clipboard = function
         }
     });
 };
-;/**
+
+/**
  * Basic text input that also manages multiple (split) values
  * charcoal/admin/property/input/text
  *
@@ -11635,7 +11677,8 @@ Charcoal.Admin.Property_Input_Text.prototype.set_split_on = function (splitOn) {
 
 Charcoal.Admin.Property_Input_Text.prototype.destroy = function () {
 }
-;/* eslint-disable consistent-this */
+
+/* eslint-disable consistent-this */
 /**
  * TinyMCE implementation for WYSIWYG inputs
  * charcoal/admin/property/input/tinymce
@@ -11995,7 +12038,8 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function () {
         editor.remove();
     }
 };
-;/**
+
+/**
  * Base Template (charcoal/admin/template)
  *
  * @param  {Object} opts - The component instance arguments.
@@ -12009,7 +12053,8 @@ Charcoal.Admin.Template = function (opts) {
 Charcoal.Admin.Template.prototype = Object.create(Charcoal.Admin.Component.prototype);
 Charcoal.Admin.Template.prototype.constructor = Charcoal.Admin.Template;
 Charcoal.Admin.Template.prototype.parent = Charcoal.Admin.Component.prototype;
-;/* globals authL10n */
+
+/* globals authL10n */
 /**
  * charcoal/admin/template/login
  */
@@ -12152,7 +12197,8 @@ Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
 
     return out;
 };
-;Charcoal.Admin.Template_MenuHeader = function () {
+
+Charcoal.Admin.Template_MenuHeader = function () {
     // toggle-class.js
     // ==========================================================================
     $('.js-toggle-class').click(function (event) {
@@ -12179,7 +12225,8 @@ Charcoal.Admin.Template_Login.prototype.parseFeedbackAsHtml = function (entries)
             .slideToggle();
     });
 };
-;/* globals authL10n */
+
+/* globals authL10n */
 /**
  * charcoal/admin/template/account/lost-password
  *
@@ -12271,7 +12318,8 @@ Charcoal.Admin.Template_Account_LostPassword.prototype.submitForm = function ($f
             });
         });
 };
-;/* globals authL10n */
+
+/* globals authL10n */
 /**
  * charcoal/admin/template/account/reset-password
  *

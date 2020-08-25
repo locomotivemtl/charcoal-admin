@@ -1,6 +1,6 @@
 module.exports = {
     options: {
-        separator: ';'
+        separator: '\n'
     },
     admin: {
         src: [
@@ -43,8 +43,9 @@ module.exports = {
             '<%= paths.js.src %>/charcoal/admin/bootstrap-dialog.js',
             // URL Search Params
             '<%= paths.npm %>/@ungap/url-search-params/min.js',
+            // Moment.js
+            '<%= paths.npm %>/moment/min/moment-with-locales.min.js',
             // Bootstrap Datepicker
-            '<%= paths.npm %>/moment/min/moment.min.js',
             '<%= paths.npm %>/tempusdominus-bootstrap-4/build/js/tempusdominus-bootstrap-4.min.js',
             // BB Map
             '<%= paths.npm %>/beneroch-gmap/assets/scripts/dist/min/gmap.min.js',
@@ -62,10 +63,7 @@ module.exports = {
             '<%= paths.npm %>/clipboard/dist/clipboard.min.js',
             // jQuery Timeago
             '<%= paths.npm %>/timeago/jquery.timeago.js',
-            // Moment.js
-            '<%= paths.npm %>/moment/min/moment-with-locales.min.js',
         ],
-        dest:      '<%= paths.js.dist %>/charcoal.admin.vendors.js',
-        separator: "\n"
+        dest: '<%= paths.js.dist %>/charcoal.admin.vendors.js'
     }
 };

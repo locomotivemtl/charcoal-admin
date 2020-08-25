@@ -5,7 +5,7 @@
     "version": "1.0.0",
     "author": "Locomotive <info@locomotive.ca>",
     "dependencies": {
-        "@claviska/jquery-minicolors": "~2.3.4",
+        "@claviska/jquery-minicolors": "^2.3.5",
         "@shopify/draggable": "^1.0.0-beta.8",
         "@ungap/url-search-params": "^0.2.2",
         "awesome-bootstrap-checkbox": "1.0.1",

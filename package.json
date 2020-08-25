@@ -10,7 +10,7 @@
         "@ungap/url-search-params": "^0.1.4",
         "awesome-bootstrap-checkbox": "1.0.1",
         "beneroch-gmap": "0.3.1",
-        "bootstrap": "^4.5.0",
+        "bootstrap": "^4.5.2",
         "bootstrap-select": "^1.13.18",
         "clipboard": "^2.0.6",
         "components-font-awesome": "~4.7.0",

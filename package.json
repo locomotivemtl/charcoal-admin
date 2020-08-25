@@ -19,7 +19,7 @@
         "jquery-ui-bundle": "1.12.1",
         "jsoneditor": "^8.6.1",
         "moment": "^2.22.2",
-        "multiselect-two-sides": "~2.5.0",
+        "multiselect-two-sides": "^2.5.7",
         "recorderjs": "git+https://github.com/mattdiamond/Recorderjs.git",
         "selectize": "~0.12.4",
         "selectize-scss": "https://github.com/papakay/selectize-bootstrap-4-style",

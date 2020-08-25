@@ -21,8 +21,8 @@
         "moment": "^2.27.0",
         "multiselect-two-sides": "^2.5.7",
         "recorderjs": "git+https://github.com/mattdiamond/Recorderjs.git",
-        "selectize": "~0.12.4",
-        "selectize-scss": "https://github.com/papakay/selectize-bootstrap-4-style",
+        "selectize": "~0.12.6",
+        "selectize-bootstrap-4": "https://github.com/papakay/selectize-bootstrap-4-style",
         "tempusdominus-bootstrap-4": "~5.1.0",
         "timeago": "^1.6.5",
         "tinymce": "^4.9.11",
@@ -47,7 +47,6 @@
         "load-grunt-config": "^3.0.1",
         "node-sass": "^4.14.1",
         "postcss-banner": "^3.0.2",
-        "selectizebootstrap": "git+https://github.com/papakay/selectize-bootstrap-4-style.git",
         "tempusdominus-core": "^5.0.3"
     },
     "browserslist": [

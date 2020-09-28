@@ -127,7 +127,7 @@ class LostPasswordToken extends AbstractModel
     protected function setDependencies(Container $container)
     {
         parent::setDependencies($container);
-        $this->defaultExpiry = $container['admin/config']['login']['token_expiry'] ?? '2 hours';
+        $this->defaultExpiry = ($container['admin/config']['login']['token_expiry'] ?? '2 hours');
     }
 
     /**

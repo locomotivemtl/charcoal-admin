@@ -9,6 +9,9 @@ use Pimple\Container;
 use Charcoal\Property\FileProperty;
 use Charcoal\Property\ImageProperty;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\Translation;
+
 // From 'charcoal-admin'
 use Charcoal\Admin\Property\AbstractPropertyDisplay;
 use Charcoal\Admin\Support\BaseUrlTrait;
@@ -25,16 +28,24 @@ class LinkDisplay extends AbstractPropertyDisplay
      */
     public function displayVal()
     {
-        $prop = $this->p();
-        $value = (array)$this->propertyVal();
+        $prop  = $this->property();
+        $value = $this->propertyVal();
         $links = [];
 
-        foreach ($value as $val) {
+        if ($value instanceof Translation) {
+            $value = $value->data();
+        }
+
+        if (!is_array($value)) {
+            $value = [ $value ];
+        }
+
+        foreach ($value as $key => $val) {
             if (empty($val)) {
                 continue;
             }
 
-            $links[] = sprintf(
+            $links[$key] = sprintf(
                 '<a href="%s">%s</a>',
                 $this->getLocalUrl($val),
                 $val
@@ -49,10 +60,18 @@ class LinkDisplay extends AbstractPropertyDisplay
      */
     public function displayValList()
     {
-        $prop = $this->p();
-        $value = (array)$this->propertyVal();
+        $prop  = $this->property();
+        $value = $this->propertyVal();
 
-        foreach ($value as $val) {
+        if ($value instanceof Translation) {
+            $value = $value->data();
+        }
+
+        if (!is_array($value)) {
+            $value = [ $value ];
+        }
+
+        foreach ($value as $key => $val) {
             if (empty($val)) {
                 continue;
             }
@@ -63,7 +82,7 @@ class LinkDisplay extends AbstractPropertyDisplay
                 basename($val)
             );
 
-            yield $prop->displayVal($link);
+            yield $key => $prop->displayVal($link);
         }
     }
 

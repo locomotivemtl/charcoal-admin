@@ -5609,7 +5609,8 @@ Charcoal.Admin.Widget_Table = function (opts) {
 
     this.template = this.properties = this.properties_options = undefined;
 
-    this.sortable = null;
+    this.sortable         = false;
+    this.sortable_handler = null;
 };
 
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
@@ -5629,6 +5630,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function () {
     this.obj_type           = opts.data.obj_type           || this.obj_type;
     this.widget_id          = opts.id                      || this.widget_id;
     this.table_selector     = '#' + this.widget_id;
+    this.sortable           = opts.data.sortable           || this.sortable;
     this.template           = opts.data.template           || this.template;
     this.collection_ident   = opts.data.collection_ident   || 'default'; // @todo remove the hardcoded shit
 
@@ -5664,15 +5666,15 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function () {
 };
 
 Charcoal.Admin.Widget_Table.prototype.bind_events = function () {
-    if (this.sortable !== null) {
-        this.sortable.destroy();
+    if (this.sortable_handler !== null) {
+        this.sortable_handler.destroy();
     }
 
     var that = this;
 
     var $sortable_table = $('tbody.js-sortable', that.table_selector);
     if ($sortable_table.length > 0) {
-        this.sortable = new window.Sortable.default($sortable_table.get(), {
+        this.sortable_handler = new window.Sortable.default($sortable_table.get(), {
             delay: 150,
             draggable: '.js-table-row',
             handle: '.js-sortable-handle',
@@ -5798,6 +5800,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
     return {
         obj_type:          this.obj_type,
         template:          this.template,
+        sortable:          this.sortable,
         collection_ident:  this.collection_ident,
         collection_config: {
             properties:         this.properties,

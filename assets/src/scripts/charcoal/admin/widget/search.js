@@ -225,5 +225,5 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
         widget.pagination.page = 1;
     }
 
-    widget.reload();
+    widget.reload(null, true);
 };

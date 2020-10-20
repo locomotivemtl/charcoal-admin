@@ -3633,7 +3633,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function () {
 
         if (page_num) {
             that.pagination.page = page_num;
-            that.reload();
+            that.reload(null, true);
         }
     });
 
@@ -3646,7 +3646,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function () {
         console.log(page_num);
 
         that.pagination.page = page_num;
-        that.reload();
+        that.reload(null, true);
     });
 };
 
@@ -5576,7 +5576,7 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
         widget.pagination.page = 1;
     }
 
-    widget.reload();
+    widget.reload(null, true);
 };
 
 /**
@@ -5726,7 +5726,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function () {
 
         if (page_num) {
             that.pagination.page = page_num;
-            that.reload();
+            that.reload(null, true);
         }
     });
 
@@ -5736,7 +5736,7 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function () {
         var $this = $(this);
         var page_num = $this.data('page-num');
         that.pagination.page = page_num;
-        that.reload();
+        that.reload(null, true);
     });
 };
 

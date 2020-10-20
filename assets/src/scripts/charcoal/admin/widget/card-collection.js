@@ -157,7 +157,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function () {
 
         if (page_num) {
             that.pagination.page = page_num;
-            that.reload();
+            that.reload(null, true);
         }
     });
 
@@ -170,7 +170,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.bind_events = function () {
         console.log(page_num);
 
         that.pagination.page = page_num;
-        that.reload();
+        that.reload(null, true);
     });
 };
 

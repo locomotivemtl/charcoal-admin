@@ -462,7 +462,6 @@ trait CollectionContainerTrait
     {
         if ($this->collectionConfig === null) {
             $this->setCollectionConfig($config);
-
             return $this;
         }
 
@@ -539,6 +538,18 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Prevents the mutation of pagination.
+     *
+     * @param  mixed $pagination Unused parameter.
+     * @return self
+     */
+    public function setPagination($pagination)
+    {
+        unset($pagination);
+        return $this;
+    }
+
+    /**
      * @return PaginationInterface
      */
     protected function createPagination()
@@ -608,6 +619,18 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Prevents the mutation of filters.
+     *
+     * @param  mixed $filters Unused parameter.
+     * @return self
+     */
+    public function setFilters($filters)
+    {
+        unset($filters);
+        return $this;
+    }
+
+    /**
      * @return FilterInterface
      */
     protected function createFilter()
@@ -646,6 +669,18 @@ trait CollectionContainerTrait
         }
 
         return $this->orders;
+    }
+
+    /**
+     * Prevents the mutation of orders.
+     *
+     * @param  mixed $orders Unused parameter.
+     * @return self
+     */
+    public function setOrders($orders)
+    {
+        unset($orders);
+        return $this;
     }
 
     /**
@@ -717,6 +752,30 @@ trait CollectionContainerTrait
     }
 
     /**
+     * Prevents the mutation of properties.
+     *
+     * @param  mixed $properties Unused parameter.
+     * @return self
+     */
+    public function setProperties($properties)
+    {
+        unset($properties);
+        return $this;
+    }
+
+    /**
+     * Prepares and returns the properties.
+     *
+     * This method should be overriden in the class implementing this trait.
+     *
+     * @return array
+     */
+    public function properties()
+    {
+        return [];
+    }
+
+    /**
      * Sort the properties before they are displayed as columns.
      *
      * This method is useful for classes using this trait.
@@ -726,6 +785,18 @@ trait CollectionContainerTrait
     public function sortProperties()
     {
         return $this->properties();
+    }
+
+    /**
+     * Retrieve the property customizations for the collection.
+     *
+     * This method should be overriden in the class implementing this trait.
+     *
+     * @return array
+     */
+    public function propertiesOptions()
+    {
+        return [];
     }
 
     /**

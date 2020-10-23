@@ -6,7 +6,11 @@
  * - jQuery
  * - Boostrap3-Dialog
  *
- * @param  {Object}  opts Options for widget
+ * @mixes Charcoal.Admin.Mixin_Model_Search
+ * @mixes Charcoal.Admin.Mixin_Model_Filters
+ * @mixes Charcoal.Admin.Mixin_Model_Orders
+ *
+ * @param {Object} opts - Options for widget
  */
 
 Charcoal.Admin.Widget_Table = function (opts) {
@@ -16,9 +20,6 @@ Charcoal.Admin.Widget_Table = function (opts) {
     this.obj_type       = null;
     this.widget_id      = null;
     this.table_selector = null;
-    this.search_query   = null;
-    this.filters        = {};
-    this.orders         = {};
     this.pagination     = {
         page: 1,
         num_per_page: 50
@@ -35,6 +36,10 @@ Charcoal.Admin.Widget_Table = function (opts) {
 Charcoal.Admin.Widget_Table.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Table.prototype.constructor = Charcoal.Admin.Widget_Table;
 Charcoal.Admin.Widget_Table.prototype.parent = Charcoal.Admin.Widget.prototype;
+
+Object.assign(Charcoal.Admin.Widget_Table.prototype, Charcoal.Admin.Mixin_Model_Search);
+Object.assign(Charcoal.Admin.Widget_Table.prototype, Charcoal.Admin.Mixin_Model_Filters);
+Object.assign(Charcoal.Admin.Widget_Table.prototype, Charcoal.Admin.Mixin_Model_Orders);
 
 /**
  * Necessary for a widget.
@@ -61,29 +66,41 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function () {
         this.properties_options = opts.data.properties_options;
     }
 
-    if (('filters' in opts.data) && Array.isArray(opts.data.filters)) {
-        this.filters = opts.data.filters;
+    if ('filters' in opts.data) {
+        this.set_filters(opts.data.filters);
     }
 
-    if (('orders' in opts.data) && Array.isArray(opts.data.orders)) {
-        this.orders = opts.data.orders;
+    if ('orders' in opts.data) {
+        this.set_orders(opts.data.orders);
     }
 
     if (('pagination' in opts.data) && $.isPlainObject(opts.data.pagination)) {
         this.pagination = opts.data.pagination;
     }
 
-    if (('list_actions' in opts.data) && Array.isArray(opts.data.list_actions)) {
-        this.list_actions = opts.data.list_actions;
+    if ('list_actions' in opts.data) {
+        if (Array.isArray(opts.data.list_actions)) {
+            this.list_actions = Object.assign({}, opts.data.list_actions);
+        } else if ($.isPlainObject(opts.data.list_actions)) {
+            this.list_actions = opts.data.list_actions;
+        }
     }
 
-    if (('object_actions' in opts.data) && Array.isArray(opts.data.object_actions)) {
-        this.object_actions = opts.data.object_actions;
+    if ('object_actions' in opts.data) {
+        if (Array.isArray(opts.data.object_actions)) {
+            this.object_actions = Object.assign({}, opts.data.object_actions);
+        } else if ($.isPlainObject(opts.data.object_actions)) {
+            this.object_actions = opts.data.object_actions;
+        }
     }
 
     return this;
 };
 
+/**
+ * @see Charcoal.Admin.Widget_Table.prototype.bind_events()
+ *     Similar method.
+ */
 Charcoal.Admin.Widget_Table.prototype.bind_events = function () {
     if (this.sortable_handler !== null) {
         this.sortable_handler.destroy();
@@ -159,62 +176,6 @@ Charcoal.Admin.Widget_Table.prototype.bind_events = function () {
     });
 };
 
-/**
- * As it says, it ADDs a filter to the already existing list
- * @param object
- * @return this chainable
- * @see set_filters
- */
-Charcoal.Admin.Widget_Table.prototype.add_filter = function (filter) {
-    var filters = this.get_filters();
-
-    // Null by default
-    // When you add a filter, you want it to be
-    // in an object
-    if (filters === null) {
-        filters = {};
-    }
-
-    filters = $.extend(filters, filter);
-    this.set_filters(filters);
-
-    return this;
-};
-
-/**
- * This will overwrite existing filters
- */
-Charcoal.Admin.Widget_Table.prototype.set_filters = function (filters) {
-    this.filters = filters;
-};
-
-/**
- * Getter
- * @return {Object | null} filters
- */
-Charcoal.Admin.Widget_Table.prototype.get_filters = function () {
-    return this.filters;
-};
-
-/**
- * Set the user search query
- *
- * @param  {string|null} query
- * @return {void}
- */
-Charcoal.Admin.Widget_Table.prototype.set_search_query = function (query) {
-    this.search_query = query;
-};
-
-/**
- * Get the user search query
- *
- * @return {string|null}
- */
-Charcoal.Admin.Widget_Table.prototype.get_search_query = function () {
-    return this.search_query;
-};
-
 Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
     return {
         obj_type:          this.obj_type,
@@ -224,9 +185,9 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
         collection_config: {
             properties:         this.properties,
             properties_options: this.properties_options,
-            search_query:       this.search_query,
-            filters:            this.filters,
-            orders:             this.orders,
+            search_query:       this.get_search_query(),
+            filters:            this.get_filters(),
+            orders:             this.get_orders(),
             pagination:         this.pagination,
             list_actions:       this.list_actions,
             object_actions:     this.object_actions

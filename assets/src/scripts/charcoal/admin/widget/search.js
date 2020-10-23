@@ -119,10 +119,10 @@ Charcoal.Admin.Widget_Search.prototype.parse_search_query = function (query) {
  * Parse a search query into query filters.
  *
  * @param  {string} query - The search query.
- * @return {object|null} A search request object or NULL.
+ * @return {array|null} A search request object or NULL.
  */
 Charcoal.Admin.Widget_Search.prototype.parse_search_filters = function (query) {
-    var words, props, request = null, filters = [], sub_filters;
+    var words, props, filters = [], sub_filters;
 
     query = this.parse_search_query(query);
 
@@ -147,12 +147,10 @@ Charcoal.Admin.Widget_Search.prototype.parse_search_filters = function (query) {
     }
 
     if (filters.length) {
-        request = {
-            filters: filters
-        };
+        return filters;
     }
 
-    return request;
+    return null;
 };
 
 /**
@@ -182,7 +180,7 @@ Charcoal.Admin.Widget_Search.prototype.search_query = function () {
 /**
  * Get the search filters.
  *
- * @return {object|null} The query filters object or NULL.
+ * @return {array|null} The query filters object or NULL.
  */
 Charcoal.Admin.Widget_Search.prototype.search_filters = function () {
     if (this._search_filters === false) {
@@ -205,7 +203,7 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
     }
 
     var is_searchable = (typeof widget.set_search_query === 'function');
-    var is_filterable = (typeof widget.set_filters === 'function');
+    var is_filterable = (typeof widget.set_filter === 'function');
 
     if (!is_searchable && !is_filterable) {
         return this;
@@ -218,7 +216,7 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
 
     if (is_filterable) {
         var filters = this.search_filters();
-        widget.set_filters(filters ? [ filters ] : []);
+        widget.set_filter('search', filters);
     }
 
     if (typeof widget.pagination !== 'undefined') {

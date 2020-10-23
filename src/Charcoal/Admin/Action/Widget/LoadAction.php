@@ -156,7 +156,6 @@ class LoadAction extends AdminAction
                 $widget->setData($widgetOptions);
             }
 
-
             $widgetHtml = $widget->renderTemplate($widget->template());
             $jsRequirements = $widget->renderTemplate('{{&jsRequirements}}');
             $js = $widget->renderTemplate('{{&js}}');

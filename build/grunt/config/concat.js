@@ -13,6 +13,7 @@ module.exports = {
             '<%= paths.js.src %>/charcoal/admin/feedback.js',
             '<%= paths.js.src %>/charcoal/admin/recaptcha.js',
             '<%= paths.js.src %>/charcoal/admin/component.js',
+            '<%= paths.js.src %>/charcoal/admin/mixin/*.js',
             '<%= paths.js.src %>/charcoal/admin/widget.js',
             '<%= paths.js.src %>/charcoal/admin/widget/*.js',
             '<%= paths.js.src %>/charcoal/admin/property.js',

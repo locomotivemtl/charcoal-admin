@@ -13,6 +13,11 @@ Charcoal.Admin = (function () {
         currentLang   = document.documentElement.lang,
         defaultLang   = 'en';
 
+    var IDX = 36, HEX = '';
+    while (IDX--) {
+        HEX += IDX.toString(36);
+    }
+
     /**
      * Centralized Store
      *
@@ -339,6 +344,27 @@ Charcoal.Admin = (function () {
 
         return cache;
     };
+
+    /**
+     * Creates a new random identifer of fixed length.
+     *
+     * A tiny (200B) and fast utility to randomize unique IDs of fixed length.
+     * This is a port of the @lukeed/uid JS library.
+     *
+     * @link https://github.com/lukeed/uid Repository
+     * @link https://www.npmjs.com/package/uid NPM Package
+     *
+     * @param {number} [len=11] - Then length of the output string.
+     *     Your risk of collisions decreases with longer strings.
+     * @return {string}
+     */
+    Admin.uid = function (len) {
+        var str = '', num = len || 11;
+        while (num--) {
+            str += HEX[Math.random() * 36 | 0];
+        }
+        return str;
+    }
 
     /**
      * Resolves the context of parameters for the "complete" callback option.

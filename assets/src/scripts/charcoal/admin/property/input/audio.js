@@ -37,6 +37,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.change_file = function (event) {
             console.log('[Property_Input_Audio.change_file]', file);
 
             audio.innerHTML = audioPropertyL10n.unsupportedElement;
+            audio.style     = 'max-width: 100%';
             audio.controls  = true;
             audio.title     = file.name;
             audio.src       = reader.result;
@@ -68,7 +69,7 @@ Charcoal.Admin.Property_Input_Audio.prototype.elfinder_callback = function (file
         var path, $audio;
 
         path    = decodeURI(file.url).replace(Charcoal.Admin.base_url(), '');
-        $audio = $('<audio controls src="' + file.url + '" class="js-file-audio">' + audioPropertyL10n.unsupportedElement + '</audio>');
+        $audio = $('<audio controls src="' + file.url + '" class="js-file-audio" style="max-width: 100%">' + audioPropertyL10n.unsupportedElement + '</audio>');
 
         console.log('[Property_Input_Audio.elfinder_callback]', file);
 

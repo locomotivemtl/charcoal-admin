@@ -24,8 +24,8 @@
  * Copyright (c) 2011-2020 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.0.4
- * @date    2020-08-15
+ * @version 9.1.2
+ * @date    2020-11-07
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -121,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 22);
+/******/ 	return __webpack_require__(__webpack_require__.s = 23);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -131,7 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse", function() { return parse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "repair", function() { return repair; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "trySimpleJsonRepair", function() { return trySimpleJsonRepair; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeUnicodeChars", function() { return escapeUnicodeChars; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validate", function() { return validate; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extend", function() { return extend; });
@@ -139,6 +139,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getType", function() { return getType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUrl", function() { return isUrl; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArray", function() { return isArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWindow", function() { return getWindow; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAbsoluteLeft", function() { return getAbsoluteLeft; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAbsoluteTop", function() { return getAbsoluteTop; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addClassName", function() { return addClassName; });
@@ -185,18 +186,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isObject", function() { return isObject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "contains", function() { return contains; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidationErrorChanged", function() { return isValidationErrorChanged; });
-/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_polyfills__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(10);
+/* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(12);
 /* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(17);
-/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(19);
-/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(json_source_map__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
+/* harmony import */ var simple_json_repair__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7);
+/* harmony import */ var simple_json_repair__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(simple_json_repair__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(18);
+/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(20);
+/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(json_source_map__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -223,330 +227,17 @@ function parse(jsonString) {
   }
 }
 /**
- * Repair a JSON-like string containing. For example changes JavaScript
- * notation into JSON notation.
- * This function for example changes a string like "{a: 2, 'b': {c: 'd'}"
- * into '{"a": 2, "b": {"c": "d"}'
- * @param {string} jsString
- * @returns {string} json
+ * Try to fix the JSON string. If not successful, return the original string
+ * @param {string} jsonString
  */
 
-function repair(jsString) {
-  // TODO: refactor this function, it's too large and complicated now
-  // escape all single and double quotes inside strings
-  var chars = [];
-  var i = 0;
-  var indent = 0;
-  var isLineSeparatedJson = false; // If JSON starts with a function (characters/digits/"_-"), remove this function.
-  // This is useful for "stripping" JSONP objects to become JSON
-  // For example: /* some comment */ function_12321321 ( [{"a":"b"}] ); => [{"a":"b"}]
-
-  var match = jsString.match(/^\s*(\/\*(.|[\r\n])*?\*\/)?\s*[\da-zA-Z_$]+\s*\(([\s\S]*)\)\s*;?\s*$/);
-
-  if (match) {
-    jsString = match[3];
+function trySimpleJsonRepair(jsonString) {
+  try {
+    return simple_json_repair__WEBPACK_IMPORTED_MODULE_2___default()(jsonString);
+  } catch (err) {
+    // repair was not successful, return original text
+    return jsonString;
   }
-
-  var controlChars = {
-    '\b': '\\b',
-    '\f': '\\f',
-    '\n': '\\n',
-    '\r': '\\r',
-    '\t': '\\t'
-  };
-  var quote = '\'';
-  var quoteDbl = '"';
-  var quoteLeft = "\u2018";
-  var quoteRight = "\u2019";
-  var quoteDblLeft = "\u201C";
-  var quoteDblRight = "\u201D";
-  var graveAccent = "`";
-  var acuteAccent = "\xB4";
-  var pythonConstants = {
-    None: 'null',
-    True: 'true',
-    False: 'false'
-  }; // helper functions to get the current/prev/next character
-
-  function curr() {
-    return jsString.charAt(i);
-  }
-
-  function next() {
-    return jsString.charAt(i + 1);
-  }
-
-  function prev() {
-    return jsString.charAt(i - 1);
-  }
-
-  function isWhiteSpace(c) {
-    return c === ' ' || c === '\n' || c === '\r' || c === '\t';
-  } // get the last parsed non-whitespace character
-
-
-  function lastNonWhitespace() {
-    var p = chars.length - 1;
-
-    while (p >= 0) {
-      var pp = chars[p];
-
-      if (!isWhiteSpace(pp)) {
-        return pp;
-      }
-
-      p--;
-    }
-
-    return '';
-  } // get at the first next non-white space character
-
-
-  function nextNonWhiteSpace() {
-    var iNext = i + 1;
-
-    while (iNext < jsString.length && isWhiteSpace(jsString[iNext])) {
-      iNext++;
-    }
-
-    return jsString[iNext];
-  } // get at the first non-white space character starting at the current character
-
-
-  function currNonWhiteSpace() {
-    var iNext = i;
-
-    while (iNext < jsString.length && isWhiteSpace(jsString[iNext])) {
-      iNext++;
-    }
-
-    return jsString[iNext];
-  } // skip a block comment '/* ... */'
-
-
-  function skipBlockComment() {
-    if (curr() === '/' && next() === '*') {
-      i += 2;
-
-      while (i < jsString.length && (curr() !== '*' || next() !== '/')) {
-        i++;
-      }
-
-      i += 2;
-
-      if (curr() === '\n') {
-        i++;
-      }
-    }
-  } // skip a comment '// ...'
-
-
-  function skipComment() {
-    if (curr() === '/' && next() === '/') {
-      i += 2;
-
-      while (i < jsString.length && curr() !== '\n') {
-        i++;
-      }
-    }
-  }
-
-  function parseWhiteSpace() {
-    var whitespace = '';
-
-    while (i < jsString.length && isWhiteSpace(curr())) {
-      whitespace += curr();
-      i++;
-    }
-
-    return whitespace;
-  }
-  /**
-   * parse single or double quoted string. Returns the parsed string
-   * @param {string} endQuote
-   * @return {string}
-   */
-
-
-  function parseString(endQuote) {
-    var string = '';
-    string += '"';
-    i++;
-    var c = curr();
-
-    while (i < jsString.length && c !== endQuote) {
-      if (c === '"' && prev() !== '\\') {
-        // unescaped double quote, escape it
-        string += '\\"';
-      } else if (c in controlChars) {
-        // replace unescaped control characters with escaped ones
-        string += controlChars[c];
-      } else if (c === '\\') {
-        // remove the escape character when followed by a single quote ', not needed
-        i++;
-        c = curr();
-
-        if (c !== '\'') {
-          string += '\\';
-        }
-
-        string += c;
-      } else {
-        // regular character
-        string += c;
-      }
-
-      i++;
-      c = curr();
-    }
-
-    if (c === endQuote) {
-      string += '"';
-      i++;
-    }
-
-    return string;
-  } // parse an unquoted key
-
-
-  function parseKey() {
-    var specialValues = ['null', 'true', 'false'];
-    var key = '';
-    var c = curr();
-    var regexp = /[a-zA-Z_$\d]/; // letter, number, underscore, dollar character
-
-    while (regexp.test(c)) {
-      key += c;
-      i++;
-      c = curr();
-    }
-
-    if (key in pythonConstants) {
-      return pythonConstants[key];
-    } else if (specialValues.indexOf(key) === -1) {
-      return '"' + key + '"';
-    } else {
-      return key;
-    }
-  }
-
-  function parseValue() {
-    var c = curr();
-    var value = '';
-
-    while (/\w/.test(c)) {
-      value += c;
-      i++;
-      c = curr();
-    }
-
-    if (value.length > 0 && c === '(') {
-      // This is an MongoDB data type like in {"_id": ObjectId("123")}
-      var innerValue;
-      i++;
-      c = curr();
-
-      if (c === '"') {
-        // a data type containing a string, like ISODate("2012-12-19T06:01:17.171Z")
-        innerValue = parseString(c);
-        c = curr();
-      } else {
-        // a data type containing a value, like 'NumberLong(2)'
-        innerValue = '';
-
-        while (c !== ')' && c !== '') {
-          innerValue += c;
-          i++;
-          c = curr();
-        }
-      }
-
-      if (c === ')') {
-        // skip the closing bracket at the end
-        i++; // return the value (strip the data type object)
-
-        return innerValue;
-      } else {
-        // huh? that's unexpected. don't touch it
-        return value + '(' + innerValue + c;
-      }
-    } else if (typeof pythonConstants[value] === 'string') {
-      // it's a python constant like None
-      return pythonConstants[value];
-    } else {
-      // just leave as is
-      return value;
-    }
-  }
-
-  function isSpecialWhiteSpace(c) {
-    return c === "\xA0" || c >= "\u2000" && c <= "\u200A" || c === "\u202F" || c === "\u205F" || c === "\u3000";
-  }
-
-  while (i < jsString.length) {
-    skipBlockComment();
-    skipComment();
-    var c = curr();
-
-    if (c === '{') {
-      indent++;
-    }
-
-    if (c === '}') {
-      indent--;
-    }
-
-    if (isSpecialWhiteSpace(c)) {
-      // special white spaces (like non breaking space)
-      chars.push(' ');
-      i++;
-    } else if (c === quote) {
-      chars.push(parseString(c));
-    } else if (c === quoteDbl) {
-      chars.push(parseString(quoteDbl));
-    } else if (c === graveAccent) {
-      chars.push(parseString(acuteAccent));
-    } else if (c === quoteLeft) {
-      chars.push(parseString(quoteRight));
-    } else if (c === quoteDblLeft) {
-      chars.push(parseString(quoteDblRight));
-    } else if (c === '}') {
-      // check for missing comma between objects
-      chars.push(c);
-      i++;
-      var whitespaces = parseWhiteSpace();
-      skipBlockComment();
-
-      if (currNonWhiteSpace() === '{') {
-        chars.push(',');
-
-        if (indent === 0) {
-          isLineSeparatedJson = true;
-        }
-      }
-
-      chars.push(whitespaces);
-    } else if (c === ',' && [']', '}'].indexOf(nextNonWhiteSpace()) !== -1) {
-      // skip trailing commas
-      i++;
-    } else if (/[a-zA-Z_$]/.test(c) && ['{', ','].indexOf(lastNonWhitespace()) !== -1) {
-      // an unquoted object key (like a in '{a:2}')
-      // FIXME: array values are also parsed via parseKey, work this out properly
-      chars.push(parseKey());
-    } else if (/\w/.test(c)) {
-      chars.push(parseValue());
-    } else {
-      chars.push(c);
-      i++;
-    }
-  }
-
-  if (isLineSeparatedJson) {
-    chars.unshift('[\n');
-    chars.push('\n]');
-  }
-
-  return chars.join('');
 }
 /**
  * Escape unicode characters.
@@ -573,8 +264,8 @@ text) {
  */
 
 function validate(jsonString) {
-  if (typeof _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2___default.a !== 'undefined') {
-    _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2___default.a.parse(jsonString);
+  if (typeof _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3___default.a !== 'undefined') {
+    _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3___default.a.parse(jsonString);
   } else {
     JSON.parse(jsonString);
   }
@@ -665,6 +356,16 @@ function isUrl(text) {
 
 function isArray(obj) {
   return Object.prototype.toString.call(obj) === '[object Array]';
+}
+/**
+ * Gets a DOM element's Window.  This is normally just the global `window`
+ * variable, but if we opened a child window, it may be different.
+ * @param {HTMLElement} element
+ * @return {Window}
+ */
+
+function getWindow(element) {
+  return element.ownerDocument.defaultView;
 }
 /**
  * Retrieve the absolute left value of a DOM element
@@ -995,7 +696,7 @@ function getInternetExplorerVersion() {
 
     if (typeof navigator !== 'undefined' && navigator.appName === 'Microsoft Internet Explorer') {
       var ua = navigator.userAgent;
-      var re = new RegExp('MSIE ([0-9]+[.0-9]+)');
+      var re = /MSIE ([0-9]+[.0-9]+)/;
 
       if (re.exec(ua) != null) {
         rv = parseFloat(RegExp.$1);
@@ -1008,14 +709,6 @@ function getInternetExplorerVersion() {
   return _ieVersion;
 }
 /**
- * Test whether the current browser is Firefox
- * @returns {boolean} isFirefox
- */
-
-function isFirefox() {
-  return typeof navigator !== 'undefined' && navigator.userAgent.indexOf('Firefox') !== -1;
-}
-/**
  * cached internet explorer version
  * @type {Number}
  * @private
@@ -1023,7 +716,16 @@ function isFirefox() {
 
 var _ieVersion = -1;
 /**
- * Add and event listener. Works for all browsers
+ * Test whether the current browser is Firefox
+ * @returns {boolean} isFirefox
+ */
+
+
+function isFirefox() {
+  return typeof navigator !== 'undefined' && navigator.userAgent.indexOf('Firefox') !== -1;
+}
+/**
+ * Add an event listener. Works for all browsers
  * @param {Element}     element    An html element
  * @param {string}      action     The action, for example "click",
  *                                 without the prefix "on"
@@ -1031,7 +733,6 @@ var _ieVersion = -1;
  * @param {boolean}     [useCapture] false by default
  * @return {function}   the created event listener
  */
-
 
 function addEventListener(element, action, listener, useCapture) {
   if (element.addEventListener) {
@@ -1393,7 +1094,7 @@ function getInputSelection(el) {
   }
 }
 /**
- * Returns the index for certaion position in text element
+ * Returns the index for certain position in text element
  * @param {DOMElement} el A dom element of a textarea or input text.
  * @param {Number} row row value, > 0, if exceeds rows number - last row will be returned
  * @param {Number} column column value, > 0, if exceeds column length - end of column will be returned
@@ -1430,7 +1131,7 @@ function getPositionForPath(text, paths) {
   }
 
   try {
-    jsmap = json_source_map__WEBPACK_IMPORTED_MODULE_3___default.a.parse(text);
+    jsmap = json_source_map__WEBPACK_IMPORTED_MODULE_4___default.a.parse(text);
   } catch (err) {
     return result;
   }
@@ -1516,7 +1217,7 @@ function makeFieldTooltip(schema, locale) {
       tooltip += '\n\n';
     }
 
-    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_4__[/* translate */ "c"])('default', undefined, locale) + '\n';
+    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_5__[/* translate */ "c"])('default', undefined, locale) + '\n';
     tooltip += JSON.stringify(schema["default"], null, 2);
   }
 
@@ -1525,7 +1226,7 @@ function makeFieldTooltip(schema, locale) {
       tooltip += '\n\n';
     }
 
-    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_4__[/* translate */ "c"])('examples', undefined, locale) + '\n';
+    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_5__[/* translate */ "c"])('examples', undefined, locale) + '\n';
     schema.examples.forEach(function (example, index) {
       tooltip += JSON.stringify(example, null, 2);
 
@@ -1761,7 +1462,7 @@ function contains(array, item) {
   return array.indexOf(item) !== -1;
 }
 /**
- * Checkes if validation has changed from the previous execution
+ * Checks if validation has changed from the previous execution
  * @param {Array} currErr current validation errors
  * @param {Array} prevErr previous validation errors
  */
@@ -1820,13 +1521,13 @@ function hasOwnProperty(object, key) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setLanguage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return setLanguages; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return translate; });
-/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(18);
+/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(19);
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_polyfills__WEBPACK_IMPORTED_MODULE_0__);
 
 /* eslint-disable no-template-curly-in-string */
 
 
-var _locales = ['en', 'pt-BR', 'zh-CN', 'tr', 'ja', 'fr-FR'];
+var _locales = ['en', 'pt-BR', 'zh-CN', 'tr', 'ja', 'fr-FR', 'de'];
 var _defs = {
   en: {
     array: 'Array',
@@ -1917,7 +1618,9 @@ var _defs = {
     modePreviewText: 'Preview',
     modePreviewTitle: 'Switch to preview mode',
     examples: 'Examples',
-    "default": 'Default'
+    "default": 'Default',
+    containsInvalidProperties: 'Contains invalid properties',
+    containsInvalidItems: 'Contains invalid items'
   },
   'zh-CN': {
     array: '数组',
@@ -2004,7 +1707,9 @@ var _defs = {
     modePreviewText: '预览',
     modePreviewTitle: '切换至预览模式',
     examples: '例子',
-    "default": '缺省'
+    "default": '缺省',
+    containsInvalidProperties: '包含无效的属性',
+    containsInvalidItems: '包含无效项目'
   },
   'pt-BR': {
     array: 'Lista',
@@ -2077,7 +1782,9 @@ var _defs = {
     arrayType: 'Campo do tipo "lista". ' + 'Uma lista contem uma coleção de valores ordenados.',
     stringType: 'Campo do tipo "string". ' + 'Campo do tipo nao é determinado através do seu valor, ' + 'mas sempre retornara um texto.',
     examples: 'Exemplos',
-    "default": 'Revelia'
+    "default": 'Revelia',
+    containsInvalidProperties: 'Contém propriedades inválidas',
+    containsInvalidItems: 'Contém itens inválidos'
   },
   tr: {
     array: 'Dizin',
@@ -2157,7 +1864,9 @@ var _defs = {
     modeViewText: 'Görünüm',
     modeViewTitle: 'Ağaç görünümüne geç',
     examples: 'Örnekler',
-    "default": 'Varsayılan'
+    "default": 'Varsayılan',
+    containsInvalidProperties: 'Geçersiz özellikler içeriyor',
+    containsInvalidItems: 'Geçersiz öğeler içeriyor'
   },
   ja: {
     array: '配列',
@@ -2241,7 +1950,9 @@ var _defs = {
     modePreviewText: 'プレビュー',
     modePreviewTitle: 'プレビューに切り替え',
     examples: '例',
-    "default": 'デフォルト'
+    "default": 'デフォルト',
+    containsInvalidProperties: '無効なプロパティが含まれています',
+    containsInvalidItems: '無効なアイテムが含まれています'
   },
   'fr-FR': {
     array: 'Liste',
@@ -2329,7 +2040,102 @@ var _defs = {
     modePreviewText: 'Prévisualisation',
     modePreviewTitle: 'Activer mode prévisualiser',
     examples: 'Exemples',
-    "default": 'Défaut'
+    "default": 'Défaut',
+    containsInvalidProperties: 'Contient des propriétés non valides',
+    containsInvalidItems: 'Contient des éléments invalides'
+  },
+  de: {
+    array: 'Auflistung',
+    auto: 'Auto',
+    appendText: 'anhängen',
+    appendTitle: 'Fügen Sie nach diesem Feld ein neues Feld mit dem Typ \'auto\' ein (Strg+Umschalt+Ein)',
+    appendSubmenuTitle: 'Wählen Sie den Typ des neuen Feldes',
+    appendTitleAuto: 'Ein neues Feld vom Typ \'auto\' hinzufügen (Strg+Umschalt+Ein)',
+    ascending: 'Aufsteigend',
+    ascendingTitle: 'Sortieren Sie die Elemente dieses ${type} in aufsteigender Reihenfolge',
+    actionsMenu: 'Klicken Sie zum Öffnen des Aktionsmenüs (Strg+M)',
+    cannotParseFieldError: 'Feld kann nicht in JSON geparst werden',
+    cannotParseValueError: 'Wert kann nicht in JSON geparst werden',
+    collapseAll: 'Alle Felder zuklappen',
+    compactTitle: 'JSON-Daten verdichten, alle Leerzeichen entfernen (Strg+Umschalt+\\)',
+    descending: 'Absteigend',
+    descendingTitle: 'Sortieren Sie die Elemente dieses ${type} in absteigender Reihenfolge',
+    drag: 'Ziehen, um dieses Feld zu verschieben (Alt+Umschalt+Pfeile)',
+    duplicateKey: 'Doppelter Schlüssel',
+    duplicateText: 'Duplikat',
+    duplicateTitle: 'Ausgewählte Felder duplizieren (Strg+D)',
+    duplicateField: 'Dieses Feld duplizieren (Strg+D)',
+    duplicateFieldError: 'Doppelter Feldname',
+    empty: 'leer',
+    expandAll: 'Alle Felder anzeigen',
+    expandTitle: 'Klicken Sie, um dieses Feld zu erweitern/zu kollabieren (Strg+E). \nStrg+Klicken Sie, um dieses Feld einschließlich aller Elemente zu erweitern/zu kollabieren.',
+    formatTitle: 'JSON-Daten mit korrekter Einrückung und Zeilenvorschüben formatieren (Strg+\\)',
+    insert: 'einfügen',
+    insertTitle: 'Fügen Sie vor diesem Feld ein neues Feld mit dem Typ \'auto\' ein (Strg+Einfg)',
+    insertSub: 'Wählen Sie den Typ des neuen Feldes',
+    object: 'Objekt',
+    ok: 'Ok',
+    redo: 'Wiederholen (Strg+Umschalt+Z)',
+    removeText: 'entfernen',
+    removeTitle: 'Ausgewählte Felder entfernen (Strg+Entf)',
+    removeField: 'Dieses Feld entfernen (Strg+Entf)',
+    repairTitle: 'JSON reparieren: Anführungszeichen und Escape-Zeichen korrigieren, Kommentare und JSONP-Notation entfernen, JavaScript-Objekte in JSON umwandeln.',
+    searchTitle: 'Suchfelder und Werte',
+    searchNextResultTitle: 'Nächstes Ergebnis (Enter)',
+    searchPreviousResultTitle: 'Vorheriges Ergebnis (Umschalt + Eingabe)',
+    selectNode: 'Wählen Sie einen Knoten aus...',
+    showAll: 'alle anzeigen',
+    showMore: 'mehr anzeigen',
+    showMoreStatus: 'Anzeige von ${visibleChilds} von ${totalChilds}-Elementen.',
+    sort: 'Sortieren',
+    sortTitle: 'Sortieren Sie die Elemente dieses ${type}',
+    sortTitleShort: 'Inhalt sortieren',
+    sortFieldLabel: 'Feld:',
+    sortDirectionLabel: 'Richtung:',
+    sortFieldTitle: 'Wählen Sie das verschachtelte Feld, nach dem das Array oder Objekt sortiert werden soll.',
+    sortAscending: 'Aufsteigend',
+    sortAscendingTitle: 'Sortieren Sie das ausgewählte Feld in aufsteigender Reihenfolge',
+    sortDescending: 'Absteigend',
+    sortDescendingTitle: 'Sortieren Sie das ausgewählte Feld in absteigender Reihenfolge',
+    string: 'Zeichenfolge',
+    transform: 'Verwandeln',
+    transformTitle: 'Die Elemente dieses ${type} filtern, sortieren oder transformieren',
+    transformTitleShort: 'Inhalte filtern, sortieren oder transformieren',
+    extract: 'Auszug',
+    extractTitle: 'Extrahieren Sie diesen ${type}',
+    transformQueryTitle: 'Eine JMESPath-Abfrage eingeben',
+    transformWizardLabel: 'Zauberer',
+    transformWizardFilter: 'Filter',
+    transformWizardSortBy: 'Sortieren nach',
+    transformWizardSelectFields: 'Felder auswählen',
+    transformQueryLabel: 'Anfrage',
+    transformPreviewLabel: 'Vorschau',
+    type: 'Geben Sie  ein.',
+    typeTitle: 'Ändern Sie den Typ dieses Feldes',
+    openUrl: 'Strg+Klicken oder Strg+Eingabe, um die URL in einem neuen Fenster zu öffnen',
+    undo: 'Letzte Aktion rückgängig machen (Strg+Z)',
+    validationCannotMove: 'Kann ein Feld nicht in ein Kind seiner selbst verschieben',
+    autoType: 'Feldtyp "auto". Der Feldtyp wird automatisch aus dem Wert bestimmt und kann ein String, eine Zahl, boolesch oder null sein.',
+    objectType: 'Feldtyp "Objekt". Ein Objekt enthält eine ungeordnete Menge von Schlüssel/Wert-Paaren.',
+    arrayType: 'Feldtyp "Array". Ein Array enthält eine geordnete Sammlung von Werten.',
+    stringType: 'Feldtyp "Zeichenfolge". Der Feldtyp wird nicht aus dem Wert bestimmt, sondern immer als Zeichenfolge zurückgegeben.',
+    modeEditorTitle: 'Editor-Modus umschalten',
+    modeCodeText: 'Code',
+    modeCodeTitle: 'Umschalten auf Code-Highlighter',
+    modeFormText: 'Formular',
+    modeFormTitle: 'Zum Formular-Editor wechseln',
+    modeTextText: 'Text',
+    modeTextTitle: 'Zum Editor für einfachen Text wechseln',
+    modeTreeText: 'Baum',
+    modeTreeTitle: 'Zum Baum-Editor wechseln',
+    modeViewText: 'Siehe',
+    modeViewTitle: 'Zur Baumansicht wechseln',
+    modePreviewText: 'Vorschau',
+    modePreviewTitle: 'In den Vorschau-Modus wechseln',
+    examples: 'Beispiele',
+    "default": 'Standardmäßig',
+    containsInvalidProperties: 'Enthält ungültige Eigenschaften',
+    containsInvalidItems: 'Enthält ungültige Elemente'
   }
 };
 var _defaultLang = 'en';
@@ -2906,7 +2712,7 @@ ContextMenu.visibleMenu = undefined;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createQuery; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return executeQuery; });
-/* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(20);
+/* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(21);
 /* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jmespath__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
 
@@ -2981,7 +2787,7 @@ function executeQuery(json, query) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showSortModal", function() { return showSortModal; });
-/* harmony import */ var picomodal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(13);
+/* harmony import */ var picomodal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
 /* harmony import */ var picomodal__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(picomodal__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
@@ -3076,11 +2882,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, "showTransformModal", function() { return /* binding */ showTransformModal; });
 
 // EXTERNAL MODULE: ./node_modules/picomodal/src/picoModal.js
-var picoModal = __webpack_require__(13);
+var picoModal = __webpack_require__(14);
 var picoModal_default = /*#__PURE__*/__webpack_require__.n(picoModal);
 
 // EXTERNAL MODULE: ./src/js/assets/selectr/selectr.js
-var selectr = __webpack_require__(9);
+var selectr = __webpack_require__(10);
 var selectr_default = /*#__PURE__*/__webpack_require__.n(selectr);
 
 // EXTERNAL MODULE: ./src/js/i18n.js
@@ -3519,6 +3325,148 @@ function showTransformModal(_ref) {
 
 /***/ }),
 /* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+!function(n,e){ true?module.exports=e():undefined}(this,function(){"use strict";var r,t,n=(r=function(n,e){return(r=Object.setPrototypeOf||{__proto__:[]}instanceof Array&&function(n,e){n.__proto__=e}||function(n,e){for(var t in e)Object.prototype.hasOwnProperty.call(e,t)&&(n[t]=e[t])})(n,e)},function(n,e){function t(){this.constructor=n}r(n,e),n.prototype=null===e?Object.create(e):(t.prototype=e.prototype,new t)}),i=(t=SyntaxError,n(e,t),e);function e(n,e){n=t.call(this,n+" (char "+e+")")||this;return n.char=e,n}var f=["'","‘","’","`","´"],o=['"',"“","”"];function u(n){return/^[a-zA-Z_]$/.test(n)}function c(n){return"0"<=n&&n<="9"}function l(n){return" "===n||"\t"===n||"\n"===n||"\r"===n}function s(n){return" "===n||" "<=n&&n<=" "||" "===n||" "===n||"　"===n}function a(n){return f.includes(n)?"'":o.includes(n)?'"':n}function d(n,e){e=n.lastIndexOf(e);return-1!==e?n.substring(0,e)+n.substring(e+1):n}function h(n,e){return n.replace(/\s*$/,function(n){return e+n})}var p=0,b=1,w=2,g=3,v=4,x=5,y=6,_={"":!0,"{":!0,"}":!0,"[":!0,"]":!0,":":!0,",":!0,"(":!0,")":!0,";":!0,"+":!0},O={'"':'"',"\\":"\\","/":"/",b:"\b",f:"\f",n:"\n",r:"\r",t:"\t"},m={"\b":"\\b","\f":"\\f","\n":"\\n","\r":"\\r","\t":"\\t"},I={null:"null",true:"true",false:"false"},j={None:"null",True:"true",False:"false"},k="",A="",$=0,E="",T="",F=y;function P(){$++,E=k.charAt($)}function S(){return F===p&&("["===T||"{"===T)||F===w||F===b||F===g}function U(){A+=T,F=y,T="",function(){if(_[E])return F=p,T=E,P();!function(){if(c(E)||"-"===E){if(F=b,"-"===E){if(T+=E,P(),!c(E))throw new i("Invalid number, digit expected",$)}else"0"===E&&(T+=E,P());for(;c(E);)T+=E,P();if("."===E){if(T+=E,P(),!c(E))throw new i("Invalid number, digit expected",$);for(;c(E);)T+=E,P()}if("e"===E||"E"===E){if(T+=E,P(),"+"!==E&&"-"!==E||(T+=E,P()),!c(E))throw new i("Invalid number, digit expected",$);for(;c(E);)T+=E,P()}return}!function(){if(function(n){return f.includes(n)||o.includes(n)}(E)){var n=a(E);for(T+='"',F=w,P();""!==E&&a(E)!==n;)if("\\"===E)if(P(),void 0!==O[E])T+="\\"+E,P();else if("u"===E){T+="\\u",P();for(var e=0;e<4;e++){if(!/^[0-9a-fA-F]$/.test(E))throw new i("Invalid unicode character",$-T.length);T+=E,P()}}else{if("'"!==E)throw new i('Invalid escape character "\\'+E+'"',$);T+="'",P()}else m[E]?T+=m[E]:T+='"'===E?'\\"':E,P();if(a(E)!==n)throw new i("End of string expected",$-T.length);return T+='"',P()}!function(){if(u(E)){for(F=g;u(E)||c(E)||"$"===E;)T+=E,P();return}!function(){if(l(E)||s(E)){for(F=v;l(E)||s(E);)T+=E,P();return}!function(){if("/"===E&&"*"===k[$+1]){for(F=x;""!==E&&("*"!==E||"*"===E&&"/"!==k[$+1]);)T+=E,P();return"*"===E&&"/"===k[$+1]&&(T+=E,P(),T+=E,P())}if("/"===E&&"/"===k[$+1]){for(F=x;""!==E&&"\n"!==E;)T+=E,P();return}!function(){F=y;for(;""!==E;)T+=E,P();throw new i('Syntax error in part "'+T+'"',$-T.length)}()}()}()}()}()}()}(),F===v&&(T=function(n){for(var e="",t=0;t<n.length;t++){var r=n[t];e+=s(r)?" ":r}return e}(T),U()),F===x&&(F=y,T="",U())}function z(){if(F!==p||"{"!==T)!function(){if(F===p&&"["===T){if(U(),F===p&&"]"===T)return U();for(;;)if(z(),F===p&&","===T){if(U(),F===p&&"]"===T){A=d(A,",");break}}else{if(!S())break;A=h(A,",")}return F===p&&"]"===T?U():A=h(A,"]")}!function(){if(F===w){for(U();F===p&&"+"===T;){var n;T="",U(),F===w&&(n=A.lastIndexOf('"'),A=A.substring(0,n)+T.substring(1),T="",U())}return}!function(){if(F===b)return U();!function(){if(F===g){if(I[T])return U();if(j[T])return T=j[T],U();var n=T,e=A.length;if(T="",U(),F===p&&"("===T)return T="",U(),z(),F===p&&")"===T&&(T="",U(),F===p&&";"===T&&(T="",U()));for(A=function(n,e,t){return n.substring(0,t)+e+n.substring(t)}(A,'"'+n,e);F===g||F===b;)U();return A+='"'}!function(){throw new i(""===T?"Unexpected end of json string":"Value expected",$-T.length)}()}()}()}()}();else if(U(),F!==p||"}"!==T){for(;;){if(F!==g&&F!==b||(F=w,T='"'+T+'"'),F!==w)throw new i("Object key expected",$-T.length);if(U(),F===p&&":"===T)U();else{if(!S())throw new i("Colon expected",$-T.length);A=h(A,":")}if(z(),F===p&&","===T){if(U(),F===p&&"}"===T){A=d(A,",");break}}else{if(F!==w&&F!==b&&F!==g)break;A=h(A,",")}}F===p&&"}"===T?U():A=h(A,"}")}else U()}return function(n){if(A="",$=0,E=(k=n).charAt(0),T="",F=y,U(),n=F===p&&"{"===T,z(),""===T)return A;if(n&&S()){for(;S();)A=h(A,","),z();return"[\n"+A+"\n]"}throw new i("Unexpected characters",$-T.length)}});
+
+/***/ }),
+/* 8 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FocusTracker; });
+
+/**
+ * @constructor FocusTracker
+ * A custom focus tracker for a DOM element with complex internal DOM structure
+ * @param  {[Object]} config    A set of configurations for the FocusTracker
+ *                {DOM Object} target *    The DOM object to track (required)
+ *                {Function}   onFocus     onFocus callback
+ *                {Function}   onBlur      onBlur callback
+ *
+ * @return
+ */
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FocusTracker = /*#__PURE__*/function () {
+  function FocusTracker(config) {
+    _classCallCheck(this, FocusTracker);
+
+    this.target = config.target || null;
+
+    if (!this.target) {
+      throw new Error('FocusTracker constructor called without a "target" to track.');
+    }
+
+    this.onFocus = typeof config.onFocus === 'function' ? config.onFocus : null;
+    this.onBlur = typeof config.onBlur === 'function' ? config.onBlur : null;
+    this._onClick = this._onEvent.bind(this);
+
+    this._onKeyUp = function (event) {
+      if (event.which === 9 || event.keyCode === 9) {
+        this._onEvent(event);
+      }
+    }.bind(this);
+
+    this.focusFlag = false;
+    this.firstEventFlag = true;
+    /*
+      Adds required (click and keyup) event listeners to the 'document' object
+      to track the focus of the given 'target'
+     */
+
+    if (this.onFocus || this.onBlur) {
+      document.addEventListener('click', this._onClick);
+      document.addEventListener('keyup', this._onKeyUp);
+    }
+  }
+  /**
+     * Removes the event listeners on the 'document' object
+     * that were added to track the focus of the given 'target'
+     */
+
+
+  _createClass(FocusTracker, [{
+    key: "destroy",
+    value: function destroy() {
+      document.removeEventListener('click', this._onClick);
+      document.removeEventListener('keyup', this._onKeyUp);
+
+      this._onEvent({
+        target: document.body
+      }); // calling _onEvent with body element in the hope that the FocusTracker is added to an element inside the body tag
+
+    }
+    /**
+       * Tracks the focus of the target and calls the onFocus and onBlur
+       * event callbacks if available.
+       * @param {Event} [event]  The 'click' or 'keyup' event object,
+       *                          from the respective events set on
+       *              document object
+       * @private
+       */
+
+  }, {
+    key: "_onEvent",
+    value: function _onEvent(event) {
+      var target = event.target;
+      var focusFlag;
+
+      if (target === this.target) {
+        focusFlag = true;
+      } else if (this.target.contains(target) || this.target.contains(document.activeElement)) {
+        focusFlag = true;
+      } else {
+        focusFlag = false;
+      }
+
+      if (focusFlag) {
+        if (!this.focusFlag) {
+          // trigger the onFocus callback
+          if (this.onFocus) {
+            this.onFocus({
+              type: 'focus',
+              target: this.target
+            });
+          }
+
+          this.focusFlag = true;
+        }
+      } else {
+        if (this.focusFlag || this.firstEventFlag) {
+          // trigger the onBlur callback
+          if (this.onBlur) {
+            this.onBlur({
+              type: 'blur',
+              target: this.target
+            });
+          }
+
+          this.focusFlag = false;
+          /*
+            When switching from one mode to another in the editor, the FocusTracker gets recreated.
+            At that time, this.focusFlag will be init to 'false' and will fail the above if condition, when blur occurs
+            this.firstEventFlag is added to overcome that issue
+           */
+
+          if (this.firstEventFlag) {
+            this.firstEventFlag = false;
+          }
+        }
+      }
+    }
+  }]);
+
+  return FocusTracker;
+}();
+
+/***/ }),
+/* 9 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3668,143 +3616,7 @@ var ModeSwitcher = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 8 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FocusTracker; });
-
-/**
- * @constructor FocusTracker
- * A custom focus tracker for a DOM element with complex internal DOM structure
- * @param  {[Object]} config    A set of configurations for the FocusTracker
- *                {DOM Object} target *    The DOM object to track (required)
- *                {Function}   onFocus     onFocus callback
- *                {Function}   onBlur      onBlur callback
- *
- * @return
- */
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var FocusTracker = /*#__PURE__*/function () {
-  function FocusTracker(config) {
-    _classCallCheck(this, FocusTracker);
-
-    this.target = config.target || null;
-
-    if (!this.target) {
-      throw new Error('FocusTracker constructor called without a "target" to track.');
-    }
-
-    this.onFocus = typeof config.onFocus === 'function' ? config.onFocus : null;
-    this.onBlur = typeof config.onBlur === 'function' ? config.onBlur : null;
-    this._onClick = this._onEvent.bind(this);
-
-    this._onKeyUp = function (event) {
-      if (event.which === 9 || event.keyCode === 9) {
-        this._onEvent(event);
-      }
-    }.bind(this);
-
-    this.focusFlag = false;
-    this.firstEventFlag = true;
-    /*
-      Adds required (click and keyup) event listeners to the 'document' object
-      to track the focus of the given 'target'
-     */
-
-    if (this.onFocus || this.onBlur) {
-      document.addEventListener('click', this._onClick);
-      document.addEventListener('keyup', this._onKeyUp);
-    }
-  }
-  /**
-     * Removes the event listeners on the 'document' object
-     * that were added to track the focus of the given 'target'
-     */
-
-
-  _createClass(FocusTracker, [{
-    key: "destroy",
-    value: function destroy() {
-      document.removeEventListener('click', this._onClick);
-      document.removeEventListener('keyup', this._onKeyUp);
-
-      this._onEvent({
-        target: document.body
-      }); // calling _onEvent with body element in the hope that the FocusTracker is added to an element inside the body tag
-
-    }
-    /**
-       * Tracks the focus of the target and calls the onFocus and onBlur
-       * event callbacks if available.
-       * @param {Event} [event]  The 'click' or 'keyup' event object,
-       *                          from the respective events set on
-       *              document object
-       * @private
-       */
-
-  }, {
-    key: "_onEvent",
-    value: function _onEvent(event) {
-      var target = event.target;
-      var focusFlag;
-
-      if (target === this.target) {
-        focusFlag = true;
-      } else if (this.target.contains(target) || this.target.contains(document.activeElement)) {
-        focusFlag = true;
-      } else {
-        focusFlag = false;
-      }
-
-      if (focusFlag) {
-        if (!this.focusFlag) {
-          // trigger the onFocus callback
-          if (this.onFocus) {
-            this.onFocus({
-              type: 'focus',
-              target: this.target
-            });
-          }
-
-          this.focusFlag = true;
-        }
-      } else {
-        if (this.focusFlag || this.firstEventFlag) {
-          // trigger the onBlur callback
-          if (this.onBlur) {
-            this.onBlur({
-              type: 'blur',
-              target: this.target
-            });
-          }
-
-          this.focusFlag = false;
-          /*
-            When switching from one mode to another in the editor, the FocusTracker gets recreated.
-            At that time, this.focusFlag will be init to 'false' and will fail the above if condition, when blur occurs
-            this.firstEventFlag is added to overcome that issue
-           */
-
-          if (this.firstEventFlag) {
-            this.firstEventFlag = false;
-          }
-        }
-      }
-    }
-  }]);
-
-  return FocusTracker;
-}();
-
-/***/ }),
-/* 9 */
+/* 10 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5881,57 +5693,6 @@ Selectr.prototype.getOptionByValue = function (value) {
 module.exports = Selectr;
 
 /***/ }),
-/* 10 */
-/***/ (function(module, exports) {
-
-/*
- * Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT license
- * Author: Jim Palmer (based on chunking idea from Dave Koelle)
- */
-/*jshint unused:false */
-module.exports = function naturalSort (a, b) {
-	"use strict";
-	var re = /(^([+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$|^0x[0-9a-f]+$|\d+)/gi,
-		sre = /(^[ ]*|[ ]*$)/g,
-		dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
-		hre = /^0x[0-9a-f]+$/i,
-		ore = /^0/,
-		i = function(s) { return naturalSort.insensitive && ('' + s).toLowerCase() || '' + s; },
-		// convert all to strings strip whitespace
-		x = i(a).replace(sre, '') || '',
-		y = i(b).replace(sre, '') || '',
-		// chunk/tokenize
-		xN = x.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
-		yN = y.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
-		// numeric, hex or date detection
-		xD = parseInt(x.match(hre), 16) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
-		yD = parseInt(y.match(hre), 16) || xD && y.match(dre) && Date.parse(y) || null,
-		oFxNcL, oFyNcL;
-	// first try and sort Hex codes or Dates
-	if (yD) {
-		if ( xD < yD ) { return -1; }
-		else if ( xD > yD ) { return 1; }
-	}
-	// natural sorting through split numeric strings and default strings
-	for(var cLoc=0, numS=Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
-		// find floats not starting with '0', string or 0 if not defined (Clint Priest)
-		oFxNcL = !(xN[cLoc] || '').match(ore) && parseFloat(xN[cLoc]) || xN[cLoc] || 0;
-		oFyNcL = !(yN[cLoc] || '').match(ore) && parseFloat(yN[cLoc]) || yN[cLoc] || 0;
-		// handle numeric vs string comparison - number < string - (Kyle Adams)
-		if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
-		// rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
-		else if (typeof oFxNcL !== typeof oFyNcL) {
-			oFxNcL += '';
-			oFyNcL += '';
-		}
-		if (oFxNcL < oFyNcL) { return -1; }
-		if (oFxNcL > oFyNcL) { return 1; }
-	}
-	return 0;
-};
-
-
-/***/ }),
 /* 11 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -6037,6 +5798,57 @@ function hasOwnProperty(object, key) {
 
 /***/ }),
 /* 12 */
+/***/ (function(module, exports) {
+
+/*
+ * Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT license
+ * Author: Jim Palmer (based on chunking idea from Dave Koelle)
+ */
+/*jshint unused:false */
+module.exports = function naturalSort (a, b) {
+	"use strict";
+	var re = /(^([+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$|^0x[0-9a-f]+$|\d+)/gi,
+		sre = /(^[ ]*|[ ]*$)/g,
+		dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
+		hre = /^0x[0-9a-f]+$/i,
+		ore = /^0/,
+		i = function(s) { return naturalSort.insensitive && ('' + s).toLowerCase() || '' + s; },
+		// convert all to strings strip whitespace
+		x = i(a).replace(sre, '') || '',
+		y = i(b).replace(sre, '') || '',
+		// chunk/tokenize
+		xN = x.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+		yN = y.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+		// numeric, hex or date detection
+		xD = parseInt(x.match(hre), 16) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
+		yD = parseInt(y.match(hre), 16) || xD && y.match(dre) && Date.parse(y) || null,
+		oFxNcL, oFyNcL;
+	// first try and sort Hex codes or Dates
+	if (yD) {
+		if ( xD < yD ) { return -1; }
+		else if ( xD > yD ) { return 1; }
+	}
+	// natural sorting through split numeric strings and default strings
+	for(var cLoc=0, numS=Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
+		// find floats not starting with '0', string or 0 if not defined (Clint Priest)
+		oFxNcL = !(xN[cLoc] || '').match(ore) && parseFloat(xN[cLoc]) || xN[cLoc] || 0;
+		oFyNcL = !(yN[cLoc] || '').match(ore) && parseFloat(yN[cLoc]) || yN[cLoc] || 0;
+		// handle numeric vs string comparison - number < string - (Kyle Adams)
+		if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
+		// rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
+		else if (typeof oFxNcL !== typeof oFyNcL) {
+			oFxNcL += '';
+			oFyNcL += '';
+		}
+		if (oFxNcL < oFyNcL) { return -1; }
+		if (oFxNcL > oFyNcL) { return 1; }
+	}
+	return 0;
+};
+
+
+/***/ }),
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var VanillaPicker;
@@ -6055,7 +5867,7 @@ if (window.Picker) {
 module.exports = VanillaPicker;
 
 /***/ }),
-/* 13 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -6662,7 +6474,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6883,7 +6695,7 @@ var ErrorTable = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ace;
@@ -6913,7 +6725,7 @@ if (window.ace) {
 module.exports = ace;
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -6923,18 +6735,40 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "textModeMixins", function() { return /* binding */ textModeMixins; });
 
+// EXTERNAL MODULE: ./node_modules/simple-json-repair/lib/umd/simpleJsonRepair.min.js
+var simpleJsonRepair_min = __webpack_require__(7);
+var simpleJsonRepair_min_default = /*#__PURE__*/__webpack_require__.n(simpleJsonRepair_min);
+
 // EXTERNAL MODULE: ./src/js/ace/index.js
-var ace = __webpack_require__(15);
+var ace = __webpack_require__(16);
 var ace_default = /*#__PURE__*/__webpack_require__.n(ace);
+
+// EXTERNAL MODULE: ./src/js/constants.js
+var constants = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./src/js/ErrorTable.js
+var ErrorTable = __webpack_require__(15);
+
+// EXTERNAL MODULE: ./src/js/FocusTracker.js
+var FocusTracker = __webpack_require__(8);
 
 // EXTERNAL MODULE: ./src/js/i18n.js
 var i18n = __webpack_require__(1);
 
-// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
-var ModeSwitcher = __webpack_require__(7);
+// EXTERNAL MODULE: ./src/js/jmespathQuery.js
+var jmespathQuery = __webpack_require__(4);
 
-// EXTERNAL MODULE: ./src/js/ErrorTable.js
-var ErrorTable = __webpack_require__(14);
+// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
+var ModeSwitcher = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./src/js/showSortModal.js
+var showSortModal = __webpack_require__(5);
+
+// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
+var showTransformModal = __webpack_require__(6);
+
+// EXTERNAL MODULE: ./src/js/tryRequireThemeJsonEditor.js
+var tryRequireThemeJsonEditor = __webpack_require__(22);
 
 // EXTERNAL MODULE: ./src/js/util.js
 var util = __webpack_require__(0);
@@ -6982,28 +6816,11 @@ function validateCustom(json, onValidate) {
     return Promise.reject(err);
   }
 }
-// EXTERNAL MODULE: ./src/js/showSortModal.js
-var showSortModal = __webpack_require__(5);
-
-// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
-var showTransformModal = __webpack_require__(6);
-
-// EXTERNAL MODULE: ./src/js/FocusTracker.js
-var FocusTracker = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./src/js/constants.js
-var constants = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./src/js/tryRequireThemeJsonEditor.js
-var tryRequireThemeJsonEditor = __webpack_require__(21);
-
-// EXTERNAL MODULE: ./src/js/jmespathQuery.js
-var jmespathQuery = __webpack_require__(4);
-
 // CONCATENATED MODULE: ./src/js/textmode.js
 
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -7249,7 +7066,7 @@ textmode.create = function (container) {
         // TODO: this anchor falls below the margin of the content,
         // therefore the normal a.href does not work. We use a click event
         // for now, but this should be fixed.
-        window.open(poweredBy.href, poweredBy.target);
+        window.open(poweredBy.href, poweredBy.target, 'noopener');
       };
 
       this.menu.appendChild(poweredBy);
@@ -7288,12 +7105,16 @@ textmode.create = function (container) {
 
     aceSession.setAnnotations = function (annotations) {
       originalSetAnnotations.call(this, annotations && annotations.length ? annotations : me.annotations);
-    };
+    }; // disable Ctrl+L quickkey of Ace (is used by the browser to select the address bar)
 
-    aceEditor.commands.bindKey('Ctrl-L', null); // disable Ctrl+L (is used by the browser to select the address bar)
 
-    aceEditor.commands.bindKey('Command-L', null); // disable Ctrl+L (is used by the browser to select the address bar)
+    aceEditor.commands.bindKey('Ctrl-L', null);
+    aceEditor.commands.bindKey('Command-L', null); // disable the quickkeys we want to use for Format and Compact
 
+    aceEditor.commands.bindKey('Ctrl-\\', null);
+    aceEditor.commands.bindKey('Command-\\', null);
+    aceEditor.commands.bindKey('Ctrl-Shift-\\', null);
+    aceEditor.commands.bindKey('Command-Shift-\\', null);
     this.aceEditor = aceEditor; // register onchange event
 
     aceEditor.on('change', this._onChange.bind(this));
@@ -7488,7 +7309,7 @@ textmode._showTransformModal = function () {
       queryDescription = _this$options.queryDescription;
   var json = this.get();
   Object(showTransformModal["showTransformModal"])({
-    anchor: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
+    container: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
     json: json,
     queryDescription: queryDescription,
     // can be undefined
@@ -7729,8 +7550,12 @@ textmode.format = function () {
 
 textmode.repair = function () {
   var text = this.getText();
-  var repairedText = Object(util["repair"])(text);
-  this.updateText(repairedText);
+
+  try {
+    var repairedText = simpleJsonRepair_min_default()(text);
+    this.updateText(repairedText);
+  } catch (err) {// repair was not successful, do nothing
+  }
 };
 /**
  * Set focus to the formatter
@@ -8127,7 +7952,7 @@ var textModeMixins = [{
 }];
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Jison generated parser */
@@ -8875,7 +8700,7 @@ if (true) {
 }
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports) {
 
 if (typeof Element !== 'undefined') {
@@ -8954,7 +8779,7 @@ if (!String.prototype.trim) {
 }
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9426,7 +9251,7 @@ function escapeJsonPointer(str) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function(exports) {
@@ -11099,37 +10924,37 @@ function escapeJsonPointer(str) {
 
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.tryRequireThemeJsonEditor = function () {
   try {
-    __webpack_require__(23);
+    __webpack_require__(24);
   } catch (err) {
     console.error(err);
   }
 };
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ace = __webpack_require__(15); // may be undefined in case of minimalist bundle
+var ace = __webpack_require__(16); // may be undefined in case of minimalist bundle
 
 
-var VanillaPicker = __webpack_require__(12); // may be undefined in case of minimalist bundle
+var VanillaPicker = __webpack_require__(13); // may be undefined in case of minimalist bundle
 
 
-var _require = __webpack_require__(25),
+var _require = __webpack_require__(26),
     treeModeMixins = _require.treeModeMixins;
 
-var _require2 = __webpack_require__(16),
+var _require2 = __webpack_require__(17),
     textModeMixins = _require2.textModeMixins;
 
-var _require3 = __webpack_require__(26),
+var _require3 = __webpack_require__(27),
     previewModeMixins = _require3.previewModeMixins;
 
 var _require4 = __webpack_require__(0),
@@ -11139,7 +10964,7 @@ var _require4 = __webpack_require__(0),
     getInternetExplorerVersion = _require4.getInternetExplorerVersion,
     parse = _require4.parse;
 
-var _require5 = __webpack_require__(24),
+var _require5 = __webpack_require__(25),
     tryRequireAjv = _require5.tryRequireAjv;
 
 var _require6 = __webpack_require__(6),
@@ -11629,7 +11454,7 @@ JSONEditor["default"] = JSONEditor;
 module.exports = JSONEditor;
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 /* ***** BEGIN LICENSE BLOCK *****
@@ -11670,7 +11495,7 @@ window.ace.define('ace/theme/jsoneditor', ['require', 'exports', 'module', 'ace/
 });
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.tryRequireAjv = function () {
@@ -11681,7 +11506,7 @@ exports.tryRequireAjv = function () {
 };
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -11691,9 +11516,452 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "treeModeMixins", function() { return /* binding */ treeModeMixins; });
 
-// EXTERNAL MODULE: ./src/js/vanilla-picker/index.js
-var vanilla_picker = __webpack_require__(12);
-var vanilla_picker_default = /*#__PURE__*/__webpack_require__.n(vanilla_picker);
+// CONCATENATED MODULE: ./src/js/autocomplete.js
+
+
+var defaultFilterFunction = {
+  start: function start(token, match, config) {
+    return match.indexOf(token) === 0;
+  },
+  contain: function contain(token, match, config) {
+    return match.indexOf(token) > -1;
+  }
+};
+function autocomplete(config) {
+  config = config || {};
+  config.filter = config.filter || 'start';
+  config.trigger = config.trigger || 'keydown';
+  config.confirmKeys = config.confirmKeys || [39, 35, 9]; // right, end, tab
+
+  config.caseSensitive = config.caseSensitive || false; // autocomplete case sensitive
+
+  var fontSize = '';
+  var fontFamily = '';
+  var wrapper = document.createElement('div');
+  wrapper.style.position = 'relative';
+  wrapper.style.outline = '0';
+  wrapper.style.border = '0';
+  wrapper.style.margin = '0';
+  wrapper.style.padding = '0';
+  var dropDown = document.createElement('div');
+  dropDown.className = 'autocomplete dropdown';
+  dropDown.style.position = 'absolute';
+  dropDown.style.visibility = 'hidden';
+  var spacer;
+  var leftSide; // <-- it will contain the leftSide part of the textfield (the bit that was already autocompleted)
+
+  var createDropDownController = function createDropDownController(elem, rs) {
+    var rows = [];
+    var ix = 0;
+    var oldIndex = -1; // TODO: move this styling in JS to SCSS
+
+    var onMouseOver = function onMouseOver() {
+      this.style.backgroundColor = '#ddd';
+    };
+
+    var onMouseOut = function onMouseOut() {
+      this.style.backgroundColor = '';
+    };
+
+    var onMouseDown = function onMouseDown() {
+      p.hide();
+      p.onmouseselection(this.__hint, p.rs);
+    };
+
+    var p = {
+      rs: rs,
+      hide: function hide() {
+        elem.style.visibility = 'hidden'; // rs.hideDropDown();
+      },
+      refresh: function refresh(token, array) {
+        elem.style.visibility = 'hidden';
+        ix = 0;
+        elem.textContent = '';
+        var vph = window.innerHeight || document.documentElement.clientHeight;
+        var rect = elem.parentNode.getBoundingClientRect();
+        var distanceToTop = rect.top - 6; // heuristic give 6px
+
+        var distanceToBottom = vph - rect.bottom - 6; // distance from the browser border.
+
+        rows = [];
+        var filterFn = typeof config.filter === 'function' ? config.filter : defaultFilterFunction[config.filter];
+        var filtered = !filterFn ? [] : array.filter(function (match) {
+          return filterFn(config.caseSensitive ? token : token.toLowerCase(), config.caseSensitive ? match : match.toLowerCase(), config);
+        });
+        rows = filtered.map(function (row) {
+          var divRow = document.createElement('div');
+          divRow.className = 'item'; // divRow.style.color = config.color;
+
+          divRow.onmouseover = onMouseOver;
+          divRow.onmouseout = onMouseOut;
+          divRow.onmousedown = onMouseDown;
+          divRow.__hint = row;
+          divRow.textContent = '';
+          divRow.appendChild(document.createTextNode(row.substring(0, token.length)));
+          var b = document.createElement('b');
+          b.appendChild(document.createTextNode(row.substring(token.length)));
+          divRow.appendChild(b);
+          elem.appendChild(divRow);
+          return divRow;
+        });
+
+        if (rows.length === 0) {
+          return; // nothing to show.
+        }
+
+        if (rows.length === 1 && (token.toLowerCase() === rows[0].__hint.toLowerCase() && !config.caseSensitive || token === rows[0].__hint && config.caseSensitive)) {
+          return; // do not show the dropDown if it has only one element which matches what we have just displayed.
+        }
+
+        if (rows.length < 2) return;
+        p.highlight(0);
+
+        if (distanceToTop > distanceToBottom * 3) {
+          // Heuristic (only when the distance to the to top is 4 times more than distance to the bottom
+          elem.style.maxHeight = distanceToTop + 'px'; // we display the dropDown on the top of the input text
+
+          elem.style.top = '';
+          elem.style.bottom = '100%';
+        } else {
+          elem.style.top = '100%';
+          elem.style.bottom = '';
+          elem.style.maxHeight = distanceToBottom + 'px';
+        }
+
+        elem.style.visibility = 'visible';
+      },
+      highlight: function highlight(index) {
+        if (oldIndex !== -1 && rows[oldIndex]) {
+          rows[oldIndex].className = 'item';
+        }
+
+        rows[index].className = 'item hover';
+        oldIndex = index;
+      },
+      move: function move(step) {
+        // moves the selection either up or down (unless it's not possible) step is either +1 or -1.
+        if (elem.style.visibility === 'hidden') return ''; // nothing to move if there is no dropDown. (this happens if the user hits escape and then down or up)
+
+        if (ix + step === -1 || ix + step === rows.length) return rows[ix].__hint; // NO CIRCULAR SCROLLING.
+
+        ix += step;
+        p.highlight(ix);
+        return rows[ix].__hint; // txtShadow.value = uRows[uIndex].__hint ;
+      },
+      onmouseselection: function onmouseselection() {} // it will be overwritten.
+
+    };
+    return p;
+  };
+
+  function setEndOfContenteditable(contentEditableElement) {
+    var range, selection;
+
+    if (document.createRange) {
+      // Firefox, Chrome, Opera, Safari, IE 9+
+      range = document.createRange(); // Create a range (a range is a like the selection but invisible)
+
+      range.selectNodeContents(contentEditableElement); // Select the entire contents of the element with the range
+
+      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+
+      selection = window.getSelection(); // get the selection object (allows you to change selection)
+
+      selection.removeAllRanges(); // remove any selections already made
+
+      selection.addRange(range); // make the range you have just created the visible selection
+    } else if (document.selection) {
+      // IE 8 and lower
+      range = document.body.createTextRange(); // Create a range (a range is a like the selection but invisible)
+
+      range.moveToElementText(contentEditableElement); // Select the entire contents of the element with the range
+
+      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+
+      range.select(); // Select the range (make it the visible selection
+    }
+  }
+
+  function calculateWidthForText(text) {
+    if (spacer === undefined) {
+      // on first call only.
+      spacer = document.createElement('span');
+      spacer.style.visibility = 'hidden';
+      spacer.style.position = 'fixed';
+      spacer.style.outline = '0';
+      spacer.style.margin = '0';
+      spacer.style.padding = '0';
+      spacer.style.border = '0';
+      spacer.style.left = '0';
+      spacer.style.whiteSpace = 'pre';
+      spacer.style.fontSize = fontSize;
+      spacer.style.fontFamily = fontFamily;
+      spacer.style.fontWeight = 'normal';
+      document.body.appendChild(spacer);
+    }
+
+    spacer.textContent = text;
+    return spacer.getBoundingClientRect().right;
+  }
+
+  var rs = {
+    onArrowDown: function onArrowDown() {},
+    // defaults to no action.
+    onArrowUp: function onArrowUp() {},
+    // defaults to no action.
+    onEnter: function onEnter() {},
+    // defaults to no action.
+    onTab: function onTab() {},
+    // defaults to no action.
+    startFrom: 0,
+    options: [],
+    element: null,
+    elementHint: null,
+    elementStyle: null,
+    wrapper: wrapper,
+    // Only to allow  easy access to the HTML elements to the final user (possibly for minor customizations)
+    show: function show(element, startPos, options) {
+      var _this = this;
+
+      this.startFrom = startPos;
+      this.wrapper.remove();
+
+      if (this.elementHint) {
+        this.elementHint.remove();
+        this.elementHint = null;
+      }
+
+      if (fontSize === '') {
+        fontSize = window.getComputedStyle(element).getPropertyValue('font-size');
+      }
+
+      if (fontFamily === '') {
+        fontFamily = window.getComputedStyle(element).getPropertyValue('font-family');
+      }
+
+      dropDown.style.marginLeft = '0';
+      dropDown.style.marginTop = element.getBoundingClientRect().height + 'px';
+      this.options = options.map(String);
+
+      if (this.element !== element) {
+        this.element = element;
+        this.elementStyle = {
+          zIndex: this.element.style.zIndex,
+          position: this.element.style.position,
+          backgroundColor: this.element.style.backgroundColor,
+          borderColor: this.element.style.borderColor
+        };
+      }
+
+      this.element.style.zIndex = 3;
+      this.element.style.position = 'relative';
+      this.element.style.backgroundColor = 'transparent';
+      this.element.style.borderColor = 'transparent';
+      this.elementHint = element.cloneNode();
+      this.elementHint.className = 'autocomplete hint';
+      this.elementHint.style.zIndex = 2;
+      this.elementHint.style.position = 'absolute';
+
+      this.elementHint.onfocus = function () {
+        _this.element.focus();
+      };
+
+      if (this.element.addEventListener) {
+        this.element.removeEventListener('keydown', keyDownHandler);
+        this.element.addEventListener('keydown', keyDownHandler, false);
+        this.element.removeEventListener('blur', onBlurHandler);
+        this.element.addEventListener('blur', onBlurHandler, false);
+      }
+
+      wrapper.appendChild(this.elementHint);
+      wrapper.appendChild(dropDown);
+      element.parentElement.appendChild(wrapper);
+      this.repaint(element);
+    },
+    setText: function setText(text) {
+      this.element.innerText = text;
+    },
+    getText: function getText() {
+      return this.element.innerText;
+    },
+    hideDropDown: function hideDropDown() {
+      this.wrapper.remove();
+
+      if (this.elementHint) {
+        this.elementHint.remove();
+        this.elementHint = null;
+        dropDownController.hide();
+        this.element.style.zIndex = this.elementStyle.zIndex;
+        this.element.style.position = this.elementStyle.position;
+        this.element.style.backgroundColor = this.elementStyle.backgroundColor;
+        this.element.style.borderColor = this.elementStyle.borderColor;
+      }
+    },
+    repaint: function repaint(element) {
+      var text = element.innerText;
+      text = text.replace('\n', '');
+      var optionsLength = this.options.length; // breaking text in leftSide and token.
+
+      var token = text.substring(this.startFrom);
+      leftSide = text.substring(0, this.startFrom);
+
+      for (var i = 0; i < optionsLength; i++) {
+        var opt = this.options[i];
+
+        if (!config.caseSensitive && opt.toLowerCase().indexOf(token.toLowerCase()) === 0 || config.caseSensitive && opt.indexOf(token) === 0) {
+          // <-- how about upperCase vs. lowercase
+          this.elementHint.innerText = leftSide + token + opt.substring(token.length);
+          this.elementHint.realInnerText = leftSide + opt;
+          break;
+        }
+      } // moving the dropDown and refreshing it.
+
+
+      dropDown.style.left = calculateWidthForText(leftSide) + 'px';
+      dropDownController.refresh(token, this.options);
+      this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + 10 + 'px';
+      var wasDropDownHidden = dropDown.style.visibility === 'hidden';
+
+      if (!wasDropDownHidden) {
+        this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + dropDown.clientWidth + 'px';
+      }
+    }
+  };
+  var dropDownController = createDropDownController(dropDown, rs);
+
+  var keyDownHandler = function (e) {
+    // console.log("Keydown:" + e.keyCode);
+    e = e || window.event;
+    var keyCode = e.keyCode;
+    if (this.elementHint == null) return;
+
+    if (keyCode === 33) {
+      return;
+    } // page up (do nothing)
+
+
+    if (keyCode === 34) {
+      return;
+    } // page down (do nothing);
+
+
+    if (keyCode === 27) {
+      // escape
+      rs.hideDropDown();
+      rs.element.focus();
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    var text = this.element.innerText;
+    text = text.replace('\n', '');
+
+    if (config.confirmKeys.indexOf(keyCode) >= 0) {
+      //  (autocomplete triggered)
+      if (keyCode === 9) {
+        if (this.elementHint.innerText.length === 0) {
+          rs.onTab();
+        }
+      }
+
+      if (this.elementHint.innerText.length > 0) {
+        // if there is a hint
+        if (this.element.innerText !== this.elementHint.realInnerText) {
+          this.element.innerText = this.elementHint.realInnerText;
+          rs.hideDropDown();
+          setEndOfContenteditable(this.element);
+
+          if (keyCode === 9) {
+            rs.element.focus();
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      }
+
+      return;
+    }
+
+    if (keyCode === 13) {
+      // enter  (autocomplete triggered)
+      if (this.elementHint.innerText.length === 0) {
+        // if there is a hint
+        rs.onEnter();
+      } else {
+        var wasDropDownHidden = dropDown.style.visibility === 'hidden';
+        dropDownController.hide();
+
+        if (wasDropDownHidden) {
+          rs.hideDropDown();
+          rs.element.focus();
+          rs.onEnter();
+          return;
+        }
+
+        this.element.innerText = this.elementHint.realInnerText;
+        rs.hideDropDown();
+        setEndOfContenteditable(this.element);
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      return;
+    }
+
+    if (keyCode === 40) {
+      // down
+      var token = text.substring(this.startFrom);
+      var m = dropDownController.move(+1);
+
+      if (m === '') {
+        rs.onArrowDown();
+      }
+
+      this.elementHint.innerText = leftSide + token + m.substring(token.length);
+      this.elementHint.realInnerText = leftSide + m;
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    if (keyCode === 38) {
+      // up
+      var _token = text.substring(this.startFrom);
+
+      var _m = dropDownController.move(-1);
+
+      if (_m === '') {
+        rs.onArrowUp();
+      }
+
+      this.elementHint.innerText = leftSide + _token + _m.substring(_token.length);
+      this.elementHint.realInnerText = leftSide + _m;
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }.bind(rs);
+
+  var onBlurHandler = function onBlurHandler(e) {
+    rs.hideDropDown(); // console.log("Lost focus.");
+  };
+
+  dropDownController.onmouseselection = function (text, rs) {
+    rs.element.innerText = rs.elementHint.innerText = leftSide + text;
+    rs.hideDropDown();
+    window.setTimeout(function () {
+      rs.element.focus();
+      setEndOfContenteditable(rs.element);
+    }, 1);
+  };
+
+  return rs;
+}
+// EXTERNAL MODULE: ./src/js/ContextMenu.js
+var ContextMenu = __webpack_require__(3);
+
+// EXTERNAL MODULE: ./src/js/FocusTracker.js
+var FocusTracker = __webpack_require__(8);
 
 // CONCATENATED MODULE: ./src/js/Highlighter.js
 
@@ -11805,915 +12073,24 @@ var Highlighter = /*#__PURE__*/function () {
 
   return Highlighter;
 }();
-// EXTERNAL MODULE: ./src/js/util.js
-var util = __webpack_require__(0);
-
-// CONCATENATED MODULE: ./src/js/NodeHistory.js
-
-
-function NodeHistory_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function NodeHistory_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function NodeHistory_createClass(Constructor, protoProps, staticProps) { if (protoProps) NodeHistory_defineProperties(Constructor.prototype, protoProps); if (staticProps) NodeHistory_defineProperties(Constructor, staticProps); return Constructor; }
-
-
-/**
- * @constructor History
- * Store action history, enables undo and redo
- * @param {JSONEditor} editor
- */
-
-var NodeHistory_NodeHistory = /*#__PURE__*/function () {
-  function NodeHistory(editor) {
-    NodeHistory_classCallCheck(this, NodeHistory);
-
-    this.editor = editor;
-    this.history = [];
-    this.index = -1;
-    this.clear(); // helper function to find a Node from a path
-
-    function findNode(path) {
-      return editor.node.findNodeByInternalPath(path);
-    } // map with all supported actions
-
-
-    this.actions = {
-      editField: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          var node = parentNode.childs[params.index];
-          node.updateField(params.oldValue);
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var node = parentNode.childs[params.index];
-          node.updateField(params.newValue);
-        }
-      },
-      editValue: {
-        undo: function undo(params) {
-          findNode(params.path).updateValue(params.oldValue);
-        },
-        redo: function redo(params) {
-          findNode(params.path).updateValue(params.newValue);
-        }
-      },
-      changeType: {
-        undo: function undo(params) {
-          findNode(params.path).changeType(params.oldType);
-        },
-        redo: function redo(params) {
-          findNode(params.path).changeType(params.newType);
-        }
-      },
-      appendNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.nodes.forEach(function (node) {
-            parentNode.appendChild(node);
-          });
-        }
-      },
-      insertBeforeNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var beforeNode = findNode(params.beforePath);
-          params.nodes.forEach(function (node) {
-            parentNode.insertBefore(node, beforeNode);
-          });
-        }
-      },
-      insertAfterNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var afterNode = findNode(params.afterPath);
-          params.nodes.forEach(function (node) {
-            parentNode.insertAfter(node, afterNode);
-            afterNode = node;
-          });
-        }
-      },
-      removeNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          var beforeNode = parentNode.childs[params.index] || parentNode.append;
-          params.nodes.forEach(function (node) {
-            parentNode.insertBefore(node, beforeNode);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        }
-      },
-      duplicateNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.clonePaths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var afterNode = findNode(params.afterPath);
-          var nodes = params.paths.map(findNode);
-          nodes.forEach(function (node) {
-            var clone = node.clone();
-
-            if (parentNode.type === 'object') {
-              var existingFieldNames = parentNode.getFieldNames();
-              clone.field = Object(util["findUniqueName"])(node.field, existingFieldNames);
-            }
-
-            parentNode.insertAfter(clone, afterNode);
-            afterNode = clone;
-          });
-        }
-      },
-      moveNodes: {
-        undo: function undo(params) {
-          var oldParentNode = findNode(params.oldParentPath);
-          var newParentNode = findNode(params.newParentPath);
-          var oldBeforeNode = oldParentNode.childs[params.oldIndex] || oldParentNode.append; // first copy the nodes, then move them
-
-          var nodes = newParentNode.childs.slice(params.newIndex, params.newIndex + params.count);
-          nodes.forEach(function (node, index) {
-            node.field = params.fieldNames[index];
-            oldParentNode.moveBefore(node, oldBeforeNode);
-          }); // This is a hack to work around an issue that we don't know tha original
-          // path of the new parent after dragging, as the node is already moved at that time.
-
-          if (params.newParentPathRedo === null) {
-            params.newParentPathRedo = newParentNode.getInternalPath();
-          }
-        },
-        redo: function redo(params) {
-          var oldParentNode = findNode(params.oldParentPathRedo);
-          var newParentNode = findNode(params.newParentPathRedo);
-          var newBeforeNode = newParentNode.childs[params.newIndexRedo] || newParentNode.append; // first copy the nodes, then move them
-
-          var nodes = oldParentNode.childs.slice(params.oldIndexRedo, params.oldIndexRedo + params.count);
-          nodes.forEach(function (node, index) {
-            node.field = params.fieldNames[index];
-            newParentNode.moveBefore(node, newBeforeNode);
-          });
-        }
-      },
-      sort: {
-        undo: function undo(params) {
-          var node = findNode(params.path);
-          node.hideChilds();
-          node.childs = params.oldChilds;
-          node.updateDom({
-            updateIndexes: true
-          });
-          node.showChilds();
-        },
-        redo: function redo(params) {
-          var node = findNode(params.path);
-          node.hideChilds();
-          node.childs = params.newChilds;
-          node.updateDom({
-            updateIndexes: true
-          });
-          node.showChilds();
-        }
-      },
-      transform: {
-        undo: function undo(params) {
-          findNode(params.path).setInternalValue(params.oldValue); // TODO: would be nice to restore the state of the node and childs
-        },
-        redo: function redo(params) {
-          findNode(params.path).setInternalValue(params.newValue); // TODO: would be nice to restore the state of the node and childs
-        }
-      } // TODO: restore the original caret position and selection with each undo
-      // TODO: implement history for actions "expand", "collapse", "scroll", "setDocument"
-
-    };
-  }
-  /**
-   * The method onChange is executed when the History is changed, and can
-   * be overloaded.
-   */
-
-
-  NodeHistory_createClass(NodeHistory, [{
-    key: "onChange",
-    value: function onChange() {}
-    /**
-     * Add a new action to the history
-     * @param {String} action  The executed action. Available actions: "editField",
-     *                         "editValue", "changeType", "appendNode",
-     *                         "removeNode", "duplicateNode", "moveNode"
-     * @param {Object} params  Object containing parameters describing the change.
-     *                         The parameters in params depend on the action (for
-     *                         example for "editValue" the Node, old value, and new
-     *                         value are provided). params contains all information
-     *                         needed to undo or redo the action.
-     */
-
-  }, {
-    key: "add",
-    value: function add(action, params) {
-      this.index++;
-      this.history[this.index] = {
-        action: action,
-        params: params,
-        timestamp: new Date()
-      }; // remove redo actions which are invalid now
-
-      if (this.index < this.history.length - 1) {
-        this.history.splice(this.index + 1, this.history.length - this.index - 1);
-      } // fire onchange event
-
-
-      this.onChange();
-    }
-    /**
-     * Clear history
-     */
-
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.history = [];
-      this.index = -1; // fire onchange event
-
-      this.onChange();
-    }
-    /**
-     * Check if there is an action available for undo
-     * @return {Boolean} canUndo
-     */
-
-  }, {
-    key: "canUndo",
-    value: function canUndo() {
-      return this.index >= 0;
-    }
-    /**
-     * Check if there is an action available for redo
-     * @return {Boolean} canRedo
-     */
-
-  }, {
-    key: "canRedo",
-    value: function canRedo() {
-      return this.index < this.history.length - 1;
-    }
-    /**
-     * Undo the last action
-     */
-
-  }, {
-    key: "undo",
-    value: function undo() {
-      if (this.canUndo()) {
-        var obj = this.history[this.index];
-
-        if (obj) {
-          var action = this.actions[obj.action];
-
-          if (action && action.undo) {
-            action.undo(obj.params);
-
-            if (obj.params.oldSelection) {
-              try {
-                this.editor.setDomSelection(obj.params.oldSelection);
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          } else {
-            console.error(new Error('unknown action "' + obj.action + '"'));
-          }
-        }
-
-        this.index--; // fire onchange event
-
-        this.onChange();
-      }
-    }
-    /**
-     * Redo the last action
-     */
-
-  }, {
-    key: "redo",
-    value: function redo() {
-      if (this.canRedo()) {
-        this.index++;
-        var obj = this.history[this.index];
-
-        if (obj) {
-          var action = this.actions[obj.action];
-
-          if (action && action.redo) {
-            action.redo(obj.params);
-
-            if (obj.params.newSelection) {
-              try {
-                this.editor.setDomSelection(obj.params.newSelection);
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          } else {
-            console.error(new Error('unknown action "' + obj.action + '"'));
-          }
-        } // fire onchange event
-
-
-        this.onChange();
-      }
-    }
-    /**
-     * Destroy history
-     */
-
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.editor = null;
-      this.history = [];
-      this.index = -1;
-    }
-  }]);
-
-  return NodeHistory;
-}();
 // EXTERNAL MODULE: ./src/js/i18n.js
 var i18n = __webpack_require__(1);
 
-// CONCATENATED MODULE: ./src/js/SearchBox.js
+// EXTERNAL MODULE: ./src/js/jmespathQuery.js
+var jmespathQuery = __webpack_require__(4);
 
+// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
+var ModeSwitcher = __webpack_require__(9);
 
-function SearchBox_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function SearchBox_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function SearchBox_createClass(Constructor, protoProps, staticProps) { if (protoProps) SearchBox_defineProperties(Constructor.prototype, protoProps); if (staticProps) SearchBox_defineProperties(Constructor, staticProps); return Constructor; }
-
-
-/**
- * @constructor SearchBox
- * Create a search box in given HTML container
- * @param {JSONEditor} editor    The JSON Editor to attach to
- * @param {Element} container               HTML container element of where to
- *                                          create the search box
- */
-
-var SearchBox_SearchBox = /*#__PURE__*/function () {
-  function SearchBox(editor, container) {
-    SearchBox_classCallCheck(this, SearchBox);
-
-    var searchBox = this;
-    this.editor = editor;
-    this.timeout = undefined;
-    this.delay = 200; // ms
-
-    this.lastText = undefined;
-    this.results = null;
-    this.dom = {};
-    this.dom.container = container;
-    var wrapper = document.createElement('div');
-    this.dom.wrapper = wrapper;
-    wrapper.className = 'jsoneditor-search';
-    container.appendChild(wrapper);
-    var results = document.createElement('div');
-    this.dom.results = results;
-    results.className = 'jsoneditor-results';
-    wrapper.appendChild(results);
-    var divInput = document.createElement('div');
-    this.dom.input = divInput;
-    divInput.className = 'jsoneditor-frame';
-    divInput.title = Object(i18n["c" /* translate */])('searchTitle');
-    wrapper.appendChild(divInput);
-    var refreshSearch = document.createElement('button');
-    refreshSearch.type = 'button';
-    refreshSearch.className = 'jsoneditor-refresh';
-    divInput.appendChild(refreshSearch);
-    var search = document.createElement('input');
-    search.type = 'text';
-    this.dom.search = search;
-
-    search.oninput = function (event) {
-      searchBox._onDelayedSearch(event);
-    };
-
-    search.onchange = function (event) {
-      // For IE 9
-      searchBox._onSearch();
-    };
-
-    search.onkeydown = function (event) {
-      searchBox._onKeyDown(event);
-    };
-
-    search.onkeyup = function (event) {
-      searchBox._onKeyUp(event);
-    };
-
-    refreshSearch.onclick = function (event) {
-      search.select();
-    }; // TODO: ESC in FF restores the last input, is a FF bug, https://bugzilla.mozilla.org/show_bug.cgi?id=598819
-
-
-    divInput.appendChild(search);
-    var searchNext = document.createElement('button');
-    searchNext.type = 'button';
-    searchNext.title = Object(i18n["c" /* translate */])('searchNextResultTitle');
-    searchNext.className = 'jsoneditor-next';
-
-    searchNext.onclick = function () {
-      searchBox.next();
-    };
-
-    divInput.appendChild(searchNext);
-    var searchPrevious = document.createElement('button');
-    searchPrevious.type = 'button';
-    searchPrevious.title = Object(i18n["c" /* translate */])('searchPreviousResultTitle');
-    searchPrevious.className = 'jsoneditor-previous';
-
-    searchPrevious.onclick = function () {
-      searchBox.previous();
-    };
-
-    divInput.appendChild(searchPrevious);
-  }
-  /**
-   * Go to the next search result
-   * @param {boolean} [focus]   If true, focus will be set to the next result
-   *                            focus is false by default.
-   */
-
-
-  SearchBox_createClass(SearchBox, [{
-    key: "next",
-    value: function next(focus) {
-      if (this.results) {
-        var index = this.resultIndex !== null ? this.resultIndex + 1 : 0;
-
-        if (index > this.results.length - 1) {
-          index = 0;
-        }
-
-        this._setActiveResult(index, focus);
-      }
-    }
-    /**
-     * Go to the prevous search result
-     * @param {boolean} [focus]   If true, focus will be set to the next result
-     *                            focus is false by default.
-     */
-
-  }, {
-    key: "previous",
-    value: function previous(focus) {
-      if (this.results) {
-        var max = this.results.length - 1;
-        var index = this.resultIndex !== null ? this.resultIndex - 1 : max;
-
-        if (index < 0) {
-          index = max;
-        }
-
-        this._setActiveResult(index, focus);
-      }
-    }
-    /**
-     * Set new value for the current active result
-     * @param {Number} index
-     * @param {boolean} [focus]   If true, focus will be set to the next result.
-     *                            focus is false by default.
-     * @private
-     */
-
-  }, {
-    key: "_setActiveResult",
-    value: function _setActiveResult(index, focus) {
-      // de-activate current active result
-      if (this.activeResult) {
-        var prevNode = this.activeResult.node;
-        var prevElem = this.activeResult.elem;
-
-        if (prevElem === 'field') {
-          delete prevNode.searchFieldActive;
-        } else {
-          delete prevNode.searchValueActive;
-        }
-
-        prevNode.updateDom();
-      }
-
-      if (!this.results || !this.results[index]) {
-        // out of range, set to undefined
-        this.resultIndex = undefined;
-        this.activeResult = undefined;
-        return;
-      }
-
-      this.resultIndex = index; // set new node active
-
-      var node = this.results[this.resultIndex].node;
-      var elem = this.results[this.resultIndex].elem;
-
-      if (elem === 'field') {
-        node.searchFieldActive = true;
-      } else {
-        node.searchValueActive = true;
-      }
-
-      this.activeResult = this.results[this.resultIndex];
-      node.updateDom(); // TODO: not so nice that the focus is only set after the animation is finished
-
-      node.scrollTo(function () {
-        if (focus) {
-          node.focus(elem);
-        }
-      });
-    }
-    /**
-     * Cancel any running onDelayedSearch.
-     * @private
-     */
-
-  }, {
-    key: "_clearDelay",
-    value: function _clearDelay() {
-      if (this.timeout !== undefined) {
-        clearTimeout(this.timeout);
-        delete this.timeout;
-      }
-    }
-    /**
-     * Start a timer to execute a search after a short delay.
-     * Used for reducing the number of searches while typing.
-     * @param {Event} event
-     * @private
-     */
-
-  }, {
-    key: "_onDelayedSearch",
-    value: function _onDelayedSearch(event) {
-      // execute the search after a short delay (reduces the number of
-      // search actions while typing in the search text box)
-      this._clearDelay();
-
-      var searchBox = this;
-      this.timeout = setTimeout(function (event) {
-        searchBox._onSearch();
-      }, this.delay);
-    }
-    /**
-     * Handle onSearch event
-     * @param {boolean} [forceSearch]  If true, search will be executed again even
-     *                                 when the search text is not changed.
-     *                                 Default is false.
-     * @private
-     */
-
-  }, {
-    key: "_onSearch",
-    value: function _onSearch(forceSearch) {
-      this._clearDelay();
-
-      var value = this.dom.search.value;
-      var text = value.length > 0 ? value : undefined;
-
-      if (text !== this.lastText || forceSearch) {
-        // only search again when changed
-        this.lastText = text;
-        this.results = this.editor.search(text);
-        var MAX_SEARCH_RESULTS = this.results[0] ? this.results[0].node.MAX_SEARCH_RESULTS : Infinity; // try to maintain the current active result if this is still part of the new search results
-
-        var activeResultIndex = 0;
-
-        if (this.activeResult) {
-          for (var i = 0; i < this.results.length; i++) {
-            if (this.results[i].node === this.activeResult.node) {
-              activeResultIndex = i;
-              break;
-            }
-          }
-        }
-
-        this._setActiveResult(activeResultIndex, false); // display search results
-
-
-        if (text !== undefined) {
-          var resultCount = this.results.length;
-
-          if (resultCount === 0) {
-            this.dom.results.textContent = "no\xA0results";
-          } else if (resultCount === 1) {
-            this.dom.results.textContent = "1\xA0result";
-          } else if (resultCount > MAX_SEARCH_RESULTS) {
-            this.dom.results.textContent = MAX_SEARCH_RESULTS + "+\xA0results";
-          } else {
-            this.dom.results.textContent = resultCount + "\xA0results";
-          }
-        } else {
-          this.dom.results.textContent = '';
-        }
-      }
-    }
-    /**
-     * Handle onKeyDown event in the input box
-     * @param {Event} event
-     * @private
-     */
-
-  }, {
-    key: "_onKeyDown",
-    value: function _onKeyDown(event) {
-      var keynum = event.which;
-
-      if (keynum === 27) {
-        // ESC
-        this.dom.search.value = ''; // clear search
-
-        this._onSearch();
-
-        event.preventDefault();
-        event.stopPropagation();
-      } else if (keynum === 13) {
-        // Enter
-        if (event.ctrlKey) {
-          // force to search again
-          this._onSearch(true);
-        } else if (event.shiftKey) {
-          // move to the previous search result
-          this.previous();
-        } else {
-          // move to the next search result
-          this.next();
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }
-    /**
-     * Handle onKeyUp event in the input box
-     * @param {Event} event
-     * @private
-     */
-
-  }, {
-    key: "_onKeyUp",
-    value: function _onKeyUp(event) {
-      var keynum = event.keyCode;
-
-      if (keynum !== 27 && keynum !== 13) {
-        // !show and !Enter
-        this._onDelayedSearch(event); // For IE 9
-
-      }
-    }
-    /**
-     * Clear the search results
-     */
-
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.dom.search.value = '';
-
-      this._onSearch();
-    }
-    /**
-     * Refresh searchResults if there is a search value
-     */
-
-  }, {
-    key: "forceSearch",
-    value: function forceSearch() {
-      this._onSearch(true);
-    }
-    /**
-     * Test whether the search box value is empty
-     * @returns {boolean} Returns true when empty.
-     */
-
-  }, {
-    key: "isEmpty",
-    value: function isEmpty() {
-      return this.dom.search.value === '';
-    }
-    /**
-     * Destroy the search box
-     */
-
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.editor = null;
-      this.dom.container.removeChild(this.dom.wrapper);
-      this.dom = null;
-      this.results = null;
-      this.activeResult = null;
-
-      this._clearDelay();
-    }
-  }]);
-
-  return SearchBox;
-}();
-// EXTERNAL MODULE: ./src/js/ContextMenu.js
-var ContextMenu = __webpack_require__(3);
-
-// CONCATENATED MODULE: ./src/js/TreePath.js
-
-
-function TreePath_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function TreePath_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function TreePath_createClass(Constructor, protoProps, staticProps) { if (protoProps) TreePath_defineProperties(Constructor.prototype, protoProps); if (staticProps) TreePath_defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-
-/**
- * Creates a component that visualize path selection in tree based editors
- * @param {HTMLElement} container
- * @param {HTMLElement} root
- * @constructor
- */
-
-var TreePath_TreePath = /*#__PURE__*/function () {
-  function TreePath(container, root) {
-    TreePath_classCallCheck(this, TreePath);
-
-    if (container) {
-      this.root = root;
-      this.path = document.createElement('div');
-      this.path.className = 'jsoneditor-treepath';
-      this.path.setAttribute('tabindex', 0);
-      this.contentMenuClicked = false;
-      container.appendChild(this.path);
-      this.reset();
-    }
-  }
-  /**
-   * Reset component to initial status
-   */
-
-
-  TreePath_createClass(TreePath, [{
-    key: "reset",
-    value: function reset() {
-      this.path.textContent = Object(i18n["c" /* translate */])('selectNode');
-    }
-    /**
-     * Renders the component UI according to a given path objects
-     * @param {Array<{name: String, childs: Array}>} pathObjs a list of path objects
-     *
-     */
-
-  }, {
-    key: "setPath",
-    value: function setPath(pathObjs) {
-      var me = this;
-      this.path.textContent = '';
-
-      if (pathObjs && pathObjs.length) {
-        pathObjs.forEach(function (pathObj, idx) {
-          var pathEl = document.createElement('span');
-          var sepEl;
-          pathEl.className = 'jsoneditor-treepath-element';
-          pathEl.innerText = pathObj.name;
-          pathEl.onclick = _onSegmentClick.bind(me, pathObj);
-          me.path.appendChild(pathEl);
-
-          if (pathObj.children.length) {
-            sepEl = document.createElement('span');
-            sepEl.className = 'jsoneditor-treepath-seperator';
-            sepEl.textContent = "\u25BA";
-
-            sepEl.onclick = function () {
-              me.contentMenuClicked = true;
-              var items = [];
-              pathObj.children.forEach(function (child) {
-                items.push({
-                  text: child.name,
-                  className: 'jsoneditor-type-modes' + (pathObjs[idx + 1] + 1 && pathObjs[idx + 1].name === child.name ? ' jsoneditor-selected' : ''),
-                  click: _onContextMenuItemClick.bind(me, pathObj, child.name)
-                });
-              });
-              var menu = new ContextMenu["a" /* ContextMenu */](items);
-              menu.show(sepEl, me.root, true);
-            };
-
-            me.path.appendChild(sepEl);
-          }
-
-          if (idx === pathObjs.length - 1) {
-            var leftRectPos = (sepEl || pathEl).getBoundingClientRect().right;
-
-            if (me.path.offsetWidth < leftRectPos) {
-              me.path.scrollLeft = leftRectPos;
-            }
-
-            if (me.path.scrollLeft) {
-              var showAllBtn = document.createElement('span');
-              showAllBtn.className = 'jsoneditor-treepath-show-all-btn';
-              showAllBtn.title = 'show all path';
-              showAllBtn.textContent = '...';
-              showAllBtn.onclick = _onShowAllClick.bind(me, pathObjs);
-              me.path.insertBefore(showAllBtn, me.path.firstChild);
-            }
-          }
-        });
-      }
-
-      function _onShowAllClick(pathObjs) {
-        me.contentMenuClicked = false;
-        Object(util["addClassName"])(me.path, 'show-all');
-        me.path.style.width = me.path.parentNode.getBoundingClientRect().width - 10 + 'px';
-
-        me.path.onblur = function () {
-          if (me.contentMenuClicked) {
-            me.contentMenuClicked = false;
-            me.path.focus();
-            return;
-          }
-
-          Object(util["removeClassName"])(me.path, 'show-all');
-          me.path.onblur = undefined;
-          me.path.style.width = '';
-          me.setPath(pathObjs);
-        };
-      }
-
-      function _onSegmentClick(pathObj) {
-        if (this.selectionCallback) {
-          this.selectionCallback(pathObj);
-        }
-      }
-
-      function _onContextMenuItemClick(pathObj, selection) {
-        if (this.contextMenuCallback) {
-          this.contextMenuCallback(pathObj, selection);
-        }
-      }
-    }
-    /**
-     * set a callback function for selection of path section
-     * @param {Function} callback function to invoke when section is selected
-     */
-
-  }, {
-    key: "onSectionSelected",
-    value: function onSectionSelected(callback) {
-      if (typeof callback === 'function') {
-        this.selectionCallback = callback;
-      }
-    }
-    /**
-     * set a callback function for selection of path section
-     * @param {Function} callback function to invoke when section is selected
-     */
-
-  }, {
-    key: "onContextMenuItemSelected",
-    value: function onContextMenuItemSelected(callback) {
-      if (typeof callback === 'function') {
-        this.contextMenuCallback = callback;
-      }
-    }
-  }]);
-
-  return TreePath;
-}();
 // EXTERNAL MODULE: ./node_modules/javascript-natural-sort/naturalSort.js
-var naturalSort = __webpack_require__(10);
+var naturalSort = __webpack_require__(12);
 var naturalSort_default = /*#__PURE__*/__webpack_require__.n(naturalSort);
 
 // EXTERNAL MODULE: ./src/js/createAbsoluteAnchor.js
 var createAbsoluteAnchor = __webpack_require__(11);
+
+// EXTERNAL MODULE: ./src/js/util.js
+var util = __webpack_require__(0);
 
 // CONCATENATED MODULE: ./src/js/appendNodeFactory.js
 
@@ -13140,8 +12517,6 @@ var constants = __webpack_require__(2);
 // CONCATENATED MODULE: ./src/js/Node.js
 
 
-var _this4 = undefined;
-
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function Node_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -13234,9 +12609,13 @@ var Node_Node = /*#__PURE__*/function () {
           if (typeof editable === 'boolean') {
             this.editable.field = editable;
             this.editable.value = editable;
-          } else {
+          } else if (_typeof(editable) === 'object' && editable !== null) {
             if (typeof editable.field === 'boolean') this.editable.field = editable.field;
             if (typeof editable.value === 'boolean') this.editable.value = editable.value;
+          } else {
+            console.error('Invalid return value for function onEditable.', 'Actual value:', editable, '.', 'Either a boolean or object { field: boolean, value: boolean } expected.');
+            this.editable.field = false;
+            this.editable.value = false;
           }
         }
       }
@@ -14272,9 +13651,10 @@ var Node_Node = /*#__PURE__*/function () {
         // create a temporary row, to prevent the scroll position from jumping
         // when removing the node
         var tbody = this.dom.tr ? this.dom.tr.parentNode : undefined;
+        var trTemp;
 
         if (tbody) {
-          var trTemp = document.createElement('tr');
+          trTemp = document.createElement('tr');
           trTemp.style.height = tbody.clientHeight + 'px';
           tbody.appendChild(trTemp);
         }
@@ -14296,7 +13676,7 @@ var Node_Node = /*#__PURE__*/function () {
           this.insertBefore(node, beforeNode, updateDom);
         }
 
-        if (tbody) {
+        if (tbody && trTemp) {
           tbody.removeChild(trTemp);
         }
       }
@@ -15161,10 +14541,10 @@ var Node_Node = /*#__PURE__*/function () {
 
         if (tooltip) {
           domField.title = tooltip;
-        } // make backgound color lightgray when empty
+        } // make background color lightgray when empty
 
 
-        var isEmpty = String(this.field) === '' && this.parent.type !== 'array';
+        var isEmpty = String(this.field) === '' && this.parent && this.parent.type !== 'array';
 
         if (isEmpty) {
           Object(util["addClassName"])(domField, 'jsoneditor-empty');
@@ -15835,11 +15215,7 @@ var Node_Node = /*#__PURE__*/function () {
       var dom = this.dom;
       var node = this;
 
-      var expandable = this._hasChilds();
-
-      if (typeof this.editor.options.onEvent === 'function') {
-        this._onEvent(event);
-      } // check if mouse is on menu or on dragarea.
+      var expandable = this._hasChilds(); // check if mouse is on menu or on dragarea.
       // If so, highlight current row and its childs
 
 
@@ -15942,7 +15318,7 @@ var Node_Node = /*#__PURE__*/function () {
               // if read-only, we use the regular click behavior of an anchor
               if (Object(util["isUrl"])(this.value)) {
                 event.preventDefault();
-                window.open(this.value, '_blank');
+                window.open(this.value, '_blank', 'noopener');
               }
             }
 
@@ -16053,6 +15429,11 @@ var Node_Node = /*#__PURE__*/function () {
 
       if (type === 'keydown') {
         this.onKeyDown(event);
+      } // fire after applying for example a change by clicking a checkbox
+
+
+      if (typeof this.editor.options.onEvent === 'function') {
+        this._onEvent(event);
       }
     }
     /**
@@ -16069,14 +15450,16 @@ var Node_Node = /*#__PURE__*/function () {
     key: "_onEvent",
     value: function _onEvent(event) {
       var element = event.target;
+      var isField = element === this.dom.field;
+      var isValue = element === this.dom.value || element === this.dom.checkbox || element === this.dom.select;
 
-      if (element === this.dom.field || element === this.dom.value) {
+      if (isField || isValue) {
         var info = {
           field: this.getField(),
           path: this.getPath()
         }; // For leaf values, include value
 
-        if (!this._hasChilds() && element === this.dom.value) {
+        if (isValue && !this._hasChilds()) {
           info.value = this.getValue();
         }
 
@@ -16117,7 +15500,7 @@ var Node_Node = /*#__PURE__*/function () {
         if (target === this.dom.value) {
           if (!this.editable.value || event.ctrlKey) {
             if (Object(util["isUrl"])(this.value)) {
-              window.open(this.value, '_blank');
+              window.open(this.value, '_blank', 'noopener');
               handled = true;
             }
           }
@@ -16339,8 +15722,9 @@ var Node_Node = /*#__PURE__*/function () {
           handled = true;
         } else if (altKey && shiftKey && editable) {
           // Alt + Shift + Arrow Right
-          dom = firstNode.getDom();
-          var prevDom = dom.previousSibling;
+          var _dom = firstNode.getDom();
+
+          var prevDom = _dom.previousSibling;
 
           if (prevDom) {
             prevNode = Node.getNodeFromTarget(prevDom);
@@ -16470,12 +15854,16 @@ var Node_Node = /*#__PURE__*/function () {
   }, {
     key: "_onExpand",
     value: function _onExpand(recurse) {
+      var table;
+      var frame;
+      var scrollTop;
+
       if (recurse) {
         // Take the table offline
-        var table = this.dom.tr.parentNode; // TODO: not nice to access the main table like this
+        table = this.dom.tr.parentNode; // TODO: not nice to access the main table like this
 
-        var frame = table.parentNode;
-        var scrollTop = frame.scrollTop;
+        frame = table.parentNode;
+        scrollTop = frame.scrollTop;
         frame.removeChild(table);
       }
 
@@ -17439,7 +16827,7 @@ var Node_Node = /*#__PURE__*/function () {
       var json = this.getValue();
 
       Object(js_showTransformModal["showTransformModal"])({
-        anchor: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
+        container: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
         json: json,
         queryDescription: queryDescription,
         // can be undefined
@@ -17654,13 +17042,13 @@ Node_Node.onDragStart = function (nodes, event) {
   var offsetY = Object(util["getAbsoluteTop"])(draggedNode.dom.tr) - Object(util["getAbsoluteTop"])(firstNode.dom.tr);
 
   if (!editor.mousemove) {
-    editor.mousemove = Object(util["addEventListener"])(window, 'mousemove', function (event) {
+    editor.mousemove = Object(util["addEventListener"])(event.view, 'mousemove', function (event) {
       Node_Node.onDrag(nodes, event);
     });
   }
 
   if (!editor.mouseup) {
-    editor.mouseup = Object(util["addEventListener"])(window, 'mouseup', function (event) {
+    editor.mouseup = Object(util["addEventListener"])(event.view, 'mouseup', function (event) {
       Node_Node.onDragEnd(nodes, event);
     });
   }
@@ -17906,12 +17294,12 @@ Node_Node.onDragEnd = function (nodes, event) {
   delete editor.drag;
 
   if (editor.mousemove) {
-    Object(util["removeEventListener"])(window, 'mousemove', editor.mousemove);
+    Object(util["removeEventListener"])(event.view, 'mousemove', editor.mousemove);
     delete editor.mousemove;
   }
 
   if (editor.mouseup) {
-    Object(util["removeEventListener"])(window, 'mouseup', editor.mouseup);
+    Object(util["removeEventListener"])(event.view, 'mouseup', editor.mouseup);
     delete editor.mouseup;
   } // Stop any running auto scroll
 
@@ -17983,7 +17371,7 @@ Node_Node._findSchema = function (schema, schemaRefs, path) {
 
       if (typeof key === 'string' && childSchema.patternProperties && !(childSchema.properties && key in childSchema.properties)) {
         for (var prop in childSchema.patternProperties) {
-          if (key.match(prop)) {
+          if (key.match(prop) && (foundSchema.properties || foundSchema.patternProperties)) {
             foundSchema = Node_Node._findSchema(childSchema.patternProperties[prop], schemaRefs, nextPath);
           }
         }
@@ -18089,7 +17477,7 @@ Node_Node.onDuplicate = function (nodes) {
       if (clones[0].parent.type === 'object') {
         // when duplicating a single object property,
         // set focus to the field and keep the original field name
-        clones[0].dom.field.innerHTML = _this4._escapeHTML(nodes[0].field);
+        clones[0].dom.field.innerHTML = nodes[0]._escapeHTML(nodes[0].field);
         clones[0].focus('field');
       } else {
         clones[0].focus();
@@ -18197,455 +17585,903 @@ function Node_hasOwnProperty(object, key) {
 
 var Node_AppendNode = appendNodeFactory(Node_Node);
 var Node_ShowMoreNode = showMoreNodeFactory(Node_Node);
-// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
-var ModeSwitcher = __webpack_require__(7);
-
-// EXTERNAL MODULE: ./src/js/FocusTracker.js
-var FocusTracker = __webpack_require__(8);
-
-// CONCATENATED MODULE: ./src/js/autocomplete.js
+// CONCATENATED MODULE: ./src/js/NodeHistory.js
 
 
-var defaultFilterFunction = {
-  start: function start(token, match, config) {
-    return match.indexOf(token) === 0;
-  },
-  contain: function contain(token, match, config) {
-    return match.indexOf(token) > -1;
-  }
-};
-function autocomplete(config) {
-  config = config || {};
-  config.filter = config.filter || 'start';
-  config.trigger = config.trigger || 'keydown';
-  config.confirmKeys = config.confirmKeys || [39, 35, 9]; // right, end, tab
+function NodeHistory_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  config.caseSensitive = config.caseSensitive || false; // autocomplete case sensitive
+function NodeHistory_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  var fontSize = '';
-  var fontFamily = '';
-  var wrapper = document.createElement('div');
-  wrapper.style.position = 'relative';
-  wrapper.style.outline = '0';
-  wrapper.style.border = '0';
-  wrapper.style.margin = '0';
-  wrapper.style.padding = '0';
-  var dropDown = document.createElement('div');
-  dropDown.className = 'autocomplete dropdown';
-  dropDown.style.position = 'absolute';
-  dropDown.style.visibility = 'hidden';
-  var spacer;
-  var leftSide; // <-- it will contain the leftSide part of the textfield (the bit that was already autocompleted)
+function NodeHistory_createClass(Constructor, protoProps, staticProps) { if (protoProps) NodeHistory_defineProperties(Constructor.prototype, protoProps); if (staticProps) NodeHistory_defineProperties(Constructor, staticProps); return Constructor; }
 
-  var createDropDownController = function createDropDownController(elem, rs) {
-    var rows = [];
-    var ix = 0;
-    var oldIndex = -1; // TODO: move this styling in JS to SCSS
 
-    var onMouseOver = function onMouseOver() {
-      this.style.backgroundColor = '#ddd';
-    };
+/**
+ * @constructor History
+ * Store action history, enables undo and redo
+ * @param {JSONEditor} editor
+ */
 
-    var onMouseOut = function onMouseOut() {
-      this.style.backgroundColor = '';
-    };
+var NodeHistory_NodeHistory = /*#__PURE__*/function () {
+  function NodeHistory(editor) {
+    NodeHistory_classCallCheck(this, NodeHistory);
 
-    var onMouseDown = function onMouseDown() {
-      p.hide();
-      p.onmouseselection(this.__hint, p.rs);
-    };
+    this.editor = editor;
+    this.history = [];
+    this.index = -1;
+    this.clear(); // helper function to find a Node from a path
 
-    var p = {
-      rs: rs,
-      hide: function hide() {
-        elem.style.visibility = 'hidden'; // rs.hideDropDown();
+    function findNode(path) {
+      return editor.node.findNodeByInternalPath(path);
+    } // map with all supported actions
+
+
+    this.actions = {
+      editField: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          var node = parentNode.childs[params.index];
+          node.updateField(params.oldValue);
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var node = parentNode.childs[params.index];
+          node.updateField(params.newValue);
+        }
       },
-      refresh: function refresh(token, array) {
-        elem.style.visibility = 'hidden';
-        ix = 0;
-        elem.textContent = '';
-        var vph = window.innerHeight || document.documentElement.clientHeight;
-        var rect = elem.parentNode.getBoundingClientRect();
-        var distanceToTop = rect.top - 6; // heuristic give 6px
+      editValue: {
+        undo: function undo(params) {
+          findNode(params.path).updateValue(params.oldValue);
+        },
+        redo: function redo(params) {
+          findNode(params.path).updateValue(params.newValue);
+        }
+      },
+      changeType: {
+        undo: function undo(params) {
+          findNode(params.path).changeType(params.oldType);
+        },
+        redo: function redo(params) {
+          findNode(params.path).changeType(params.newType);
+        }
+      },
+      appendNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.nodes.forEach(function (node) {
+            parentNode.appendChild(node);
+          });
+        }
+      },
+      insertBeforeNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var beforeNode = findNode(params.beforePath);
+          params.nodes.forEach(function (node) {
+            parentNode.insertBefore(node, beforeNode);
+          });
+        }
+      },
+      insertAfterNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var afterNode = findNode(params.afterPath);
+          params.nodes.forEach(function (node) {
+            parentNode.insertAfter(node, afterNode);
+            afterNode = node;
+          });
+        }
+      },
+      removeNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          var beforeNode = parentNode.childs[params.index] || parentNode.append;
+          params.nodes.forEach(function (node) {
+            parentNode.insertBefore(node, beforeNode);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        }
+      },
+      duplicateNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.clonePaths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var afterNode = findNode(params.afterPath);
+          var nodes = params.paths.map(findNode);
+          nodes.forEach(function (node) {
+            var clone = node.clone();
 
-        var distanceToBottom = vph - rect.bottom - 6; // distance from the browser border.
+            if (parentNode.type === 'object') {
+              var existingFieldNames = parentNode.getFieldNames();
+              clone.field = Object(util["findUniqueName"])(node.field, existingFieldNames);
+            }
 
-        rows = [];
-        var filterFn = typeof config.filter === 'function' ? config.filter : defaultFilterFunction[config.filter];
-        var filtered = !filterFn ? [] : array.filter(function (match) {
-          return filterFn(config.caseSensitive ? token : token.toLowerCase(), config.caseSensitive ? match : match.toLowerCase(), config);
-        });
-        rows = filtered.map(function (row) {
-          var divRow = document.createElement('div');
-          divRow.className = 'item'; // divRow.style.color = config.color;
+            parentNode.insertAfter(clone, afterNode);
+            afterNode = clone;
+          });
+        }
+      },
+      moveNodes: {
+        undo: function undo(params) {
+          var oldParentNode = findNode(params.oldParentPath);
+          var newParentNode = findNode(params.newParentPath);
+          var oldBeforeNode = oldParentNode.childs[params.oldIndex] || oldParentNode.append; // first copy the nodes, then move them
 
-          divRow.onmouseover = onMouseOver;
-          divRow.onmouseout = onMouseOut;
-          divRow.onmousedown = onMouseDown;
-          divRow.__hint = row;
-          divRow.textContent = '';
-          divRow.appendChild(document.createTextNode(row.substring(0, token.length)));
-          var b = document.createElement('b');
-          b.appendChild(document.createTextNode(row.substring(token.length)));
-          divRow.appendChild(b);
-          elem.appendChild(divRow);
-          return divRow;
-        });
+          var nodes = newParentNode.childs.slice(params.newIndex, params.newIndex + params.count);
+          nodes.forEach(function (node, index) {
+            node.field = params.fieldNames[index];
+            oldParentNode.moveBefore(node, oldBeforeNode);
+          }); // This is a hack to work around an issue that we don't know tha original
+          // path of the new parent after dragging, as the node is already moved at that time.
 
-        if (rows.length === 0) {
-          return; // nothing to show.
+          if (params.newParentPathRedo === null) {
+            params.newParentPathRedo = newParentNode.getInternalPath();
+          }
+        },
+        redo: function redo(params) {
+          var oldParentNode = findNode(params.oldParentPathRedo);
+          var newParentNode = findNode(params.newParentPathRedo);
+          var newBeforeNode = newParentNode.childs[params.newIndexRedo] || newParentNode.append; // first copy the nodes, then move them
+
+          var nodes = oldParentNode.childs.slice(params.oldIndexRedo, params.oldIndexRedo + params.count);
+          nodes.forEach(function (node, index) {
+            node.field = params.fieldNames[index];
+            newParentNode.moveBefore(node, newBeforeNode);
+          });
+        }
+      },
+      sort: {
+        undo: function undo(params) {
+          var node = findNode(params.path);
+          node.hideChilds();
+          node.childs = params.oldChilds;
+          node.updateDom({
+            updateIndexes: true
+          });
+          node.showChilds();
+        },
+        redo: function redo(params) {
+          var node = findNode(params.path);
+          node.hideChilds();
+          node.childs = params.newChilds;
+          node.updateDom({
+            updateIndexes: true
+          });
+          node.showChilds();
+        }
+      },
+      transform: {
+        undo: function undo(params) {
+          findNode(params.path).setInternalValue(params.oldValue); // TODO: would be nice to restore the state of the node and childs
+        },
+        redo: function redo(params) {
+          findNode(params.path).setInternalValue(params.newValue); // TODO: would be nice to restore the state of the node and childs
+        }
+      } // TODO: restore the original caret position and selection with each undo
+      // TODO: implement history for actions "expand", "collapse", "scroll", "setDocument"
+
+    };
+  }
+  /**
+   * The method onChange is executed when the History is changed, and can
+   * be overloaded.
+   */
+
+
+  NodeHistory_createClass(NodeHistory, [{
+    key: "onChange",
+    value: function onChange() {}
+    /**
+     * Add a new action to the history
+     * @param {String} action  The executed action. Available actions: "editField",
+     *                         "editValue", "changeType", "appendNode",
+     *                         "removeNode", "duplicateNode", "moveNode"
+     * @param {Object} params  Object containing parameters describing the change.
+     *                         The parameters in params depend on the action (for
+     *                         example for "editValue" the Node, old value, and new
+     *                         value are provided). params contains all information
+     *                         needed to undo or redo the action.
+     */
+
+  }, {
+    key: "add",
+    value: function add(action, params) {
+      this.index++;
+      this.history[this.index] = {
+        action: action,
+        params: params,
+        timestamp: new Date()
+      }; // remove redo actions which are invalid now
+
+      if (this.index < this.history.length - 1) {
+        this.history.splice(this.index + 1, this.history.length - this.index - 1);
+      } // fire onchange event
+
+
+      this.onChange();
+    }
+    /**
+     * Clear history
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.history = [];
+      this.index = -1; // fire onchange event
+
+      this.onChange();
+    }
+    /**
+     * Check if there is an action available for undo
+     * @return {Boolean} canUndo
+     */
+
+  }, {
+    key: "canUndo",
+    value: function canUndo() {
+      return this.index >= 0;
+    }
+    /**
+     * Check if there is an action available for redo
+     * @return {Boolean} canRedo
+     */
+
+  }, {
+    key: "canRedo",
+    value: function canRedo() {
+      return this.index < this.history.length - 1;
+    }
+    /**
+     * Undo the last action
+     */
+
+  }, {
+    key: "undo",
+    value: function undo() {
+      if (this.canUndo()) {
+        var obj = this.history[this.index];
+
+        if (obj) {
+          var action = this.actions[obj.action];
+
+          if (action && action.undo) {
+            action.undo(obj.params);
+
+            if (obj.params.oldSelection) {
+              try {
+                this.editor.setDomSelection(obj.params.oldSelection);
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          } else {
+            console.error(new Error('unknown action "' + obj.action + '"'));
+          }
         }
 
-        if (rows.length === 1 && (token.toLowerCase() === rows[0].__hint.toLowerCase() && !config.caseSensitive || token === rows[0].__hint && config.caseSensitive)) {
-          return; // do not show the dropDown if it has only one element which matches what we have just displayed.
+        this.index--; // fire onchange event
+
+        this.onChange();
+      }
+    }
+    /**
+     * Redo the last action
+     */
+
+  }, {
+    key: "redo",
+    value: function redo() {
+      if (this.canRedo()) {
+        this.index++;
+        var obj = this.history[this.index];
+
+        if (obj) {
+          var action = this.actions[obj.action];
+
+          if (action && action.redo) {
+            action.redo(obj.params);
+
+            if (obj.params.newSelection) {
+              try {
+                this.editor.setDomSelection(obj.params.newSelection);
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          } else {
+            console.error(new Error('unknown action "' + obj.action + '"'));
+          }
+        } // fire onchange event
+
+
+        this.onChange();
+      }
+    }
+    /**
+     * Destroy history
+     */
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.editor = null;
+      this.history = [];
+      this.index = -1;
+    }
+  }]);
+
+  return NodeHistory;
+}();
+// CONCATENATED MODULE: ./src/js/SearchBox.js
+
+
+function SearchBox_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function SearchBox_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function SearchBox_createClass(Constructor, protoProps, staticProps) { if (protoProps) SearchBox_defineProperties(Constructor.prototype, protoProps); if (staticProps) SearchBox_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+/**
+ * @constructor SearchBox
+ * Create a search box in given HTML container
+ * @param {JSONEditor} editor    The JSON Editor to attach to
+ * @param {Element} container               HTML container element of where to
+ *                                          create the search box
+ */
+
+var SearchBox_SearchBox = /*#__PURE__*/function () {
+  function SearchBox(editor, container) {
+    SearchBox_classCallCheck(this, SearchBox);
+
+    var searchBox = this;
+    this.editor = editor;
+    this.timeout = undefined;
+    this.delay = 200; // ms
+
+    this.lastText = undefined;
+    this.results = null;
+    this.dom = {};
+    this.dom.container = container;
+    var wrapper = document.createElement('div');
+    this.dom.wrapper = wrapper;
+    wrapper.className = 'jsoneditor-search';
+    container.appendChild(wrapper);
+    var results = document.createElement('div');
+    this.dom.results = results;
+    results.className = 'jsoneditor-results';
+    wrapper.appendChild(results);
+    var divInput = document.createElement('div');
+    this.dom.input = divInput;
+    divInput.className = 'jsoneditor-frame';
+    divInput.title = Object(i18n["c" /* translate */])('searchTitle');
+    wrapper.appendChild(divInput);
+    var refreshSearch = document.createElement('button');
+    refreshSearch.type = 'button';
+    refreshSearch.className = 'jsoneditor-refresh';
+    divInput.appendChild(refreshSearch);
+    var search = document.createElement('input');
+    search.type = 'text';
+    this.dom.search = search;
+
+    search.oninput = function (event) {
+      searchBox._onDelayedSearch(event);
+    };
+
+    search.onchange = function (event) {
+      // For IE 9
+      searchBox._onSearch();
+    };
+
+    search.onkeydown = function (event) {
+      searchBox._onKeyDown(event);
+    };
+
+    search.onkeyup = function (event) {
+      searchBox._onKeyUp(event);
+    };
+
+    refreshSearch.onclick = function (event) {
+      search.select();
+    }; // TODO: ESC in FF restores the last input, is a FF bug, https://bugzilla.mozilla.org/show_bug.cgi?id=598819
+
+
+    divInput.appendChild(search);
+    var searchNext = document.createElement('button');
+    searchNext.type = 'button';
+    searchNext.title = Object(i18n["c" /* translate */])('searchNextResultTitle');
+    searchNext.className = 'jsoneditor-next';
+
+    searchNext.onclick = function () {
+      searchBox.next();
+    };
+
+    divInput.appendChild(searchNext);
+    var searchPrevious = document.createElement('button');
+    searchPrevious.type = 'button';
+    searchPrevious.title = Object(i18n["c" /* translate */])('searchPreviousResultTitle');
+    searchPrevious.className = 'jsoneditor-previous';
+
+    searchPrevious.onclick = function () {
+      searchBox.previous();
+    };
+
+    divInput.appendChild(searchPrevious);
+  }
+  /**
+   * Go to the next search result
+   * @param {boolean} [focus]   If true, focus will be set to the next result
+   *                            focus is false by default.
+   */
+
+
+  SearchBox_createClass(SearchBox, [{
+    key: "next",
+    value: function next(focus) {
+      if (this.results) {
+        var index = this.resultIndex !== null ? this.resultIndex + 1 : 0;
+
+        if (index > this.results.length - 1) {
+          index = 0;
         }
 
-        if (rows.length < 2) return;
-        p.highlight(0);
+        this._setActiveResult(index, focus);
+      }
+    }
+    /**
+     * Go to the prevous search result
+     * @param {boolean} [focus]   If true, focus will be set to the next result
+     *                            focus is false by default.
+     */
 
-        if (distanceToTop > distanceToBottom * 3) {
-          // Heuristic (only when the distance to the to top is 4 times more than distance to the bottom
-          elem.style.maxHeight = distanceToTop + 'px'; // we display the dropDown on the top of the input text
+  }, {
+    key: "previous",
+    value: function previous(focus) {
+      if (this.results) {
+        var max = this.results.length - 1;
+        var index = this.resultIndex !== null ? this.resultIndex - 1 : max;
 
-          elem.style.top = '';
-          elem.style.bottom = '100%';
+        if (index < 0) {
+          index = max;
+        }
+
+        this._setActiveResult(index, focus);
+      }
+    }
+    /**
+     * Set new value for the current active result
+     * @param {Number} index
+     * @param {boolean} [focus]   If true, focus will be set to the next result.
+     *                            focus is false by default.
+     * @private
+     */
+
+  }, {
+    key: "_setActiveResult",
+    value: function _setActiveResult(index, focus) {
+      // de-activate current active result
+      if (this.activeResult) {
+        var prevNode = this.activeResult.node;
+        var prevElem = this.activeResult.elem;
+
+        if (prevElem === 'field') {
+          delete prevNode.searchFieldActive;
         } else {
-          elem.style.top = '100%';
-          elem.style.bottom = '';
-          elem.style.maxHeight = distanceToBottom + 'px';
+          delete prevNode.searchValueActive;
         }
 
-        elem.style.visibility = 'visible';
-      },
-      highlight: function highlight(index) {
-        if (oldIndex !== -1 && rows[oldIndex]) {
-          rows[oldIndex].className = 'item';
+        prevNode.updateDom();
+      }
+
+      if (!this.results || !this.results[index]) {
+        // out of range, set to undefined
+        this.resultIndex = undefined;
+        this.activeResult = undefined;
+        return;
+      }
+
+      this.resultIndex = index; // set new node active
+
+      var node = this.results[this.resultIndex].node;
+      var elem = this.results[this.resultIndex].elem;
+
+      if (elem === 'field') {
+        node.searchFieldActive = true;
+      } else {
+        node.searchValueActive = true;
+      }
+
+      this.activeResult = this.results[this.resultIndex];
+      node.updateDom(); // TODO: not so nice that the focus is only set after the animation is finished
+
+      node.scrollTo(function () {
+        if (focus) {
+          node.focus(elem);
+        }
+      });
+    }
+    /**
+     * Cancel any running onDelayedSearch.
+     * @private
+     */
+
+  }, {
+    key: "_clearDelay",
+    value: function _clearDelay() {
+      if (this.timeout !== undefined) {
+        clearTimeout(this.timeout);
+        delete this.timeout;
+      }
+    }
+    /**
+     * Start a timer to execute a search after a short delay.
+     * Used for reducing the number of searches while typing.
+     * @param {Event} event
+     * @private
+     */
+
+  }, {
+    key: "_onDelayedSearch",
+    value: function _onDelayedSearch(event) {
+      // execute the search after a short delay (reduces the number of
+      // search actions while typing in the search text box)
+      this._clearDelay();
+
+      var searchBox = this;
+      this.timeout = setTimeout(function (event) {
+        searchBox._onSearch();
+      }, this.delay);
+    }
+    /**
+     * Handle onSearch event
+     * @param {boolean} [forceSearch]  If true, search will be executed again even
+     *                                 when the search text is not changed.
+     *                                 Default is false.
+     * @private
+     */
+
+  }, {
+    key: "_onSearch",
+    value: function _onSearch(forceSearch) {
+      this._clearDelay();
+
+      var value = this.dom.search.value;
+      var text = value.length > 0 ? value : undefined;
+
+      if (text !== this.lastText || forceSearch) {
+        // only search again when changed
+        this.lastText = text;
+        this.results = this.editor.search(text);
+        var MAX_SEARCH_RESULTS = this.results[0] ? this.results[0].node.MAX_SEARCH_RESULTS : Infinity; // try to maintain the current active result if this is still part of the new search results
+
+        var activeResultIndex = 0;
+
+        if (this.activeResult) {
+          for (var i = 0; i < this.results.length; i++) {
+            if (this.results[i].node === this.activeResult.node) {
+              activeResultIndex = i;
+              break;
+            }
+          }
         }
 
-        rows[index].className = 'item hover';
-        oldIndex = index;
-      },
-      move: function move(step) {
-        // moves the selection either up or down (unless it's not possible) step is either +1 or -1.
-        if (elem.style.visibility === 'hidden') return ''; // nothing to move if there is no dropDown. (this happens if the user hits escape and then down or up)
+        this._setActiveResult(activeResultIndex, false); // display search results
 
-        if (ix + step === -1 || ix + step === rows.length) return rows[ix].__hint; // NO CIRCULAR SCROLLING.
 
-        ix += step;
-        p.highlight(ix);
-        return rows[ix].__hint; // txtShadow.value = uRows[uIndex].__hint ;
-      },
-      onmouseselection: function onmouseselection() {} // it will be overwritten.
+        if (text !== undefined) {
+          var resultCount = this.results.length;
 
-    };
-    return p;
-  };
+          if (resultCount === 0) {
+            this.dom.results.textContent = "no\xA0results";
+          } else if (resultCount === 1) {
+            this.dom.results.textContent = "1\xA0result";
+          } else if (resultCount > MAX_SEARCH_RESULTS) {
+            this.dom.results.textContent = MAX_SEARCH_RESULTS + "+\xA0results";
+          } else {
+            this.dom.results.textContent = resultCount + "\xA0results";
+          }
+        } else {
+          this.dom.results.textContent = '';
+        }
+      }
+    }
+    /**
+     * Handle onKeyDown event in the input box
+     * @param {Event} event
+     * @private
+     */
 
-  function setEndOfContenteditable(contentEditableElement) {
-    var range, selection;
+  }, {
+    key: "_onKeyDown",
+    value: function _onKeyDown(event) {
+      var keynum = event.which;
 
-    if (document.createRange) {
-      // Firefox, Chrome, Opera, Safari, IE 9+
-      range = document.createRange(); // Create a range (a range is a like the selection but invisible)
+      if (keynum === 27) {
+        // ESC
+        this.dom.search.value = ''; // clear search
 
-      range.selectNodeContents(contentEditableElement); // Select the entire contents of the element with the range
+        this._onSearch();
 
-      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+        event.preventDefault();
+        event.stopPropagation();
+      } else if (keynum === 13) {
+        // Enter
+        if (event.ctrlKey) {
+          // force to search again
+          this._onSearch(true);
+        } else if (event.shiftKey) {
+          // move to the previous search result
+          this.previous();
+        } else {
+          // move to the next search result
+          this.next();
+        }
 
-      selection = window.getSelection(); // get the selection object (allows you to change selection)
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+    /**
+     * Handle onKeyUp event in the input box
+     * @param {Event} event
+     * @private
+     */
 
-      selection.removeAllRanges(); // remove any selections already made
+  }, {
+    key: "_onKeyUp",
+    value: function _onKeyUp(event) {
+      var keynum = event.keyCode;
 
-      selection.addRange(range); // make the range you have just created the visible selection
-    } else if (document.selection) {
-      // IE 8 and lower
-      range = document.body.createTextRange(); // Create a range (a range is a like the selection but invisible)
+      if (keynum !== 27 && keynum !== 13) {
+        // !show and !Enter
+        this._onDelayedSearch(event); // For IE 9
 
-      range.moveToElementText(contentEditableElement); // Select the entire contents of the element with the range
+      }
+    }
+    /**
+     * Clear the search results
+     */
 
-      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.dom.search.value = '';
 
-      range.select(); // Select the range (make it the visible selection
+      this._onSearch();
+    }
+    /**
+     * Refresh searchResults if there is a search value
+     */
+
+  }, {
+    key: "forceSearch",
+    value: function forceSearch() {
+      this._onSearch(true);
+    }
+    /**
+     * Test whether the search box value is empty
+     * @returns {boolean} Returns true when empty.
+     */
+
+  }, {
+    key: "isEmpty",
+    value: function isEmpty() {
+      return this.dom.search.value === '';
+    }
+    /**
+     * Destroy the search box
+     */
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.editor = null;
+      this.dom.container.removeChild(this.dom.wrapper);
+      this.dom = null;
+      this.results = null;
+      this.activeResult = null;
+
+      this._clearDelay();
+    }
+  }]);
+
+  return SearchBox;
+}();
+// CONCATENATED MODULE: ./src/js/TreePath.js
+
+
+function TreePath_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function TreePath_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function TreePath_createClass(Constructor, protoProps, staticProps) { if (protoProps) TreePath_defineProperties(Constructor.prototype, protoProps); if (staticProps) TreePath_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+/**
+ * Creates a component that visualize path selection in tree based editors
+ * @param {HTMLElement} container
+ * @param {HTMLElement} root
+ * @constructor
+ */
+
+var TreePath_TreePath = /*#__PURE__*/function () {
+  function TreePath(container, root) {
+    TreePath_classCallCheck(this, TreePath);
+
+    if (container) {
+      this.root = root;
+      this.path = document.createElement('div');
+      this.path.className = 'jsoneditor-treepath';
+      this.path.setAttribute('tabindex', 0);
+      this.contentMenuClicked = false;
+      container.appendChild(this.path);
+      this.reset();
     }
   }
+  /**
+   * Reset component to initial status
+   */
 
-  function calculateWidthForText(text) {
-    if (spacer === undefined) {
-      // on first call only.
-      spacer = document.createElement('span');
-      spacer.style.visibility = 'hidden';
-      spacer.style.position = 'fixed';
-      spacer.style.outline = '0';
-      spacer.style.margin = '0';
-      spacer.style.padding = '0';
-      spacer.style.border = '0';
-      spacer.style.left = '0';
-      spacer.style.whiteSpace = 'pre';
-      spacer.style.fontSize = fontSize;
-      spacer.style.fontFamily = fontFamily;
-      spacer.style.fontWeight = 'normal';
-      document.body.appendChild(spacer);
+
+  TreePath_createClass(TreePath, [{
+    key: "reset",
+    value: function reset() {
+      this.path.textContent = Object(i18n["c" /* translate */])('selectNode');
     }
+    /**
+     * Renders the component UI according to a given path objects
+     * @param {Array<{name: String, childs: Array}>} pathObjs a list of path objects
+     *
+     */
 
-    spacer.textContent = text;
-    return spacer.getBoundingClientRect().right;
-  }
+  }, {
+    key: "setPath",
+    value: function setPath(pathObjs) {
+      var me = this;
+      this.path.textContent = '';
 
-  var rs = {
-    onArrowDown: function onArrowDown() {},
-    // defaults to no action.
-    onArrowUp: function onArrowUp() {},
-    // defaults to no action.
-    onEnter: function onEnter() {},
-    // defaults to no action.
-    onTab: function onTab() {},
-    // defaults to no action.
-    startFrom: 0,
-    options: [],
-    element: null,
-    elementHint: null,
-    elementStyle: null,
-    wrapper: wrapper,
-    // Only to allow  easy access to the HTML elements to the final user (possibly for minor customizations)
-    show: function show(element, startPos, options) {
-      var _this = this;
+      if (pathObjs && pathObjs.length) {
+        pathObjs.forEach(function (pathObj, idx) {
+          var pathEl = document.createElement('span');
+          var sepEl;
+          pathEl.className = 'jsoneditor-treepath-element';
+          pathEl.innerText = pathObj.name;
+          pathEl.onclick = _onSegmentClick.bind(me, pathObj);
+          me.path.appendChild(pathEl);
 
-      this.startFrom = startPos;
-      this.wrapper.remove();
+          if (pathObj.children.length) {
+            sepEl = document.createElement('span');
+            sepEl.className = 'jsoneditor-treepath-seperator';
+            sepEl.textContent = "\u25BA";
 
-      if (this.elementHint) {
-        this.elementHint.remove();
-        this.elementHint = null;
+            sepEl.onclick = function () {
+              me.contentMenuClicked = true;
+              var items = [];
+              pathObj.children.forEach(function (child) {
+                items.push({
+                  text: child.name,
+                  className: 'jsoneditor-type-modes' + (pathObjs[idx + 1] + 1 && pathObjs[idx + 1].name === child.name ? ' jsoneditor-selected' : ''),
+                  click: _onContextMenuItemClick.bind(me, pathObj, child.name)
+                });
+              });
+              var menu = new ContextMenu["a" /* ContextMenu */](items);
+              menu.show(sepEl, me.root, true);
+            };
+
+            me.path.appendChild(sepEl);
+          }
+
+          if (idx === pathObjs.length - 1) {
+            var leftRectPos = (sepEl || pathEl).getBoundingClientRect().right;
+
+            if (me.path.offsetWidth < leftRectPos) {
+              me.path.scrollLeft = leftRectPos;
+            }
+
+            if (me.path.scrollLeft) {
+              var showAllBtn = document.createElement('span');
+              showAllBtn.className = 'jsoneditor-treepath-show-all-btn';
+              showAllBtn.title = 'show all path';
+              showAllBtn.textContent = '...';
+              showAllBtn.onclick = _onShowAllClick.bind(me, pathObjs);
+              me.path.insertBefore(showAllBtn, me.path.firstChild);
+            }
+          }
+        });
       }
 
-      if (fontSize === '') {
-        fontSize = window.getComputedStyle(element).getPropertyValue('font-size');
-      }
+      function _onShowAllClick(pathObjs) {
+        me.contentMenuClicked = false;
+        Object(util["addClassName"])(me.path, 'show-all');
+        me.path.style.width = me.path.parentNode.getBoundingClientRect().width - 10 + 'px';
 
-      if (fontFamily === '') {
-        fontFamily = window.getComputedStyle(element).getPropertyValue('font-family');
-      }
+        me.path.onblur = function () {
+          if (me.contentMenuClicked) {
+            me.contentMenuClicked = false;
+            me.path.focus();
+            return;
+          }
 
-      dropDown.style.marginLeft = '0';
-      dropDown.style.marginTop = element.getBoundingClientRect().height + 'px';
-      this.options = options.map(String);
-
-      if (this.element !== element) {
-        this.element = element;
-        this.elementStyle = {
-          zIndex: this.element.style.zIndex,
-          position: this.element.style.position,
-          backgroundColor: this.element.style.backgroundColor,
-          borderColor: this.element.style.borderColor
+          Object(util["removeClassName"])(me.path, 'show-all');
+          me.path.onblur = undefined;
+          me.path.style.width = '';
+          me.setPath(pathObjs);
         };
       }
 
-      this.element.style.zIndex = 3;
-      this.element.style.position = 'relative';
-      this.element.style.backgroundColor = 'transparent';
-      this.element.style.borderColor = 'transparent';
-      this.elementHint = element.cloneNode();
-      this.elementHint.className = 'autocomplete hint';
-      this.elementHint.style.zIndex = 2;
-      this.elementHint.style.position = 'absolute';
-
-      this.elementHint.onfocus = function () {
-        _this.element.focus();
-      };
-
-      if (this.element.addEventListener) {
-        this.element.removeEventListener('keydown', keyDownHandler);
-        this.element.addEventListener('keydown', keyDownHandler, false);
-        this.element.removeEventListener('blur', onBlurHandler);
-        this.element.addEventListener('blur', onBlurHandler, false);
-      }
-
-      wrapper.appendChild(this.elementHint);
-      wrapper.appendChild(dropDown);
-      element.parentElement.appendChild(wrapper);
-      this.repaint(element);
-    },
-    setText: function setText(text) {
-      this.element.innerText = text;
-    },
-    getText: function getText() {
-      return this.element.innerText;
-    },
-    hideDropDown: function hideDropDown() {
-      this.wrapper.remove();
-
-      if (this.elementHint) {
-        this.elementHint.remove();
-        this.elementHint = null;
-        dropDownController.hide();
-        this.element.style.zIndex = this.elementStyle.zIndex;
-        this.element.style.position = this.elementStyle.position;
-        this.element.style.backgroundColor = this.elementStyle.backgroundColor;
-        this.element.style.borderColor = this.elementStyle.borderColor;
-      }
-    },
-    repaint: function repaint(element) {
-      var text = element.innerText;
-      text = text.replace('\n', '');
-      var optionsLength = this.options.length; // breaking text in leftSide and token.
-
-      var token = text.substring(this.startFrom);
-      leftSide = text.substring(0, this.startFrom);
-
-      for (var i = 0; i < optionsLength; i++) {
-        var opt = this.options[i];
-
-        if (!config.caseSensitive && opt.toLowerCase().indexOf(token.toLowerCase()) === 0 || config.caseSensitive && opt.indexOf(token) === 0) {
-          // <-- how about upperCase vs. lowercase
-          this.elementHint.innerText = leftSide + token + opt.substring(token.length);
-          this.elementHint.realInnerText = leftSide + opt;
-          break;
-        }
-      } // moving the dropDown and refreshing it.
-
-
-      dropDown.style.left = calculateWidthForText(leftSide) + 'px';
-      dropDownController.refresh(token, this.options);
-      this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + 10 + 'px';
-      var wasDropDownHidden = dropDown.style.visibility === 'hidden';
-
-      if (!wasDropDownHidden) {
-        this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + dropDown.clientWidth + 'px';
-      }
-    }
-  };
-  var dropDownController = createDropDownController(dropDown, rs);
-
-  var keyDownHandler = function (e) {
-    // console.log("Keydown:" + e.keyCode);
-    e = e || window.event;
-    var keyCode = e.keyCode;
-    if (this.elementHint == null) return;
-
-    if (keyCode === 33) {
-      return;
-    } // page up (do nothing)
-
-
-    if (keyCode === 34) {
-      return;
-    } // page down (do nothing);
-
-
-    if (keyCode === 27) {
-      // escape
-      rs.hideDropDown();
-      rs.element.focus();
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-
-    var text = this.element.innerText;
-    text = text.replace('\n', '');
-
-    if (config.confirmKeys.indexOf(keyCode) >= 0) {
-      //  (autocomplete triggered)
-      if (keyCode === 9) {
-        if (this.elementHint.innerText.length === 0) {
-          rs.onTab();
+      function _onSegmentClick(pathObj) {
+        if (this.selectionCallback) {
+          this.selectionCallback(pathObj);
         }
       }
 
-      if (this.elementHint.innerText.length > 0) {
-        // if there is a hint
-        if (this.element.innerText !== this.elementHint.realInnerText) {
-          this.element.innerText = this.elementHint.realInnerText;
-          rs.hideDropDown();
-          setEndOfContenteditable(this.element);
-
-          if (keyCode === 9) {
-            rs.element.focus();
-            e.preventDefault();
-            e.stopPropagation();
-          }
+      function _onContextMenuItemClick(pathObj, selection) {
+        if (this.contextMenuCallback) {
+          this.contextMenuCallback(pathObj, selection);
         }
       }
-
-      return;
     }
+    /**
+     * set a callback function for selection of path section
+     * @param {Function} callback function to invoke when section is selected
+     */
 
-    if (keyCode === 13) {
-      // enter  (autocomplete triggered)
-      if (this.elementHint.innerText.length === 0) {
-        // if there is a hint
-        rs.onEnter();
-      } else {
-        var wasDropDownHidden = dropDown.style.visibility === 'hidden';
-        dropDownController.hide();
-
-        if (wasDropDownHidden) {
-          rs.hideDropDown();
-          rs.element.focus();
-          rs.onEnter();
-          return;
-        }
-
-        this.element.innerText = this.elementHint.realInnerText;
-        rs.hideDropDown();
-        setEndOfContenteditable(this.element);
-        e.preventDefault();
-        e.stopPropagation();
+  }, {
+    key: "onSectionSelected",
+    value: function onSectionSelected(callback) {
+      if (typeof callback === 'function') {
+        this.selectionCallback = callback;
       }
-
-      return;
     }
+    /**
+     * set a callback function for selection of path section
+     * @param {Function} callback function to invoke when section is selected
+     */
 
-    if (keyCode === 40) {
-      // down
-      var token = text.substring(this.startFrom);
-      var m = dropDownController.move(+1);
-
-      if (m === '') {
-        rs.onArrowDown();
+  }, {
+    key: "onContextMenuItemSelected",
+    value: function onContextMenuItemSelected(callback) {
+      if (typeof callback === 'function') {
+        this.contextMenuCallback = callback;
       }
-
-      this.elementHint.innerText = leftSide + token + m.substring(token.length);
-      this.elementHint.realInnerText = leftSide + m;
-      e.preventDefault();
-      e.stopPropagation();
-      return;
     }
+  }]);
 
-    if (keyCode === 38) {
-      // up
-      var _token = text.substring(this.startFrom);
-
-      var _m = dropDownController.move(-1);
-
-      if (_m === '') {
-        rs.onArrowUp();
-      }
-
-      this.elementHint.innerText = leftSide + _token + _m.substring(_token.length);
-      this.elementHint.realInnerText = leftSide + _m;
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }.bind(rs);
-
-  var onBlurHandler = function onBlurHandler(e) {
-    rs.hideDropDown(); // console.log("Lost focus.");
-  };
-
-  dropDownController.onmouseselection = function (text, rs) {
-    rs.element.innerText = rs.elementHint.innerText = leftSide + text;
-    rs.hideDropDown();
-    window.setTimeout(function () {
-      rs.element.focus();
-      setEndOfContenteditable(rs.element);
-    }, 1);
-  };
-
-  return rs;
-}
-// EXTERNAL MODULE: ./src/js/jmespathQuery.js
-var jmespathQuery = __webpack_require__(4);
+  return TreePath;
+}();
+// EXTERNAL MODULE: ./src/js/vanilla-picker/index.js
+var vanilla_picker = __webpack_require__(13);
+var vanilla_picker_default = /*#__PURE__*/__webpack_require__.n(vanilla_picker);
 
 // CONCATENATED MODULE: ./src/js/treemode.js
 
@@ -18778,7 +18614,7 @@ treemode._setOptions = function (options) {
         var pickerHeight = 300; // estimated height of the color picker
 
         var top = parent.getBoundingClientRect().top;
-        var windowHeight = window.innerHeight;
+        var windowHeight = Object(util["getWindow"])(parent).innerHeight;
         var showOnTop = windowHeight - top < pickerHeight && top > pickerHeight;
         new vanilla_picker_default.a({
           parent: parent,
@@ -18947,7 +18783,7 @@ treemode.setText = function (jsonText) {
     this.set(Object(util["parse"])(jsonText)); // this can throw an error
   } catch (err) {
     // try to repair json, replace JavaScript notation with JSON notation
-    var repairedJsonText = Object(util["repair"])(jsonText); // try to parse again
+    var repairedJsonText = Object(util["trySimpleJsonRepair"])(jsonText); // try to parse again
 
     this.set(Object(util["parse"])(repairedJsonText)); // this can throw an error
   }
@@ -18964,7 +18800,7 @@ treemode.updateText = function (jsonText) {
     this.update(Object(util["parse"])(jsonText)); // this can throw an error
   } catch (err) {
     // try to repair json, replace JavaScript notation with JSON notation
-    var repairJsonText = Object(util["repair"])(jsonText); // try to parse again
+    var repairJsonText = Object(util["trySimpleJsonRepair"])(jsonText); // try to parse again
 
     this.update(Object(util["parse"])(repairJsonText)); // this can throw an error
   }
@@ -19287,8 +19123,8 @@ treemode._renderValidationErrors = function (errorNodes) {
       node: pair[0],
       child: pair[1],
       error: {
-        message: pair[0].type === 'object' ? 'Contains invalid properties' // object
-        : 'Contains invalid items' // array
+        message: pair[0].type === 'object' ? Object(i18n["c" /* translate */])('containsInvalidProperties') // object
+        : Object(i18n["c" /* translate */])('containsInvalidItems') // array
 
       }
     };
@@ -19955,7 +19791,7 @@ treemode._updateDragDistance = function (event) {
 };
 /**
  * Start multi selection of nodes by dragging the mouse
- * @param event
+ * @param {MouseEvent} event
  * @private
  */
 
@@ -19980,13 +19816,13 @@ treemode._onMultiSelectStart = function (event) {
   var editor = this;
 
   if (!this.mousemove) {
-    this.mousemove = Object(util["addEventListener"])(window, 'mousemove', function (event) {
+    this.mousemove = Object(util["addEventListener"])(event.view, 'mousemove', function (event) {
       editor._onMultiSelect(event);
     });
   }
 
   if (!this.mouseup) {
-    this.mouseup = Object(util["addEventListener"])(window, 'mouseup', function (event) {
+    this.mouseup = Object(util["addEventListener"])(event.view, 'mouseup', function (event) {
       editor._onMultiSelectEnd(event);
     });
   }
@@ -19995,7 +19831,7 @@ treemode._onMultiSelectStart = function (event) {
 };
 /**
  * Multiselect nodes by dragging
- * @param event
+ * @param {MouseEvent} event
  * @private
  */
 
@@ -20044,11 +19880,12 @@ treemode._onMultiSelect = function (event) {
 };
 /**
  * End of multiselect nodes by dragging
+ * @param {MouseEvent} event
  * @private
  */
 
 
-treemode._onMultiSelectEnd = function () {
+treemode._onMultiSelectEnd = function (event) {
   // set focus to the context menu button of the first node
   if (this.multiselection.nodes[0]) {
     this.multiselection.nodes[0].dom.menu.focus();
@@ -20058,12 +19895,12 @@ treemode._onMultiSelectEnd = function () {
   this.multiselection.end = null; // cleanup global event listeners
 
   if (this.mousemove) {
-    Object(util["removeEventListener"])(window, 'mousemove', this.mousemove);
+    Object(util["removeEventListener"])(event.view, 'mousemove', this.mousemove);
     delete this.mousemove;
   }
 
   if (this.mouseup) {
-    Object(util["removeEventListener"])(window, 'mouseup', this.mouseup);
+    Object(util["removeEventListener"])(event.view, 'mouseup', this.mouseup);
     delete this.mouseup;
   }
 };
@@ -20178,6 +20015,12 @@ treemode._showAutoComplete = function (element) {
   var jsonElementType = '';
   if (element.className.indexOf('jsoneditor-value') >= 0) jsonElementType = 'value';
   if (element.className.indexOf('jsoneditor-field') >= 0) jsonElementType = 'field';
+
+  if (jsonElementType === '') {
+    // Unknown element field. Could be a button or something else
+    return;
+  }
+
   var self = this;
   setTimeout(function () {
     if (node && (self.options.autocomplete.trigger === 'focus' || element.innerText.length > 0)) {
@@ -20535,7 +20378,7 @@ var treeModeMixins = [{
 }];
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -20545,32 +20388,18 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "previewModeMixins", function() { return /* binding */ previewModeMixins; });
 
-// EXTERNAL MODULE: ./src/js/i18n.js
-var i18n = __webpack_require__(1);
-
-// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
-var ModeSwitcher = __webpack_require__(7);
-
-// EXTERNAL MODULE: ./src/js/ErrorTable.js
-var ErrorTable = __webpack_require__(14);
-
-// EXTERNAL MODULE: ./src/js/showSortModal.js
-var showSortModal = __webpack_require__(5);
-
-// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
-var showTransformModal = __webpack_require__(6);
-
-// EXTERNAL MODULE: ./src/js/textmode.js + 1 modules
-var textmode = __webpack_require__(16);
+// EXTERNAL MODULE: ./node_modules/simple-json-repair/lib/umd/simpleJsonRepair.min.js
+var simpleJsonRepair_min = __webpack_require__(7);
+var simpleJsonRepair_min_default = /*#__PURE__*/__webpack_require__.n(simpleJsonRepair_min);
 
 // EXTERNAL MODULE: ./src/js/constants.js
 var constants = __webpack_require__(2);
 
+// EXTERNAL MODULE: ./src/js/ErrorTable.js
+var ErrorTable = __webpack_require__(15);
+
 // EXTERNAL MODULE: ./src/js/FocusTracker.js
 var FocusTracker = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./src/js/util.js
-var util = __webpack_require__(0);
 
 // CONCATENATED MODULE: ./src/js/History.js
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -20670,10 +20499,29 @@ var History = /*#__PURE__*/function () {
 
   return History;
 }();
+// EXTERNAL MODULE: ./src/js/i18n.js
+var i18n = __webpack_require__(1);
+
 // EXTERNAL MODULE: ./src/js/jmespathQuery.js
 var jmespathQuery = __webpack_require__(4);
 
+// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
+var ModeSwitcher = __webpack_require__(9);
+
+// EXTERNAL MODULE: ./src/js/showSortModal.js
+var showSortModal = __webpack_require__(5);
+
+// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
+var showTransformModal = __webpack_require__(6);
+
+// EXTERNAL MODULE: ./src/js/textmode.js + 1 modules
+var textmode = __webpack_require__(17);
+
+// EXTERNAL MODULE: ./src/js/util.js
+var util = __webpack_require__(0);
+
 // CONCATENATED MODULE: ./src/js/previewmode.js
+
 
 
 
@@ -21071,7 +20919,7 @@ previewmode._showTransformModal = function () {
 
 
     Object(showTransformModal["showTransformModal"])({
-      anchor: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
+      container: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
       json: json,
       queryDescription: queryDescription,
       // can be undefined
@@ -21141,9 +20989,13 @@ previewmode.format = function () {
 
 previewmode.repair = function () {
   var text = this.getText();
-  var repairedText = Object(util["repair"])(text);
 
-  this._setTextAndFireOnChange(repairedText);
+  try {
+    var repairedText = simpleJsonRepair_min_default()(text);
+
+    this._setTextAndFireOnChange(repairedText);
+  } catch (err) {// repair was not successful, do nothing
+  }
 };
 /**
  * Set focus to the editor

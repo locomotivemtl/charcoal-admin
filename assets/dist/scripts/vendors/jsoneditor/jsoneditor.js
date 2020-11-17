@@ -24,8 +24,8 @@
  * Copyright (c) 2011-2020 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.0.4
- * @date    2020-08-15
+ * @version 9.1.2
+ * @date    2020-11-07
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -121,7 +121,7 @@ return /******/ (function(modules) { // webpackBootstrap
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 36);
+/******/ 	return __webpack_require__(__webpack_require__.s = 37);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -131,7 +131,7 @@ return /******/ (function(modules) { // webpackBootstrap
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "parse", function() { return parse; });
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "repair", function() { return repair; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "trySimpleJsonRepair", function() { return trySimpleJsonRepair; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "escapeUnicodeChars", function() { return escapeUnicodeChars; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "validate", function() { return validate; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "extend", function() { return extend; });
@@ -139,6 +139,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getType", function() { return getType; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isUrl", function() { return isUrl; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isArray", function() { return isArray; });
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getWindow", function() { return getWindow; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAbsoluteLeft", function() { return getAbsoluteLeft; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "getAbsoluteTop", function() { return getAbsoluteTop; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "addClassName", function() { return addClassName; });
@@ -185,18 +186,21 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isObject", function() { return isObject; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "contains", function() { return contains; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "isValidationErrorChanged", function() { return isValidationErrorChanged; });
-/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
+/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_polyfills__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(11);
+/* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(13);
 /* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(22);
-/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2__);
-/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(33);
-/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(json_source_map__WEBPACK_IMPORTED_MODULE_3__);
-/* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1);
+/* harmony import */ var simple_json_repair__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8);
+/* harmony import */ var simple_json_repair__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(simple_json_repair__WEBPACK_IMPORTED_MODULE_2__);
+/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(23);
+/* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3__);
+/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(34);
+/* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(json_source_map__WEBPACK_IMPORTED_MODULE_4__);
+/* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1);
 
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -223,330 +227,17 @@ function parse(jsonString) {
   }
 }
 /**
- * Repair a JSON-like string containing. For example changes JavaScript
- * notation into JSON notation.
- * This function for example changes a string like "{a: 2, 'b': {c: 'd'}"
- * into '{"a": 2, "b": {"c": "d"}'
- * @param {string} jsString
- * @returns {string} json
+ * Try to fix the JSON string. If not successful, return the original string
+ * @param {string} jsonString
  */
 
-function repair(jsString) {
-  // TODO: refactor this function, it's too large and complicated now
-  // escape all single and double quotes inside strings
-  var chars = [];
-  var i = 0;
-  var indent = 0;
-  var isLineSeparatedJson = false; // If JSON starts with a function (characters/digits/"_-"), remove this function.
-  // This is useful for "stripping" JSONP objects to become JSON
-  // For example: /* some comment */ function_12321321 ( [{"a":"b"}] ); => [{"a":"b"}]
-
-  var match = jsString.match(/^\s*(\/\*(.|[\r\n])*?\*\/)?\s*[\da-zA-Z_$]+\s*\(([\s\S]*)\)\s*;?\s*$/);
-
-  if (match) {
-    jsString = match[3];
+function trySimpleJsonRepair(jsonString) {
+  try {
+    return simple_json_repair__WEBPACK_IMPORTED_MODULE_2___default()(jsonString);
+  } catch (err) {
+    // repair was not successful, return original text
+    return jsonString;
   }
-
-  var controlChars = {
-    '\b': '\\b',
-    '\f': '\\f',
-    '\n': '\\n',
-    '\r': '\\r',
-    '\t': '\\t'
-  };
-  var quote = '\'';
-  var quoteDbl = '"';
-  var quoteLeft = "\u2018";
-  var quoteRight = "\u2019";
-  var quoteDblLeft = "\u201C";
-  var quoteDblRight = "\u201D";
-  var graveAccent = "`";
-  var acuteAccent = "\xB4";
-  var pythonConstants = {
-    None: 'null',
-    True: 'true',
-    False: 'false'
-  }; // helper functions to get the current/prev/next character
-
-  function curr() {
-    return jsString.charAt(i);
-  }
-
-  function next() {
-    return jsString.charAt(i + 1);
-  }
-
-  function prev() {
-    return jsString.charAt(i - 1);
-  }
-
-  function isWhiteSpace(c) {
-    return c === ' ' || c === '\n' || c === '\r' || c === '\t';
-  } // get the last parsed non-whitespace character
-
-
-  function lastNonWhitespace() {
-    var p = chars.length - 1;
-
-    while (p >= 0) {
-      var pp = chars[p];
-
-      if (!isWhiteSpace(pp)) {
-        return pp;
-      }
-
-      p--;
-    }
-
-    return '';
-  } // get at the first next non-white space character
-
-
-  function nextNonWhiteSpace() {
-    var iNext = i + 1;
-
-    while (iNext < jsString.length && isWhiteSpace(jsString[iNext])) {
-      iNext++;
-    }
-
-    return jsString[iNext];
-  } // get at the first non-white space character starting at the current character
-
-
-  function currNonWhiteSpace() {
-    var iNext = i;
-
-    while (iNext < jsString.length && isWhiteSpace(jsString[iNext])) {
-      iNext++;
-    }
-
-    return jsString[iNext];
-  } // skip a block comment '/* ... */'
-
-
-  function skipBlockComment() {
-    if (curr() === '/' && next() === '*') {
-      i += 2;
-
-      while (i < jsString.length && (curr() !== '*' || next() !== '/')) {
-        i++;
-      }
-
-      i += 2;
-
-      if (curr() === '\n') {
-        i++;
-      }
-    }
-  } // skip a comment '// ...'
-
-
-  function skipComment() {
-    if (curr() === '/' && next() === '/') {
-      i += 2;
-
-      while (i < jsString.length && curr() !== '\n') {
-        i++;
-      }
-    }
-  }
-
-  function parseWhiteSpace() {
-    var whitespace = '';
-
-    while (i < jsString.length && isWhiteSpace(curr())) {
-      whitespace += curr();
-      i++;
-    }
-
-    return whitespace;
-  }
-  /**
-   * parse single or double quoted string. Returns the parsed string
-   * @param {string} endQuote
-   * @return {string}
-   */
-
-
-  function parseString(endQuote) {
-    var string = '';
-    string += '"';
-    i++;
-    var c = curr();
-
-    while (i < jsString.length && c !== endQuote) {
-      if (c === '"' && prev() !== '\\') {
-        // unescaped double quote, escape it
-        string += '\\"';
-      } else if (c in controlChars) {
-        // replace unescaped control characters with escaped ones
-        string += controlChars[c];
-      } else if (c === '\\') {
-        // remove the escape character when followed by a single quote ', not needed
-        i++;
-        c = curr();
-
-        if (c !== '\'') {
-          string += '\\';
-        }
-
-        string += c;
-      } else {
-        // regular character
-        string += c;
-      }
-
-      i++;
-      c = curr();
-    }
-
-    if (c === endQuote) {
-      string += '"';
-      i++;
-    }
-
-    return string;
-  } // parse an unquoted key
-
-
-  function parseKey() {
-    var specialValues = ['null', 'true', 'false'];
-    var key = '';
-    var c = curr();
-    var regexp = /[a-zA-Z_$\d]/; // letter, number, underscore, dollar character
-
-    while (regexp.test(c)) {
-      key += c;
-      i++;
-      c = curr();
-    }
-
-    if (key in pythonConstants) {
-      return pythonConstants[key];
-    } else if (specialValues.indexOf(key) === -1) {
-      return '"' + key + '"';
-    } else {
-      return key;
-    }
-  }
-
-  function parseValue() {
-    var c = curr();
-    var value = '';
-
-    while (/\w/.test(c)) {
-      value += c;
-      i++;
-      c = curr();
-    }
-
-    if (value.length > 0 && c === '(') {
-      // This is an MongoDB data type like in {"_id": ObjectId("123")}
-      var innerValue;
-      i++;
-      c = curr();
-
-      if (c === '"') {
-        // a data type containing a string, like ISODate("2012-12-19T06:01:17.171Z")
-        innerValue = parseString(c);
-        c = curr();
-      } else {
-        // a data type containing a value, like 'NumberLong(2)'
-        innerValue = '';
-
-        while (c !== ')' && c !== '') {
-          innerValue += c;
-          i++;
-          c = curr();
-        }
-      }
-
-      if (c === ')') {
-        // skip the closing bracket at the end
-        i++; // return the value (strip the data type object)
-
-        return innerValue;
-      } else {
-        // huh? that's unexpected. don't touch it
-        return value + '(' + innerValue + c;
-      }
-    } else if (typeof pythonConstants[value] === 'string') {
-      // it's a python constant like None
-      return pythonConstants[value];
-    } else {
-      // just leave as is
-      return value;
-    }
-  }
-
-  function isSpecialWhiteSpace(c) {
-    return c === "\xA0" || c >= "\u2000" && c <= "\u200A" || c === "\u202F" || c === "\u205F" || c === "\u3000";
-  }
-
-  while (i < jsString.length) {
-    skipBlockComment();
-    skipComment();
-    var c = curr();
-
-    if (c === '{') {
-      indent++;
-    }
-
-    if (c === '}') {
-      indent--;
-    }
-
-    if (isSpecialWhiteSpace(c)) {
-      // special white spaces (like non breaking space)
-      chars.push(' ');
-      i++;
-    } else if (c === quote) {
-      chars.push(parseString(c));
-    } else if (c === quoteDbl) {
-      chars.push(parseString(quoteDbl));
-    } else if (c === graveAccent) {
-      chars.push(parseString(acuteAccent));
-    } else if (c === quoteLeft) {
-      chars.push(parseString(quoteRight));
-    } else if (c === quoteDblLeft) {
-      chars.push(parseString(quoteDblRight));
-    } else if (c === '}') {
-      // check for missing comma between objects
-      chars.push(c);
-      i++;
-      var whitespaces = parseWhiteSpace();
-      skipBlockComment();
-
-      if (currNonWhiteSpace() === '{') {
-        chars.push(',');
-
-        if (indent === 0) {
-          isLineSeparatedJson = true;
-        }
-      }
-
-      chars.push(whitespaces);
-    } else if (c === ',' && [']', '}'].indexOf(nextNonWhiteSpace()) !== -1) {
-      // skip trailing commas
-      i++;
-    } else if (/[a-zA-Z_$]/.test(c) && ['{', ','].indexOf(lastNonWhitespace()) !== -1) {
-      // an unquoted object key (like a in '{a:2}')
-      // FIXME: array values are also parsed via parseKey, work this out properly
-      chars.push(parseKey());
-    } else if (/\w/.test(c)) {
-      chars.push(parseValue());
-    } else {
-      chars.push(c);
-      i++;
-    }
-  }
-
-  if (isLineSeparatedJson) {
-    chars.unshift('[\n');
-    chars.push('\n]');
-  }
-
-  return chars.join('');
 }
 /**
  * Escape unicode characters.
@@ -573,8 +264,8 @@ text) {
  */
 
 function validate(jsonString) {
-  if (typeof _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2___default.a !== 'undefined') {
-    _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_2___default.a.parse(jsonString);
+  if (typeof _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3___default.a !== 'undefined') {
+    _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3___default.a.parse(jsonString);
   } else {
     JSON.parse(jsonString);
   }
@@ -665,6 +356,16 @@ function isUrl(text) {
 
 function isArray(obj) {
   return Object.prototype.toString.call(obj) === '[object Array]';
+}
+/**
+ * Gets a DOM element's Window.  This is normally just the global `window`
+ * variable, but if we opened a child window, it may be different.
+ * @param {HTMLElement} element
+ * @return {Window}
+ */
+
+function getWindow(element) {
+  return element.ownerDocument.defaultView;
 }
 /**
  * Retrieve the absolute left value of a DOM element
@@ -995,7 +696,7 @@ function getInternetExplorerVersion() {
 
     if (typeof navigator !== 'undefined' && navigator.appName === 'Microsoft Internet Explorer') {
       var ua = navigator.userAgent;
-      var re = new RegExp('MSIE ([0-9]+[.0-9]+)');
+      var re = /MSIE ([0-9]+[.0-9]+)/;
 
       if (re.exec(ua) != null) {
         rv = parseFloat(RegExp.$1);
@@ -1008,14 +709,6 @@ function getInternetExplorerVersion() {
   return _ieVersion;
 }
 /**
- * Test whether the current browser is Firefox
- * @returns {boolean} isFirefox
- */
-
-function isFirefox() {
-  return typeof navigator !== 'undefined' && navigator.userAgent.indexOf('Firefox') !== -1;
-}
-/**
  * cached internet explorer version
  * @type {Number}
  * @private
@@ -1023,7 +716,16 @@ function isFirefox() {
 
 var _ieVersion = -1;
 /**
- * Add and event listener. Works for all browsers
+ * Test whether the current browser is Firefox
+ * @returns {boolean} isFirefox
+ */
+
+
+function isFirefox() {
+  return typeof navigator !== 'undefined' && navigator.userAgent.indexOf('Firefox') !== -1;
+}
+/**
+ * Add an event listener. Works for all browsers
  * @param {Element}     element    An html element
  * @param {string}      action     The action, for example "click",
  *                                 without the prefix "on"
@@ -1031,7 +733,6 @@ var _ieVersion = -1;
  * @param {boolean}     [useCapture] false by default
  * @return {function}   the created event listener
  */
-
 
 function addEventListener(element, action, listener, useCapture) {
   if (element.addEventListener) {
@@ -1393,7 +1094,7 @@ function getInputSelection(el) {
   }
 }
 /**
- * Returns the index for certaion position in text element
+ * Returns the index for certain position in text element
  * @param {DOMElement} el A dom element of a textarea or input text.
  * @param {Number} row row value, > 0, if exceeds rows number - last row will be returned
  * @param {Number} column column value, > 0, if exceeds column length - end of column will be returned
@@ -1430,7 +1131,7 @@ function getPositionForPath(text, paths) {
   }
 
   try {
-    jsmap = json_source_map__WEBPACK_IMPORTED_MODULE_3___default.a.parse(text);
+    jsmap = json_source_map__WEBPACK_IMPORTED_MODULE_4___default.a.parse(text);
   } catch (err) {
     return result;
   }
@@ -1516,7 +1217,7 @@ function makeFieldTooltip(schema, locale) {
       tooltip += '\n\n';
     }
 
-    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_4__[/* translate */ "c"])('default', undefined, locale) + '\n';
+    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_5__[/* translate */ "c"])('default', undefined, locale) + '\n';
     tooltip += JSON.stringify(schema["default"], null, 2);
   }
 
@@ -1525,7 +1226,7 @@ function makeFieldTooltip(schema, locale) {
       tooltip += '\n\n';
     }
 
-    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_4__[/* translate */ "c"])('examples', undefined, locale) + '\n';
+    tooltip += Object(_i18n__WEBPACK_IMPORTED_MODULE_5__[/* translate */ "c"])('examples', undefined, locale) + '\n';
     schema.examples.forEach(function (example, index) {
       tooltip += JSON.stringify(example, null, 2);
 
@@ -1761,7 +1462,7 @@ function contains(array, item) {
   return array.indexOf(item) !== -1;
 }
 /**
- * Checkes if validation has changed from the previous execution
+ * Checks if validation has changed from the previous execution
  * @param {Array} currErr current validation errors
  * @param {Array} prevErr previous validation errors
  */
@@ -1820,13 +1521,13 @@ function hasOwnProperty(object, key) {
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return setLanguage; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return setLanguages; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "c", function() { return translate; });
-/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(24);
+/* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(25);
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_polyfills__WEBPACK_IMPORTED_MODULE_0__);
 
 /* eslint-disable no-template-curly-in-string */
 
 
-var _locales = ['en', 'pt-BR', 'zh-CN', 'tr', 'ja', 'fr-FR'];
+var _locales = ['en', 'pt-BR', 'zh-CN', 'tr', 'ja', 'fr-FR', 'de'];
 var _defs = {
   en: {
     array: 'Array',
@@ -1917,7 +1618,9 @@ var _defs = {
     modePreviewText: 'Preview',
     modePreviewTitle: 'Switch to preview mode',
     examples: 'Examples',
-    "default": 'Default'
+    "default": 'Default',
+    containsInvalidProperties: 'Contains invalid properties',
+    containsInvalidItems: 'Contains invalid items'
   },
   'zh-CN': {
     array: '数组',
@@ -2004,7 +1707,9 @@ var _defs = {
     modePreviewText: '预览',
     modePreviewTitle: '切换至预览模式',
     examples: '例子',
-    "default": '缺省'
+    "default": '缺省',
+    containsInvalidProperties: '包含无效的属性',
+    containsInvalidItems: '包含无效项目'
   },
   'pt-BR': {
     array: 'Lista',
@@ -2077,7 +1782,9 @@ var _defs = {
     arrayType: 'Campo do tipo "lista". ' + 'Uma lista contem uma coleção de valores ordenados.',
     stringType: 'Campo do tipo "string". ' + 'Campo do tipo nao é determinado através do seu valor, ' + 'mas sempre retornara um texto.',
     examples: 'Exemplos',
-    "default": 'Revelia'
+    "default": 'Revelia',
+    containsInvalidProperties: 'Contém propriedades inválidas',
+    containsInvalidItems: 'Contém itens inválidos'
   },
   tr: {
     array: 'Dizin',
@@ -2157,7 +1864,9 @@ var _defs = {
     modeViewText: 'Görünüm',
     modeViewTitle: 'Ağaç görünümüne geç',
     examples: 'Örnekler',
-    "default": 'Varsayılan'
+    "default": 'Varsayılan',
+    containsInvalidProperties: 'Geçersiz özellikler içeriyor',
+    containsInvalidItems: 'Geçersiz öğeler içeriyor'
   },
   ja: {
     array: '配列',
@@ -2241,7 +1950,9 @@ var _defs = {
     modePreviewText: 'プレビュー',
     modePreviewTitle: 'プレビューに切り替え',
     examples: '例',
-    "default": 'デフォルト'
+    "default": 'デフォルト',
+    containsInvalidProperties: '無効なプロパティが含まれています',
+    containsInvalidItems: '無効なアイテムが含まれています'
   },
   'fr-FR': {
     array: 'Liste',
@@ -2329,7 +2040,102 @@ var _defs = {
     modePreviewText: 'Prévisualisation',
     modePreviewTitle: 'Activer mode prévisualiser',
     examples: 'Exemples',
-    "default": 'Défaut'
+    "default": 'Défaut',
+    containsInvalidProperties: 'Contient des propriétés non valides',
+    containsInvalidItems: 'Contient des éléments invalides'
+  },
+  de: {
+    array: 'Auflistung',
+    auto: 'Auto',
+    appendText: 'anhängen',
+    appendTitle: 'Fügen Sie nach diesem Feld ein neues Feld mit dem Typ \'auto\' ein (Strg+Umschalt+Ein)',
+    appendSubmenuTitle: 'Wählen Sie den Typ des neuen Feldes',
+    appendTitleAuto: 'Ein neues Feld vom Typ \'auto\' hinzufügen (Strg+Umschalt+Ein)',
+    ascending: 'Aufsteigend',
+    ascendingTitle: 'Sortieren Sie die Elemente dieses ${type} in aufsteigender Reihenfolge',
+    actionsMenu: 'Klicken Sie zum Öffnen des Aktionsmenüs (Strg+M)',
+    cannotParseFieldError: 'Feld kann nicht in JSON geparst werden',
+    cannotParseValueError: 'Wert kann nicht in JSON geparst werden',
+    collapseAll: 'Alle Felder zuklappen',
+    compactTitle: 'JSON-Daten verdichten, alle Leerzeichen entfernen (Strg+Umschalt+\\)',
+    descending: 'Absteigend',
+    descendingTitle: 'Sortieren Sie die Elemente dieses ${type} in absteigender Reihenfolge',
+    drag: 'Ziehen, um dieses Feld zu verschieben (Alt+Umschalt+Pfeile)',
+    duplicateKey: 'Doppelter Schlüssel',
+    duplicateText: 'Duplikat',
+    duplicateTitle: 'Ausgewählte Felder duplizieren (Strg+D)',
+    duplicateField: 'Dieses Feld duplizieren (Strg+D)',
+    duplicateFieldError: 'Doppelter Feldname',
+    empty: 'leer',
+    expandAll: 'Alle Felder anzeigen',
+    expandTitle: 'Klicken Sie, um dieses Feld zu erweitern/zu kollabieren (Strg+E). \nStrg+Klicken Sie, um dieses Feld einschließlich aller Elemente zu erweitern/zu kollabieren.',
+    formatTitle: 'JSON-Daten mit korrekter Einrückung und Zeilenvorschüben formatieren (Strg+\\)',
+    insert: 'einfügen',
+    insertTitle: 'Fügen Sie vor diesem Feld ein neues Feld mit dem Typ \'auto\' ein (Strg+Einfg)',
+    insertSub: 'Wählen Sie den Typ des neuen Feldes',
+    object: 'Objekt',
+    ok: 'Ok',
+    redo: 'Wiederholen (Strg+Umschalt+Z)',
+    removeText: 'entfernen',
+    removeTitle: 'Ausgewählte Felder entfernen (Strg+Entf)',
+    removeField: 'Dieses Feld entfernen (Strg+Entf)',
+    repairTitle: 'JSON reparieren: Anführungszeichen und Escape-Zeichen korrigieren, Kommentare und JSONP-Notation entfernen, JavaScript-Objekte in JSON umwandeln.',
+    searchTitle: 'Suchfelder und Werte',
+    searchNextResultTitle: 'Nächstes Ergebnis (Enter)',
+    searchPreviousResultTitle: 'Vorheriges Ergebnis (Umschalt + Eingabe)',
+    selectNode: 'Wählen Sie einen Knoten aus...',
+    showAll: 'alle anzeigen',
+    showMore: 'mehr anzeigen',
+    showMoreStatus: 'Anzeige von ${visibleChilds} von ${totalChilds}-Elementen.',
+    sort: 'Sortieren',
+    sortTitle: 'Sortieren Sie die Elemente dieses ${type}',
+    sortTitleShort: 'Inhalt sortieren',
+    sortFieldLabel: 'Feld:',
+    sortDirectionLabel: 'Richtung:',
+    sortFieldTitle: 'Wählen Sie das verschachtelte Feld, nach dem das Array oder Objekt sortiert werden soll.',
+    sortAscending: 'Aufsteigend',
+    sortAscendingTitle: 'Sortieren Sie das ausgewählte Feld in aufsteigender Reihenfolge',
+    sortDescending: 'Absteigend',
+    sortDescendingTitle: 'Sortieren Sie das ausgewählte Feld in absteigender Reihenfolge',
+    string: 'Zeichenfolge',
+    transform: 'Verwandeln',
+    transformTitle: 'Die Elemente dieses ${type} filtern, sortieren oder transformieren',
+    transformTitleShort: 'Inhalte filtern, sortieren oder transformieren',
+    extract: 'Auszug',
+    extractTitle: 'Extrahieren Sie diesen ${type}',
+    transformQueryTitle: 'Eine JMESPath-Abfrage eingeben',
+    transformWizardLabel: 'Zauberer',
+    transformWizardFilter: 'Filter',
+    transformWizardSortBy: 'Sortieren nach',
+    transformWizardSelectFields: 'Felder auswählen',
+    transformQueryLabel: 'Anfrage',
+    transformPreviewLabel: 'Vorschau',
+    type: 'Geben Sie  ein.',
+    typeTitle: 'Ändern Sie den Typ dieses Feldes',
+    openUrl: 'Strg+Klicken oder Strg+Eingabe, um die URL in einem neuen Fenster zu öffnen',
+    undo: 'Letzte Aktion rückgängig machen (Strg+Z)',
+    validationCannotMove: 'Kann ein Feld nicht in ein Kind seiner selbst verschieben',
+    autoType: 'Feldtyp "auto". Der Feldtyp wird automatisch aus dem Wert bestimmt und kann ein String, eine Zahl, boolesch oder null sein.',
+    objectType: 'Feldtyp "Objekt". Ein Objekt enthält eine ungeordnete Menge von Schlüssel/Wert-Paaren.',
+    arrayType: 'Feldtyp "Array". Ein Array enthält eine geordnete Sammlung von Werten.',
+    stringType: 'Feldtyp "Zeichenfolge". Der Feldtyp wird nicht aus dem Wert bestimmt, sondern immer als Zeichenfolge zurückgegeben.',
+    modeEditorTitle: 'Editor-Modus umschalten',
+    modeCodeText: 'Code',
+    modeCodeTitle: 'Umschalten auf Code-Highlighter',
+    modeFormText: 'Formular',
+    modeFormTitle: 'Zum Formular-Editor wechseln',
+    modeTextText: 'Text',
+    modeTextTitle: 'Zum Editor für einfachen Text wechseln',
+    modeTreeText: 'Baum',
+    modeTreeTitle: 'Zum Baum-Editor wechseln',
+    modeViewText: 'Siehe',
+    modeViewTitle: 'Zur Baumansicht wechseln',
+    modePreviewText: 'Vorschau',
+    modePreviewTitle: 'In den Vorschau-Modus wechseln',
+    examples: 'Beispiele',
+    "default": 'Standardmäßig',
+    containsInvalidProperties: 'Enthält ungültige Eigenschaften',
+    containsInvalidItems: 'Enthält ungültige Elemente'
   }
 };
 var _defaultLang = 'en';
@@ -2906,7 +2712,7 @@ ContextMenu.visibleMenu = undefined;
 "use strict";
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return createQuery; });
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "b", function() { return executeQuery; });
-/* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(34);
+/* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(35);
 /* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jmespath__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(0);
 
@@ -2981,7 +2787,7 @@ function executeQuery(json, query) {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "showSortModal", function() { return showSortModal; });
-/* harmony import */ var picomodal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(14);
+/* harmony import */ var picomodal__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(15);
 /* harmony import */ var picomodal__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(picomodal__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(1);
 /* harmony import */ var _util__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(0);
@@ -3076,11 +2882,11 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, "showTransformModal", function() { return /* binding */ showTransformModal; });
 
 // EXTERNAL MODULE: ./node_modules/picomodal/src/picoModal.js
-var picoModal = __webpack_require__(14);
+var picoModal = __webpack_require__(15);
 var picoModal_default = /*#__PURE__*/__webpack_require__.n(picoModal);
 
 // EXTERNAL MODULE: ./src/js/assets/selectr/selectr.js
-var selectr = __webpack_require__(10);
+var selectr = __webpack_require__(11);
 var selectr_default = /*#__PURE__*/__webpack_require__.n(selectr);
 
 // EXTERNAL MODULE: ./src/js/i18n.js
@@ -3533,8 +3339,8 @@ module.exports = {
   toHash: toHash,
   getProperty: getProperty,
   escapeQuotes: escapeQuotes,
-  equal: __webpack_require__(18),
-  ucs2length: __webpack_require__(47),
+  equal: __webpack_require__(19),
+  ucs2length: __webpack_require__(51),
   varOccurences: varOccurences,
   varReplace: varReplace,
   schemaHasRules: schemaHasRules,
@@ -3765,6 +3571,149 @@ function unescapeJsonPointer(str) {
 
 /***/ }),
 /* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+module.exports = __webpack_require__(43).default
+
+
+/***/ }),
+/* 9 */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FocusTracker; });
+
+/**
+ * @constructor FocusTracker
+ * A custom focus tracker for a DOM element with complex internal DOM structure
+ * @param  {[Object]} config    A set of configurations for the FocusTracker
+ *                {DOM Object} target *    The DOM object to track (required)
+ *                {Function}   onFocus     onFocus callback
+ *                {Function}   onBlur      onBlur callback
+ *
+ * @return
+ */
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+
+var FocusTracker = /*#__PURE__*/function () {
+  function FocusTracker(config) {
+    _classCallCheck(this, FocusTracker);
+
+    this.target = config.target || null;
+
+    if (!this.target) {
+      throw new Error('FocusTracker constructor called without a "target" to track.');
+    }
+
+    this.onFocus = typeof config.onFocus === 'function' ? config.onFocus : null;
+    this.onBlur = typeof config.onBlur === 'function' ? config.onBlur : null;
+    this._onClick = this._onEvent.bind(this);
+
+    this._onKeyUp = function (event) {
+      if (event.which === 9 || event.keyCode === 9) {
+        this._onEvent(event);
+      }
+    }.bind(this);
+
+    this.focusFlag = false;
+    this.firstEventFlag = true;
+    /*
+      Adds required (click and keyup) event listeners to the 'document' object
+      to track the focus of the given 'target'
+     */
+
+    if (this.onFocus || this.onBlur) {
+      document.addEventListener('click', this._onClick);
+      document.addEventListener('keyup', this._onKeyUp);
+    }
+  }
+  /**
+     * Removes the event listeners on the 'document' object
+     * that were added to track the focus of the given 'target'
+     */
+
+
+  _createClass(FocusTracker, [{
+    key: "destroy",
+    value: function destroy() {
+      document.removeEventListener('click', this._onClick);
+      document.removeEventListener('keyup', this._onKeyUp);
+
+      this._onEvent({
+        target: document.body
+      }); // calling _onEvent with body element in the hope that the FocusTracker is added to an element inside the body tag
+
+    }
+    /**
+       * Tracks the focus of the target and calls the onFocus and onBlur
+       * event callbacks if available.
+       * @param {Event} [event]  The 'click' or 'keyup' event object,
+       *                          from the respective events set on
+       *              document object
+       * @private
+       */
+
+  }, {
+    key: "_onEvent",
+    value: function _onEvent(event) {
+      var target = event.target;
+      var focusFlag;
+
+      if (target === this.target) {
+        focusFlag = true;
+      } else if (this.target.contains(target) || this.target.contains(document.activeElement)) {
+        focusFlag = true;
+      } else {
+        focusFlag = false;
+      }
+
+      if (focusFlag) {
+        if (!this.focusFlag) {
+          // trigger the onFocus callback
+          if (this.onFocus) {
+            this.onFocus({
+              type: 'focus',
+              target: this.target
+            });
+          }
+
+          this.focusFlag = true;
+        }
+      } else {
+        if (this.focusFlag || this.firstEventFlag) {
+          // trigger the onBlur callback
+          if (this.onBlur) {
+            this.onBlur({
+              type: 'blur',
+              target: this.target
+            });
+          }
+
+          this.focusFlag = false;
+          /*
+            When switching from one mode to another in the editor, the FocusTracker gets recreated.
+            At that time, this.focusFlag will be init to 'false' and will fail the above if condition, when blur occurs
+            this.firstEventFlag is added to overcome that issue
+           */
+
+          if (this.firstEventFlag) {
+            this.firstEventFlag = false;
+          }
+        }
+      }
+    }
+  }]);
+
+  return FocusTracker;
+}();
+
+/***/ }),
+/* 10 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -3914,143 +3863,7 @@ var ModeSwitcher = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 9 */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "a", function() { return FocusTracker; });
-
-/**
- * @constructor FocusTracker
- * A custom focus tracker for a DOM element with complex internal DOM structure
- * @param  {[Object]} config    A set of configurations for the FocusTracker
- *                {DOM Object} target *    The DOM object to track (required)
- *                {Function}   onFocus     onFocus callback
- *                {Function}   onBlur      onBlur callback
- *
- * @return
- */
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
-
-var FocusTracker = /*#__PURE__*/function () {
-  function FocusTracker(config) {
-    _classCallCheck(this, FocusTracker);
-
-    this.target = config.target || null;
-
-    if (!this.target) {
-      throw new Error('FocusTracker constructor called without a "target" to track.');
-    }
-
-    this.onFocus = typeof config.onFocus === 'function' ? config.onFocus : null;
-    this.onBlur = typeof config.onBlur === 'function' ? config.onBlur : null;
-    this._onClick = this._onEvent.bind(this);
-
-    this._onKeyUp = function (event) {
-      if (event.which === 9 || event.keyCode === 9) {
-        this._onEvent(event);
-      }
-    }.bind(this);
-
-    this.focusFlag = false;
-    this.firstEventFlag = true;
-    /*
-      Adds required (click and keyup) event listeners to the 'document' object
-      to track the focus of the given 'target'
-     */
-
-    if (this.onFocus || this.onBlur) {
-      document.addEventListener('click', this._onClick);
-      document.addEventListener('keyup', this._onKeyUp);
-    }
-  }
-  /**
-     * Removes the event listeners on the 'document' object
-     * that were added to track the focus of the given 'target'
-     */
-
-
-  _createClass(FocusTracker, [{
-    key: "destroy",
-    value: function destroy() {
-      document.removeEventListener('click', this._onClick);
-      document.removeEventListener('keyup', this._onKeyUp);
-
-      this._onEvent({
-        target: document.body
-      }); // calling _onEvent with body element in the hope that the FocusTracker is added to an element inside the body tag
-
-    }
-    /**
-       * Tracks the focus of the target and calls the onFocus and onBlur
-       * event callbacks if available.
-       * @param {Event} [event]  The 'click' or 'keyup' event object,
-       *                          from the respective events set on
-       *              document object
-       * @private
-       */
-
-  }, {
-    key: "_onEvent",
-    value: function _onEvent(event) {
-      var target = event.target;
-      var focusFlag;
-
-      if (target === this.target) {
-        focusFlag = true;
-      } else if (this.target.contains(target) || this.target.contains(document.activeElement)) {
-        focusFlag = true;
-      } else {
-        focusFlag = false;
-      }
-
-      if (focusFlag) {
-        if (!this.focusFlag) {
-          // trigger the onFocus callback
-          if (this.onFocus) {
-            this.onFocus({
-              type: 'focus',
-              target: this.target
-            });
-          }
-
-          this.focusFlag = true;
-        }
-      } else {
-        if (this.focusFlag || this.firstEventFlag) {
-          // trigger the onBlur callback
-          if (this.onBlur) {
-            this.onBlur({
-              type: 'blur',
-              target: this.target
-            });
-          }
-
-          this.focusFlag = false;
-          /*
-            When switching from one mode to another in the editor, the FocusTracker gets recreated.
-            At that time, this.focusFlag will be init to 'false' and will fail the above if condition, when blur occurs
-            this.firstEventFlag is added to overcome that issue
-           */
-
-          if (this.firstEventFlag) {
-            this.firstEventFlag = false;
-          }
-        }
-      }
-    }
-  }]);
-
-  return FocusTracker;
-}();
-
-/***/ }),
-/* 10 */
+/* 11 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6127,57 +5940,6 @@ Selectr.prototype.getOptionByValue = function (value) {
 module.exports = Selectr;
 
 /***/ }),
-/* 11 */
-/***/ (function(module, exports) {
-
-/*
- * Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT license
- * Author: Jim Palmer (based on chunking idea from Dave Koelle)
- */
-/*jshint unused:false */
-module.exports = function naturalSort (a, b) {
-	"use strict";
-	var re = /(^([+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$|^0x[0-9a-f]+$|\d+)/gi,
-		sre = /(^[ ]*|[ ]*$)/g,
-		dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
-		hre = /^0x[0-9a-f]+$/i,
-		ore = /^0/,
-		i = function(s) { return naturalSort.insensitive && ('' + s).toLowerCase() || '' + s; },
-		// convert all to strings strip whitespace
-		x = i(a).replace(sre, '') || '',
-		y = i(b).replace(sre, '') || '',
-		// chunk/tokenize
-		xN = x.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
-		yN = y.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
-		// numeric, hex or date detection
-		xD = parseInt(x.match(hre), 16) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
-		yD = parseInt(y.match(hre), 16) || xD && y.match(dre) && Date.parse(y) || null,
-		oFxNcL, oFyNcL;
-	// first try and sort Hex codes or Dates
-	if (yD) {
-		if ( xD < yD ) { return -1; }
-		else if ( xD > yD ) { return 1; }
-	}
-	// natural sorting through split numeric strings and default strings
-	for(var cLoc=0, numS=Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
-		// find floats not starting with '0', string or 0 if not defined (Clint Priest)
-		oFxNcL = !(xN[cLoc] || '').match(ore) && parseFloat(xN[cLoc]) || xN[cLoc] || 0;
-		oFyNcL = !(yN[cLoc] || '').match(ore) && parseFloat(yN[cLoc]) || yN[cLoc] || 0;
-		// handle numeric vs string comparison - number < string - (Kyle Adams)
-		if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
-		// rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
-		else if (typeof oFxNcL !== typeof oFyNcL) {
-			oFxNcL += '';
-			oFyNcL += '';
-		}
-		if (oFxNcL < oFyNcL) { return -1; }
-		if (oFxNcL > oFyNcL) { return 1; }
-	}
-	return 0;
-};
-
-
-/***/ }),
 /* 12 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -6283,6 +6045,57 @@ function hasOwnProperty(object, key) {
 
 /***/ }),
 /* 13 */
+/***/ (function(module, exports) {
+
+/*
+ * Natural Sort algorithm for Javascript - Version 0.7 - Released under MIT license
+ * Author: Jim Palmer (based on chunking idea from Dave Koelle)
+ */
+/*jshint unused:false */
+module.exports = function naturalSort (a, b) {
+	"use strict";
+	var re = /(^([+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?)?$|^0x[0-9a-f]+$|\d+)/gi,
+		sre = /(^[ ]*|[ ]*$)/g,
+		dre = /(^([\w ]+,?[\w ]+)?[\w ]+,?[\w ]+\d+:\d+(:\d+)?[\w ]?|^\d{1,4}[\/\-]\d{1,4}[\/\-]\d{1,4}|^\w+, \w+ \d+, \d{4})/,
+		hre = /^0x[0-9a-f]+$/i,
+		ore = /^0/,
+		i = function(s) { return naturalSort.insensitive && ('' + s).toLowerCase() || '' + s; },
+		// convert all to strings strip whitespace
+		x = i(a).replace(sre, '') || '',
+		y = i(b).replace(sre, '') || '',
+		// chunk/tokenize
+		xN = x.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+		yN = y.replace(re, '\0$1\0').replace(/\0$/,'').replace(/^\0/,'').split('\0'),
+		// numeric, hex or date detection
+		xD = parseInt(x.match(hre), 16) || (xN.length !== 1 && x.match(dre) && Date.parse(x)),
+		yD = parseInt(y.match(hre), 16) || xD && y.match(dre) && Date.parse(y) || null,
+		oFxNcL, oFyNcL;
+	// first try and sort Hex codes or Dates
+	if (yD) {
+		if ( xD < yD ) { return -1; }
+		else if ( xD > yD ) { return 1; }
+	}
+	// natural sorting through split numeric strings and default strings
+	for(var cLoc=0, numS=Math.max(xN.length, yN.length); cLoc < numS; cLoc++) {
+		// find floats not starting with '0', string or 0 if not defined (Clint Priest)
+		oFxNcL = !(xN[cLoc] || '').match(ore) && parseFloat(xN[cLoc]) || xN[cLoc] || 0;
+		oFyNcL = !(yN[cLoc] || '').match(ore) && parseFloat(yN[cLoc]) || yN[cLoc] || 0;
+		// handle numeric vs string comparison - number < string - (Kyle Adams)
+		if (isNaN(oFxNcL) !== isNaN(oFyNcL)) { return (isNaN(oFxNcL)) ? 1 : -1; }
+		// rely on string comparison if different types - i.e. '02' < 2 != '02' < '2'
+		else if (typeof oFxNcL !== typeof oFyNcL) {
+			oFxNcL += '';
+			oFyNcL += '';
+		}
+		if (oFxNcL < oFyNcL) { return -1; }
+		if (oFxNcL > oFyNcL) { return 1; }
+	}
+	return 0;
+};
+
+
+/***/ }),
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var VanillaPicker;
@@ -6293,7 +6106,7 @@ if (window.Picker) {
 } else {
   try {
     // load color picker
-    VanillaPicker = __webpack_require__(41);
+    VanillaPicker = __webpack_require__(42);
   } catch (err) {// probably running the minimalist bundle
   }
 }
@@ -6301,7 +6114,7 @@ if (window.Picker) {
 module.exports = VanillaPicker;
 
 /***/ }),
-/* 14 */
+/* 15 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/**
@@ -6908,7 +6721,7 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 
 /***/ }),
-/* 15 */
+/* 16 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7129,7 +6942,7 @@ var ErrorTable = /*#__PURE__*/function () {
 }();
 
 /***/ }),
-/* 16 */
+/* 17 */
 /***/ (function(module, exports) {
 
 module.exports = function(module) {
@@ -7157,17 +6970,17 @@ module.exports = function(module) {
 
 
 /***/ }),
-/* 17 */
+/* 18 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var URI = __webpack_require__(46)
-  , equal = __webpack_require__(18)
+var URI = __webpack_require__(50)
+  , equal = __webpack_require__(19)
   , util = __webpack_require__(7)
-  , SchemaObject = __webpack_require__(25)
-  , traverse = __webpack_require__(48);
+  , SchemaObject = __webpack_require__(26)
+  , traverse = __webpack_require__(52);
 
 module.exports = resolve;
 
@@ -7434,7 +7247,7 @@ function resolveIds(schema) {
 
 
 /***/ }),
-/* 18 */
+/* 19 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -7487,13 +7300,13 @@ module.exports = function equal(a, b) {
 
 
 /***/ }),
-/* 19 */
+/* 20 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var resolve = __webpack_require__(17);
+var resolve = __webpack_require__(18);
 
 module.exports = {
   Validation: errorSubclass(ValidationError),
@@ -7528,7 +7341,7 @@ function errorSubclass(Subclass) {
 
 
 /***/ }),
-/* 20 */
+/* 21 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var ace;
@@ -7539,15 +7352,15 @@ if (window.ace) {
 } else {
   try {
     // load Ace editor
-    ace = __webpack_require__(37); // load required Ace plugins
+    ace = __webpack_require__(38); // load required Ace plugins
 
-    __webpack_require__(38);
+    __webpack_require__(39);
 
-    __webpack_require__(39); // embed Ace json worker
+    __webpack_require__(40); // embed Ace json worker
     // https://github.com/ajaxorg/ace/issues/3913
 
 
-    var jsonWorkerDataUrl = __webpack_require__(40);
+    var jsonWorkerDataUrl = __webpack_require__(41);
 
     ace.config.setModuleUrl('ace/mode/json_worker', jsonWorkerDataUrl);
   } catch (err) {// failed to load Ace (can be minimalist bundle).
@@ -7558,7 +7371,7 @@ if (window.ace) {
 module.exports = ace;
 
 /***/ }),
-/* 21 */
+/* 22 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7568,18 +7381,40 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "textModeMixins", function() { return /* binding */ textModeMixins; });
 
+// EXTERNAL MODULE: ./node_modules/simple-json-repair/lib/cjs/index-commonjs.js
+var index_commonjs = __webpack_require__(8);
+var index_commonjs_default = /*#__PURE__*/__webpack_require__.n(index_commonjs);
+
 // EXTERNAL MODULE: ./src/js/ace/index.js
-var ace = __webpack_require__(20);
+var ace = __webpack_require__(21);
 var ace_default = /*#__PURE__*/__webpack_require__.n(ace);
+
+// EXTERNAL MODULE: ./src/js/constants.js
+var constants = __webpack_require__(2);
+
+// EXTERNAL MODULE: ./src/js/ErrorTable.js
+var ErrorTable = __webpack_require__(16);
+
+// EXTERNAL MODULE: ./src/js/FocusTracker.js
+var FocusTracker = __webpack_require__(9);
 
 // EXTERNAL MODULE: ./src/js/i18n.js
 var i18n = __webpack_require__(1);
 
-// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
-var ModeSwitcher = __webpack_require__(8);
+// EXTERNAL MODULE: ./src/js/jmespathQuery.js
+var jmespathQuery = __webpack_require__(4);
 
-// EXTERNAL MODULE: ./src/js/ErrorTable.js
-var ErrorTable = __webpack_require__(15);
+// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
+var ModeSwitcher = __webpack_require__(10);
+
+// EXTERNAL MODULE: ./src/js/showSortModal.js
+var showSortModal = __webpack_require__(5);
+
+// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
+var showTransformModal = __webpack_require__(6);
+
+// EXTERNAL MODULE: ./src/js/tryRequireThemeJsonEditor.js
+var tryRequireThemeJsonEditor = __webpack_require__(36);
 
 // EXTERNAL MODULE: ./src/js/util.js
 var util = __webpack_require__(0);
@@ -7627,28 +7462,11 @@ function validateCustom(json, onValidate) {
     return Promise.reject(err);
   }
 }
-// EXTERNAL MODULE: ./src/js/showSortModal.js
-var showSortModal = __webpack_require__(5);
-
-// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
-var showTransformModal = __webpack_require__(6);
-
-// EXTERNAL MODULE: ./src/js/FocusTracker.js
-var FocusTracker = __webpack_require__(9);
-
-// EXTERNAL MODULE: ./src/js/constants.js
-var constants = __webpack_require__(2);
-
-// EXTERNAL MODULE: ./src/js/tryRequireThemeJsonEditor.js
-var tryRequireThemeJsonEditor = __webpack_require__(35);
-
-// EXTERNAL MODULE: ./src/js/jmespathQuery.js
-var jmespathQuery = __webpack_require__(4);
-
 // CONCATENATED MODULE: ./src/js/textmode.js
 
 
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 
 
 
@@ -7894,7 +7712,7 @@ textmode.create = function (container) {
         // TODO: this anchor falls below the margin of the content,
         // therefore the normal a.href does not work. We use a click event
         // for now, but this should be fixed.
-        window.open(poweredBy.href, poweredBy.target);
+        window.open(poweredBy.href, poweredBy.target, 'noopener');
       };
 
       this.menu.appendChild(poweredBy);
@@ -7933,12 +7751,16 @@ textmode.create = function (container) {
 
     aceSession.setAnnotations = function (annotations) {
       originalSetAnnotations.call(this, annotations && annotations.length ? annotations : me.annotations);
-    };
+    }; // disable Ctrl+L quickkey of Ace (is used by the browser to select the address bar)
 
-    aceEditor.commands.bindKey('Ctrl-L', null); // disable Ctrl+L (is used by the browser to select the address bar)
 
-    aceEditor.commands.bindKey('Command-L', null); // disable Ctrl+L (is used by the browser to select the address bar)
+    aceEditor.commands.bindKey('Ctrl-L', null);
+    aceEditor.commands.bindKey('Command-L', null); // disable the quickkeys we want to use for Format and Compact
 
+    aceEditor.commands.bindKey('Ctrl-\\', null);
+    aceEditor.commands.bindKey('Command-\\', null);
+    aceEditor.commands.bindKey('Ctrl-Shift-\\', null);
+    aceEditor.commands.bindKey('Command-Shift-\\', null);
     this.aceEditor = aceEditor; // register onchange event
 
     aceEditor.on('change', this._onChange.bind(this));
@@ -8133,7 +7955,7 @@ textmode._showTransformModal = function () {
       queryDescription = _this$options.queryDescription;
   var json = this.get();
   Object(showTransformModal["showTransformModal"])({
-    anchor: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
+    container: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
     json: json,
     queryDescription: queryDescription,
     // can be undefined
@@ -8374,8 +8196,12 @@ textmode.format = function () {
 
 textmode.repair = function () {
   var text = this.getText();
-  var repairedText = Object(util["repair"])(text);
-  this.updateText(repairedText);
+
+  try {
+    var repairedText = index_commonjs_default()(text);
+    this.updateText(repairedText);
+  } catch (err) {// repair was not successful, do nothing
+  }
 };
 /**
  * Set focus to the formatter
@@ -8772,7 +8598,7 @@ var textModeMixins = [{
 }];
 
 /***/ }),
-/* 22 */
+/* 23 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* Jison generated parser */
@@ -9520,7 +9346,7 @@ if (true) {
 }
 
 /***/ }),
-/* 23 */
+/* 24 */
 /***/ (function(module, exports) {
 
 module.exports = function() {
@@ -9529,7 +9355,7 @@ module.exports = function() {
 
 
 /***/ }),
-/* 24 */
+/* 25 */
 /***/ (function(module, exports) {
 
 if (typeof Element !== 'undefined') {
@@ -9608,7 +9434,7 @@ if (!String.prototype.trim) {
 }
 
 /***/ }),
-/* 25 */
+/* 26 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9624,7 +9450,7 @@ function SchemaObject(obj) {
 
 
 /***/ }),
-/* 26 */
+/* 27 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9690,7 +9516,7 @@ module.exports = function (data, opts) {
 
 
 /***/ }),
-/* 27 */
+/* 28 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -9787,7 +9613,7 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
     it.rootId = it.resolve.fullPath(it.self._getId(it.root.schema));
     it.baseId = it.baseId || it.rootId;
     delete it.isTop;
-    it.dataPathArr = [undefined];
+    it.dataPathArr = [""];
     if (it.schema.default !== undefined && it.opts.useDefaults && it.opts.strictDefaults) {
       var $defaultMsg = 'default is ignored in the schema root';
       if (it.opts.strictDefaults === 'log') it.logger.warn($defaultMsg);
@@ -9849,43 +9675,35 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
       if ($coerceToTypes) {
         var $dataType = 'dataType' + $lvl,
           $coerced = 'coerced' + $lvl;
-        out += ' var ' + ($dataType) + ' = typeof ' + ($data) + '; ';
+        out += ' var ' + ($dataType) + ' = typeof ' + ($data) + '; var ' + ($coerced) + ' = undefined; ';
         if (it.opts.coerceTypes == 'array') {
-          out += ' if (' + ($dataType) + ' == \'object\' && Array.isArray(' + ($data) + ')) ' + ($dataType) + ' = \'array\'; ';
+          out += ' if (' + ($dataType) + ' == \'object\' && Array.isArray(' + ($data) + ') && ' + ($data) + '.length == 1) { ' + ($data) + ' = ' + ($data) + '[0]; ' + ($dataType) + ' = typeof ' + ($data) + '; if (' + (it.util.checkDataType(it.schema.type, $data, it.opts.strictNumbers)) + ') ' + ($coerced) + ' = ' + ($data) + '; } ';
         }
-        out += ' var ' + ($coerced) + ' = undefined; ';
-        var $bracesCoercion = '';
+        out += ' if (' + ($coerced) + ' !== undefined) ; ';
         var arr1 = $coerceToTypes;
         if (arr1) {
           var $type, $i = -1,
             l1 = arr1.length - 1;
           while ($i < l1) {
             $type = arr1[$i += 1];
-            if ($i) {
-              out += ' if (' + ($coerced) + ' === undefined) { ';
-              $bracesCoercion += '}';
-            }
-            if (it.opts.coerceTypes == 'array' && $type != 'array') {
-              out += ' if (' + ($dataType) + ' == \'array\' && ' + ($data) + '.length == 1) { ' + ($coerced) + ' = ' + ($data) + ' = ' + ($data) + '[0]; ' + ($dataType) + ' = typeof ' + ($data) + ';  } ';
-            }
             if ($type == 'string') {
-              out += ' if (' + ($dataType) + ' == \'number\' || ' + ($dataType) + ' == \'boolean\') ' + ($coerced) + ' = \'\' + ' + ($data) + '; else if (' + ($data) + ' === null) ' + ($coerced) + ' = \'\'; ';
+              out += ' else if (' + ($dataType) + ' == \'number\' || ' + ($dataType) + ' == \'boolean\') ' + ($coerced) + ' = \'\' + ' + ($data) + '; else if (' + ($data) + ' === null) ' + ($coerced) + ' = \'\'; ';
             } else if ($type == 'number' || $type == 'integer') {
-              out += ' if (' + ($dataType) + ' == \'boolean\' || ' + ($data) + ' === null || (' + ($dataType) + ' == \'string\' && ' + ($data) + ' && ' + ($data) + ' == +' + ($data) + ' ';
+              out += ' else if (' + ($dataType) + ' == \'boolean\' || ' + ($data) + ' === null || (' + ($dataType) + ' == \'string\' && ' + ($data) + ' && ' + ($data) + ' == +' + ($data) + ' ';
               if ($type == 'integer') {
                 out += ' && !(' + ($data) + ' % 1)';
               }
               out += ')) ' + ($coerced) + ' = +' + ($data) + '; ';
             } else if ($type == 'boolean') {
-              out += ' if (' + ($data) + ' === \'false\' || ' + ($data) + ' === 0 || ' + ($data) + ' === null) ' + ($coerced) + ' = false; else if (' + ($data) + ' === \'true\' || ' + ($data) + ' === 1) ' + ($coerced) + ' = true; ';
+              out += ' else if (' + ($data) + ' === \'false\' || ' + ($data) + ' === 0 || ' + ($data) + ' === null) ' + ($coerced) + ' = false; else if (' + ($data) + ' === \'true\' || ' + ($data) + ' === 1) ' + ($coerced) + ' = true; ';
             } else if ($type == 'null') {
-              out += ' if (' + ($data) + ' === \'\' || ' + ($data) + ' === 0 || ' + ($data) + ' === false) ' + ($coerced) + ' = null; ';
+              out += ' else if (' + ($data) + ' === \'\' || ' + ($data) + ' === 0 || ' + ($data) + ' === false) ' + ($coerced) + ' = null; ';
             } else if (it.opts.coerceTypes == 'array' && $type == 'array') {
-              out += ' if (' + ($dataType) + ' == \'string\' || ' + ($dataType) + ' == \'number\' || ' + ($dataType) + ' == \'boolean\' || ' + ($data) + ' == null) ' + ($coerced) + ' = [' + ($data) + ']; ';
+              out += ' else if (' + ($dataType) + ' == \'string\' || ' + ($dataType) + ' == \'number\' || ' + ($dataType) + ' == \'boolean\' || ' + ($data) + ' == null) ' + ($coerced) + ' = [' + ($data) + ']; ';
             }
           }
         }
-        out += ' ' + ($bracesCoercion) + ' if (' + ($coerced) + ' === undefined) {   ';
+        out += ' else {   ';
         var $$outStack = $$outStack || [];
         $$outStack.push(out);
         out = ''; /* istanbul ignore else */
@@ -9925,7 +9743,7 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
         } else {
           out += ' var err = ' + (__err) + ';  if (vErrors === null) vErrors = [err]; else vErrors.push(err); errors++; ';
         }
-        out += ' } else {  ';
+        out += ' } if (' + ($coerced) + ' !== undefined) {  ';
         var $parentData = $dataLvl ? 'data' + (($dataLvl - 1) || '') : 'parentData',
           $parentDataProperty = $dataLvl ? it.dataPathArr[$dataLvl] : 'parentDataProperty';
         out += ' ' + ($data) + ' = ' + ($coerced) + '; ';
@@ -10187,7 +10005,7 @@ module.exports = function generate_validate(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 28 */
+/* 29 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10357,7 +10175,7 @@ module.exports = function generate__limit(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 29 */
+/* 30 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10444,7 +10262,7 @@ module.exports = function generate__limitItems(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 30 */
+/* 31 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10536,7 +10354,7 @@ module.exports = function generate__limitLength(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 31 */
+/* 32 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -10623,13 +10441,13 @@ module.exports = function generate__limitProperties(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 32 */
+/* 33 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"$id\":\"http://json-schema.org/draft-07/schema#\",\"title\":\"Core schema meta-schema\",\"definitions\":{\"schemaArray\":{\"type\":\"array\",\"minItems\":1,\"items\":{\"$ref\":\"#\"}},\"nonNegativeInteger\":{\"type\":\"integer\",\"minimum\":0},\"nonNegativeIntegerDefault0\":{\"allOf\":[{\"$ref\":\"#/definitions/nonNegativeInteger\"},{\"default\":0}]},\"simpleTypes\":{\"enum\":[\"array\",\"boolean\",\"integer\",\"null\",\"number\",\"object\",\"string\"]},\"stringArray\":{\"type\":\"array\",\"items\":{\"type\":\"string\"},\"uniqueItems\":true,\"default\":[]}},\"type\":[\"object\",\"boolean\"],\"properties\":{\"$id\":{\"type\":\"string\",\"format\":\"uri-reference\"},\"$schema\":{\"type\":\"string\",\"format\":\"uri\"},\"$ref\":{\"type\":\"string\",\"format\":\"uri-reference\"},\"$comment\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"default\":true,\"readOnly\":{\"type\":\"boolean\",\"default\":false},\"examples\":{\"type\":\"array\",\"items\":true},\"multipleOf\":{\"type\":\"number\",\"exclusiveMinimum\":0},\"maximum\":{\"type\":\"number\"},\"exclusiveMaximum\":{\"type\":\"number\"},\"minimum\":{\"type\":\"number\"},\"exclusiveMinimum\":{\"type\":\"number\"},\"maxLength\":{\"$ref\":\"#/definitions/nonNegativeInteger\"},\"minLength\":{\"$ref\":\"#/definitions/nonNegativeIntegerDefault0\"},\"pattern\":{\"type\":\"string\",\"format\":\"regex\"},\"additionalItems\":{\"$ref\":\"#\"},\"items\":{\"anyOf\":[{\"$ref\":\"#\"},{\"$ref\":\"#/definitions/schemaArray\"}],\"default\":true},\"maxItems\":{\"$ref\":\"#/definitions/nonNegativeInteger\"},\"minItems\":{\"$ref\":\"#/definitions/nonNegativeIntegerDefault0\"},\"uniqueItems\":{\"type\":\"boolean\",\"default\":false},\"contains\":{\"$ref\":\"#\"},\"maxProperties\":{\"$ref\":\"#/definitions/nonNegativeInteger\"},\"minProperties\":{\"$ref\":\"#/definitions/nonNegativeIntegerDefault0\"},\"required\":{\"$ref\":\"#/definitions/stringArray\"},\"additionalProperties\":{\"$ref\":\"#\"},\"definitions\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"properties\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"patternProperties\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"propertyNames\":{\"format\":\"regex\"},\"default\":{}},\"dependencies\":{\"type\":\"object\",\"additionalProperties\":{\"anyOf\":[{\"$ref\":\"#\"},{\"$ref\":\"#/definitions/stringArray\"}]}},\"propertyNames\":{\"$ref\":\"#\"},\"const\":true,\"enum\":{\"type\":\"array\",\"items\":true,\"minItems\":1,\"uniqueItems\":true},\"type\":{\"anyOf\":[{\"$ref\":\"#/definitions/simpleTypes\"},{\"type\":\"array\",\"items\":{\"$ref\":\"#/definitions/simpleTypes\"},\"minItems\":1,\"uniqueItems\":true}]},\"format\":{\"type\":\"string\"},\"contentMediaType\":{\"type\":\"string\"},\"contentEncoding\":{\"type\":\"string\"},\"if\":{\"$ref\":\"#\"},\"then\":{\"$ref\":\"#\"},\"else\":{\"$ref\":\"#\"},\"allOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"anyOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"oneOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"not\":{\"$ref\":\"#\"}},\"default\":true}");
 
 /***/ }),
-/* 33 */
+/* 34 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -11101,7 +10919,7 @@ function escapeJsonPointer(str) {
 
 
 /***/ }),
-/* 34 */
+/* 35 */
 /***/ (function(module, exports, __webpack_require__) {
 
 (function(exports) {
@@ -12774,37 +12592,37 @@ function escapeJsonPointer(str) {
 
 
 /***/ }),
-/* 35 */
+/* 36 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.tryRequireThemeJsonEditor = function () {
   try {
-    __webpack_require__(42);
+    __webpack_require__(46);
   } catch (err) {
     console.error(err);
   }
 };
 
 /***/ }),
-/* 36 */
+/* 37 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ace = __webpack_require__(20); // may be undefined in case of minimalist bundle
+var ace = __webpack_require__(21); // may be undefined in case of minimalist bundle
 
 
-var VanillaPicker = __webpack_require__(13); // may be undefined in case of minimalist bundle
+var VanillaPicker = __webpack_require__(14); // may be undefined in case of minimalist bundle
 
 
-var _require = __webpack_require__(80),
+var _require = __webpack_require__(84),
     treeModeMixins = _require.treeModeMixins;
 
-var _require2 = __webpack_require__(21),
+var _require2 = __webpack_require__(22),
     textModeMixins = _require2.textModeMixins;
 
-var _require3 = __webpack_require__(81),
+var _require3 = __webpack_require__(85),
     previewModeMixins = _require3.previewModeMixins;
 
 var _require4 = __webpack_require__(0),
@@ -12814,7 +12632,7 @@ var _require4 = __webpack_require__(0),
     getInternetExplorerVersion = _require4.getInternetExplorerVersion,
     parse = _require4.parse;
 
-var _require5 = __webpack_require__(43),
+var _require5 = __webpack_require__(47),
     tryRequireAjv = _require5.tryRequireAjv;
 
 var _require6 = __webpack_require__(6),
@@ -13174,8 +12992,8 @@ JSONEditor.prototype.setSchema = function (schema, schemaRefs) {
           $data: true
         }); // support both draft-04 and draft-06 alongside the latest draft-07
 
-        ajv.addMetaSchema(__webpack_require__(78));
-        ajv.addMetaSchema(__webpack_require__(79));
+        ajv.addMetaSchema(__webpack_require__(82));
+        ajv.addMetaSchema(__webpack_require__(83));
       }
     } catch (err) {
       console.warn('Failed to create an instance of Ajv, JSON Schema validation is not available. Please use a JSONEditor bundle including Ajv, or pass an instance of Ajv as via the configuration option `ajv`.');
@@ -13304,7 +13122,7 @@ JSONEditor["default"] = JSONEditor;
 module.exports = JSONEditor;
 
 /***/ }),
-/* 37 */
+/* 38 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {/* ***** BEGIN LICENSE BLOCK *****
@@ -17113,7 +16931,7 @@ init(true);function init(packaged) {
     if (!global || !global.document)
         return;
     
-    options.packaged = packaged || require.packaged || module.packaged || (global.define && __webpack_require__(23).packaged);
+    options.packaged = packaged || require.packaged || module.packaged || (global.define && __webpack_require__(24).packaged);
 
     var scriptOptions = {};
     var scriptUrl = "";
@@ -34576,7 +34394,7 @@ exports.config = require("./config");
 exports.require = require;
 
 if (true)
-    exports.define = __webpack_require__(23);
+    exports.define = __webpack_require__(24);
 exports.edit = function(el, options) {
     if (typeof el == "string") {
         var _id = el;
@@ -34645,10 +34463,10 @@ exports.version = exports.config.version;
                 });
             })();
         
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)(module)))
 
 /***/ }),
-/* 38 */
+/* 39 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {ace.define("ace/mode/json_highlight_rules",["require","exports","module","ace/lib/oop","ace/mode/text_highlight_rules"], function(require, exports, module) {
@@ -34980,10 +34798,10 @@ exports.Mode = Mode;
                     });
                 })();
             
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)(module)))
 
 /***/ }),
-/* 39 */
+/* 40 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(module) {ace.define("ace/ext/searchbox",["require","exports","module","ace/lib/dom","ace/lib/lang","ace/lib/event","ace/keyboard/hash_handler","ace/lib/keys"], function(require, exports, module) {
@@ -35500,16 +35318,16 @@ exports.Search = function(editor, isReplace) {
                     });
                 })();
             
-/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(16)(module)))
+/* WEBPACK VAR INJECTION */}.call(this, __webpack_require__(17)(module)))
 
 /***/ }),
-/* 40 */
+/* 41 */
 /***/ (function(module, exports) {
 
 module.exports = 'data:application/javascript;base64,Im5vIHVzZSBzdHJpY3QiOwohKGZ1bmN0aW9uKHdpbmRvdykgewppZiAodHlwZW9mIHdpbmRvdy53aW5kb3cgIT0gInVuZGVmaW5lZCIgJiYgd2luZG93LmRvY3VtZW50KQogICAgcmV0dXJuOwppZiAod2luZG93LnJlcXVpcmUgJiYgd2luZG93LmRlZmluZSkKICAgIHJldHVybjsKCmlmICghd2luZG93LmNvbnNvbGUpIHsKICAgIHdpbmRvdy5jb25zb2xlID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdmFyIG1zZ3MgPSBBcnJheS5wcm90b3R5cGUuc2xpY2UuY2FsbChhcmd1bWVudHMsIDApOwogICAgICAgIHBvc3RNZXNzYWdlKHt0eXBlOiAibG9nIiwgZGF0YTogbXNnc30pOwogICAgfTsKICAgIHdpbmRvdy5jb25zb2xlLmVycm9yID0KICAgIHdpbmRvdy5jb25zb2xlLndhcm4gPSAKICAgIHdpbmRvdy5jb25zb2xlLmxvZyA9CiAgICB3aW5kb3cuY29uc29sZS50cmFjZSA9IHdpbmRvdy5jb25zb2xlOwp9CndpbmRvdy53aW5kb3cgPSB3aW5kb3c7CndpbmRvdy5hY2UgPSB3aW5kb3c7Cgp3aW5kb3cub25lcnJvciA9IGZ1bmN0aW9uKG1lc3NhZ2UsIGZpbGUsIGxpbmUsIGNvbCwgZXJyKSB7CiAgICBwb3N0TWVzc2FnZSh7dHlwZTogImVycm9yIiwgZGF0YTogewogICAgICAgIG1lc3NhZ2U6IG1lc3NhZ2UsCiAgICAgICAgZGF0YTogZXJyLmRhdGEsCiAgICAgICAgZmlsZTogZmlsZSwKICAgICAgICBsaW5lOiBsaW5lLCAKICAgICAgICBjb2w6IGNvbCwKICAgICAgICBzdGFjazogZXJyLnN0YWNrCiAgICB9fSk7Cn07Cgp3aW5kb3cubm9ybWFsaXplTW9kdWxlID0gZnVuY3Rpb24ocGFyZW50SWQsIG1vZHVsZU5hbWUpIHsKICAgIC8vIG5vcm1hbGl6ZSBwbHVnaW4gcmVxdWlyZXMKICAgIGlmIChtb2R1bGVOYW1lLmluZGV4T2YoIiEiKSAhPT0gLTEpIHsKICAgICAgICB2YXIgY2h1bmtzID0gbW9kdWxlTmFtZS5zcGxpdCgiISIpOwogICAgICAgIHJldHVybiB3aW5kb3cubm9ybWFsaXplTW9kdWxlKHBhcmVudElkLCBjaHVua3NbMF0pICsgIiEiICsgd2luZG93Lm5vcm1hbGl6ZU1vZHVsZShwYXJlbnRJZCwgY2h1bmtzWzFdKTsKICAgIH0KICAgIC8vIG5vcm1hbGl6ZSByZWxhdGl2ZSByZXF1aXJlcwogICAgaWYgKG1vZHVsZU5hbWUuY2hhckF0KDApID09ICIuIikgewogICAgICAgIHZhciBiYXNlID0gcGFyZW50SWQuc3BsaXQoIi8iKS5zbGljZSgwLCAtMSkuam9pbigiLyIpOwogICAgICAgIG1vZHVsZU5hbWUgPSAoYmFzZSA/IGJhc2UgKyAiLyIgOiAiIikgKyBtb2R1bGVOYW1lOwogICAgICAgIAogICAgICAgIHdoaWxlIChtb2R1bGVOYW1lLmluZGV4T2YoIi4iKSAhPT0gLTEgJiYgcHJldmlvdXMgIT0gbW9kdWxlTmFtZSkgewogICAgICAgICAgICB2YXIgcHJldmlvdXMgPSBtb2R1bGVOYW1lOwogICAgICAgICAgICBtb2R1bGVOYW1lID0gbW9kdWxlTmFtZS5yZXBsYWNlKC9eXC5cLy8sICIiKS5yZXBsYWNlKC9cL1wuXC8vLCAiLyIpLnJlcGxhY2UoL1teXC9dK1wvXC5cLlwvLywgIiIpOwogICAgICAgIH0KICAgIH0KICAgIAogICAgcmV0dXJuIG1vZHVsZU5hbWU7Cn07Cgp3aW5kb3cucmVxdWlyZSA9IGZ1bmN0aW9uIHJlcXVpcmUocGFyZW50SWQsIGlkKSB7CiAgICBpZiAoIWlkKSB7CiAgICAgICAgaWQgPSBwYXJlbnRJZDsKICAgICAgICBwYXJlbnRJZCA9IG51bGw7CiAgICB9CiAgICBpZiAoIWlkLmNoYXJBdCkKICAgICAgICB0aHJvdyBuZXcgRXJyb3IoIndvcmtlci5qcyByZXF1aXJlKCkgYWNjZXB0cyBvbmx5IChwYXJlbnRJZCwgaWQpIGFzIGFyZ3VtZW50cyIpOwoKICAgIGlkID0gd2luZG93Lm5vcm1hbGl6ZU1vZHVsZShwYXJlbnRJZCwgaWQpOwoKICAgIHZhciBtb2R1bGUgPSB3aW5kb3cucmVxdWlyZS5tb2R1bGVzW2lkXTsKICAgIGlmIChtb2R1bGUpIHsKICAgICAgICBpZiAoIW1vZHVsZS5pbml0aWFsaXplZCkgewogICAgICAgICAgICBtb2R1bGUuaW5pdGlhbGl6ZWQgPSB0cnVlOwogICAgICAgICAgICBtb2R1bGUuZXhwb3J0cyA9IG1vZHVsZS5mYWN0b3J5KCkuZXhwb3J0czsKICAgICAgICB9CiAgICAgICAgcmV0dXJuIG1vZHVsZS5leHBvcnRzOwogICAgfQogICAKICAgIGlmICghd2luZG93LnJlcXVpcmUudGxucykKICAgICAgICByZXR1cm4gY29uc29sZS5sb2coInVuYWJsZSB0byBsb2FkICIgKyBpZCk7CiAgICAKICAgIHZhciBwYXRoID0gcmVzb2x2ZU1vZHVsZUlkKGlkLCB3aW5kb3cucmVxdWlyZS50bG5zKTsKICAgIGlmIChwYXRoLnNsaWNlKC0zKSAhPSAiLmpzIikgcGF0aCArPSAiLmpzIjsKICAgIAogICAgd2luZG93LnJlcXVpcmUuaWQgPSBpZDsKICAgIHdpbmRvdy5yZXF1aXJlLm1vZHVsZXNbaWRdID0ge307IC8vIHByZXZlbnQgaW5maW5pdGUgbG9vcCBvbiBicm9rZW4gbW9kdWxlcwogICAgaW1wb3J0U2NyaXB0cyhwYXRoKTsKICAgIHJldHVybiB3aW5kb3cucmVxdWlyZShwYXJlbnRJZCwgaWQpOwp9OwpmdW5jdGlvbiByZXNvbHZlTW9kdWxlSWQoaWQsIHBhdGhzKSB7CiAgICB2YXIgdGVzdFBhdGggPSBpZCwgdGFpbCA9ICIiOwogICAgd2hpbGUgKHRlc3RQYXRoKSB7CiAgICAgICAgdmFyIGFsaWFzID0gcGF0aHNbdGVzdFBhdGhdOwogICAgICAgIGlmICh0eXBlb2YgYWxpYXMgPT0gInN0cmluZyIpIHsKICAgICAgICAgICAgcmV0dXJuIGFsaWFzICsgdGFpbDsKICAgICAgICB9IGVsc2UgaWYgKGFsaWFzKSB7CiAgICAgICAgICAgIHJldHVybiAgYWxpYXMubG9jYXRpb24ucmVwbGFjZSgvXC8qJC8sICIvIikgKyAodGFpbCB8fCBhbGlhcy5tYWluIHx8IGFsaWFzLm5hbWUpOwogICAgICAgIH0gZWxzZSBpZiAoYWxpYXMgPT09IGZhbHNlKSB7CiAgICAgICAgICAgIHJldHVybiAiIjsKICAgICAgICB9CiAgICAgICAgdmFyIGkgPSB0ZXN0UGF0aC5sYXN0SW5kZXhPZigiLyIpOwogICAgICAgIGlmIChpID09PSAtMSkgYnJlYWs7CiAgICAgICAgdGFpbCA9IHRlc3RQYXRoLnN1YnN0cihpKSArIHRhaWw7CiAgICAgICAgdGVzdFBhdGggPSB0ZXN0UGF0aC5zbGljZSgwLCBpKTsKICAgIH0KICAgIHJldHVybiBpZDsKfQp3aW5kb3cucmVxdWlyZS5tb2R1bGVzID0ge307CndpbmRvdy5yZXF1aXJlLnRsbnMgPSB7fTsKCndpbmRvdy5kZWZpbmUgPSBmdW5jdGlvbihpZCwgZGVwcywgZmFjdG9yeSkgewogICAgaWYgKGFyZ3VtZW50cy5sZW5ndGggPT0gMikgewogICAgICAgIGZhY3RvcnkgPSBkZXBzOwogICAgICAgIGlmICh0eXBlb2YgaWQgIT0gInN0cmluZyIpIHsKICAgICAgICAgICAgZGVwcyA9IGlkOwogICAgICAgICAgICBpZCA9IHdpbmRvdy5yZXF1aXJlLmlkOwogICAgICAgIH0KICAgIH0gZWxzZSBpZiAoYXJndW1lbnRzLmxlbmd0aCA9PSAxKSB7CiAgICAgICAgZmFjdG9yeSA9IGlkOwogICAgICAgIGRlcHMgPSBbXTsKICAgICAgICBpZCA9IHdpbmRvdy5yZXF1aXJlLmlkOwogICAgfQogICAgCiAgICBpZiAodHlwZW9mIGZhY3RvcnkgIT0gImZ1bmN0aW9uIikgewogICAgICAgIHdpbmRvdy5yZXF1aXJlLm1vZHVsZXNbaWRdID0gewogICAgICAgICAgICBleHBvcnRzOiBmYWN0b3J5LAogICAgICAgICAgICBpbml0aWFsaXplZDogdHJ1ZQogICAgICAgIH07CiAgICAgICAgcmV0dXJuOwogICAgfQoKICAgIGlmICghZGVwcy5sZW5ndGgpCiAgICAgICAgLy8gSWYgdGhlcmUgaXMgbm8gZGVwZW5kZW5jaWVzLCB3ZSBpbmplY3QgInJlcXVpcmUiLCAiZXhwb3J0cyIgYW5kCiAgICAgICAgLy8gIm1vZHVsZSIgYXMgZGVwZW5kZW5jaWVzLCB0byBwcm92aWRlIENvbW1vbkpTIGNvbXBhdGliaWxpdHkuCiAgICAgICAgZGVwcyA9IFsicmVxdWlyZSIsICJleHBvcnRzIiwgIm1vZHVsZSJdOwoKICAgIHZhciByZXEgPSBmdW5jdGlvbihjaGlsZElkKSB7CiAgICAgICAgcmV0dXJuIHdpbmRvdy5yZXF1aXJlKGlkLCBjaGlsZElkKTsKICAgIH07CgogICAgd2luZG93LnJlcXVpcmUubW9kdWxlc1tpZF0gPSB7CiAgICAgICAgZXhwb3J0czoge30sCiAgICAgICAgZmFjdG9yeTogZnVuY3Rpb24oKSB7CiAgICAgICAgICAgIHZhciBtb2R1bGUgPSB0aGlzOwogICAgICAgICAgICB2YXIgcmV0dXJuRXhwb3J0cyA9IGZhY3RvcnkuYXBwbHkodGhpcywgZGVwcy5zbGljZSgwLCBmYWN0b3J5Lmxlbmd0aCkubWFwKGZ1bmN0aW9uKGRlcCkgewogICAgICAgICAgICAgICAgc3dpdGNoIChkZXApIHsKICAgICAgICAgICAgICAgICAgICAvLyBCZWNhdXNlICJyZXF1aXJlIiwgImV4cG9ydHMiIGFuZCAibW9kdWxlIiBhcmVuJ3QgYWN0dWFsCiAgICAgICAgICAgICAgICAgICAgLy8gZGVwZW5kZW5jaWVzLCB3ZSBtdXN0IGhhbmRsZSB0aGVtIHNlcGVyYXRlbHkuCiAgICAgICAgICAgICAgICAgICAgY2FzZSAicmVxdWlyZSI6IHJldHVybiByZXE7CiAgICAgICAgICAgICAgICAgICAgY2FzZSAiZXhwb3J0cyI6IHJldHVybiBtb2R1bGUuZXhwb3J0czsKICAgICAgICAgICAgICAgICAgICBjYXNlICJtb2R1bGUiOiAgcmV0dXJuIG1vZHVsZTsKICAgICAgICAgICAgICAgICAgICAvLyBCdXQgZm9yIGFsbCBvdGhlciBkZXBlbmRlbmNpZXMsIHdlIGNhbiBqdXN0IGdvIGFoZWFkIGFuZAogICAgICAgICAgICAgICAgICAgIC8vIHJlcXVpcmUgdGhlbS4KICAgICAgICAgICAgICAgICAgICBkZWZhdWx0OiAgICAgICAgcmV0dXJuIHJlcShkZXApOwogICAgICAgICAgICAgICAgfQogICAgICAgICAgICB9KSk7CiAgICAgICAgICAgIGlmIChyZXR1cm5FeHBvcnRzKQogICAgICAgICAgICAgICAgbW9kdWxlLmV4cG9ydHMgPSByZXR1cm5FeHBvcnRzOwogICAgICAgICAgICByZXR1cm4gbW9kdWxlOwogICAgICAgIH0KICAgIH07Cn07CndpbmRvdy5kZWZpbmUuYW1kID0ge307CnJlcXVpcmUudGxucyA9IHt9Owp3aW5kb3cuaW5pdEJhc2VVcmxzICA9IGZ1bmN0aW9uIGluaXRCYXNlVXJscyh0b3BMZXZlbE5hbWVzcGFjZXMpIHsKICAgIGZvciAodmFyIGkgaW4gdG9wTGV2ZWxOYW1lc3BhY2VzKQogICAgICAgIHJlcXVpcmUudGxuc1tpXSA9IHRvcExldmVsTmFtZXNwYWNlc1tpXTsKfTsKCndpbmRvdy5pbml0U2VuZGVyID0gZnVuY3Rpb24gaW5pdFNlbmRlcigpIHsKCiAgICB2YXIgRXZlbnRFbWl0dGVyID0gd2luZG93LnJlcXVpcmUoImFjZS9saWIvZXZlbnRfZW1pdHRlciIpLkV2ZW50RW1pdHRlcjsKICAgIHZhciBvb3AgPSB3aW5kb3cucmVxdWlyZSgiYWNlL2xpYi9vb3AiKTsKICAgIAogICAgdmFyIFNlbmRlciA9IGZ1bmN0aW9uKCkge307CiAgICAKICAgIChmdW5jdGlvbigpIHsKICAgICAgICAKICAgICAgICBvb3AuaW1wbGVtZW50KHRoaXMsIEV2ZW50RW1pdHRlcik7CiAgICAgICAgICAgICAgICAKICAgICAgICB0aGlzLmNhbGxiYWNrID0gZnVuY3Rpb24oZGF0YSwgY2FsbGJhY2tJZCkgewogICAgICAgICAgICBwb3N0TWVzc2FnZSh7CiAgICAgICAgICAgICAgICB0eXBlOiAiY2FsbCIsCiAgICAgICAgICAgICAgICBpZDogY2FsbGJhY2tJZCwKICAgICAgICAgICAgICAgIGRhdGE6IGRhdGEKICAgICAgICAgICAgfSk7CiAgICAgICAgfTsKICAgIAogICAgICAgIHRoaXMuZW1pdCA9IGZ1bmN0aW9uKG5hbWUsIGRhdGEpIHsKICAgICAgICAgICAgcG9zdE1lc3NhZ2UoewogICAgICAgICAgICAgICAgdHlwZTogImV2ZW50IiwKICAgICAgICAgICAgICAgIG5hbWU6IG5hbWUsCiAgICAgICAgICAgICAgICBkYXRhOiBkYXRhCiAgICAgICAgICAgIH0pOwogICAgICAgIH07CiAgICAgICAgCiAgICB9KS5jYWxsKFNlbmRlci5wcm90b3R5cGUpOwogICAgCiAgICByZXR1cm4gbmV3IFNlbmRlcigpOwp9OwoKdmFyIG1haW4gPSB3aW5kb3cubWFpbiA9IG51bGw7CnZhciBzZW5kZXIgPSB3aW5kb3cuc2VuZGVyID0gbnVsbDsKCndpbmRvdy5vbm1lc3NhZ2UgPSBmdW5jdGlvbihlKSB7CiAgICB2YXIgbXNnID0gZS5kYXRhOwogICAgaWYgKG1zZy5ldmVudCAmJiBzZW5kZXIpIHsKICAgICAgICBzZW5kZXIuX3NpZ25hbChtc2cuZXZlbnQsIG1zZy5kYXRhKTsKICAgIH0KICAgIGVsc2UgaWYgKG1zZy5jb21tYW5kKSB7CiAgICAgICAgaWYgKG1haW5bbXNnLmNvbW1hbmRdKQogICAgICAgICAgICBtYWluW21zZy5jb21tYW5kXS5hcHBseShtYWluLCBtc2cuYXJncyk7CiAgICAgICAgZWxzZSBpZiAod2luZG93W21zZy5jb21tYW5kXSkKICAgICAgICAgICAgd2luZG93W21zZy5jb21tYW5kXS5hcHBseSh3aW5kb3csIG1zZy5hcmdzKTsKICAgICAgICBlbHNlCiAgICAgICAgICAgIHRocm93IG5ldyBFcnJvcigiVW5rbm93biBjb21tYW5kOiIgKyBtc2cuY29tbWFuZCk7CiAgICB9CiAgICBlbHNlIGlmIChtc2cuaW5pdCkgewogICAgICAgIHdpbmRvdy5pbml0QmFzZVVybHMobXNnLnRsbnMpOwogICAgICAgIHNlbmRlciA9IHdpbmRvdy5zZW5kZXIgPSB3aW5kb3cuaW5pdFNlbmRlcigpOwogICAgICAgIHZhciBjbGF6eiA9IHJlcXVpcmUobXNnLm1vZHVsZSlbbXNnLmNsYXNzbmFtZV07CiAgICAgICAgbWFpbiA9IHdpbmRvdy5tYWluID0gbmV3IGNsYXp6KHNlbmRlcik7CiAgICB9Cn07Cn0pKHRoaXMpOwoKYWNlLmRlZmluZSgiYWNlL2xpYi9vb3AiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKZXhwb3J0cy5pbmhlcml0cyA9IGZ1bmN0aW9uKGN0b3IsIHN1cGVyQ3RvcikgewogICAgY3Rvci5zdXBlcl8gPSBzdXBlckN0b3I7CiAgICBjdG9yLnByb3RvdHlwZSA9IE9iamVjdC5jcmVhdGUoc3VwZXJDdG9yLnByb3RvdHlwZSwgewogICAgICAgIGNvbnN0cnVjdG9yOiB7CiAgICAgICAgICAgIHZhbHVlOiBjdG9yLAogICAgICAgICAgICBlbnVtZXJhYmxlOiBmYWxzZSwKICAgICAgICAgICAgd3JpdGFibGU6IHRydWUsCiAgICAgICAgICAgIGNvbmZpZ3VyYWJsZTogdHJ1ZQogICAgICAgIH0KICAgIH0pOwp9OwoKZXhwb3J0cy5taXhpbiA9IGZ1bmN0aW9uKG9iaiwgbWl4aW4pIHsKICAgIGZvciAodmFyIGtleSBpbiBtaXhpbikgewogICAgICAgIG9ialtrZXldID0gbWl4aW5ba2V5XTsKICAgIH0KICAgIHJldHVybiBvYmo7Cn07CgpleHBvcnRzLmltcGxlbWVudCA9IGZ1bmN0aW9uKHByb3RvLCBtaXhpbikgewogICAgZXhwb3J0cy5taXhpbihwcm90bywgbWl4aW4pOwp9OwoKfSk7CgphY2UuZGVmaW5lKCJhY2UvcmFuZ2UiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwp2YXIgY29tcGFyZVBvaW50cyA9IGZ1bmN0aW9uKHAxLCBwMikgewogICAgcmV0dXJuIHAxLnJvdyAtIHAyLnJvdyB8fCBwMS5jb2x1bW4gLSBwMi5jb2x1bW47Cn07CnZhciBSYW5nZSA9IGZ1bmN0aW9uKHN0YXJ0Um93LCBzdGFydENvbHVtbiwgZW5kUm93LCBlbmRDb2x1bW4pIHsKICAgIHRoaXMuc3RhcnQgPSB7CiAgICAgICAgcm93OiBzdGFydFJvdywKICAgICAgICBjb2x1bW46IHN0YXJ0Q29sdW1uCiAgICB9OwoKICAgIHRoaXMuZW5kID0gewogICAgICAgIHJvdzogZW5kUm93LAogICAgICAgIGNvbHVtbjogZW5kQ29sdW1uCiAgICB9Owp9OwoKKGZ1bmN0aW9uKCkgewogICAgdGhpcy5pc0VxdWFsID0gZnVuY3Rpb24ocmFuZ2UpIHsKICAgICAgICByZXR1cm4gdGhpcy5zdGFydC5yb3cgPT09IHJhbmdlLnN0YXJ0LnJvdyAmJgogICAgICAgICAgICB0aGlzLmVuZC5yb3cgPT09IHJhbmdlLmVuZC5yb3cgJiYKICAgICAgICAgICAgdGhpcy5zdGFydC5jb2x1bW4gPT09IHJhbmdlLnN0YXJ0LmNvbHVtbiAmJgogICAgICAgICAgICB0aGlzLmVuZC5jb2x1bW4gPT09IHJhbmdlLmVuZC5jb2x1bW47CiAgICB9OwogICAgdGhpcy50b1N0cmluZyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiAoIlJhbmdlOiBbIiArIHRoaXMuc3RhcnQucm93ICsgIi8iICsgdGhpcy5zdGFydC5jb2x1bW4gKwogICAgICAgICAgICAiXSAtPiBbIiArIHRoaXMuZW5kLnJvdyArICIvIiArIHRoaXMuZW5kLmNvbHVtbiArICJdIik7CiAgICB9OwoKICAgIHRoaXMuY29udGFpbnMgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIHJldHVybiB0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pID09IDA7CiAgICB9OwogICAgdGhpcy5jb21wYXJlUmFuZ2UgPSBmdW5jdGlvbihyYW5nZSkgewogICAgICAgIHZhciBjbXAsCiAgICAgICAgICAgIGVuZCA9IHJhbmdlLmVuZCwKICAgICAgICAgICAgc3RhcnQgPSByYW5nZS5zdGFydDsKCiAgICAgICAgY21wID0gdGhpcy5jb21wYXJlKGVuZC5yb3csIGVuZC5jb2x1bW4pOwogICAgICAgIGlmIChjbXAgPT0gMSkgewogICAgICAgICAgICBjbXAgPSB0aGlzLmNvbXBhcmUoc3RhcnQucm93LCBzdGFydC5jb2x1bW4pOwogICAgICAgICAgICBpZiAoY21wID09IDEpIHsKICAgICAgICAgICAgICAgIHJldHVybiAyOwogICAgICAgICAgICB9IGVsc2UgaWYgKGNtcCA9PSAwKSB7CiAgICAgICAgICAgICAgICByZXR1cm4gMTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHJldHVybiAwOwogICAgICAgICAgICB9CiAgICAgICAgfSBlbHNlIGlmIChjbXAgPT0gLTEpIHsKICAgICAgICAgICAgcmV0dXJuIC0yOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIGNtcCA9IHRoaXMuY29tcGFyZShzdGFydC5yb3csIHN0YXJ0LmNvbHVtbik7CiAgICAgICAgICAgIGlmIChjbXAgPT0gLTEpIHsKICAgICAgICAgICAgICAgIHJldHVybiAtMTsKICAgICAgICAgICAgfSBlbHNlIGlmIChjbXAgPT0gMSkgewogICAgICAgICAgICAgICAgcmV0dXJuIDQyOwogICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgcmV0dXJuIDA7CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICB9OwogICAgdGhpcy5jb21wYXJlUG9pbnQgPSBmdW5jdGlvbihwKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuY29tcGFyZShwLnJvdywgcC5jb2x1bW4pOwogICAgfTsKICAgIHRoaXMuY29udGFpbnNSYW5nZSA9IGZ1bmN0aW9uKHJhbmdlKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuY29tcGFyZVBvaW50KHJhbmdlLnN0YXJ0KSA9PSAwICYmIHRoaXMuY29tcGFyZVBvaW50KHJhbmdlLmVuZCkgPT0gMDsKICAgIH07CiAgICB0aGlzLmludGVyc2VjdHMgPSBmdW5jdGlvbihyYW5nZSkgewogICAgICAgIHZhciBjbXAgPSB0aGlzLmNvbXBhcmVSYW5nZShyYW5nZSk7CiAgICAgICAgcmV0dXJuIChjbXAgPT0gLTEgfHwgY21wID09IDAgfHwgY21wID09IDEpOwogICAgfTsKICAgIHRoaXMuaXNFbmQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIHJldHVybiB0aGlzLmVuZC5yb3cgPT0gcm93ICYmIHRoaXMuZW5kLmNvbHVtbiA9PSBjb2x1bW47CiAgICB9OwogICAgdGhpcy5pc1N0YXJ0ID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICByZXR1cm4gdGhpcy5zdGFydC5yb3cgPT0gcm93ICYmIHRoaXMuc3RhcnQuY29sdW1uID09IGNvbHVtbjsKICAgIH07CiAgICB0aGlzLnNldFN0YXJ0ID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICBpZiAodHlwZW9mIHJvdyA9PSAib2JqZWN0IikgewogICAgICAgICAgICB0aGlzLnN0YXJ0LmNvbHVtbiA9IHJvdy5jb2x1bW47CiAgICAgICAgICAgIHRoaXMuc3RhcnQucm93ID0gcm93LnJvdzsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICB0aGlzLnN0YXJ0LnJvdyA9IHJvdzsKICAgICAgICAgICAgdGhpcy5zdGFydC5jb2x1bW4gPSBjb2x1bW47CiAgICAgICAgfQogICAgfTsKICAgIHRoaXMuc2V0RW5kID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICBpZiAodHlwZW9mIHJvdyA9PSAib2JqZWN0IikgewogICAgICAgICAgICB0aGlzLmVuZC5jb2x1bW4gPSByb3cuY29sdW1uOwogICAgICAgICAgICB0aGlzLmVuZC5yb3cgPSByb3cucm93OwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIHRoaXMuZW5kLnJvdyA9IHJvdzsKICAgICAgICAgICAgdGhpcy5lbmQuY29sdW1uID0gY29sdW1uOwogICAgICAgIH0KICAgIH07CiAgICB0aGlzLmluc2lkZSA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgaWYgKHRoaXMuY29tcGFyZShyb3csIGNvbHVtbikgPT0gMCkgewogICAgICAgICAgICBpZiAodGhpcy5pc0VuZChyb3csIGNvbHVtbikgfHwgdGhpcy5pc1N0YXJ0KHJvdywgY29sdW1uKSkgewogICAgICAgICAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgcmV0dXJuIHRydWU7CiAgICAgICAgICAgIH0KICAgICAgICB9CiAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgfTsKICAgIHRoaXMuaW5zaWRlU3RhcnQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pID09IDApIHsKICAgICAgICAgICAgaWYgKHRoaXMuaXNFbmQocm93LCBjb2x1bW4pKSB7CiAgICAgICAgICAgICAgICByZXR1cm4gZmFsc2U7CiAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICByZXR1cm4gdHJ1ZTsKICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICByZXR1cm4gZmFsc2U7CiAgICB9OwogICAgdGhpcy5pbnNpZGVFbmQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pID09IDApIHsKICAgICAgICAgICAgaWYgKHRoaXMuaXNTdGFydChyb3csIGNvbHVtbikpIHsKICAgICAgICAgICAgICAgIHJldHVybiBmYWxzZTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHJldHVybiB0cnVlOwogICAgICAgICAgICB9CiAgICAgICAgfQogICAgICAgIHJldHVybiBmYWxzZTsKICAgIH07CiAgICB0aGlzLmNvbXBhcmUgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICghdGhpcy5pc011bHRpTGluZSgpKSB7CiAgICAgICAgICAgIGlmIChyb3cgPT09IHRoaXMuc3RhcnQucm93KSB7CiAgICAgICAgICAgICAgICByZXR1cm4gY29sdW1uIDwgdGhpcy5zdGFydC5jb2x1bW4gPyAtMSA6IChjb2x1bW4gPiB0aGlzLmVuZC5jb2x1bW4gPyAxIDogMCk7CiAgICAgICAgICAgIH0KICAgICAgICB9CgogICAgICAgIGlmIChyb3cgPCB0aGlzLnN0YXJ0LnJvdykKICAgICAgICAgICAgcmV0dXJuIC0xOwoKICAgICAgICBpZiAocm93ID4gdGhpcy5lbmQucm93KQogICAgICAgICAgICByZXR1cm4gMTsKCiAgICAgICAgaWYgKHRoaXMuc3RhcnQucm93ID09PSByb3cpCiAgICAgICAgICAgIHJldHVybiBjb2x1bW4gPj0gdGhpcy5zdGFydC5jb2x1bW4gPyAwIDogLTE7CgogICAgICAgIGlmICh0aGlzLmVuZC5yb3cgPT09IHJvdykKICAgICAgICAgICAgcmV0dXJuIGNvbHVtbiA8PSB0aGlzLmVuZC5jb2x1bW4gPyAwIDogMTsKCiAgICAgICAgcmV0dXJuIDA7CiAgICB9OwogICAgdGhpcy5jb21wYXJlU3RhcnQgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLnN0YXJ0LnJvdyA9PSByb3cgJiYgdGhpcy5zdGFydC5jb2x1bW4gPT0gY29sdW1uKSB7CiAgICAgICAgICAgIHJldHVybiAtMTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICByZXR1cm4gdGhpcy5jb21wYXJlKHJvdywgY29sdW1uKTsKICAgICAgICB9CiAgICB9OwogICAgdGhpcy5jb21wYXJlRW5kID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICBpZiAodGhpcy5lbmQucm93ID09IHJvdyAmJiB0aGlzLmVuZC5jb2x1bW4gPT0gY29sdW1uKSB7CiAgICAgICAgICAgIHJldHVybiAxOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIHJldHVybiB0aGlzLmNvbXBhcmUocm93LCBjb2x1bW4pOwogICAgICAgIH0KICAgIH07CiAgICB0aGlzLmNvbXBhcmVJbnNpZGUgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIGlmICh0aGlzLmVuZC5yb3cgPT0gcm93ICYmIHRoaXMuZW5kLmNvbHVtbiA9PSBjb2x1bW4pIHsKICAgICAgICAgICAgcmV0dXJuIDE7CiAgICAgICAgfSBlbHNlIGlmICh0aGlzLnN0YXJ0LnJvdyA9PSByb3cgJiYgdGhpcy5zdGFydC5jb2x1bW4gPT0gY29sdW1uKSB7CiAgICAgICAgICAgIHJldHVybiAtMTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICByZXR1cm4gdGhpcy5jb21wYXJlKHJvdywgY29sdW1uKTsKICAgICAgICB9CiAgICB9OwogICAgdGhpcy5jbGlwUm93cyA9IGZ1bmN0aW9uKGZpcnN0Um93LCBsYXN0Um93KSB7CiAgICAgICAgaWYgKHRoaXMuZW5kLnJvdyA+IGxhc3RSb3cpCiAgICAgICAgICAgIHZhciBlbmQgPSB7cm93OiBsYXN0Um93ICsgMSwgY29sdW1uOiAwfTsKICAgICAgICBlbHNlIGlmICh0aGlzLmVuZC5yb3cgPCBmaXJzdFJvdykKICAgICAgICAgICAgdmFyIGVuZCA9IHtyb3c6IGZpcnN0Um93LCBjb2x1bW46IDB9OwoKICAgICAgICBpZiAodGhpcy5zdGFydC5yb3cgPiBsYXN0Um93KQogICAgICAgICAgICB2YXIgc3RhcnQgPSB7cm93OiBsYXN0Um93ICsgMSwgY29sdW1uOiAwfTsKICAgICAgICBlbHNlIGlmICh0aGlzLnN0YXJ0LnJvdyA8IGZpcnN0Um93KQogICAgICAgICAgICB2YXIgc3RhcnQgPSB7cm93OiBmaXJzdFJvdywgY29sdW1uOiAwfTsKCiAgICAgICAgcmV0dXJuIFJhbmdlLmZyb21Qb2ludHMoc3RhcnQgfHwgdGhpcy5zdGFydCwgZW5kIHx8IHRoaXMuZW5kKTsKICAgIH07CiAgICB0aGlzLmV4dGVuZCA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgdmFyIGNtcCA9IHRoaXMuY29tcGFyZShyb3csIGNvbHVtbik7CgogICAgICAgIGlmIChjbXAgPT0gMCkKICAgICAgICAgICAgcmV0dXJuIHRoaXM7CiAgICAgICAgZWxzZSBpZiAoY21wID09IC0xKQogICAgICAgICAgICB2YXIgc3RhcnQgPSB7cm93OiByb3csIGNvbHVtbjogY29sdW1ufTsKICAgICAgICBlbHNlCiAgICAgICAgICAgIHZhciBlbmQgPSB7cm93OiByb3csIGNvbHVtbjogY29sdW1ufTsKCiAgICAgICAgcmV0dXJuIFJhbmdlLmZyb21Qb2ludHMoc3RhcnQgfHwgdGhpcy5zdGFydCwgZW5kIHx8IHRoaXMuZW5kKTsKICAgIH07CgogICAgdGhpcy5pc0VtcHR5ID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuICh0aGlzLnN0YXJ0LnJvdyA9PT0gdGhpcy5lbmQucm93ICYmIHRoaXMuc3RhcnQuY29sdW1uID09PSB0aGlzLmVuZC5jb2x1bW4pOwogICAgfTsKICAgIHRoaXMuaXNNdWx0aUxpbmUgPSBmdW5jdGlvbigpIHsKICAgICAgICByZXR1cm4gKHRoaXMuc3RhcnQucm93ICE9PSB0aGlzLmVuZC5yb3cpOwogICAgfTsKICAgIHRoaXMuY2xvbmUgPSBmdW5jdGlvbigpIHsKICAgICAgICByZXR1cm4gUmFuZ2UuZnJvbVBvaW50cyh0aGlzLnN0YXJ0LCB0aGlzLmVuZCk7CiAgICB9OwogICAgdGhpcy5jb2xsYXBzZVJvd3MgPSBmdW5jdGlvbigpIHsKICAgICAgICBpZiAodGhpcy5lbmQuY29sdW1uID09IDApCiAgICAgICAgICAgIHJldHVybiBuZXcgUmFuZ2UodGhpcy5zdGFydC5yb3csIDAsIE1hdGgubWF4KHRoaXMuc3RhcnQucm93LCB0aGlzLmVuZC5yb3ctMSksIDApOwogICAgICAgIGVsc2UKICAgICAgICAgICAgcmV0dXJuIG5ldyBSYW5nZSh0aGlzLnN0YXJ0LnJvdywgMCwgdGhpcy5lbmQucm93LCAwKTsKICAgIH07CiAgICB0aGlzLnRvU2NyZWVuUmFuZ2UgPSBmdW5jdGlvbihzZXNzaW9uKSB7CiAgICAgICAgdmFyIHNjcmVlblBvc1N0YXJ0ID0gc2Vzc2lvbi5kb2N1bWVudFRvU2NyZWVuUG9zaXRpb24odGhpcy5zdGFydCk7CiAgICAgICAgdmFyIHNjcmVlblBvc0VuZCA9IHNlc3Npb24uZG9jdW1lbnRUb1NjcmVlblBvc2l0aW9uKHRoaXMuZW5kKTsKCiAgICAgICAgcmV0dXJuIG5ldyBSYW5nZSgKICAgICAgICAgICAgc2NyZWVuUG9zU3RhcnQucm93LCBzY3JlZW5Qb3NTdGFydC5jb2x1bW4sCiAgICAgICAgICAgIHNjcmVlblBvc0VuZC5yb3csIHNjcmVlblBvc0VuZC5jb2x1bW4KICAgICAgICApOwogICAgfTsKICAgIHRoaXMubW92ZUJ5ID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICB0aGlzLnN0YXJ0LnJvdyArPSByb3c7CiAgICAgICAgdGhpcy5zdGFydC5jb2x1bW4gKz0gY29sdW1uOwogICAgICAgIHRoaXMuZW5kLnJvdyArPSByb3c7CiAgICAgICAgdGhpcy5lbmQuY29sdW1uICs9IGNvbHVtbjsKICAgIH07Cgp9KS5jYWxsKFJhbmdlLnByb3RvdHlwZSk7ClJhbmdlLmZyb21Qb2ludHMgPSBmdW5jdGlvbihzdGFydCwgZW5kKSB7CiAgICByZXR1cm4gbmV3IFJhbmdlKHN0YXJ0LnJvdywgc3RhcnQuY29sdW1uLCBlbmQucm93LCBlbmQuY29sdW1uKTsKfTsKUmFuZ2UuY29tcGFyZVBvaW50cyA9IGNvbXBhcmVQb2ludHM7CgpSYW5nZS5jb21wYXJlUG9pbnRzID0gZnVuY3Rpb24ocDEsIHAyKSB7CiAgICByZXR1cm4gcDEucm93IC0gcDIucm93IHx8IHAxLmNvbHVtbiAtIHAyLmNvbHVtbjsKfTsKCgpleHBvcnRzLlJhbmdlID0gUmFuZ2U7Cn0pOwoKYWNlLmRlZmluZSgiYWNlL2FwcGx5X2RlbHRhIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCmZ1bmN0aW9uIHRocm93RGVsdGFFcnJvcihkZWx0YSwgZXJyb3JUZXh0KXsKICAgIGNvbnNvbGUubG9nKCJJbnZhbGlkIERlbHRhOiIsIGRlbHRhKTsKICAgIHRocm93ICJJbnZhbGlkIERlbHRhOiAiICsgZXJyb3JUZXh0Owp9CgpmdW5jdGlvbiBwb3NpdGlvbkluRG9jdW1lbnQoZG9jTGluZXMsIHBvc2l0aW9uKSB7CiAgICByZXR1cm4gcG9zaXRpb24ucm93ICAgID49IDAgJiYgcG9zaXRpb24ucm93ICAgIDwgIGRvY0xpbmVzLmxlbmd0aCAmJgogICAgICAgICAgIHBvc2l0aW9uLmNvbHVtbiA+PSAwICYmIHBvc2l0aW9uLmNvbHVtbiA8PSBkb2NMaW5lc1twb3NpdGlvbi5yb3ddLmxlbmd0aDsKfQoKZnVuY3Rpb24gdmFsaWRhdGVEZWx0YShkb2NMaW5lcywgZGVsdGEpIHsKICAgIGlmIChkZWx0YS5hY3Rpb24gIT0gImluc2VydCIgJiYgZGVsdGEuYWN0aW9uICE9ICJyZW1vdmUiKQogICAgICAgIHRocm93RGVsdGFFcnJvcihkZWx0YSwgImRlbHRhLmFjdGlvbiBtdXN0IGJlICdpbnNlcnQnIG9yICdyZW1vdmUnIik7CiAgICBpZiAoIShkZWx0YS5saW5lcyBpbnN0YW5jZW9mIEFycmF5KSkKICAgICAgICB0aHJvd0RlbHRhRXJyb3IoZGVsdGEsICJkZWx0YS5saW5lcyBtdXN0IGJlIGFuIEFycmF5Iik7CiAgICBpZiAoIWRlbHRhLnN0YXJ0IHx8ICFkZWx0YS5lbmQpCiAgICAgICB0aHJvd0RlbHRhRXJyb3IoZGVsdGEsICJkZWx0YS5zdGFydC9lbmQgbXVzdCBiZSBhbiBwcmVzZW50Iik7CiAgICB2YXIgc3RhcnQgPSBkZWx0YS5zdGFydDsKICAgIGlmICghcG9zaXRpb25JbkRvY3VtZW50KGRvY0xpbmVzLCBkZWx0YS5zdGFydCkpCiAgICAgICAgdGhyb3dEZWx0YUVycm9yKGRlbHRhLCAiZGVsdGEuc3RhcnQgbXVzdCBiZSBjb250YWluZWQgaW4gZG9jdW1lbnQiKTsKICAgIHZhciBlbmQgPSBkZWx0YS5lbmQ7CiAgICBpZiAoZGVsdGEuYWN0aW9uID09ICJyZW1vdmUiICYmICFwb3NpdGlvbkluRG9jdW1lbnQoZG9jTGluZXMsIGVuZCkpCiAgICAgICAgdGhyb3dEZWx0YUVycm9yKGRlbHRhLCAiZGVsdGEuZW5kIG11c3QgY29udGFpbmVkIGluIGRvY3VtZW50IGZvciAncmVtb3ZlJyBhY3Rpb25zIik7CiAgICB2YXIgbnVtUmFuZ2VSb3dzID0gZW5kLnJvdyAtIHN0YXJ0LnJvdzsKICAgIHZhciBudW1SYW5nZUxhc3RMaW5lQ2hhcnMgPSAoZW5kLmNvbHVtbiAtIChudW1SYW5nZVJvd3MgPT0gMCA/IHN0YXJ0LmNvbHVtbiA6IDApKTsKICAgIGlmIChudW1SYW5nZVJvd3MgIT0gZGVsdGEubGluZXMubGVuZ3RoIC0gMSB8fCBkZWx0YS5saW5lc1tudW1SYW5nZVJvd3NdLmxlbmd0aCAhPSBudW1SYW5nZUxhc3RMaW5lQ2hhcnMpCiAgICAgICAgdGhyb3dEZWx0YUVycm9yKGRlbHRhLCAiZGVsdGEucmFuZ2UgbXVzdCBtYXRjaCBkZWx0YSBsaW5lcyIpOwp9CgpleHBvcnRzLmFwcGx5RGVsdGEgPSBmdW5jdGlvbihkb2NMaW5lcywgZGVsdGEsIGRvTm90VmFsaWRhdGUpIHsKICAgIAogICAgdmFyIHJvdyA9IGRlbHRhLnN0YXJ0LnJvdzsKICAgIHZhciBzdGFydENvbHVtbiA9IGRlbHRhLnN0YXJ0LmNvbHVtbjsKICAgIHZhciBsaW5lID0gZG9jTGluZXNbcm93XSB8fCAiIjsKICAgIHN3aXRjaCAoZGVsdGEuYWN0aW9uKSB7CiAgICAgICAgY2FzZSAiaW5zZXJ0IjoKICAgICAgICAgICAgdmFyIGxpbmVzID0gZGVsdGEubGluZXM7CiAgICAgICAgICAgIGlmIChsaW5lcy5sZW5ndGggPT09IDEpIHsKICAgICAgICAgICAgICAgIGRvY0xpbmVzW3Jvd10gPSBsaW5lLnN1YnN0cmluZygwLCBzdGFydENvbHVtbikgKyBkZWx0YS5saW5lc1swXSArIGxpbmUuc3Vic3RyaW5nKHN0YXJ0Q29sdW1uKTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHZhciBhcmdzID0gW3JvdywgMV0uY29uY2F0KGRlbHRhLmxpbmVzKTsKICAgICAgICAgICAgICAgIGRvY0xpbmVzLnNwbGljZS5hcHBseShkb2NMaW5lcywgYXJncyk7CiAgICAgICAgICAgICAgICBkb2NMaW5lc1tyb3ddID0gbGluZS5zdWJzdHJpbmcoMCwgc3RhcnRDb2x1bW4pICsgZG9jTGluZXNbcm93XTsKICAgICAgICAgICAgICAgIGRvY0xpbmVzW3JvdyArIGRlbHRhLmxpbmVzLmxlbmd0aCAtIDFdICs9IGxpbmUuc3Vic3RyaW5nKHN0YXJ0Q29sdW1uKTsKICAgICAgICAgICAgfQogICAgICAgICAgICBicmVhazsKICAgICAgICBjYXNlICJyZW1vdmUiOgogICAgICAgICAgICB2YXIgZW5kQ29sdW1uID0gZGVsdGEuZW5kLmNvbHVtbjsKICAgICAgICAgICAgdmFyIGVuZFJvdyA9IGRlbHRhLmVuZC5yb3c7CiAgICAgICAgICAgIGlmIChyb3cgPT09IGVuZFJvdykgewogICAgICAgICAgICAgICAgZG9jTGluZXNbcm93XSA9IGxpbmUuc3Vic3RyaW5nKDAsIHN0YXJ0Q29sdW1uKSArIGxpbmUuc3Vic3RyaW5nKGVuZENvbHVtbik7CiAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICBkb2NMaW5lcy5zcGxpY2UoCiAgICAgICAgICAgICAgICAgICAgcm93LCBlbmRSb3cgLSByb3cgKyAxLAogICAgICAgICAgICAgICAgICAgIGxpbmUuc3Vic3RyaW5nKDAsIHN0YXJ0Q29sdW1uKSArIGRvY0xpbmVzW2VuZFJvd10uc3Vic3RyaW5nKGVuZENvbHVtbikKICAgICAgICAgICAgICAgICk7CiAgICAgICAgICAgIH0KICAgICAgICAgICAgYnJlYWs7CiAgICB9Cn07Cn0pOwoKYWNlLmRlZmluZSgiYWNlL2xpYi9ldmVudF9lbWl0dGVyIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCnZhciBFdmVudEVtaXR0ZXIgPSB7fTsKdmFyIHN0b3BQcm9wYWdhdGlvbiA9IGZ1bmN0aW9uKCkgeyB0aGlzLnByb3BhZ2F0aW9uU3RvcHBlZCA9IHRydWU7IH07CnZhciBwcmV2ZW50RGVmYXVsdCA9IGZ1bmN0aW9uKCkgeyB0aGlzLmRlZmF1bHRQcmV2ZW50ZWQgPSB0cnVlOyB9OwoKRXZlbnRFbWl0dGVyLl9lbWl0ID0KRXZlbnRFbWl0dGVyLl9kaXNwYXRjaEV2ZW50ID0gZnVuY3Rpb24oZXZlbnROYW1lLCBlKSB7CiAgICB0aGlzLl9ldmVudFJlZ2lzdHJ5IHx8ICh0aGlzLl9ldmVudFJlZ2lzdHJ5ID0ge30pOwogICAgdGhpcy5fZGVmYXVsdEhhbmRsZXJzIHx8ICh0aGlzLl9kZWZhdWx0SGFuZGxlcnMgPSB7fSk7CgogICAgdmFyIGxpc3RlbmVycyA9IHRoaXMuX2V2ZW50UmVnaXN0cnlbZXZlbnROYW1lXSB8fCBbXTsKICAgIHZhciBkZWZhdWx0SGFuZGxlciA9IHRoaXMuX2RlZmF1bHRIYW5kbGVyc1tldmVudE5hbWVdOwogICAgaWYgKCFsaXN0ZW5lcnMubGVuZ3RoICYmICFkZWZhdWx0SGFuZGxlcikKICAgICAgICByZXR1cm47CgogICAgaWYgKHR5cGVvZiBlICE9ICJvYmplY3QiIHx8ICFlKQogICAgICAgIGUgPSB7fTsKCiAgICBpZiAoIWUudHlwZSkKICAgICAgICBlLnR5cGUgPSBldmVudE5hbWU7CiAgICBpZiAoIWUuc3RvcFByb3BhZ2F0aW9uKQogICAgICAgIGUuc3RvcFByb3BhZ2F0aW9uID0gc3RvcFByb3BhZ2F0aW9uOwogICAgaWYgKCFlLnByZXZlbnREZWZhdWx0KQogICAgICAgIGUucHJldmVudERlZmF1bHQgPSBwcmV2ZW50RGVmYXVsdDsKCiAgICBsaXN0ZW5lcnMgPSBsaXN0ZW5lcnMuc2xpY2UoKTsKICAgIGZvciAodmFyIGk9MDsgaTxsaXN0ZW5lcnMubGVuZ3RoOyBpKyspIHsKICAgICAgICBsaXN0ZW5lcnNbaV0oZSwgdGhpcyk7CiAgICAgICAgaWYgKGUucHJvcGFnYXRpb25TdG9wcGVkKQogICAgICAgICAgICBicmVhazsKICAgIH0KICAgIAogICAgaWYgKGRlZmF1bHRIYW5kbGVyICYmICFlLmRlZmF1bHRQcmV2ZW50ZWQpCiAgICAgICAgcmV0dXJuIGRlZmF1bHRIYW5kbGVyKGUsIHRoaXMpOwp9OwoKCkV2ZW50RW1pdHRlci5fc2lnbmFsID0gZnVuY3Rpb24oZXZlbnROYW1lLCBlKSB7CiAgICB2YXIgbGlzdGVuZXJzID0gKHRoaXMuX2V2ZW50UmVnaXN0cnkgfHwge30pW2V2ZW50TmFtZV07CiAgICBpZiAoIWxpc3RlbmVycykKICAgICAgICByZXR1cm47CiAgICBsaXN0ZW5lcnMgPSBsaXN0ZW5lcnMuc2xpY2UoKTsKICAgIGZvciAodmFyIGk9MDsgaTxsaXN0ZW5lcnMubGVuZ3RoOyBpKyspCiAgICAgICAgbGlzdGVuZXJzW2ldKGUsIHRoaXMpOwp9OwoKRXZlbnRFbWl0dGVyLm9uY2UgPSBmdW5jdGlvbihldmVudE5hbWUsIGNhbGxiYWNrKSB7CiAgICB2YXIgX3NlbGYgPSB0aGlzOwogICAgdGhpcy5vbihldmVudE5hbWUsIGZ1bmN0aW9uIG5ld0NhbGxiYWNrKCkgewogICAgICAgIF9zZWxmLm9mZihldmVudE5hbWUsIG5ld0NhbGxiYWNrKTsKICAgICAgICBjYWxsYmFjay5hcHBseShudWxsLCBhcmd1bWVudHMpOwogICAgfSk7CiAgICBpZiAoIWNhbGxiYWNrKSB7CiAgICAgICAgcmV0dXJuIG5ldyBQcm9taXNlKGZ1bmN0aW9uKHJlc29sdmUpIHsKICAgICAgICAgICAgY2FsbGJhY2sgPSByZXNvbHZlOwogICAgICAgIH0pOwogICAgfQp9OwoKCkV2ZW50RW1pdHRlci5zZXREZWZhdWx0SGFuZGxlciA9IGZ1bmN0aW9uKGV2ZW50TmFtZSwgY2FsbGJhY2spIHsKICAgIHZhciBoYW5kbGVycyA9IHRoaXMuX2RlZmF1bHRIYW5kbGVyczsKICAgIGlmICghaGFuZGxlcnMpCiAgICAgICAgaGFuZGxlcnMgPSB0aGlzLl9kZWZhdWx0SGFuZGxlcnMgPSB7X2Rpc2FibGVkXzoge319OwogICAgCiAgICBpZiAoaGFuZGxlcnNbZXZlbnROYW1lXSkgewogICAgICAgIHZhciBvbGQgPSBoYW5kbGVyc1tldmVudE5hbWVdOwogICAgICAgIHZhciBkaXNhYmxlZCA9IGhhbmRsZXJzLl9kaXNhYmxlZF9bZXZlbnROYW1lXTsKICAgICAgICBpZiAoIWRpc2FibGVkKQogICAgICAgICAgICBoYW5kbGVycy5fZGlzYWJsZWRfW2V2ZW50TmFtZV0gPSBkaXNhYmxlZCA9IFtdOwogICAgICAgIGRpc2FibGVkLnB1c2gob2xkKTsKICAgICAgICB2YXIgaSA9IGRpc2FibGVkLmluZGV4T2YoY2FsbGJhY2spOwogICAgICAgIGlmIChpICE9IC0xKSAKICAgICAgICAgICAgZGlzYWJsZWQuc3BsaWNlKGksIDEpOwogICAgfQogICAgaGFuZGxlcnNbZXZlbnROYW1lXSA9IGNhbGxiYWNrOwp9OwpFdmVudEVtaXR0ZXIucmVtb3ZlRGVmYXVsdEhhbmRsZXIgPSBmdW5jdGlvbihldmVudE5hbWUsIGNhbGxiYWNrKSB7CiAgICB2YXIgaGFuZGxlcnMgPSB0aGlzLl9kZWZhdWx0SGFuZGxlcnM7CiAgICBpZiAoIWhhbmRsZXJzKQogICAgICAgIHJldHVybjsKICAgIHZhciBkaXNhYmxlZCA9IGhhbmRsZXJzLl9kaXNhYmxlZF9bZXZlbnROYW1lXTsKICAgIAogICAgaWYgKGhhbmRsZXJzW2V2ZW50TmFtZV0gPT0gY2FsbGJhY2spIHsKICAgICAgICBpZiAoZGlzYWJsZWQpCiAgICAgICAgICAgIHRoaXMuc2V0RGVmYXVsdEhhbmRsZXIoZXZlbnROYW1lLCBkaXNhYmxlZC5wb3AoKSk7CiAgICB9IGVsc2UgaWYgKGRpc2FibGVkKSB7CiAgICAgICAgdmFyIGkgPSBkaXNhYmxlZC5pbmRleE9mKGNhbGxiYWNrKTsKICAgICAgICBpZiAoaSAhPSAtMSkKICAgICAgICAgICAgZGlzYWJsZWQuc3BsaWNlKGksIDEpOwogICAgfQp9OwoKRXZlbnRFbWl0dGVyLm9uID0KRXZlbnRFbWl0dGVyLmFkZEV2ZW50TGlzdGVuZXIgPSBmdW5jdGlvbihldmVudE5hbWUsIGNhbGxiYWNrLCBjYXB0dXJpbmcpIHsKICAgIHRoaXMuX2V2ZW50UmVnaXN0cnkgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5IHx8IHt9OwoKICAgIHZhciBsaXN0ZW5lcnMgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5W2V2ZW50TmFtZV07CiAgICBpZiAoIWxpc3RlbmVycykKICAgICAgICBsaXN0ZW5lcnMgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5W2V2ZW50TmFtZV0gPSBbXTsKCiAgICBpZiAobGlzdGVuZXJzLmluZGV4T2YoY2FsbGJhY2spID09IC0xKQogICAgICAgIGxpc3RlbmVyc1tjYXB0dXJpbmcgPyAidW5zaGlmdCIgOiAicHVzaCJdKGNhbGxiYWNrKTsKICAgIHJldHVybiBjYWxsYmFjazsKfTsKCkV2ZW50RW1pdHRlci5vZmYgPQpFdmVudEVtaXR0ZXIucmVtb3ZlTGlzdGVuZXIgPQpFdmVudEVtaXR0ZXIucmVtb3ZlRXZlbnRMaXN0ZW5lciA9IGZ1bmN0aW9uKGV2ZW50TmFtZSwgY2FsbGJhY2spIHsKICAgIHRoaXMuX2V2ZW50UmVnaXN0cnkgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5IHx8IHt9OwoKICAgIHZhciBsaXN0ZW5lcnMgPSB0aGlzLl9ldmVudFJlZ2lzdHJ5W2V2ZW50TmFtZV07CiAgICBpZiAoIWxpc3RlbmVycykKICAgICAgICByZXR1cm47CgogICAgdmFyIGluZGV4ID0gbGlzdGVuZXJzLmluZGV4T2YoY2FsbGJhY2spOwogICAgaWYgKGluZGV4ICE9PSAtMSkKICAgICAgICBsaXN0ZW5lcnMuc3BsaWNlKGluZGV4LCAxKTsKfTsKCkV2ZW50RW1pdHRlci5yZW1vdmVBbGxMaXN0ZW5lcnMgPSBmdW5jdGlvbihldmVudE5hbWUpIHsKICAgIGlmICghZXZlbnROYW1lKSB0aGlzLl9ldmVudFJlZ2lzdHJ5ID0gdGhpcy5fZGVmYXVsdEhhbmRsZXJzID0gdW5kZWZpbmVkOwogICAgaWYgKHRoaXMuX2V2ZW50UmVnaXN0cnkpIHRoaXMuX2V2ZW50UmVnaXN0cnlbZXZlbnROYW1lXSA9IHVuZGVmaW5lZDsKICAgIGlmICh0aGlzLl9kZWZhdWx0SGFuZGxlcnMpIHRoaXMuX2RlZmF1bHRIYW5kbGVyc1tldmVudE5hbWVdID0gdW5kZWZpbmVkOwp9OwoKZXhwb3J0cy5FdmVudEVtaXR0ZXIgPSBFdmVudEVtaXR0ZXI7Cgp9KTsKCmFjZS5kZWZpbmUoImFjZS9hbmNob3IiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKdmFyIG9vcCA9IHJlcXVpcmUoIi4vbGliL29vcCIpOwp2YXIgRXZlbnRFbWl0dGVyID0gcmVxdWlyZSgiLi9saWIvZXZlbnRfZW1pdHRlciIpLkV2ZW50RW1pdHRlcjsKCnZhciBBbmNob3IgPSBleHBvcnRzLkFuY2hvciA9IGZ1bmN0aW9uKGRvYywgcm93LCBjb2x1bW4pIHsKICAgIHRoaXMuJG9uQ2hhbmdlID0gdGhpcy5vbkNoYW5nZS5iaW5kKHRoaXMpOwogICAgdGhpcy5hdHRhY2goZG9jKTsKICAgIAogICAgaWYgKHR5cGVvZiBjb2x1bW4gPT0gInVuZGVmaW5lZCIpCiAgICAgICAgdGhpcy5zZXRQb3NpdGlvbihyb3cucm93LCByb3cuY29sdW1uKTsKICAgIGVsc2UKICAgICAgICB0aGlzLnNldFBvc2l0aW9uKHJvdywgY29sdW1uKTsKfTsKCihmdW5jdGlvbigpIHsKCiAgICBvb3AuaW1wbGVtZW50KHRoaXMsIEV2ZW50RW1pdHRlcik7CiAgICB0aGlzLmdldFBvc2l0aW9uID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGNsaXBQb3NpdGlvblRvRG9jdW1lbnQodGhpcy5yb3csIHRoaXMuY29sdW1uKTsKICAgIH07CiAgICB0aGlzLmdldERvY3VtZW50ID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuZG9jdW1lbnQ7CiAgICB9OwogICAgdGhpcy4kaW5zZXJ0UmlnaHQgPSBmYWxzZTsKICAgIHRoaXMub25DaGFuZ2UgPSBmdW5jdGlvbihkZWx0YSkgewogICAgICAgIGlmIChkZWx0YS5zdGFydC5yb3cgPT0gZGVsdGEuZW5kLnJvdyAmJiBkZWx0YS5zdGFydC5yb3cgIT0gdGhpcy5yb3cpCiAgICAgICAgICAgIHJldHVybjsKCiAgICAgICAgaWYgKGRlbHRhLnN0YXJ0LnJvdyA+IHRoaXMucm93KQogICAgICAgICAgICByZXR1cm47CiAgICAgICAgICAgIAogICAgICAgIHZhciBwb2ludCA9ICRnZXRUcmFuc2Zvcm1lZFBvaW50KGRlbHRhLCB7cm93OiB0aGlzLnJvdywgY29sdW1uOiB0aGlzLmNvbHVtbn0sIHRoaXMuJGluc2VydFJpZ2h0KTsKICAgICAgICB0aGlzLnNldFBvc2l0aW9uKHBvaW50LnJvdywgcG9pbnQuY29sdW1uLCB0cnVlKTsKICAgIH07CiAgICAKICAgIGZ1bmN0aW9uICRwb2ludHNJbk9yZGVyKHBvaW50MSwgcG9pbnQyLCBlcXVhbFBvaW50c0luT3JkZXIpIHsKICAgICAgICB2YXIgYkNvbElzQWZ0ZXIgPSBlcXVhbFBvaW50c0luT3JkZXIgPyBwb2ludDEuY29sdW1uIDw9IHBvaW50Mi5jb2x1bW4gOiBwb2ludDEuY29sdW1uIDwgcG9pbnQyLmNvbHVtbjsKICAgICAgICByZXR1cm4gKHBvaW50MS5yb3cgPCBwb2ludDIucm93KSB8fCAocG9pbnQxLnJvdyA9PSBwb2ludDIucm93ICYmIGJDb2xJc0FmdGVyKTsKICAgIH0KICAgICAgICAgICAgCiAgICBmdW5jdGlvbiAkZ2V0VHJhbnNmb3JtZWRQb2ludChkZWx0YSwgcG9pbnQsIG1vdmVJZkVxdWFsKSB7CiAgICAgICAgdmFyIGRlbHRhSXNJbnNlcnQgPSBkZWx0YS5hY3Rpb24gPT0gImluc2VydCI7CiAgICAgICAgdmFyIGRlbHRhUm93U2hpZnQgPSAoZGVsdGFJc0luc2VydCA/IDEgOiAtMSkgKiAoZGVsdGEuZW5kLnJvdyAgICAtIGRlbHRhLnN0YXJ0LnJvdyk7CiAgICAgICAgdmFyIGRlbHRhQ29sU2hpZnQgPSAoZGVsdGFJc0luc2VydCA/IDEgOiAtMSkgKiAoZGVsdGEuZW5kLmNvbHVtbiAtIGRlbHRhLnN0YXJ0LmNvbHVtbik7CiAgICAgICAgdmFyIGRlbHRhU3RhcnQgPSBkZWx0YS5zdGFydDsKICAgICAgICB2YXIgZGVsdGFFbmQgPSBkZWx0YUlzSW5zZXJ0ID8gZGVsdGFTdGFydCA6IGRlbHRhLmVuZDsgLy8gQ29sbGFwc2UgaW5zZXJ0IHJhbmdlLgogICAgICAgIGlmICgkcG9pbnRzSW5PcmRlcihwb2ludCwgZGVsdGFTdGFydCwgbW92ZUlmRXF1YWwpKSB7CiAgICAgICAgICAgIHJldHVybiB7CiAgICAgICAgICAgICAgICByb3c6IHBvaW50LnJvdywKICAgICAgICAgICAgICAgIGNvbHVtbjogcG9pbnQuY29sdW1uCiAgICAgICAgICAgIH07CiAgICAgICAgfQogICAgICAgIGlmICgkcG9pbnRzSW5PcmRlcihkZWx0YUVuZCwgcG9pbnQsICFtb3ZlSWZFcXVhbCkpIHsKICAgICAgICAgICAgcmV0dXJuIHsKICAgICAgICAgICAgICAgIHJvdzogcG9pbnQucm93ICsgZGVsdGFSb3dTaGlmdCwKICAgICAgICAgICAgICAgIGNvbHVtbjogcG9pbnQuY29sdW1uICsgKHBvaW50LnJvdyA9PSBkZWx0YUVuZC5yb3cgPyBkZWx0YUNvbFNoaWZ0IDogMCkKICAgICAgICAgICAgfTsKICAgICAgICB9CiAgICAgICAgCiAgICAgICAgcmV0dXJuIHsKICAgICAgICAgICAgcm93OiBkZWx0YVN0YXJ0LnJvdywKICAgICAgICAgICAgY29sdW1uOiBkZWx0YVN0YXJ0LmNvbHVtbgogICAgICAgIH07CiAgICB9CiAgICB0aGlzLnNldFBvc2l0aW9uID0gZnVuY3Rpb24ocm93LCBjb2x1bW4sIG5vQ2xpcCkgewogICAgICAgIHZhciBwb3M7CiAgICAgICAgaWYgKG5vQ2xpcCkgewogICAgICAgICAgICBwb3MgPSB7CiAgICAgICAgICAgICAgICByb3c6IHJvdywKICAgICAgICAgICAgICAgIGNvbHVtbjogY29sdW1uCiAgICAgICAgICAgIH07CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgcG9zID0gdGhpcy4kY2xpcFBvc2l0aW9uVG9Eb2N1bWVudChyb3csIGNvbHVtbik7CiAgICAgICAgfQoKICAgICAgICBpZiAodGhpcy5yb3cgPT0gcG9zLnJvdyAmJiB0aGlzLmNvbHVtbiA9PSBwb3MuY29sdW1uKQogICAgICAgICAgICByZXR1cm47CgogICAgICAgIHZhciBvbGQgPSB7CiAgICAgICAgICAgIHJvdzogdGhpcy5yb3csCiAgICAgICAgICAgIGNvbHVtbjogdGhpcy5jb2x1bW4KICAgICAgICB9OwoKICAgICAgICB0aGlzLnJvdyA9IHBvcy5yb3c7CiAgICAgICAgdGhpcy5jb2x1bW4gPSBwb3MuY29sdW1uOwogICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlIiwgewogICAgICAgICAgICBvbGQ6IG9sZCwKICAgICAgICAgICAgdmFsdWU6IHBvcwogICAgICAgIH0pOwogICAgfTsKICAgIHRoaXMuZGV0YWNoID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdGhpcy5kb2N1bWVudC5vZmYoImNoYW5nZSIsIHRoaXMuJG9uQ2hhbmdlKTsKICAgIH07CiAgICB0aGlzLmF0dGFjaCA9IGZ1bmN0aW9uKGRvYykgewogICAgICAgIHRoaXMuZG9jdW1lbnQgPSBkb2MgfHwgdGhpcy5kb2N1bWVudDsKICAgICAgICB0aGlzLmRvY3VtZW50Lm9uKCJjaGFuZ2UiLCB0aGlzLiRvbkNoYW5nZSk7CiAgICB9OwogICAgdGhpcy4kY2xpcFBvc2l0aW9uVG9Eb2N1bWVudCA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgdmFyIHBvcyA9IHt9OwoKICAgICAgICBpZiAocm93ID49IHRoaXMuZG9jdW1lbnQuZ2V0TGVuZ3RoKCkpIHsKICAgICAgICAgICAgcG9zLnJvdyA9IE1hdGgubWF4KDAsIHRoaXMuZG9jdW1lbnQuZ2V0TGVuZ3RoKCkgLSAxKTsKICAgICAgICAgICAgcG9zLmNvbHVtbiA9IHRoaXMuZG9jdW1lbnQuZ2V0TGluZShwb3Mucm93KS5sZW5ndGg7CiAgICAgICAgfQogICAgICAgIGVsc2UgaWYgKHJvdyA8IDApIHsKICAgICAgICAgICAgcG9zLnJvdyA9IDA7CiAgICAgICAgICAgIHBvcy5jb2x1bW4gPSAwOwogICAgICAgIH0KICAgICAgICBlbHNlIHsKICAgICAgICAgICAgcG9zLnJvdyA9IHJvdzsKICAgICAgICAgICAgcG9zLmNvbHVtbiA9IE1hdGgubWluKHRoaXMuZG9jdW1lbnQuZ2V0TGluZShwb3Mucm93KS5sZW5ndGgsIE1hdGgubWF4KDAsIGNvbHVtbikpOwogICAgICAgIH0KCiAgICAgICAgaWYgKGNvbHVtbiA8IDApCiAgICAgICAgICAgIHBvcy5jb2x1bW4gPSAwOwoKICAgICAgICByZXR1cm4gcG9zOwogICAgfTsKCn0pLmNhbGwoQW5jaG9yLnByb3RvdHlwZSk7Cgp9KTsKCmFjZS5kZWZpbmUoImFjZS9kb2N1bWVudCIsW10sIGZ1bmN0aW9uKHJlcXVpcmUsIGV4cG9ydHMsIG1vZHVsZSkgewoidXNlIHN0cmljdCI7Cgp2YXIgb29wID0gcmVxdWlyZSgiLi9saWIvb29wIik7CnZhciBhcHBseURlbHRhID0gcmVxdWlyZSgiLi9hcHBseV9kZWx0YSIpLmFwcGx5RGVsdGE7CnZhciBFdmVudEVtaXR0ZXIgPSByZXF1aXJlKCIuL2xpYi9ldmVudF9lbWl0dGVyIikuRXZlbnRFbWl0dGVyOwp2YXIgUmFuZ2UgPSByZXF1aXJlKCIuL3JhbmdlIikuUmFuZ2U7CnZhciBBbmNob3IgPSByZXF1aXJlKCIuL2FuY2hvciIpLkFuY2hvcjsKCnZhciBEb2N1bWVudCA9IGZ1bmN0aW9uKHRleHRPckxpbmVzKSB7CiAgICB0aGlzLiRsaW5lcyA9IFsiIl07CiAgICBpZiAodGV4dE9yTGluZXMubGVuZ3RoID09PSAwKSB7CiAgICAgICAgdGhpcy4kbGluZXMgPSBbIiJdOwogICAgfSBlbHNlIGlmIChBcnJheS5pc0FycmF5KHRleHRPckxpbmVzKSkgewogICAgICAgIHRoaXMuaW5zZXJ0TWVyZ2VkTGluZXMoe3JvdzogMCwgY29sdW1uOiAwfSwgdGV4dE9yTGluZXMpOwogICAgfSBlbHNlIHsKICAgICAgICB0aGlzLmluc2VydCh7cm93OiAwLCBjb2x1bW46MH0sIHRleHRPckxpbmVzKTsKICAgIH0KfTsKCihmdW5jdGlvbigpIHsKCiAgICBvb3AuaW1wbGVtZW50KHRoaXMsIEV2ZW50RW1pdHRlcik7CiAgICB0aGlzLnNldFZhbHVlID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgIHZhciBsZW4gPSB0aGlzLmdldExlbmd0aCgpIC0gMTsKICAgICAgICB0aGlzLnJlbW92ZShuZXcgUmFuZ2UoMCwgMCwgbGVuLCB0aGlzLmdldExpbmUobGVuKS5sZW5ndGgpKTsKICAgICAgICB0aGlzLmluc2VydCh7cm93OiAwLCBjb2x1bW46IDB9LCB0ZXh0KTsKICAgIH07CiAgICB0aGlzLmdldFZhbHVlID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0QWxsTGluZXMoKS5qb2luKHRoaXMuZ2V0TmV3TGluZUNoYXJhY3RlcigpKTsKICAgIH07CiAgICB0aGlzLmNyZWF0ZUFuY2hvciA9IGZ1bmN0aW9uKHJvdywgY29sdW1uKSB7CiAgICAgICAgcmV0dXJuIG5ldyBBbmNob3IodGhpcywgcm93LCBjb2x1bW4pOwogICAgfTsKICAgIGlmICgiYWFhIi5zcGxpdCgvYS8pLmxlbmd0aCA9PT0gMCkgewogICAgICAgIHRoaXMuJHNwbGl0ID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgICAgICByZXR1cm4gdGV4dC5yZXBsYWNlKC9cclxufFxyL2csICJcbiIpLnNwbGl0KCJcbiIpOwogICAgICAgIH07CiAgICB9IGVsc2UgewogICAgICAgIHRoaXMuJHNwbGl0ID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgICAgICByZXR1cm4gdGV4dC5zcGxpdCgvXHJcbnxccnxcbi8pOwogICAgICAgIH07CiAgICB9CgoKICAgIHRoaXMuJGRldGVjdE5ld0xpbmUgPSBmdW5jdGlvbih0ZXh0KSB7CiAgICAgICAgdmFyIG1hdGNoID0gdGV4dC5tYXRjaCgvXi4qPyhcclxufFxyfFxuKS9tKTsKICAgICAgICB0aGlzLiRhdXRvTmV3TGluZSA9IG1hdGNoID8gbWF0Y2hbMV0gOiAiXG4iOwogICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlTmV3TGluZU1vZGUiKTsKICAgIH07CiAgICB0aGlzLmdldE5ld0xpbmVDaGFyYWN0ZXIgPSBmdW5jdGlvbigpIHsKICAgICAgICBzd2l0Y2ggKHRoaXMuJG5ld0xpbmVNb2RlKSB7CiAgICAgICAgICBjYXNlICJ3aW5kb3dzIjoKICAgICAgICAgICAgcmV0dXJuICJcclxuIjsKICAgICAgICAgIGNhc2UgInVuaXgiOgogICAgICAgICAgICByZXR1cm4gIlxuIjsKICAgICAgICAgIGRlZmF1bHQ6CiAgICAgICAgICAgIHJldHVybiB0aGlzLiRhdXRvTmV3TGluZSB8fCAiXG4iOwogICAgICAgIH0KICAgIH07CgogICAgdGhpcy4kYXV0b05ld0xpbmUgPSAiIjsKICAgIHRoaXMuJG5ld0xpbmVNb2RlID0gImF1dG8iOwogICAgdGhpcy5zZXROZXdMaW5lTW9kZSA9IGZ1bmN0aW9uKG5ld0xpbmVNb2RlKSB7CiAgICAgICAgaWYgKHRoaXMuJG5ld0xpbmVNb2RlID09PSBuZXdMaW5lTW9kZSkKICAgICAgICAgICAgcmV0dXJuOwoKICAgICAgICB0aGlzLiRuZXdMaW5lTW9kZSA9IG5ld0xpbmVNb2RlOwogICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlTmV3TGluZU1vZGUiKTsKICAgIH07CiAgICB0aGlzLmdldE5ld0xpbmVNb2RlID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJG5ld0xpbmVNb2RlOwogICAgfTsKICAgIHRoaXMuaXNOZXdMaW5lID0gZnVuY3Rpb24odGV4dCkgewogICAgICAgIHJldHVybiAodGV4dCA9PSAiXHJcbiIgfHwgdGV4dCA9PSAiXHIiIHx8IHRleHQgPT0gIlxuIik7CiAgICB9OwogICAgdGhpcy5nZXRMaW5lID0gZnVuY3Rpb24ocm93KSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGxpbmVzW3Jvd10gfHwgIiI7CiAgICB9OwogICAgdGhpcy5nZXRMaW5lcyA9IGZ1bmN0aW9uKGZpcnN0Um93LCBsYXN0Um93KSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGxpbmVzLnNsaWNlKGZpcnN0Um93LCBsYXN0Um93ICsgMSk7CiAgICB9OwogICAgdGhpcy5nZXRBbGxMaW5lcyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiB0aGlzLmdldExpbmVzKDAsIHRoaXMuZ2V0TGVuZ3RoKCkpOwogICAgfTsKICAgIHRoaXMuZ2V0TGVuZ3RoID0gZnVuY3Rpb24oKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuJGxpbmVzLmxlbmd0aDsKICAgIH07CiAgICB0aGlzLmdldFRleHRSYW5nZSA9IGZ1bmN0aW9uKHJhbmdlKSB7CiAgICAgICAgcmV0dXJuIHRoaXMuZ2V0TGluZXNGb3JSYW5nZShyYW5nZSkuam9pbih0aGlzLmdldE5ld0xpbmVDaGFyYWN0ZXIoKSk7CiAgICB9OwogICAgdGhpcy5nZXRMaW5lc0ZvclJhbmdlID0gZnVuY3Rpb24ocmFuZ2UpIHsKICAgICAgICB2YXIgbGluZXM7CiAgICAgICAgaWYgKHJhbmdlLnN0YXJ0LnJvdyA9PT0gcmFuZ2UuZW5kLnJvdykgewogICAgICAgICAgICBsaW5lcyA9IFt0aGlzLmdldExpbmUocmFuZ2Uuc3RhcnQucm93KS5zdWJzdHJpbmcocmFuZ2Uuc3RhcnQuY29sdW1uLCByYW5nZS5lbmQuY29sdW1uKV07CiAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgbGluZXMgPSB0aGlzLmdldExpbmVzKHJhbmdlLnN0YXJ0LnJvdywgcmFuZ2UuZW5kLnJvdyk7CiAgICAgICAgICAgIGxpbmVzWzBdID0gKGxpbmVzWzBdIHx8ICIiKS5zdWJzdHJpbmcocmFuZ2Uuc3RhcnQuY29sdW1uKTsKICAgICAgICAgICAgdmFyIGwgPSBsaW5lcy5sZW5ndGggLSAxOwogICAgICAgICAgICBpZiAocmFuZ2UuZW5kLnJvdyAtIHJhbmdlLnN0YXJ0LnJvdyA9PSBsKQogICAgICAgICAgICAgICAgbGluZXNbbF0gPSBsaW5lc1tsXS5zdWJzdHJpbmcoMCwgcmFuZ2UuZW5kLmNvbHVtbik7CiAgICAgICAgfQogICAgICAgIHJldHVybiBsaW5lczsKICAgIH07CiAgICB0aGlzLmluc2VydExpbmVzID0gZnVuY3Rpb24ocm93LCBsaW5lcykgewogICAgICAgIGNvbnNvbGUud2FybigiVXNlIG9mIGRvY3VtZW50Lmluc2VydExpbmVzIGlzIGRlcHJlY2F0ZWQuIFVzZSB0aGUgaW5zZXJ0RnVsbExpbmVzIG1ldGhvZCBpbnN0ZWFkLiIpOwogICAgICAgIHJldHVybiB0aGlzLmluc2VydEZ1bGxMaW5lcyhyb3csIGxpbmVzKTsKICAgIH07CiAgICB0aGlzLnJlbW92ZUxpbmVzID0gZnVuY3Rpb24oZmlyc3RSb3csIGxhc3RSb3cpIHsKICAgICAgICBjb25zb2xlLndhcm4oIlVzZSBvZiBkb2N1bWVudC5yZW1vdmVMaW5lcyBpcyBkZXByZWNhdGVkLiBVc2UgdGhlIHJlbW92ZUZ1bGxMaW5lcyBtZXRob2QgaW5zdGVhZC4iKTsKICAgICAgICByZXR1cm4gdGhpcy5yZW1vdmVGdWxsTGluZXMoZmlyc3RSb3csIGxhc3RSb3cpOwogICAgfTsKICAgIHRoaXMuaW5zZXJ0TmV3TGluZSA9IGZ1bmN0aW9uKHBvc2l0aW9uKSB7CiAgICAgICAgY29uc29sZS53YXJuKCJVc2Ugb2YgZG9jdW1lbnQuaW5zZXJ0TmV3TGluZSBpcyBkZXByZWNhdGVkLiBVc2UgaW5zZXJ0TWVyZ2VkTGluZXMocG9zaXRpb24sIFsnJywgJyddKSBpbnN0ZWFkLiIpOwogICAgICAgIHJldHVybiB0aGlzLmluc2VydE1lcmdlZExpbmVzKHBvc2l0aW9uLCBbIiIsICIiXSk7CiAgICB9OwogICAgdGhpcy5pbnNlcnQgPSBmdW5jdGlvbihwb3NpdGlvbiwgdGV4dCkgewogICAgICAgIGlmICh0aGlzLmdldExlbmd0aCgpIDw9IDEpCiAgICAgICAgICAgIHRoaXMuJGRldGVjdE5ld0xpbmUodGV4dCk7CiAgICAgICAgCiAgICAgICAgcmV0dXJuIHRoaXMuaW5zZXJ0TWVyZ2VkTGluZXMocG9zaXRpb24sIHRoaXMuJHNwbGl0KHRleHQpKTsKICAgIH07CiAgICB0aGlzLmluc2VydEluTGluZSA9IGZ1bmN0aW9uKHBvc2l0aW9uLCB0ZXh0KSB7CiAgICAgICAgdmFyIHN0YXJ0ID0gdGhpcy5jbGlwcGVkUG9zKHBvc2l0aW9uLnJvdywgcG9zaXRpb24uY29sdW1uKTsKICAgICAgICB2YXIgZW5kID0gdGhpcy5wb3MocG9zaXRpb24ucm93LCBwb3NpdGlvbi5jb2x1bW4gKyB0ZXh0Lmxlbmd0aCk7CiAgICAgICAgCiAgICAgICAgdGhpcy5hcHBseURlbHRhKHsKICAgICAgICAgICAgc3RhcnQ6IHN0YXJ0LAogICAgICAgICAgICBlbmQ6IGVuZCwKICAgICAgICAgICAgYWN0aW9uOiAiaW5zZXJ0IiwKICAgICAgICAgICAgbGluZXM6IFt0ZXh0XQogICAgICAgIH0sIHRydWUpOwogICAgICAgIAogICAgICAgIHJldHVybiB0aGlzLmNsb25lUG9zKGVuZCk7CiAgICB9OwogICAgCiAgICB0aGlzLmNsaXBwZWRQb3MgPSBmdW5jdGlvbihyb3csIGNvbHVtbikgewogICAgICAgIHZhciBsZW5ndGggPSB0aGlzLmdldExlbmd0aCgpOwogICAgICAgIGlmIChyb3cgPT09IHVuZGVmaW5lZCkgewogICAgICAgICAgICByb3cgPSBsZW5ndGg7CiAgICAgICAgfSBlbHNlIGlmIChyb3cgPCAwKSB7CiAgICAgICAgICAgIHJvdyA9IDA7CiAgICAgICAgfSBlbHNlIGlmIChyb3cgPj0gbGVuZ3RoKSB7CiAgICAgICAgICAgIHJvdyA9IGxlbmd0aCAtIDE7CiAgICAgICAgICAgIGNvbHVtbiA9IHVuZGVmaW5lZDsKICAgICAgICB9CiAgICAgICAgdmFyIGxpbmUgPSB0aGlzLmdldExpbmUocm93KTsKICAgICAgICBpZiAoY29sdW1uID09IHVuZGVmaW5lZCkKICAgICAgICAgICAgY29sdW1uID0gbGluZS5sZW5ndGg7CiAgICAgICAgY29sdW1uID0gTWF0aC5taW4oTWF0aC5tYXgoY29sdW1uLCAwKSwgbGluZS5sZW5ndGgpOwogICAgICAgIHJldHVybiB7cm93OiByb3csIGNvbHVtbjogY29sdW1ufTsKICAgIH07CiAgICAKICAgIHRoaXMuY2xvbmVQb3MgPSBmdW5jdGlvbihwb3MpIHsKICAgICAgICByZXR1cm4ge3JvdzogcG9zLnJvdywgY29sdW1uOiBwb3MuY29sdW1ufTsKICAgIH07CiAgICAKICAgIHRoaXMucG9zID0gZnVuY3Rpb24ocm93LCBjb2x1bW4pIHsKICAgICAgICByZXR1cm4ge3Jvdzogcm93LCBjb2x1bW46IGNvbHVtbn07CiAgICB9OwogICAgCiAgICB0aGlzLiRjbGlwUG9zaXRpb24gPSBmdW5jdGlvbihwb3NpdGlvbikgewogICAgICAgIHZhciBsZW5ndGggPSB0aGlzLmdldExlbmd0aCgpOwogICAgICAgIGlmIChwb3NpdGlvbi5yb3cgPj0gbGVuZ3RoKSB7CiAgICAgICAgICAgIHBvc2l0aW9uLnJvdyA9IE1hdGgubWF4KDAsIGxlbmd0aCAtIDEpOwogICAgICAgICAgICBwb3NpdGlvbi5jb2x1bW4gPSB0aGlzLmdldExpbmUobGVuZ3RoIC0gMSkubGVuZ3RoOwogICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgIHBvc2l0aW9uLnJvdyA9IE1hdGgubWF4KDAsIHBvc2l0aW9uLnJvdyk7CiAgICAgICAgICAgIHBvc2l0aW9uLmNvbHVtbiA9IE1hdGgubWluKE1hdGgubWF4KHBvc2l0aW9uLmNvbHVtbiwgMCksIHRoaXMuZ2V0TGluZShwb3NpdGlvbi5yb3cpLmxlbmd0aCk7CiAgICAgICAgfQogICAgICAgIHJldHVybiBwb3NpdGlvbjsKICAgIH07CiAgICB0aGlzLmluc2VydEZ1bGxMaW5lcyA9IGZ1bmN0aW9uKHJvdywgbGluZXMpIHsKICAgICAgICByb3cgPSBNYXRoLm1pbihNYXRoLm1heChyb3csIDApLCB0aGlzLmdldExlbmd0aCgpKTsKICAgICAgICB2YXIgY29sdW1uID0gMDsKICAgICAgICBpZiAocm93IDwgdGhpcy5nZXRMZW5ndGgoKSkgewogICAgICAgICAgICBsaW5lcyA9IGxpbmVzLmNvbmNhdChbIiJdKTsKICAgICAgICAgICAgY29sdW1uID0gMDsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBsaW5lcyA9IFsiIl0uY29uY2F0KGxpbmVzKTsKICAgICAgICAgICAgcm93LS07CiAgICAgICAgICAgIGNvbHVtbiA9IHRoaXMuJGxpbmVzW3Jvd10ubGVuZ3RoOwogICAgICAgIH0KICAgICAgICB0aGlzLmluc2VydE1lcmdlZExpbmVzKHtyb3c6IHJvdywgY29sdW1uOiBjb2x1bW59LCBsaW5lcyk7CiAgICB9OyAgICAKICAgIHRoaXMuaW5zZXJ0TWVyZ2VkTGluZXMgPSBmdW5jdGlvbihwb3NpdGlvbiwgbGluZXMpIHsKICAgICAgICB2YXIgc3RhcnQgPSB0aGlzLmNsaXBwZWRQb3MocG9zaXRpb24ucm93LCBwb3NpdGlvbi5jb2x1bW4pOwogICAgICAgIHZhciBlbmQgPSB7CiAgICAgICAgICAgIHJvdzogc3RhcnQucm93ICsgbGluZXMubGVuZ3RoIC0gMSwKICAgICAgICAgICAgY29sdW1uOiAobGluZXMubGVuZ3RoID09IDEgPyBzdGFydC5jb2x1bW4gOiAwKSArIGxpbmVzW2xpbmVzLmxlbmd0aCAtIDFdLmxlbmd0aAogICAgICAgIH07CiAgICAgICAgCiAgICAgICAgdGhpcy5hcHBseURlbHRhKHsKICAgICAgICAgICAgc3RhcnQ6IHN0YXJ0LAogICAgICAgICAgICBlbmQ6IGVuZCwKICAgICAgICAgICAgYWN0aW9uOiAiaW5zZXJ0IiwKICAgICAgICAgICAgbGluZXM6IGxpbmVzCiAgICAgICAgfSk7CiAgICAgICAgCiAgICAgICAgcmV0dXJuIHRoaXMuY2xvbmVQb3MoZW5kKTsKICAgIH07CiAgICB0aGlzLnJlbW92ZSA9IGZ1bmN0aW9uKHJhbmdlKSB7CiAgICAgICAgdmFyIHN0YXJ0ID0gdGhpcy5jbGlwcGVkUG9zKHJhbmdlLnN0YXJ0LnJvdywgcmFuZ2Uuc3RhcnQuY29sdW1uKTsKICAgICAgICB2YXIgZW5kID0gdGhpcy5jbGlwcGVkUG9zKHJhbmdlLmVuZC5yb3csIHJhbmdlLmVuZC5jb2x1bW4pOwogICAgICAgIHRoaXMuYXBwbHlEZWx0YSh7CiAgICAgICAgICAgIHN0YXJ0OiBzdGFydCwKICAgICAgICAgICAgZW5kOiBlbmQsCiAgICAgICAgICAgIGFjdGlvbjogInJlbW92ZSIsCiAgICAgICAgICAgIGxpbmVzOiB0aGlzLmdldExpbmVzRm9yUmFuZ2Uoe3N0YXJ0OiBzdGFydCwgZW5kOiBlbmR9KQogICAgICAgIH0pOwogICAgICAgIHJldHVybiB0aGlzLmNsb25lUG9zKHN0YXJ0KTsKICAgIH07CiAgICB0aGlzLnJlbW92ZUluTGluZSA9IGZ1bmN0aW9uKHJvdywgc3RhcnRDb2x1bW4sIGVuZENvbHVtbikgewogICAgICAgIHZhciBzdGFydCA9IHRoaXMuY2xpcHBlZFBvcyhyb3csIHN0YXJ0Q29sdW1uKTsKICAgICAgICB2YXIgZW5kID0gdGhpcy5jbGlwcGVkUG9zKHJvdywgZW5kQ29sdW1uKTsKICAgICAgICAKICAgICAgICB0aGlzLmFwcGx5RGVsdGEoewogICAgICAgICAgICBzdGFydDogc3RhcnQsCiAgICAgICAgICAgIGVuZDogZW5kLAogICAgICAgICAgICBhY3Rpb246ICJyZW1vdmUiLAogICAgICAgICAgICBsaW5lczogdGhpcy5nZXRMaW5lc0ZvclJhbmdlKHtzdGFydDogc3RhcnQsIGVuZDogZW5kfSkKICAgICAgICB9LCB0cnVlKTsKICAgICAgICAKICAgICAgICByZXR1cm4gdGhpcy5jbG9uZVBvcyhzdGFydCk7CiAgICB9OwogICAgdGhpcy5yZW1vdmVGdWxsTGluZXMgPSBmdW5jdGlvbihmaXJzdFJvdywgbGFzdFJvdykgewogICAgICAgIGZpcnN0Um93ID0gTWF0aC5taW4oTWF0aC5tYXgoMCwgZmlyc3RSb3cpLCB0aGlzLmdldExlbmd0aCgpIC0gMSk7CiAgICAgICAgbGFzdFJvdyAgPSBNYXRoLm1pbihNYXRoLm1heCgwLCBsYXN0Um93ICksIHRoaXMuZ2V0TGVuZ3RoKCkgLSAxKTsKICAgICAgICB2YXIgZGVsZXRlRmlyc3ROZXdMaW5lID0gbGFzdFJvdyA9PSB0aGlzLmdldExlbmd0aCgpIC0gMSAmJiBmaXJzdFJvdyA+IDA7CiAgICAgICAgdmFyIGRlbGV0ZUxhc3ROZXdMaW5lICA9IGxhc3RSb3cgIDwgdGhpcy5nZXRMZW5ndGgoKSAtIDE7CiAgICAgICAgdmFyIHN0YXJ0Um93ID0gKCBkZWxldGVGaXJzdE5ld0xpbmUgPyBmaXJzdFJvdyAtIDEgICAgICAgICAgICAgICAgICA6IGZpcnN0Um93ICAgICAgICAgICAgICAgICAgICApOwogICAgICAgIHZhciBzdGFydENvbCA9ICggZGVsZXRlRmlyc3ROZXdMaW5lID8gdGhpcy5nZXRMaW5lKHN0YXJ0Um93KS5sZW5ndGggOiAwICAgICAgICAgICAgICAgICAgICAgICAgICAgKTsKICAgICAgICB2YXIgZW5kUm93ICAgPSAoIGRlbGV0ZUxhc3ROZXdMaW5lICA/IGxhc3RSb3cgKyAxICAgICAgICAgICAgICAgICAgIDogbGFzdFJvdyAgICAgICAgICAgICAgICAgICAgICk7CiAgICAgICAgdmFyIGVuZENvbCAgID0gKCBkZWxldGVMYXN0TmV3TGluZSAgPyAwICAgICAgICAgICAgICAgICAgICAgICAgICAgICA6IHRoaXMuZ2V0TGluZShlbmRSb3cpLmxlbmd0aCApOyAKICAgICAgICB2YXIgcmFuZ2UgPSBuZXcgUmFuZ2Uoc3RhcnRSb3csIHN0YXJ0Q29sLCBlbmRSb3csIGVuZENvbCk7CiAgICAgICAgdmFyIGRlbGV0ZWRMaW5lcyA9IHRoaXMuJGxpbmVzLnNsaWNlKGZpcnN0Um93LCBsYXN0Um93ICsgMSk7CiAgICAgICAgCiAgICAgICAgdGhpcy5hcHBseURlbHRhKHsKICAgICAgICAgICAgc3RhcnQ6IHJhbmdlLnN0YXJ0LAogICAgICAgICAgICBlbmQ6IHJhbmdlLmVuZCwKICAgICAgICAgICAgYWN0aW9uOiAicmVtb3ZlIiwKICAgICAgICAgICAgbGluZXM6IHRoaXMuZ2V0TGluZXNGb3JSYW5nZShyYW5nZSkKICAgICAgICB9KTsKICAgICAgICByZXR1cm4gZGVsZXRlZExpbmVzOwogICAgfTsKICAgIHRoaXMucmVtb3ZlTmV3TGluZSA9IGZ1bmN0aW9uKHJvdykgewogICAgICAgIGlmIChyb3cgPCB0aGlzLmdldExlbmd0aCgpIC0gMSAmJiByb3cgPj0gMCkgewogICAgICAgICAgICB0aGlzLmFwcGx5RGVsdGEoewogICAgICAgICAgICAgICAgc3RhcnQ6IHRoaXMucG9zKHJvdywgdGhpcy5nZXRMaW5lKHJvdykubGVuZ3RoKSwKICAgICAgICAgICAgICAgIGVuZDogdGhpcy5wb3Mocm93ICsgMSwgMCksCiAgICAgICAgICAgICAgICBhY3Rpb246ICJyZW1vdmUiLAogICAgICAgICAgICAgICAgbGluZXM6IFsiIiwgIiJdCiAgICAgICAgICAgIH0pOwogICAgICAgIH0KICAgIH07CiAgICB0aGlzLnJlcGxhY2UgPSBmdW5jdGlvbihyYW5nZSwgdGV4dCkgewogICAgICAgIGlmICghKHJhbmdlIGluc3RhbmNlb2YgUmFuZ2UpKQogICAgICAgICAgICByYW5nZSA9IFJhbmdlLmZyb21Qb2ludHMocmFuZ2Uuc3RhcnQsIHJhbmdlLmVuZCk7CiAgICAgICAgaWYgKHRleHQubGVuZ3RoID09PSAwICYmIHJhbmdlLmlzRW1wdHkoKSkKICAgICAgICAgICAgcmV0dXJuIHJhbmdlLnN0YXJ0OwogICAgICAgIGlmICh0ZXh0ID09IHRoaXMuZ2V0VGV4dFJhbmdlKHJhbmdlKSkKICAgICAgICAgICAgcmV0dXJuIHJhbmdlLmVuZDsKCiAgICAgICAgdGhpcy5yZW1vdmUocmFuZ2UpOwogICAgICAgIHZhciBlbmQ7CiAgICAgICAgaWYgKHRleHQpIHsKICAgICAgICAgICAgZW5kID0gdGhpcy5pbnNlcnQocmFuZ2Uuc3RhcnQsIHRleHQpOwogICAgICAgIH0KICAgICAgICBlbHNlIHsKICAgICAgICAgICAgZW5kID0gcmFuZ2Uuc3RhcnQ7CiAgICAgICAgfQogICAgICAgIAogICAgICAgIHJldHVybiBlbmQ7CiAgICB9OwogICAgdGhpcy5hcHBseURlbHRhcyA9IGZ1bmN0aW9uKGRlbHRhcykgewogICAgICAgIGZvciAodmFyIGk9MDsgaTxkZWx0YXMubGVuZ3RoOyBpKyspIHsKICAgICAgICAgICAgdGhpcy5hcHBseURlbHRhKGRlbHRhc1tpXSk7CiAgICAgICAgfQogICAgfTsKICAgIHRoaXMucmV2ZXJ0RGVsdGFzID0gZnVuY3Rpb24oZGVsdGFzKSB7CiAgICAgICAgZm9yICh2YXIgaT1kZWx0YXMubGVuZ3RoLTE7IGk+PTA7IGktLSkgewogICAgICAgICAgICB0aGlzLnJldmVydERlbHRhKGRlbHRhc1tpXSk7CiAgICAgICAgfQogICAgfTsKICAgIHRoaXMuYXBwbHlEZWx0YSA9IGZ1bmN0aW9uKGRlbHRhLCBkb05vdFZhbGlkYXRlKSB7CiAgICAgICAgdmFyIGlzSW5zZXJ0ID0gZGVsdGEuYWN0aW9uID09ICJpbnNlcnQiOwogICAgICAgIGlmIChpc0luc2VydCA/IGRlbHRhLmxpbmVzLmxlbmd0aCA8PSAxICYmICFkZWx0YS5saW5lc1swXQogICAgICAgICAgICA6ICFSYW5nZS5jb21wYXJlUG9pbnRzKGRlbHRhLnN0YXJ0LCBkZWx0YS5lbmQpKSB7CiAgICAgICAgICAgIHJldHVybjsKICAgICAgICB9CiAgICAgICAgCiAgICAgICAgaWYgKGlzSW5zZXJ0ICYmIGRlbHRhLmxpbmVzLmxlbmd0aCA+IDIwMDAwKSB7CiAgICAgICAgICAgIHRoaXMuJHNwbGl0QW5kYXBwbHlMYXJnZURlbHRhKGRlbHRhLCAyMDAwMCk7CiAgICAgICAgfQogICAgICAgIGVsc2UgewogICAgICAgICAgICBhcHBseURlbHRhKHRoaXMuJGxpbmVzLCBkZWx0YSwgZG9Ob3RWYWxpZGF0ZSk7CiAgICAgICAgICAgIHRoaXMuX3NpZ25hbCgiY2hhbmdlIiwgZGVsdGEpOwogICAgICAgIH0KICAgIH07CiAgICAKICAgIHRoaXMuJHNhZmVBcHBseURlbHRhID0gZnVuY3Rpb24oZGVsdGEpIHsKICAgICAgICB2YXIgZG9jTGVuZ3RoID0gdGhpcy4kbGluZXMubGVuZ3RoOwogICAgICAgIGlmICgKICAgICAgICAgICAgZGVsdGEuYWN0aW9uID09ICJyZW1vdmUiICYmIGRlbHRhLnN0YXJ0LnJvdyA8IGRvY0xlbmd0aCAmJiBkZWx0YS5lbmQucm93IDwgZG9jTGVuZ3RoCiAgICAgICAgICAgIHx8IGRlbHRhLmFjdGlvbiA9PSAiaW5zZXJ0IiAmJiBkZWx0YS5zdGFydC5yb3cgPD0gZG9jTGVuZ3RoCiAgICAgICAgKSB7CiAgICAgICAgICAgIHRoaXMuYXBwbHlEZWx0YShkZWx0YSk7CiAgICAgICAgfQogICAgfTsKICAgIAogICAgdGhpcy4kc3BsaXRBbmRhcHBseUxhcmdlRGVsdGEgPSBmdW5jdGlvbihkZWx0YSwgTUFYKSB7CiAgICAgICAgdmFyIGxpbmVzID0gZGVsdGEubGluZXM7CiAgICAgICAgdmFyIGwgPSBsaW5lcy5sZW5ndGggLSBNQVggKyAxOwogICAgICAgIHZhciByb3cgPSBkZWx0YS5zdGFydC5yb3c7IAogICAgICAgIHZhciBjb2x1bW4gPSBkZWx0YS5zdGFydC5jb2x1bW47CiAgICAgICAgZm9yICh2YXIgZnJvbSA9IDAsIHRvID0gMDsgZnJvbSA8IGw7IGZyb20gPSB0bykgewogICAgICAgICAgICB0byArPSBNQVggLSAxOwogICAgICAgICAgICB2YXIgY2h1bmsgPSBsaW5lcy5zbGljZShmcm9tLCB0byk7CiAgICAgICAgICAgIGNodW5rLnB1c2goIiIpOwogICAgICAgICAgICB0aGlzLmFwcGx5RGVsdGEoewogICAgICAgICAgICAgICAgc3RhcnQ6IHRoaXMucG9zKHJvdyArIGZyb20sIGNvbHVtbiksCiAgICAgICAgICAgICAgICBlbmQ6IHRoaXMucG9zKHJvdyArIHRvLCBjb2x1bW4gPSAwKSwKICAgICAgICAgICAgICAgIGFjdGlvbjogZGVsdGEuYWN0aW9uLAogICAgICAgICAgICAgICAgbGluZXM6IGNodW5rCiAgICAgICAgICAgIH0sIHRydWUpOwogICAgICAgIH0KICAgICAgICBkZWx0YS5saW5lcyA9IGxpbmVzLnNsaWNlKGZyb20pOwogICAgICAgIGRlbHRhLnN0YXJ0LnJvdyA9IHJvdyArIGZyb207CiAgICAgICAgZGVsdGEuc3RhcnQuY29sdW1uID0gY29sdW1uOwogICAgICAgIHRoaXMuYXBwbHlEZWx0YShkZWx0YSwgdHJ1ZSk7CiAgICB9OwogICAgdGhpcy5yZXZlcnREZWx0YSA9IGZ1bmN0aW9uKGRlbHRhKSB7CiAgICAgICAgdGhpcy4kc2FmZUFwcGx5RGVsdGEoewogICAgICAgICAgICBzdGFydDogdGhpcy5jbG9uZVBvcyhkZWx0YS5zdGFydCksCiAgICAgICAgICAgIGVuZDogdGhpcy5jbG9uZVBvcyhkZWx0YS5lbmQpLAogICAgICAgICAgICBhY3Rpb246IChkZWx0YS5hY3Rpb24gPT0gImluc2VydCIgPyAicmVtb3ZlIiA6ICJpbnNlcnQiKSwKICAgICAgICAgICAgbGluZXM6IGRlbHRhLmxpbmVzLnNsaWNlKCkKICAgICAgICB9KTsKICAgIH07CiAgICB0aGlzLmluZGV4VG9Qb3NpdGlvbiA9IGZ1bmN0aW9uKGluZGV4LCBzdGFydFJvdykgewogICAgICAgIHZhciBsaW5lcyA9IHRoaXMuJGxpbmVzIHx8IHRoaXMuZ2V0QWxsTGluZXMoKTsKICAgICAgICB2YXIgbmV3bGluZUxlbmd0aCA9IHRoaXMuZ2V0TmV3TGluZUNoYXJhY3RlcigpLmxlbmd0aDsKICAgICAgICBmb3IgKHZhciBpID0gc3RhcnRSb3cgfHwgMCwgbCA9IGxpbmVzLmxlbmd0aDsgaSA8IGw7IGkrKykgewogICAgICAgICAgICBpbmRleCAtPSBsaW5lc1tpXS5sZW5ndGggKyBuZXdsaW5lTGVuZ3RoOwogICAgICAgICAgICBpZiAoaW5kZXggPCAwKQogICAgICAgICAgICAgICAgcmV0dXJuIHtyb3c6IGksIGNvbHVtbjogaW5kZXggKyBsaW5lc1tpXS5sZW5ndGggKyBuZXdsaW5lTGVuZ3RofTsKICAgICAgICB9CiAgICAgICAgcmV0dXJuIHtyb3c6IGwtMSwgY29sdW1uOiBpbmRleCArIGxpbmVzW2wtMV0ubGVuZ3RoICsgbmV3bGluZUxlbmd0aH07CiAgICB9OwogICAgdGhpcy5wb3NpdGlvblRvSW5kZXggPSBmdW5jdGlvbihwb3MsIHN0YXJ0Um93KSB7CiAgICAgICAgdmFyIGxpbmVzID0gdGhpcy4kbGluZXMgfHwgdGhpcy5nZXRBbGxMaW5lcygpOwogICAgICAgIHZhciBuZXdsaW5lTGVuZ3RoID0gdGhpcy5nZXROZXdMaW5lQ2hhcmFjdGVyKCkubGVuZ3RoOwogICAgICAgIHZhciBpbmRleCA9IDA7CiAgICAgICAgdmFyIHJvdyA9IE1hdGgubWluKHBvcy5yb3csIGxpbmVzLmxlbmd0aCk7CiAgICAgICAgZm9yICh2YXIgaSA9IHN0YXJ0Um93IHx8IDA7IGkgPCByb3c7ICsraSkKICAgICAgICAgICAgaW5kZXggKz0gbGluZXNbaV0ubGVuZ3RoICsgbmV3bGluZUxlbmd0aDsKCiAgICAgICAgcmV0dXJuIGluZGV4ICsgcG9zLmNvbHVtbjsKICAgIH07Cgp9KS5jYWxsKERvY3VtZW50LnByb3RvdHlwZSk7CgpleHBvcnRzLkRvY3VtZW50ID0gRG9jdW1lbnQ7Cn0pOwoKYWNlLmRlZmluZSgiYWNlL2xpYi9sYW5nIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCmV4cG9ydHMubGFzdCA9IGZ1bmN0aW9uKGEpIHsKICAgIHJldHVybiBhW2EubGVuZ3RoIC0gMV07Cn07CgpleHBvcnRzLnN0cmluZ1JldmVyc2UgPSBmdW5jdGlvbihzdHJpbmcpIHsKICAgIHJldHVybiBzdHJpbmcuc3BsaXQoIiIpLnJldmVyc2UoKS5qb2luKCIiKTsKfTsKCmV4cG9ydHMuc3RyaW5nUmVwZWF0ID0gZnVuY3Rpb24gKHN0cmluZywgY291bnQpIHsKICAgIHZhciByZXN1bHQgPSAnJzsKICAgIHdoaWxlIChjb3VudCA+IDApIHsKICAgICAgICBpZiAoY291bnQgJiAxKQogICAgICAgICAgICByZXN1bHQgKz0gc3RyaW5nOwoKICAgICAgICBpZiAoY291bnQgPj49IDEpCiAgICAgICAgICAgIHN0cmluZyArPSBzdHJpbmc7CiAgICB9CiAgICByZXR1cm4gcmVzdWx0Owp9OwoKdmFyIHRyaW1CZWdpblJlZ2V4cCA9IC9eXHNccyovOwp2YXIgdHJpbUVuZFJlZ2V4cCA9IC9cc1xzKiQvOwoKZXhwb3J0cy5zdHJpbmdUcmltTGVmdCA9IGZ1bmN0aW9uIChzdHJpbmcpIHsKICAgIHJldHVybiBzdHJpbmcucmVwbGFjZSh0cmltQmVnaW5SZWdleHAsICcnKTsKfTsKCmV4cG9ydHMuc3RyaW5nVHJpbVJpZ2h0ID0gZnVuY3Rpb24gKHN0cmluZykgewogICAgcmV0dXJuIHN0cmluZy5yZXBsYWNlKHRyaW1FbmRSZWdleHAsICcnKTsKfTsKCmV4cG9ydHMuY29weU9iamVjdCA9IGZ1bmN0aW9uKG9iaikgewogICAgdmFyIGNvcHkgPSB7fTsKICAgIGZvciAodmFyIGtleSBpbiBvYmopIHsKICAgICAgICBjb3B5W2tleV0gPSBvYmpba2V5XTsKICAgIH0KICAgIHJldHVybiBjb3B5Owp9OwoKZXhwb3J0cy5jb3B5QXJyYXkgPSBmdW5jdGlvbihhcnJheSl7CiAgICB2YXIgY29weSA9IFtdOwogICAgZm9yICh2YXIgaT0wLCBsPWFycmF5Lmxlbmd0aDsgaTxsOyBpKyspIHsKICAgICAgICBpZiAoYXJyYXlbaV0gJiYgdHlwZW9mIGFycmF5W2ldID09ICJvYmplY3QiKQogICAgICAgICAgICBjb3B5W2ldID0gdGhpcy5jb3B5T2JqZWN0KGFycmF5W2ldKTsKICAgICAgICBlbHNlIAogICAgICAgICAgICBjb3B5W2ldID0gYXJyYXlbaV07CiAgICB9CiAgICByZXR1cm4gY29weTsKfTsKCmV4cG9ydHMuZGVlcENvcHkgPSBmdW5jdGlvbiBkZWVwQ29weShvYmopIHsKICAgIGlmICh0eXBlb2Ygb2JqICE9PSAib2JqZWN0IiB8fCAhb2JqKQogICAgICAgIHJldHVybiBvYmo7CiAgICB2YXIgY29weTsKICAgIGlmIChBcnJheS5pc0FycmF5KG9iaikpIHsKICAgICAgICBjb3B5ID0gW107CiAgICAgICAgZm9yICh2YXIga2V5ID0gMDsga2V5IDwgb2JqLmxlbmd0aDsga2V5KyspIHsKICAgICAgICAgICAgY29weVtrZXldID0gZGVlcENvcHkob2JqW2tleV0pOwogICAgICAgIH0KICAgICAgICByZXR1cm4gY29weTsKICAgIH0KICAgIGlmIChPYmplY3QucHJvdG90eXBlLnRvU3RyaW5nLmNhbGwob2JqKSAhPT0gIltvYmplY3QgT2JqZWN0XSIpCiAgICAgICAgcmV0dXJuIG9iajsKICAgIAogICAgY29weSA9IHt9OwogICAgZm9yICh2YXIga2V5IGluIG9iaikKICAgICAgICBjb3B5W2tleV0gPSBkZWVwQ29weShvYmpba2V5XSk7CiAgICByZXR1cm4gY29weTsKfTsKCmV4cG9ydHMuYXJyYXlUb01hcCA9IGZ1bmN0aW9uKGFycikgewogICAgdmFyIG1hcCA9IHt9OwogICAgZm9yICh2YXIgaT0wOyBpPGFyci5sZW5ndGg7IGkrKykgewogICAgICAgIG1hcFthcnJbaV1dID0gMTsKICAgIH0KICAgIHJldHVybiBtYXA7Cgp9OwoKZXhwb3J0cy5jcmVhdGVNYXAgPSBmdW5jdGlvbihwcm9wcykgewogICAgdmFyIG1hcCA9IE9iamVjdC5jcmVhdGUobnVsbCk7CiAgICBmb3IgKHZhciBpIGluIHByb3BzKSB7CiAgICAgICAgbWFwW2ldID0gcHJvcHNbaV07CiAgICB9CiAgICByZXR1cm4gbWFwOwp9OwpleHBvcnRzLmFycmF5UmVtb3ZlID0gZnVuY3Rpb24oYXJyYXksIHZhbHVlKSB7CiAgZm9yICh2YXIgaSA9IDA7IGkgPD0gYXJyYXkubGVuZ3RoOyBpKyspIHsKICAgIGlmICh2YWx1ZSA9PT0gYXJyYXlbaV0pIHsKICAgICAgYXJyYXkuc3BsaWNlKGksIDEpOwogICAgfQogIH0KfTsKCmV4cG9ydHMuZXNjYXBlUmVnRXhwID0gZnVuY3Rpb24oc3RyKSB7CiAgICByZXR1cm4gc3RyLnJlcGxhY2UoLyhbLiorP14ke30oKXxbXF1cL1xcXSkvZywgJ1xcJDEnKTsKfTsKCmV4cG9ydHMuZXNjYXBlSFRNTCA9IGZ1bmN0aW9uKHN0cikgewogICAgcmV0dXJuICgiIiArIHN0cikucmVwbGFjZSgvJi9nLCAiJiMzODsiKS5yZXBsYWNlKC8iL2csICImIzM0OyIpLnJlcGxhY2UoLycvZywgIiYjMzk7IikucmVwbGFjZSgvPC9nLCAiJiM2MDsiKTsKfTsKCmV4cG9ydHMuZ2V0TWF0Y2hPZmZzZXRzID0gZnVuY3Rpb24oc3RyaW5nLCByZWdFeHApIHsKICAgIHZhciBtYXRjaGVzID0gW107CgogICAgc3RyaW5nLnJlcGxhY2UocmVnRXhwLCBmdW5jdGlvbihzdHIpIHsKICAgICAgICBtYXRjaGVzLnB1c2goewogICAgICAgICAgICBvZmZzZXQ6IGFyZ3VtZW50c1thcmd1bWVudHMubGVuZ3RoLTJdLAogICAgICAgICAgICBsZW5ndGg6IHN0ci5sZW5ndGgKICAgICAgICB9KTsKICAgIH0pOwoKICAgIHJldHVybiBtYXRjaGVzOwp9OwpleHBvcnRzLmRlZmVycmVkQ2FsbCA9IGZ1bmN0aW9uKGZjbikgewogICAgdmFyIHRpbWVyID0gbnVsbDsKICAgIHZhciBjYWxsYmFjayA9IGZ1bmN0aW9uKCkgewogICAgICAgIHRpbWVyID0gbnVsbDsKICAgICAgICBmY24oKTsKICAgIH07CgogICAgdmFyIGRlZmVycmVkID0gZnVuY3Rpb24odGltZW91dCkgewogICAgICAgIGRlZmVycmVkLmNhbmNlbCgpOwogICAgICAgIHRpbWVyID0gc2V0VGltZW91dChjYWxsYmFjaywgdGltZW91dCB8fCAwKTsKICAgICAgICByZXR1cm4gZGVmZXJyZWQ7CiAgICB9OwoKICAgIGRlZmVycmVkLnNjaGVkdWxlID0gZGVmZXJyZWQ7CgogICAgZGVmZXJyZWQuY2FsbCA9IGZ1bmN0aW9uKCkgewogICAgICAgIHRoaXMuY2FuY2VsKCk7CiAgICAgICAgZmNuKCk7CiAgICAgICAgcmV0dXJuIGRlZmVycmVkOwogICAgfTsKCiAgICBkZWZlcnJlZC5jYW5jZWwgPSBmdW5jdGlvbigpIHsKICAgICAgICBjbGVhclRpbWVvdXQodGltZXIpOwogICAgICAgIHRpbWVyID0gbnVsbDsKICAgICAgICByZXR1cm4gZGVmZXJyZWQ7CiAgICB9OwogICAgCiAgICBkZWZlcnJlZC5pc1BlbmRpbmcgPSBmdW5jdGlvbigpIHsKICAgICAgICByZXR1cm4gdGltZXI7CiAgICB9OwoKICAgIHJldHVybiBkZWZlcnJlZDsKfTsKCgpleHBvcnRzLmRlbGF5ZWRDYWxsID0gZnVuY3Rpb24oZmNuLCBkZWZhdWx0VGltZW91dCkgewogICAgdmFyIHRpbWVyID0gbnVsbDsKICAgIHZhciBjYWxsYmFjayA9IGZ1bmN0aW9uKCkgewogICAgICAgIHRpbWVyID0gbnVsbDsKICAgICAgICBmY24oKTsKICAgIH07CgogICAgdmFyIF9zZWxmID0gZnVuY3Rpb24odGltZW91dCkgewogICAgICAgIGlmICh0aW1lciA9PSBudWxsKQogICAgICAgICAgICB0aW1lciA9IHNldFRpbWVvdXQoY2FsbGJhY2ssIHRpbWVvdXQgfHwgZGVmYXVsdFRpbWVvdXQpOwogICAgfTsKCiAgICBfc2VsZi5kZWxheSA9IGZ1bmN0aW9uKHRpbWVvdXQpIHsKICAgICAgICB0aW1lciAmJiBjbGVhclRpbWVvdXQodGltZXIpOwogICAgICAgIHRpbWVyID0gc2V0VGltZW91dChjYWxsYmFjaywgdGltZW91dCB8fCBkZWZhdWx0VGltZW91dCk7CiAgICB9OwogICAgX3NlbGYuc2NoZWR1bGUgPSBfc2VsZjsKCiAgICBfc2VsZi5jYWxsID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdGhpcy5jYW5jZWwoKTsKICAgICAgICBmY24oKTsKICAgIH07CgogICAgX3NlbGYuY2FuY2VsID0gZnVuY3Rpb24oKSB7CiAgICAgICAgdGltZXIgJiYgY2xlYXJUaW1lb3V0KHRpbWVyKTsKICAgICAgICB0aW1lciA9IG51bGw7CiAgICB9OwoKICAgIF9zZWxmLmlzUGVuZGluZyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiB0aW1lcjsKICAgIH07CgogICAgcmV0dXJuIF9zZWxmOwp9Owp9KTsKCmFjZS5kZWZpbmUoImFjZS93b3JrZXIvbWlycm9yIixbXSwgZnVuY3Rpb24ocmVxdWlyZSwgZXhwb3J0cywgbW9kdWxlKSB7CiJ1c2Ugc3RyaWN0IjsKCnZhciBSYW5nZSA9IHJlcXVpcmUoIi4uL3JhbmdlIikuUmFuZ2U7CnZhciBEb2N1bWVudCA9IHJlcXVpcmUoIi4uL2RvY3VtZW50IikuRG9jdW1lbnQ7CnZhciBsYW5nID0gcmVxdWlyZSgiLi4vbGliL2xhbmciKTsKICAgIAp2YXIgTWlycm9yID0gZXhwb3J0cy5NaXJyb3IgPSBmdW5jdGlvbihzZW5kZXIpIHsKICAgIHRoaXMuc2VuZGVyID0gc2VuZGVyOwogICAgdmFyIGRvYyA9IHRoaXMuZG9jID0gbmV3IERvY3VtZW50KCIiKTsKICAgIAogICAgdmFyIGRlZmVycmVkVXBkYXRlID0gdGhpcy5kZWZlcnJlZFVwZGF0ZSA9IGxhbmcuZGVsYXllZENhbGwodGhpcy5vblVwZGF0ZS5iaW5kKHRoaXMpKTsKICAgIAogICAgdmFyIF9zZWxmID0gdGhpczsKICAgIHNlbmRlci5vbigiY2hhbmdlIiwgZnVuY3Rpb24oZSkgewogICAgICAgIHZhciBkYXRhID0gZS5kYXRhOwogICAgICAgIGlmIChkYXRhWzBdLnN0YXJ0KSB7CiAgICAgICAgICAgIGRvYy5hcHBseURlbHRhcyhkYXRhKTsKICAgICAgICB9IGVsc2UgewogICAgICAgICAgICBmb3IgKHZhciBpID0gMDsgaSA8IGRhdGEubGVuZ3RoOyBpICs9IDIpIHsKICAgICAgICAgICAgICAgIGlmIChBcnJheS5pc0FycmF5KGRhdGFbaSsxXSkpIHsKICAgICAgICAgICAgICAgICAgICB2YXIgZCA9IHthY3Rpb246ICJpbnNlcnQiLCBzdGFydDogZGF0YVtpXSwgbGluZXM6IGRhdGFbaSsxXX07CiAgICAgICAgICAgICAgICB9IGVsc2UgewogICAgICAgICAgICAgICAgICAgIHZhciBkID0ge2FjdGlvbjogInJlbW92ZSIsIHN0YXJ0OiBkYXRhW2ldLCBlbmQ6IGRhdGFbaSsxXX07CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICBkb2MuYXBwbHlEZWx0YShkLCB0cnVlKTsKICAgICAgICAgICAgfQogICAgICAgIH0KICAgICAgICBpZiAoX3NlbGYuJHRpbWVvdXQpCiAgICAgICAgICAgIHJldHVybiBkZWZlcnJlZFVwZGF0ZS5zY2hlZHVsZShfc2VsZi4kdGltZW91dCk7CiAgICAgICAgX3NlbGYub25VcGRhdGUoKTsKICAgIH0pOwp9OwoKKGZ1bmN0aW9uKCkgewogICAgCiAgICB0aGlzLiR0aW1lb3V0ID0gNTAwOwogICAgCiAgICB0aGlzLnNldFRpbWVvdXQgPSBmdW5jdGlvbih0aW1lb3V0KSB7CiAgICAgICAgdGhpcy4kdGltZW91dCA9IHRpbWVvdXQ7CiAgICB9OwogICAgCiAgICB0aGlzLnNldFZhbHVlID0gZnVuY3Rpb24odmFsdWUpIHsKICAgICAgICB0aGlzLmRvYy5zZXRWYWx1ZSh2YWx1ZSk7CiAgICAgICAgdGhpcy5kZWZlcnJlZFVwZGF0ZS5zY2hlZHVsZSh0aGlzLiR0aW1lb3V0KTsKICAgIH07CiAgICAKICAgIHRoaXMuZ2V0VmFsdWUgPSBmdW5jdGlvbihjYWxsYmFja0lkKSB7CiAgICAgICAgdGhpcy5zZW5kZXIuY2FsbGJhY2sodGhpcy5kb2MuZ2V0VmFsdWUoKSwgY2FsbGJhY2tJZCk7CiAgICB9OwogICAgCiAgICB0aGlzLm9uVXBkYXRlID0gZnVuY3Rpb24oKSB7CiAgICB9OwogICAgCiAgICB0aGlzLmlzUGVuZGluZyA9IGZ1bmN0aW9uKCkgewogICAgICAgIHJldHVybiB0aGlzLmRlZmVycmVkVXBkYXRlLmlzUGVuZGluZygpOwogICAgfTsKICAgIAp9KS5jYWxsKE1pcnJvci5wcm90b3R5cGUpOwoKfSk7CgphY2UuZGVmaW5lKCJhY2UvbW9kZS9qc29uL2pzb25fcGFyc2UiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKICAgIHZhciBhdCwgICAgIC8vIFRoZSBpbmRleCBvZiB0aGUgY3VycmVudCBjaGFyYWN0ZXIKICAgICAgICBjaCwgICAgIC8vIFRoZSBjdXJyZW50IGNoYXJhY3RlcgogICAgICAgIGVzY2FwZWUgPSB7CiAgICAgICAgICAgICciJzogICciJywKICAgICAgICAgICAgJ1xcJzogJ1xcJywKICAgICAgICAgICAgJy8nOiAgJy8nLAogICAgICAgICAgICBiOiAgICAnXGInLAogICAgICAgICAgICBmOiAgICAnXGYnLAogICAgICAgICAgICBuOiAgICAnXG4nLAogICAgICAgICAgICByOiAgICAnXHInLAogICAgICAgICAgICB0OiAgICAnXHQnCiAgICAgICAgfSwKICAgICAgICB0ZXh0LAoKICAgICAgICBlcnJvciA9IGZ1bmN0aW9uIChtKSB7CgogICAgICAgICAgICB0aHJvdyB7CiAgICAgICAgICAgICAgICBuYW1lOiAgICAnU3ludGF4RXJyb3InLAogICAgICAgICAgICAgICAgbWVzc2FnZTogbSwKICAgICAgICAgICAgICAgIGF0OiAgICAgIGF0LAogICAgICAgICAgICAgICAgdGV4dDogICAgdGV4dAogICAgICAgICAgICB9OwogICAgICAgIH0sCgogICAgICAgIG5leHQgPSBmdW5jdGlvbiAoYykgewoKICAgICAgICAgICAgaWYgKGMgJiYgYyAhPT0gY2gpIHsKICAgICAgICAgICAgICAgIGVycm9yKCJFeHBlY3RlZCAnIiArIGMgKyAiJyBpbnN0ZWFkIG9mICciICsgY2ggKyAiJyIpOwogICAgICAgICAgICB9CgogICAgICAgICAgICBjaCA9IHRleHQuY2hhckF0KGF0KTsKICAgICAgICAgICAgYXQgKz0gMTsKICAgICAgICAgICAgcmV0dXJuIGNoOwogICAgICAgIH0sCgogICAgICAgIG51bWJlciA9IGZ1bmN0aW9uICgpIHsKCiAgICAgICAgICAgIHZhciBudW1iZXIsCiAgICAgICAgICAgICAgICBzdHJpbmcgPSAnJzsKCiAgICAgICAgICAgIGlmIChjaCA9PT0gJy0nKSB7CiAgICAgICAgICAgICAgICBzdHJpbmcgPSAnLSc7CiAgICAgICAgICAgICAgICBuZXh0KCctJyk7CiAgICAgICAgICAgIH0KICAgICAgICAgICAgd2hpbGUgKGNoID49ICcwJyAmJiBjaCA8PSAnOScpIHsKICAgICAgICAgICAgICAgIHN0cmluZyArPSBjaDsKICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgfQogICAgICAgICAgICBpZiAoY2ggPT09ICcuJykgewogICAgICAgICAgICAgICAgc3RyaW5nICs9ICcuJzsKICAgICAgICAgICAgICAgIHdoaWxlIChuZXh0KCkgJiYgY2ggPj0gJzAnICYmIGNoIDw9ICc5JykgewogICAgICAgICAgICAgICAgICAgIHN0cmluZyArPSBjaDsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBpZiAoY2ggPT09ICdlJyB8fCBjaCA9PT0gJ0UnKSB7CiAgICAgICAgICAgICAgICBzdHJpbmcgKz0gY2g7CiAgICAgICAgICAgICAgICBuZXh0KCk7CiAgICAgICAgICAgICAgICBpZiAoY2ggPT09ICctJyB8fCBjaCA9PT0gJysnKSB7CiAgICAgICAgICAgICAgICAgICAgc3RyaW5nICs9IGNoOwogICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIHdoaWxlIChjaCA+PSAnMCcgJiYgY2ggPD0gJzknKSB7CiAgICAgICAgICAgICAgICAgICAgc3RyaW5nICs9IGNoOwogICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBudW1iZXIgPSArc3RyaW5nOwogICAgICAgICAgICBpZiAoaXNOYU4obnVtYmVyKSkgewogICAgICAgICAgICAgICAgZXJyb3IoIkJhZCBudW1iZXIiKTsKICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgIHJldHVybiBudW1iZXI7CiAgICAgICAgICAgIH0KICAgICAgICB9LAoKICAgICAgICBzdHJpbmcgPSBmdW5jdGlvbiAoKSB7CgogICAgICAgICAgICB2YXIgaGV4LAogICAgICAgICAgICAgICAgaSwKICAgICAgICAgICAgICAgIHN0cmluZyA9ICcnLAogICAgICAgICAgICAgICAgdWZmZmY7CgogICAgICAgICAgICBpZiAoY2ggPT09ICciJykgewogICAgICAgICAgICAgICAgd2hpbGUgKG5leHQoKSkgewogICAgICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJyInKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIHN0cmluZzsKICAgICAgICAgICAgICAgICAgICB9IGVsc2UgaWYgKGNoID09PSAnXFwnKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgICAgICAgICAgICAgaWYgKGNoID09PSAndScpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVmZmZmID0gMDsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGZvciAoaSA9IDA7IGkgPCA0OyBpICs9IDEpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBoZXggPSBwYXJzZUludChuZXh0KCksIDE2KTsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICBpZiAoIWlzRmluaXRlKGhleCkpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgYnJlYWs7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgICAgICAgICAgICAgIHVmZmZmID0gdWZmZmYgKiAxNiArIGhleDsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICAgICAgICAgIHN0cmluZyArPSBTdHJpbmcuZnJvbUNoYXJDb2RlKHVmZmZmKTsKICAgICAgICAgICAgICAgICAgICAgICAgfSBlbHNlIGlmICh0eXBlb2YgZXNjYXBlZVtjaF0gPT09ICdzdHJpbmcnKSB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBzdHJpbmcgKz0gZXNjYXBlZVtjaF07CiAgICAgICAgICAgICAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICAgICAgICAgICAgICBicmVhazsKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIH0gZWxzZSBpZiAoY2ggPT0gIlxuIiB8fCBjaCA9PSAiXHIiKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIGJyZWFrOwogICAgICAgICAgICAgICAgICAgIH0gZWxzZSB7CiAgICAgICAgICAgICAgICAgICAgICAgIHN0cmluZyArPSBjaDsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZXJyb3IoIkJhZCBzdHJpbmciKTsKICAgICAgICB9LAoKICAgICAgICB3aGl0ZSA9IGZ1bmN0aW9uICgpIHsKCiAgICAgICAgICAgIHdoaWxlIChjaCAmJiBjaCA8PSAnICcpIHsKICAgICAgICAgICAgICAgIG5leHQoKTsKICAgICAgICAgICAgfQogICAgICAgIH0sCgogICAgICAgIHdvcmQgPSBmdW5jdGlvbiAoKSB7CgogICAgICAgICAgICBzd2l0Y2ggKGNoKSB7CiAgICAgICAgICAgIGNhc2UgJ3QnOgogICAgICAgICAgICAgICAgbmV4dCgndCcpOwogICAgICAgICAgICAgICAgbmV4dCgncicpOwogICAgICAgICAgICAgICAgbmV4dCgndScpOwogICAgICAgICAgICAgICAgbmV4dCgnZScpOwogICAgICAgICAgICAgICAgcmV0dXJuIHRydWU7CiAgICAgICAgICAgIGNhc2UgJ2YnOgogICAgICAgICAgICAgICAgbmV4dCgnZicpOwogICAgICAgICAgICAgICAgbmV4dCgnYScpOwogICAgICAgICAgICAgICAgbmV4dCgnbCcpOwogICAgICAgICAgICAgICAgbmV4dCgncycpOwogICAgICAgICAgICAgICAgbmV4dCgnZScpOwogICAgICAgICAgICAgICAgcmV0dXJuIGZhbHNlOwogICAgICAgICAgICBjYXNlICduJzoKICAgICAgICAgICAgICAgIG5leHQoJ24nKTsKICAgICAgICAgICAgICAgIG5leHQoJ3UnKTsKICAgICAgICAgICAgICAgIG5leHQoJ2wnKTsKICAgICAgICAgICAgICAgIG5leHQoJ2wnKTsKICAgICAgICAgICAgICAgIHJldHVybiBudWxsOwogICAgICAgICAgICB9CiAgICAgICAgICAgIGVycm9yKCJVbmV4cGVjdGVkICciICsgY2ggKyAiJyIpOwogICAgICAgIH0sCgogICAgICAgIHZhbHVlLCAgLy8gUGxhY2UgaG9sZGVyIGZvciB0aGUgdmFsdWUgZnVuY3Rpb24uCgogICAgICAgIGFycmF5ID0gZnVuY3Rpb24gKCkgewoKICAgICAgICAgICAgdmFyIGFycmF5ID0gW107CgogICAgICAgICAgICBpZiAoY2ggPT09ICdbJykgewogICAgICAgICAgICAgICAgbmV4dCgnWycpOwogICAgICAgICAgICAgICAgd2hpdGUoKTsKICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJ10nKSB7CiAgICAgICAgICAgICAgICAgICAgbmV4dCgnXScpOwogICAgICAgICAgICAgICAgICAgIHJldHVybiBhcnJheTsgICAvLyBlbXB0eSBhcnJheQogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgd2hpbGUgKGNoKSB7CiAgICAgICAgICAgICAgICAgICAgYXJyYXkucHVzaCh2YWx1ZSgpKTsKICAgICAgICAgICAgICAgICAgICB3aGl0ZSgpOwogICAgICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJ10nKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoJ10nKTsKICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIGFycmF5OwogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgICAgICBuZXh0KCcsJyk7CiAgICAgICAgICAgICAgICAgICAgd2hpdGUoKTsKICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICBlcnJvcigiQmFkIGFycmF5Iik7CiAgICAgICAgfSwKCiAgICAgICAgb2JqZWN0ID0gZnVuY3Rpb24gKCkgewoKICAgICAgICAgICAgdmFyIGtleSwKICAgICAgICAgICAgICAgIG9iamVjdCA9IHt9OwoKICAgICAgICAgICAgaWYgKGNoID09PSAneycpIHsKICAgICAgICAgICAgICAgIG5leHQoJ3snKTsKICAgICAgICAgICAgICAgIHdoaXRlKCk7CiAgICAgICAgICAgICAgICBpZiAoY2ggPT09ICd9JykgewogICAgICAgICAgICAgICAgICAgIG5leHQoJ30nKTsKICAgICAgICAgICAgICAgICAgICByZXR1cm4gb2JqZWN0OyAgIC8vIGVtcHR5IG9iamVjdAogICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgd2hpbGUgKGNoKSB7CiAgICAgICAgICAgICAgICAgICAga2V5ID0gc3RyaW5nKCk7CiAgICAgICAgICAgICAgICAgICAgd2hpdGUoKTsKICAgICAgICAgICAgICAgICAgICBuZXh0KCc6Jyk7CiAgICAgICAgICAgICAgICAgICAgaWYgKE9iamVjdC5oYXNPd25Qcm9wZXJ0eS5jYWxsKG9iamVjdCwga2V5KSkgewogICAgICAgICAgICAgICAgICAgICAgICBlcnJvcignRHVwbGljYXRlIGtleSAiJyArIGtleSArICciJyk7CiAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIG9iamVjdFtrZXldID0gdmFsdWUoKTsKICAgICAgICAgICAgICAgICAgICB3aGl0ZSgpOwogICAgICAgICAgICAgICAgICAgIGlmIChjaCA9PT0gJ30nKSB7CiAgICAgICAgICAgICAgICAgICAgICAgIG5leHQoJ30nKTsKICAgICAgICAgICAgICAgICAgICAgICAgcmV0dXJuIG9iamVjdDsKICAgICAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgICAgICAgICAgbmV4dCgnLCcpOwogICAgICAgICAgICAgICAgICAgIHdoaXRlKCk7CiAgICAgICAgICAgICAgICB9CiAgICAgICAgICAgIH0KICAgICAgICAgICAgZXJyb3IoIkJhZCBvYmplY3QiKTsKICAgICAgICB9OwoKICAgIHZhbHVlID0gZnVuY3Rpb24gKCkgewoKICAgICAgICB3aGl0ZSgpOwogICAgICAgIHN3aXRjaCAoY2gpIHsKICAgICAgICBjYXNlICd7JzoKICAgICAgICAgICAgcmV0dXJuIG9iamVjdCgpOwogICAgICAgIGNhc2UgJ1snOgogICAgICAgICAgICByZXR1cm4gYXJyYXkoKTsKICAgICAgICBjYXNlICciJzoKICAgICAgICAgICAgcmV0dXJuIHN0cmluZygpOwogICAgICAgIGNhc2UgJy0nOgogICAgICAgICAgICByZXR1cm4gbnVtYmVyKCk7CiAgICAgICAgZGVmYXVsdDoKICAgICAgICAgICAgcmV0dXJuIGNoID49ICcwJyAmJiBjaCA8PSAnOScgPyBudW1iZXIoKSA6IHdvcmQoKTsKICAgICAgICB9CiAgICB9OwoKICAgIHJldHVybiBmdW5jdGlvbiAoc291cmNlLCByZXZpdmVyKSB7CiAgICAgICAgdmFyIHJlc3VsdDsKCiAgICAgICAgdGV4dCA9IHNvdXJjZTsKICAgICAgICBhdCA9IDA7CiAgICAgICAgY2ggPSAnICc7CiAgICAgICAgcmVzdWx0ID0gdmFsdWUoKTsKICAgICAgICB3aGl0ZSgpOwogICAgICAgIGlmIChjaCkgewogICAgICAgICAgICBlcnJvcigiU3ludGF4IGVycm9yIik7CiAgICAgICAgfQoKICAgICAgICByZXR1cm4gdHlwZW9mIHJldml2ZXIgPT09ICdmdW5jdGlvbicgPyBmdW5jdGlvbiB3YWxrKGhvbGRlciwga2V5KSB7CiAgICAgICAgICAgIHZhciBrLCB2LCB2YWx1ZSA9IGhvbGRlcltrZXldOwogICAgICAgICAgICBpZiAodmFsdWUgJiYgdHlwZW9mIHZhbHVlID09PSAnb2JqZWN0JykgewogICAgICAgICAgICAgICAgZm9yIChrIGluIHZhbHVlKSB7CiAgICAgICAgICAgICAgICAgICAgaWYgKE9iamVjdC5oYXNPd25Qcm9wZXJ0eS5jYWxsKHZhbHVlLCBrKSkgewogICAgICAgICAgICAgICAgICAgICAgICB2ID0gd2Fsayh2YWx1ZSwgayk7CiAgICAgICAgICAgICAgICAgICAgICAgIGlmICh2ICE9PSB1bmRlZmluZWQpIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIHZhbHVlW2tdID0gdjsKICAgICAgICAgICAgICAgICAgICAgICAgfSBlbHNlIHsKICAgICAgICAgICAgICAgICAgICAgICAgICAgIGRlbGV0ZSB2YWx1ZVtrXTsKICAgICAgICAgICAgICAgICAgICAgICAgfQogICAgICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgICAgIH0KICAgICAgICAgICAgfQogICAgICAgICAgICByZXR1cm4gcmV2aXZlci5jYWxsKGhvbGRlciwga2V5LCB2YWx1ZSk7CiAgICAgICAgfSh7Jyc6IHJlc3VsdH0sICcnKSA6IHJlc3VsdDsKICAgIH07Cn0pOwoKYWNlLmRlZmluZSgiYWNlL21vZGUvanNvbl93b3JrZXIiLFtdLCBmdW5jdGlvbihyZXF1aXJlLCBleHBvcnRzLCBtb2R1bGUpIHsKInVzZSBzdHJpY3QiOwoKdmFyIG9vcCA9IHJlcXVpcmUoIi4uL2xpYi9vb3AiKTsKdmFyIE1pcnJvciA9IHJlcXVpcmUoIi4uL3dvcmtlci9taXJyb3IiKS5NaXJyb3I7CnZhciBwYXJzZSA9IHJlcXVpcmUoIi4vanNvbi9qc29uX3BhcnNlIik7Cgp2YXIgSnNvbldvcmtlciA9IGV4cG9ydHMuSnNvbldvcmtlciA9IGZ1bmN0aW9uKHNlbmRlcikgewogICAgTWlycm9yLmNhbGwodGhpcywgc2VuZGVyKTsKICAgIHRoaXMuc2V0VGltZW91dCgyMDApOwp9OwoKb29wLmluaGVyaXRzKEpzb25Xb3JrZXIsIE1pcnJvcik7CgooZnVuY3Rpb24oKSB7CgogICAgdGhpcy5vblVwZGF0ZSA9IGZ1bmN0aW9uKCkgewogICAgICAgIHZhciB2YWx1ZSA9IHRoaXMuZG9jLmdldFZhbHVlKCk7CiAgICAgICAgdmFyIGVycm9ycyA9IFtdOwogICAgICAgIHRyeSB7CiAgICAgICAgICAgIGlmICh2YWx1ZSkKICAgICAgICAgICAgICAgIHBhcnNlKHZhbHVlKTsKICAgICAgICB9IGNhdGNoIChlKSB7CiAgICAgICAgICAgIHZhciBwb3MgPSB0aGlzLmRvYy5pbmRleFRvUG9zaXRpb24oZS5hdC0xKTsKICAgICAgICAgICAgZXJyb3JzLnB1c2goewogICAgICAgICAgICAgICAgcm93OiBwb3Mucm93LAogICAgICAgICAgICAgICAgY29sdW1uOiBwb3MuY29sdW1uLAogICAgICAgICAgICAgICAgdGV4dDogZS5tZXNzYWdlLAogICAgICAgICAgICAgICAgdHlwZTogImVycm9yIgogICAgICAgICAgICB9KTsKICAgICAgICB9CiAgICAgICAgdGhpcy5zZW5kZXIuZW1pdCgiYW5ub3RhdGUiLCBlcnJvcnMpOwogICAgfTsKCn0pLmNhbGwoSnNvbldvcmtlci5wcm90b3R5cGUpOwoKfSk7Cg==';
 
 /***/ }),
-/* 41 */
+/* 42 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /*!
@@ -36524,7 +36342,726 @@ module.exports = 'data:application/javascript;base64,Im5vIHVzZSBzdHJpY3QiOwohKGZ
 
 
 /***/ }),
-/* 42 */
+/* 43 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+var JsonRepairError_1 = __webpack_require__(44);
+var stringUtils_1 = __webpack_require__(45);
+// token types enumeration
+var DELIMITER = 0;
+var NUMBER = 1;
+var STRING = 2;
+var SYMBOL = 3;
+var WHITESPACE = 4;
+var COMMENT = 5;
+var UNKNOWN = 6;
+// map with all delimiters
+var DELIMITERS = {
+    '': true,
+    '{': true,
+    '}': true,
+    '[': true,
+    ']': true,
+    ':': true,
+    ',': true,
+    // for JSONP and MongoDB data type notation
+    '(': true,
+    ')': true,
+    ';': true,
+    // for string concatenation
+    '+': true
+};
+// map with all escape characters
+var ESCAPE_CHARACTERS = {
+    '"': '"',
+    '\\': '\\',
+    '/': '/',
+    b: '\b',
+    f: '\f',
+    n: '\n',
+    r: '\r',
+    t: '\t'
+    // \u is handled by getToken()
+};
+// TODO: can we unify CONTROL_CHARACTERS and ESCAPE_CHARACTERS?
+var CONTROL_CHARACTERS = {
+    '\b': '\\b',
+    '\f': '\\f',
+    '\n': '\\n',
+    '\r': '\\r',
+    '\t': '\\t'
+};
+var SYMBOLS = {
+    null: 'null',
+    true: 'true',
+    false: 'false'
+};
+var PYTHON_SYMBOLS = {
+    None: 'null',
+    True: 'true',
+    False: 'false'
+};
+var input = ''; // current json text
+var output = ''; // generated output
+var index = 0; // current index in text
+var c = ''; // current token character in text
+var token = ''; // current token
+var tokenType = UNKNOWN; // type of current token
+/**
+ * Repair a string containing an invalid JSON document.
+ * For example changes JavaScript notation into JSON notation.
+ *
+ * Example:
+ *
+ *     repair('{name: \'John\'}") // '{"name": "John"}'
+ *
+ */
+function simpleJsonRepair(text) {
+    // initialize
+    input = text;
+    output = '';
+    index = 0;
+    c = input.charAt(0);
+    token = '';
+    tokenType = UNKNOWN;
+    // get first token
+    processNextToken();
+    // @ts-ignore
+    var isRootLevelObject = tokenType === DELIMITER && token === '{';
+    // parse everything
+    parseObject();
+    if (token === '') {
+        // reached the end of the document properly
+        return output;
+    }
+    if (isRootLevelObject && tokenIsStartOfValue()) {
+        // start of a new value after end of the root level object: looks like
+        // newline delimited JSON -> turn into a root level array
+        while (tokenIsStartOfValue()) {
+            output = stringUtils_1.insertBeforeLastWhitespace(output, ',');
+            // parse next newline delimited item
+            parseObject();
+        }
+        // wrap the output in an array
+        return "[\n" + output + "\n]";
+    }
+    throw new JsonRepairError_1.default('Unexpected characters', index - token.length);
+}
+exports.default = simpleJsonRepair;
+/**
+ * Get the next character from the expression.
+ * The character is stored into the char c. If the end of the expression is
+ * reached, the function puts an empty string in c.
+ */
+function next() {
+    index++;
+    c = input.charAt(index);
+    // Note: not using input[index] because that returns undefined when index is out of range
+}
+// check whether the current token is the start of a value:
+// object, array, number, string, or symbol
+function tokenIsStartOfValue() {
+    return (tokenType === DELIMITER && (token === '[' || token === '{')) ||
+        tokenType === STRING ||
+        tokenType === NUMBER ||
+        tokenType === SYMBOL;
+}
+// check whether the current token is the start of a key (or possible key):
+// number, string, or symbol
+function tokenIsStartOfKey() {
+    return tokenType === STRING ||
+        tokenType === NUMBER ||
+        tokenType === SYMBOL;
+}
+/**
+ * Process the previous token, and get next token in the current text
+ */
+function processNextToken() {
+    output += token;
+    tokenType = UNKNOWN;
+    token = '';
+    getTokenDelimiter();
+    // @ts-ignore
+    if (tokenType === WHITESPACE) {
+        // we leave the whitespace as it is, except replacing special white
+        // space character
+        token = stringUtils_1.normalizeWhitespace(token);
+        processNextToken();
+    }
+    // @ts-ignore
+    if (tokenType === COMMENT) {
+        // ignore comments
+        tokenType = UNKNOWN;
+        token = '';
+        processNextToken();
+    }
+}
+// check for delimiters like ':', '{', ']'
+function getTokenDelimiter() {
+    if (DELIMITERS[c]) {
+        tokenType = DELIMITER;
+        token = c;
+        next();
+        return;
+    }
+    getTokenNumber();
+}
+// check for a number like "2.3e+5"
+function getTokenNumber() {
+    if (stringUtils_1.isDigit(c) || c === '-') {
+        tokenType = NUMBER;
+        if (c === '-') {
+            token += c;
+            next();
+            if (!stringUtils_1.isDigit(c)) {
+                throw new JsonRepairError_1.default('Invalid number, digit expected', index);
+            }
+        }
+        else if (c === '0') {
+            token += c;
+            next();
+        }
+        else {
+            // digit 1-9, nothing extra to do
+        }
+        while (stringUtils_1.isDigit(c)) {
+            token += c;
+            next();
+        }
+        if (c === '.') {
+            token += c;
+            next();
+            if (!stringUtils_1.isDigit(c)) {
+                throw new JsonRepairError_1.default('Invalid number, digit expected', index);
+            }
+            while (stringUtils_1.isDigit(c)) {
+                token += c;
+                next();
+            }
+        }
+        if (c === 'e' || c === 'E') {
+            token += c;
+            next();
+            // @ts-ignore
+            if (c === '+' || c === '-') {
+                token += c;
+                next();
+            }
+            if (!stringUtils_1.isDigit(c)) {
+                throw new JsonRepairError_1.default('Invalid number, digit expected', index);
+            }
+            while (stringUtils_1.isDigit(c)) {
+                token += c;
+                next();
+            }
+        }
+        return;
+    }
+    getTokenString();
+}
+// get a token string like '"hello world"'
+function getTokenString() {
+    if (stringUtils_1.isQuote(c)) {
+        var quote = stringUtils_1.normalizeQuote(c);
+        token += '"'; // output valid double quote
+        tokenType = STRING;
+        next();
+        // @ts-ignore
+        while (c !== '' && stringUtils_1.normalizeQuote(c) !== quote) {
+            if (c === '\\') {
+                // handle escape characters
+                next();
+                var unescaped = ESCAPE_CHARACTERS[c];
+                if (unescaped !== undefined) {
+                    token += '\\' + c;
+                    next();
+                    // @ts-ignore
+                }
+                else if (c === 'u') {
+                    // parse escaped unicode character, like '\\u260E'
+                    token += '\\u';
+                    next();
+                    for (var u = 0; u < 4; u++) {
+                        if (!stringUtils_1.isHex(c)) {
+                            throw new JsonRepairError_1.default('Invalid unicode character', index - token.length);
+                        }
+                        token += c;
+                        next();
+                    }
+                    // @ts-ignore
+                }
+                else if (c === '\'') {
+                    // escaped single quote character -> remove the escape character
+                    token += '\'';
+                    next();
+                }
+                else {
+                    throw new JsonRepairError_1.default('Invalid escape character "\\' + c + '"', index);
+                }
+            }
+            else if (CONTROL_CHARACTERS[c]) {
+                // unescaped special character
+                // fix by adding an escape character
+                token += CONTROL_CHARACTERS[c];
+                next();
+            }
+            else if (c === '"') {
+                // unescaped double quote -> escape it
+                token += '\\"';
+                next();
+            }
+            else {
+                // a regular character
+                token += c;
+                next();
+            }
+        }
+        if (stringUtils_1.normalizeQuote(c) !== quote) {
+            throw new JsonRepairError_1.default('End of string expected', index - token.length);
+        }
+        token += '"'; // output valid double quote
+        next();
+        return;
+    }
+    getTokenAlpha();
+}
+// check for symbols (true, false, null)
+function getTokenAlpha() {
+    if (stringUtils_1.isAlpha(c)) {
+        tokenType = SYMBOL;
+        while (stringUtils_1.isAlpha(c) || stringUtils_1.isDigit(c) || c === '$') {
+            token += c;
+            next();
+        }
+        return;
+    }
+    getTokenWhitespace();
+}
+// get whitespaces: space, tab, newline, and carriage return
+function getTokenWhitespace() {
+    if (stringUtils_1.isWhitespace(c) || stringUtils_1.isSpecialWhitespace(c)) {
+        tokenType = WHITESPACE;
+        while (stringUtils_1.isWhitespace(c) || stringUtils_1.isSpecialWhitespace(c)) {
+            token += c;
+            next();
+        }
+        return;
+    }
+    getTokenComment();
+}
+function getTokenComment() {
+    // find a block comment '/* ... */'
+    if (c === '/' && input[index + 1] === '*') {
+        tokenType = COMMENT;
+        // @ts-ignore
+        while (c !== '' && (c !== '*' || (c === '*' && input[index + 1] !== '/'))) {
+            token += c;
+            next();
+        }
+        if (c === '*' && input[index + 1] === '/') {
+            token += c;
+            next();
+            token += c;
+            next();
+        }
+        return;
+    }
+    // find a comment '// ...'
+    if (c === '/' && input[index + 1] === '/') {
+        tokenType = COMMENT;
+        // @ts-ignore
+        while (c !== '' && c !== '\n') {
+            token += c;
+            next();
+        }
+        return;
+    }
+    getTokenUnknown();
+}
+// something unknown is found, wrong characters -> a syntax error
+function getTokenUnknown() {
+    tokenType = UNKNOWN;
+    while (c !== '') {
+        token += c;
+        next();
+    }
+    throw new JsonRepairError_1.default('Syntax error in part "' + token + '"', index - token.length);
+}
+/**
+ * Parse an object like '{"key": "value"}'
+ * @return {*}
+ */
+function parseObject() {
+    if (tokenType === DELIMITER && token === '{') {
+        processNextToken();
+        // @ts-ignore
+        // TODO: can we make this redundant?
+        if (tokenType === DELIMITER && token === '}') {
+            // empty object
+            processNextToken();
+            return;
+        }
+        while (true) {
+            // parse key
+            // @ts-ignore
+            if (tokenType === SYMBOL || tokenType === NUMBER) {
+                // unquoted key -> add quotes around it, change it into a string
+                tokenType = STRING;
+                token = "\"" + token + "\"";
+            }
+            // @ts-ignore
+            if (tokenType !== STRING) {
+                // TODO: handle ambiguous cases like '[{"i":1,{"i":2}]'
+                throw new JsonRepairError_1.default('Object key expected', index - token.length);
+            }
+            processNextToken();
+            // parse colon (key/value separator)
+            // @ts-ignore
+            if (tokenType === DELIMITER && token === ':') {
+                processNextToken();
+            }
+            else {
+                if (tokenIsStartOfValue()) {
+                    // we expect a colon here, but got the start of a value
+                    // -> insert a colon before any inserted whitespaces at the end of output
+                    output = stringUtils_1.insertBeforeLastWhitespace(output, ':');
+                }
+                else {
+                    throw new JsonRepairError_1.default('Colon expected', index - token.length);
+                }
+            }
+            // parse value
+            parseObject();
+            // parse comma (key/value pair separator)
+            // @ts-ignore
+            if (tokenType === DELIMITER && token === ',') {
+                processNextToken();
+                // @ts-ignore
+                if (tokenType === DELIMITER && token === '}') {
+                    // we've just passed a trailing comma -> remove the trailing comma
+                    output = stringUtils_1.stripLastOccurrence(output, ',');
+                    break;
+                }
+            }
+            else {
+                if (tokenIsStartOfKey()) {
+                    // we expect a comma here, but got the start of a new key
+                    // -> insert a comma before any inserted whitespaces at the end of output
+                    output = stringUtils_1.insertBeforeLastWhitespace(output, ',');
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        // @ts-ignore
+        if (tokenType === DELIMITER && token === '}') {
+            processNextToken();
+        }
+        else {
+            // missing end bracket -> insert the missing bracket
+            output = stringUtils_1.insertBeforeLastWhitespace(output, '}');
+        }
+        return;
+    }
+    parseArray();
+}
+/**
+ * Parse an object like '["item1", "item2", ...]'
+ * @return {*}
+ */
+function parseArray() {
+    if (tokenType === DELIMITER && token === '[') {
+        processNextToken();
+        // @ts-ignore
+        if (tokenType === DELIMITER && token === ']') {
+            // empty array
+            processNextToken();
+            return;
+        }
+        while (true) {
+            // parse item
+            parseObject();
+            // parse comma (item separator)
+            // @ts-ignore
+            if (tokenType === DELIMITER && token === ',') {
+                processNextToken();
+                // @ts-ignore
+                if (tokenType === DELIMITER && token === ']') {
+                    // we've just passed a trailing comma -> remove the trailing comma
+                    output = stringUtils_1.stripLastOccurrence(output, ',');
+                    break;
+                }
+            }
+            else {
+                if (tokenIsStartOfValue()) {
+                    // we expect a comma here, but got the start of a new item
+                    // -> insert a comma before any inserted whitespaces at the end of output
+                    output = stringUtils_1.insertBeforeLastWhitespace(output, ',');
+                }
+                else {
+                    break;
+                }
+            }
+        }
+        // @ts-ignore
+        if (tokenType === DELIMITER && token === ']') {
+            processNextToken();
+        }
+        else {
+            // missing end bracket -> insert the missing bracket
+            output = stringUtils_1.insertBeforeLastWhitespace(output, ']');
+        }
+        return;
+    }
+    parseString();
+}
+/**
+ * Parse a string enclosed by double quotes "...". Can contain escaped quotes
+ * @return {*}
+ */
+function parseString() {
+    if (tokenType === STRING) {
+        processNextToken();
+        // @ts-ignore
+        while (tokenType === DELIMITER && token === '+') {
+            // string concatenation like "hello" + "world"
+            token = ''; // don't output the concatenation
+            processNextToken();
+            if (tokenType === STRING) {
+                // concatenate with the previous string
+                var endIndex = output.lastIndexOf('"');
+                output = output.substring(0, endIndex) + token.substring(1);
+                token = '';
+                processNextToken();
+            }
+        }
+        return;
+    }
+    parseNumber();
+}
+/**
+ * Parse a number
+ */
+function parseNumber() {
+    if (tokenType === NUMBER) {
+        processNextToken();
+        return;
+    }
+    parseSymbol();
+}
+/**
+ * Parse constants true, false, null
+ */
+function parseSymbol() {
+    if (tokenType === SYMBOL) {
+        // a supported symbol: true, false, null
+        if (SYMBOLS[token]) {
+            processNextToken();
+            return;
+        }
+        // for example replace None with null
+        if (PYTHON_SYMBOLS[token]) {
+            token = PYTHON_SYMBOLS[token];
+            processNextToken();
+            return;
+        }
+        // make a copy of the symbol, let's see what comes next
+        var symbol = token;
+        var symbolIndex = output.length;
+        token = '';
+        processNextToken();
+        // @ts-ignore
+        // if (tokenType === DELIMITER && token === '(') {
+        if (tokenType === DELIMITER && token === '(') {
+            // a MongoDB function call or JSONP call
+            // Can be a MongoDB data type like in {"_id": ObjectId("123")}
+            // token = '' // do not output the function name
+            // processNextToken()
+            // next()
+            token = ''; // do not output the ( character
+            processNextToken();
+            // process the part inside the brackets
+            parseObject();
+            // skip the closing bracket ")" and ");"
+            // @ts-ignore
+            if (tokenType === DELIMITER && token === ')') {
+                token = ''; // do not output the ) character
+                processNextToken();
+                if (tokenType === DELIMITER && token === ';') {
+                    token = ''; // do not output the semicolon character
+                    processNextToken();
+                }
+            }
+            return;
+        }
+        // unknown symbol => turn into in a string
+        // it is possible that by reading the next token we already inserted
+        // extra spaces in the output which should be inside the string,
+        // hence the symbolIndex
+        output = stringUtils_1.insertAtIndex(output, "\"" + symbol, symbolIndex);
+        while (tokenType === SYMBOL || tokenType === NUMBER) {
+            processNextToken();
+        }
+        output += '"';
+        return;
+    }
+    parseEnd();
+}
+/**
+ * Evaluated when the expression is not yet ended but expected to end
+ */
+function parseEnd() {
+    if (token === '') {
+        // syntax error or unexpected end of expression
+        throw new JsonRepairError_1.default('Unexpected end of json string', index - token.length);
+    }
+    else {
+        throw new JsonRepairError_1.default('Value expected', index - token.length);
+    }
+}
+
+
+/***/ }),
+/* 44 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (Object.prototype.hasOwnProperty.call(b, p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
+var JsonRepairError = /** @class */ (function (_super) {
+    __extends(JsonRepairError, _super);
+    /**
+     * @param {string} message  Explanatory message
+     * @param {number} char     Character index where the error happened
+     */
+    function JsonRepairError(message, char) {
+        var _this = _super.call(this, message + ' (char ' + char + ')') || this;
+        _this.char = char;
+        return _this;
+    }
+    return JsonRepairError;
+}(SyntaxError));
+exports.default = JsonRepairError;
+
+
+/***/ }),
+/* 45 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.insertAtIndex = exports.insertBeforeLastWhitespace = exports.stripLastOccurrence = exports.normalizeQuote = exports.isQuote = exports.normalizeWhitespace = exports.isSpecialWhitespace = exports.isWhitespace = exports.isDigit = exports.isHex = exports.isAlpha = void 0;
+var SINGLE_QUOTES = [
+    '\'',
+    '\u2018',
+    '\u2019',
+    '\u0060',
+    '\u00B4' // acute accent
+];
+var DOUBLE_QUOTES = [
+    '"',
+    '\u201C',
+    '\u201D' // double quote right
+];
+/**
+ * Check if the given character contains an alpha character, a-z, A-Z, _
+ */
+function isAlpha(c) {
+    return /^[a-zA-Z_]$/.test(c);
+}
+exports.isAlpha = isAlpha;
+/**
+ * Check if the given character contains a hexadecimal character 0-9, a-f, A-F
+ */
+function isHex(c) {
+    return /^[0-9a-fA-F]$/.test(c);
+}
+exports.isHex = isHex;
+/**
+ * checks if the given char c is a digit
+ */
+function isDigit(c) {
+    return (c >= '0' && c <= '9');
+}
+exports.isDigit = isDigit;
+/**
+ * Check if the given character is a whitespace character like space, tab, or
+ * newline
+ */
+function isWhitespace(c) {
+    return c === ' ' || c === '\t' || c === '\n' || c === '\r';
+}
+exports.isWhitespace = isWhitespace;
+function isSpecialWhitespace(c) {
+    return (c === '\u00A0' ||
+        (c >= '\u2000' && c <= '\u200A') ||
+        c === '\u202F' ||
+        c === '\u205F' ||
+        c === '\u3000');
+}
+exports.isSpecialWhitespace = isSpecialWhitespace;
+function normalizeWhitespace(text) {
+    var normalized = '';
+    for (var i = 0; i < text.length; i++) {
+        var char = text[i];
+        normalized += isSpecialWhitespace(char)
+            ? ' '
+            : char;
+    }
+    return normalized;
+}
+exports.normalizeWhitespace = normalizeWhitespace;
+function isQuote(c) {
+    return SINGLE_QUOTES.includes(c) || DOUBLE_QUOTES.includes(c);
+}
+exports.isQuote = isQuote;
+function normalizeQuote(c) {
+    if (SINGLE_QUOTES.includes(c)) {
+        return '\'';
+    }
+    if (DOUBLE_QUOTES.includes(c)) {
+        return '"';
+    }
+    return c;
+}
+exports.normalizeQuote = normalizeQuote;
+function stripLastOccurrence(text, textToStrip) {
+    var index = text.lastIndexOf(textToStrip);
+    return (index !== -1)
+        ? text.substring(0, index) + text.substring(index + 1)
+        : text;
+}
+exports.stripLastOccurrence = stripLastOccurrence;
+function insertBeforeLastWhitespace(text, textToInsert) {
+    return text.replace(/\s*$/, function (match) { return textToInsert + match; });
+}
+exports.insertBeforeLastWhitespace = insertBeforeLastWhitespace;
+function insertAtIndex(text, textToInsert, index) {
+    return text.substring(0, index) + textToInsert + text.substring(index);
+}
+exports.insertAtIndex = insertAtIndex;
+
+
+/***/ }),
+/* 46 */
 /***/ (function(module, exports) {
 
 /* ***** BEGIN LICENSE BLOCK *****
@@ -36565,31 +37102,31 @@ window.ace.define('ace/theme/jsoneditor', ['require', 'exports', 'module', 'ace/
 });
 
 /***/ }),
-/* 43 */
+/* 47 */
 /***/ (function(module, exports, __webpack_require__) {
 
 exports.tryRequireAjv = function () {
   try {
-    return __webpack_require__(44);
+    return __webpack_require__(48);
   } catch (err) {// no problem... when we need Ajv we will throw a neat exception
   }
 };
 
 /***/ }),
-/* 44 */
+/* 48 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var compileSchema = __webpack_require__(45)
-  , resolve = __webpack_require__(17)
-  , Cache = __webpack_require__(49)
-  , SchemaObject = __webpack_require__(25)
-  , stableStringify = __webpack_require__(26)
-  , formats = __webpack_require__(50)
-  , rules = __webpack_require__(51)
-  , $dataMetaSchema = __webpack_require__(72)
+var compileSchema = __webpack_require__(49)
+  , resolve = __webpack_require__(18)
+  , Cache = __webpack_require__(53)
+  , SchemaObject = __webpack_require__(26)
+  , stableStringify = __webpack_require__(27)
+  , formats = __webpack_require__(54)
+  , rules = __webpack_require__(55)
+  , $dataMetaSchema = __webpack_require__(76)
   , util = __webpack_require__(7);
 
 module.exports = Ajv;
@@ -36607,14 +37144,14 @@ Ajv.prototype.errorsText = errorsText;
 Ajv.prototype._addSchema = _addSchema;
 Ajv.prototype._compile = _compile;
 
-Ajv.prototype.compileAsync = __webpack_require__(73);
-var customKeyword = __webpack_require__(74);
+Ajv.prototype.compileAsync = __webpack_require__(77);
+var customKeyword = __webpack_require__(78);
 Ajv.prototype.addKeyword = customKeyword.add;
 Ajv.prototype.getKeyword = customKeyword.get;
 Ajv.prototype.removeKeyword = customKeyword.remove;
 Ajv.prototype.validateKeyword = customKeyword.validate;
 
-var errorClasses = __webpack_require__(19);
+var errorClasses = __webpack_require__(20);
 Ajv.ValidationError = errorClasses.Validation;
 Ajv.MissingRefError = errorClasses.MissingRef;
 Ajv.$dataMetaSchema = $dataMetaSchema;
@@ -37023,11 +37560,11 @@ function addFormat(name, format) {
 function addDefaultMetaSchema(self) {
   var $dataSchema;
   if (self._opts.$data) {
-    $dataSchema = __webpack_require__(77);
+    $dataSchema = __webpack_require__(81);
     self.addMetaSchema($dataSchema, $dataSchema.$id, true);
   }
   if (self._opts.meta === false) return;
-  var metaSchema = __webpack_require__(32);
+  var metaSchema = __webpack_require__(33);
   if (self._opts.$data) metaSchema = $dataMetaSchema(metaSchema, META_SUPPORT_DATA);
   self.addMetaSchema(metaSchema, META_SCHEMA_ID, true);
   self._refs['http://json-schema.org/schema'] = META_SCHEMA_ID;
@@ -37089,25 +37626,25 @@ function noop() {}
 
 
 /***/ }),
-/* 45 */
+/* 49 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var resolve = __webpack_require__(17)
+var resolve = __webpack_require__(18)
   , util = __webpack_require__(7)
-  , errorClasses = __webpack_require__(19)
-  , stableStringify = __webpack_require__(26);
+  , errorClasses = __webpack_require__(20)
+  , stableStringify = __webpack_require__(27);
 
-var validateGenerator = __webpack_require__(27);
+var validateGenerator = __webpack_require__(28);
 
 /**
  * Functions below are used inside compiled validations function
  */
 
 var ucs2length = util.ucs2length;
-var equal = __webpack_require__(18);
+var equal = __webpack_require__(19);
 
 // this error is thrown by async schemas to return validation errors via exception
 var ValidationError = errorClasses.Validation;
@@ -37483,10 +38020,10 @@ function vars(arr, statement) {
 
 
 /***/ }),
-/* 46 */
+/* 50 */
 /***/ (function(module, exports, __webpack_require__) {
 
-/** @license URI.js v4.2.1 (c) 2011 Gary Court. License: http://github.com/garycourt/uri-js */
+/** @license URI.js v4.4.0 (c) 2011 Gary Court. License: http://github.com/garycourt/uri-js */
 (function (global, factory) {
 	 true ? factory(exports) :
 	undefined;
@@ -38448,9 +38985,9 @@ function _recomposeAuthority(components, options) {
             return "[" + $1 + ($2 ? "%25" + $2 : "") + "]";
         }));
     }
-    if (typeof components.port === "number") {
+    if (typeof components.port === "number" || typeof components.port === "string") {
         uriTokens.push(":");
-        uriTokens.push(components.port.toString(10));
+        uriTokens.push(String(components.port));
     }
     return uriTokens.length ? uriTokens.join("") : undefined;
 }
@@ -38653,8 +39190,9 @@ var handler = {
         return components;
     },
     serialize: function serialize(components, options) {
+        var secure = String(components.scheme).toLowerCase() === "https";
         //normalize the default port
-        if (components.port === (String(components.scheme).toLowerCase() !== "https" ? 80 : 443) || components.port === "") {
+        if (components.port === (secure ? 443 : 80) || components.port === "") {
             components.port = undefined;
         }
         //normalize the empty path
@@ -38673,6 +39211,57 @@ var handler$1 = {
     domainHost: handler.domainHost,
     parse: handler.parse,
     serialize: handler.serialize
+};
+
+function isSecure(wsComponents) {
+    return typeof wsComponents.secure === 'boolean' ? wsComponents.secure : String(wsComponents.scheme).toLowerCase() === "wss";
+}
+//RFC 6455
+var handler$2 = {
+    scheme: "ws",
+    domainHost: true,
+    parse: function parse(components, options) {
+        var wsComponents = components;
+        //indicate if the secure flag is set
+        wsComponents.secure = isSecure(wsComponents);
+        //construct resouce name
+        wsComponents.resourceName = (wsComponents.path || '/') + (wsComponents.query ? '?' + wsComponents.query : '');
+        wsComponents.path = undefined;
+        wsComponents.query = undefined;
+        return wsComponents;
+    },
+    serialize: function serialize(wsComponents, options) {
+        //normalize the default port
+        if (wsComponents.port === (isSecure(wsComponents) ? 443 : 80) || wsComponents.port === "") {
+            wsComponents.port = undefined;
+        }
+        //ensure scheme matches secure flag
+        if (typeof wsComponents.secure === 'boolean') {
+            wsComponents.scheme = wsComponents.secure ? 'wss' : 'ws';
+            wsComponents.secure = undefined;
+        }
+        //reconstruct path from resource name
+        if (wsComponents.resourceName) {
+            var _wsComponents$resourc = wsComponents.resourceName.split('?'),
+                _wsComponents$resourc2 = slicedToArray(_wsComponents$resourc, 2),
+                path = _wsComponents$resourc2[0],
+                query = _wsComponents$resourc2[1];
+
+            wsComponents.path = path && path !== '/' ? path : undefined;
+            wsComponents.query = query;
+            wsComponents.resourceName = undefined;
+        }
+        //forbid fragment component
+        wsComponents.fragment = undefined;
+        return wsComponents;
+    }
+};
+
+var handler$3 = {
+    scheme: "wss",
+    domainHost: handler$2.domainHost,
+    parse: handler$2.parse,
+    serialize: handler$2.serialize
 };
 
 var O = {};
@@ -38705,7 +39294,7 @@ function decodeUnreserved(str) {
     var decStr = pctDecChars(str);
     return !decStr.match(UNRESERVED) ? str : decStr;
 }
-var handler$2 = {
+var handler$4 = {
     scheme: "mailto",
     parse: function parse$$1(components, options) {
         var mailtoComponents = components;
@@ -38793,7 +39382,7 @@ var handler$2 = {
 
 var URN_PARSE = /^([^\:]+)\:(.*)/;
 //RFC 2141
-var handler$3 = {
+var handler$5 = {
     scheme: "urn",
     parse: function parse$$1(components, options) {
         var matches = components.path && components.path.match(URN_PARSE);
@@ -38832,7 +39421,7 @@ var handler$3 = {
 
 var UUID = /^[0-9A-Fa-f]{8}(?:\-[0-9A-Fa-f]{4}){3}\-[0-9A-Fa-f]{12}$/;
 //RFC 4122
-var handler$4 = {
+var handler$6 = {
     scheme: "urn:uuid",
     parse: function parse(urnComponents, options) {
         var uuidComponents = urnComponents;
@@ -38856,6 +39445,8 @@ SCHEMES[handler$1.scheme] = handler$1;
 SCHEMES[handler$2.scheme] = handler$2;
 SCHEMES[handler$3.scheme] = handler$3;
 SCHEMES[handler$4.scheme] = handler$4;
+SCHEMES[handler$5.scheme] = handler$5;
+SCHEMES[handler$6.scheme] = handler$6;
 
 exports.SCHEMES = SCHEMES;
 exports.pctEncChar = pctEncChar;
@@ -38876,7 +39467,7 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 
 /***/ }),
-/* 47 */
+/* 51 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38903,7 +39494,7 @@ module.exports = function ucs2length(str) {
 
 
 /***/ }),
-/* 48 */
+/* 52 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -38999,7 +39590,7 @@ function escapeJsonPtr(str) {
 
 
 /***/ }),
-/* 49 */
+/* 53 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39032,7 +39623,7 @@ Cache.prototype.clear = function Cache_clear() {
 
 
 /***/ }),
-/* 50 */
+/* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39051,8 +39642,8 @@ var URITEMPLATE = /^(?:(?:[^\x00-\x20"'<>%\\^`{|}]|%[0-9a-f]{2})|\{[+#./;?&=,!@|
 // For the source: https://gist.github.com/dperini/729294
 // For test cases: https://mathiasbynens.be/demo/url-regex
 // @todo Delete current URL in favour of the commented out URL rule when this issue is fixed https://github.com/eslint/eslint/issues/7983.
-// var URL = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)(?:\.(?:[a-z\u{00a1}-\u{ffff}0-9]+-?)*[a-z\u{00a1}-\u{ffff}0-9]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
-var URL = /^(?:(?:http[s\u017F]?|ftp):\/\/)(?:(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+(?::(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?@)?(?:(?!10(?:\.[0-9]{1,3}){3})(?!127(?:\.[0-9]{1,3}){3})(?!169\.254(?:\.[0-9]{1,3}){2})(?!192\.168(?:\.[0-9]{1,3}){2})(?!172\.(?:1[6-9]|2[0-9]|3[01])(?:\.[0-9]{1,3}){2})(?:[1-9][0-9]?|1[0-9][0-9]|2[01][0-9]|22[0-3])(?:\.(?:1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])){2}(?:\.(?:[1-9][0-9]?|1[0-9][0-9]|2[0-4][0-9]|25[0-4]))|(?:(?:(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-?)*(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)(?:\.(?:(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-?)*(?:[0-9KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)*(?:\.(?:(?:[KSa-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]){2,})))(?::[0-9]{2,5})?(?:\/(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?$/i;
+// var URL = /^(?:(?:https?|ftp):\/\/)(?:\S+(?::\S*)?@)?(?:(?!10(?:\.\d{1,3}){3})(?!127(?:\.\d{1,3}){3})(?!169\.254(?:\.\d{1,3}){2})(?!192\.168(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z\u{00a1}-\u{ffff}0-9]+-)*[a-z\u{00a1}-\u{ffff}0-9]+)(?:\.(?:[a-z\u{00a1}-\u{ffff}0-9]+-)*[a-z\u{00a1}-\u{ffff}0-9]+)*(?:\.(?:[a-z\u{00a1}-\u{ffff}]{2,})))(?::\d{2,5})?(?:\/[^\s]*)?$/iu;
+var URL = /^(?:(?:http[s\u017F]?|ftp):\/\/)(?:(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+(?::(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?@)?(?:(?!10(?:\.[0-9]{1,3}){3})(?!127(?:\.[0-9]{1,3}){3})(?!169\.254(?:\.[0-9]{1,3}){2})(?!192\.168(?:\.[0-9]{1,3}){2})(?!172\.(?:1[6-9]|2[0-9]|3[01])(?:\.[0-9]{1,3}){2})(?:[1-9][0-9]?|1[0-9][0-9]|2[01][0-9]|22[0-3])(?:\.(?:1?[0-9]{1,2}|2[0-4][0-9]|25[0-5])){2}(?:\.(?:[1-9][0-9]?|1[0-9][0-9]|2[0-4][0-9]|25[0-4]))|(?:(?:(?:[0-9a-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-)*(?:[0-9a-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)(?:\.(?:(?:[0-9a-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+-)*(?:[0-9a-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])+)*(?:\.(?:(?:[a-z\xA1-\uD7FF\uE000-\uFFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF]){2,})))(?::[0-9]{2,5})?(?:\/(?:[\0-\x08\x0E-\x1F!-\x9F\xA1-\u167F\u1681-\u1FFF\u200B-\u2027\u202A-\u202E\u2030-\u205E\u2060-\u2FFF\u3001-\uD7FF\uE000-\uFEFE\uFF00-\uFFFF]|[\uD800-\uDBFF][\uDC00-\uDFFF]|[\uD800-\uDBFF](?![\uDC00-\uDFFF])|(?:[^\uD800-\uDBFF]|^)[\uDC00-\uDFFF])*)?$/i;
 var UUID = /^(?:urn:uuid:)?[0-9a-f]{8}-(?:[0-9a-f]{4}-){3}[0-9a-f]{12}$/i;
 var JSON_POINTER = /^(?:\/(?:[^~/]|~0|~1)*)*$/;
 var JSON_POINTER_URI_FRAGMENT = /^#(?:\/(?:[a-z0-9_\-.!$&'()*+,;:=@]|%[0-9a-f]{2}|~0|~1)*)*$/i;
@@ -39074,8 +39665,8 @@ formats.fast = {
   time: /^(?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)?$/i,
   'date-time': /^\d\d\d\d-[0-1]\d-[0-3]\d[t\s](?:[0-2]\d:[0-5]\d:[0-5]\d|23:59:60)(?:\.\d+)?(?:z|[+-]\d\d(?::?\d\d)?)$/i,
   // uri: https://github.com/mafintosh/is-my-json-valid/blob/master/formats.js
-  uri: /^(?:[a-z][a-z0-9+-.]*:)(?:\/?\/)?[^\s]*$/i,
-  'uri-reference': /^(?:(?:[a-z][a-z0-9+-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i,
+  uri: /^(?:[a-z][a-z0-9+\-.]*:)(?:\/?\/)?[^\s]*$/i,
+  'uri-reference': /^(?:(?:[a-z][a-z0-9+\-.]*:)?\/?\/)?(?:[^\\\s#][^\s#]*)?(?:#[^\\\s]*)?$/i,
   'uri-template': URITEMPLATE,
   url: URL,
   // email (sources from jsen validator):
@@ -39181,13 +39772,13 @@ function regex(str) {
 
 
 /***/ }),
-/* 51 */
+/* 55 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var ruleModules = __webpack_require__(52)
+var ruleModules = __webpack_require__(56)
   , toHash = __webpack_require__(7).toHash;
 
 module.exports = function rules() {
@@ -39254,7 +39845,7 @@ module.exports = function rules() {
 
 
 /***/ }),
-/* 52 */
+/* 56 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39262,39 +39853,39 @@ module.exports = function rules() {
 
 //all requires must be explicit because browserify won't work with dynamic requires
 module.exports = {
-  '$ref': __webpack_require__(53),
-  allOf: __webpack_require__(54),
-  anyOf: __webpack_require__(55),
-  '$comment': __webpack_require__(56),
-  const: __webpack_require__(57),
-  contains: __webpack_require__(58),
-  dependencies: __webpack_require__(59),
-  'enum': __webpack_require__(60),
-  format: __webpack_require__(61),
-  'if': __webpack_require__(62),
-  items: __webpack_require__(63),
-  maximum: __webpack_require__(28),
-  minimum: __webpack_require__(28),
-  maxItems: __webpack_require__(29),
-  minItems: __webpack_require__(29),
-  maxLength: __webpack_require__(30),
-  minLength: __webpack_require__(30),
-  maxProperties: __webpack_require__(31),
-  minProperties: __webpack_require__(31),
-  multipleOf: __webpack_require__(64),
-  not: __webpack_require__(65),
-  oneOf: __webpack_require__(66),
-  pattern: __webpack_require__(67),
-  properties: __webpack_require__(68),
-  propertyNames: __webpack_require__(69),
-  required: __webpack_require__(70),
-  uniqueItems: __webpack_require__(71),
-  validate: __webpack_require__(27)
+  '$ref': __webpack_require__(57),
+  allOf: __webpack_require__(58),
+  anyOf: __webpack_require__(59),
+  '$comment': __webpack_require__(60),
+  const: __webpack_require__(61),
+  contains: __webpack_require__(62),
+  dependencies: __webpack_require__(63),
+  'enum': __webpack_require__(64),
+  format: __webpack_require__(65),
+  'if': __webpack_require__(66),
+  items: __webpack_require__(67),
+  maximum: __webpack_require__(29),
+  minimum: __webpack_require__(29),
+  maxItems: __webpack_require__(30),
+  minItems: __webpack_require__(30),
+  maxLength: __webpack_require__(31),
+  minLength: __webpack_require__(31),
+  maxProperties: __webpack_require__(32),
+  minProperties: __webpack_require__(32),
+  multipleOf: __webpack_require__(68),
+  not: __webpack_require__(69),
+  oneOf: __webpack_require__(70),
+  pattern: __webpack_require__(71),
+  properties: __webpack_require__(72),
+  propertyNames: __webpack_require__(73),
+  required: __webpack_require__(74),
+  uniqueItems: __webpack_require__(75),
+  validate: __webpack_require__(28)
 };
 
 
 /***/ }),
-/* 53 */
+/* 57 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39425,7 +40016,7 @@ module.exports = function generate_ref(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 54 */
+/* 58 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39448,7 +40039,7 @@ module.exports = function generate_allOf(it, $keyword, $ruleType) {
       l1 = arr1.length - 1;
     while ($i < l1) {
       $sch = arr1[$i += 1];
-      if ((it.opts.strictKeywords ? typeof $sch == 'object' && Object.keys($sch).length > 0 : it.util.schemaHasRules($sch, it.RULES.all))) {
+      if ((it.opts.strictKeywords ? (typeof $sch == 'object' && Object.keys($sch).length > 0) || $sch === false : it.util.schemaHasRules($sch, it.RULES.all))) {
         $allSchemasEmpty = false;
         $it.schema = $sch;
         $it.schemaPath = $schemaPath + '[' + $i + ']';
@@ -39474,7 +40065,7 @@ module.exports = function generate_allOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 55 */
+/* 59 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39495,7 +40086,7 @@ module.exports = function generate_anyOf(it, $keyword, $ruleType) {
   $it.level++;
   var $nextValid = 'valid' + $it.level;
   var $noEmptySchema = $schema.every(function($sch) {
-    return (it.opts.strictKeywords ? typeof $sch == 'object' && Object.keys($sch).length > 0 : it.util.schemaHasRules($sch, it.RULES.all));
+    return (it.opts.strictKeywords ? (typeof $sch == 'object' && Object.keys($sch).length > 0) || $sch === false : it.util.schemaHasRules($sch, it.RULES.all));
   });
   if ($noEmptySchema) {
     var $currentBaseId = $it.baseId;
@@ -39554,7 +40145,7 @@ module.exports = function generate_anyOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 56 */
+/* 60 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39575,7 +40166,7 @@ module.exports = function generate_comment(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 57 */
+/* 61 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39638,7 +40229,7 @@ module.exports = function generate_const(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 58 */
+/* 62 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39662,7 +40253,7 @@ module.exports = function generate_contains(it, $keyword, $ruleType) {
     $dataNxt = $it.dataLevel = it.dataLevel + 1,
     $nextData = 'data' + $dataNxt,
     $currentBaseId = it.baseId,
-    $nonEmptySchema = (it.opts.strictKeywords ? typeof $schema == 'object' && Object.keys($schema).length > 0 : it.util.schemaHasRules($schema, it.RULES.all));
+    $nonEmptySchema = (it.opts.strictKeywords ? (typeof $schema == 'object' && Object.keys($schema).length > 0) || $schema === false : it.util.schemaHasRules($schema, it.RULES.all));
   out += 'var ' + ($errs) + ' = errors;var ' + ($valid) + ';';
   if ($nonEmptySchema) {
     var $wasComposite = it.compositeRule;
@@ -39726,7 +40317,7 @@ module.exports = function generate_contains(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 59 */
+/* 63 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39875,7 +40466,7 @@ module.exports = function generate_dependencies(it, $keyword, $ruleType) {
   var $currentBaseId = $it.baseId;
   for (var $property in $schemaDeps) {
     var $sch = $schemaDeps[$property];
-    if ((it.opts.strictKeywords ? typeof $sch == 'object' && Object.keys($sch).length > 0 : it.util.schemaHasRules($sch, it.RULES.all))) {
+    if ((it.opts.strictKeywords ? (typeof $sch == 'object' && Object.keys($sch).length > 0) || $sch === false : it.util.schemaHasRules($sch, it.RULES.all))) {
       out += ' ' + ($nextValid) + ' = true; if ( ' + ($data) + (it.util.getProperty($property)) + ' !== undefined ';
       if ($ownProperties) {
         out += ' && Object.prototype.hasOwnProperty.call(' + ($data) + ', \'' + (it.util.escapeQuotes($property)) + '\') ';
@@ -39901,7 +40492,7 @@ module.exports = function generate_dependencies(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 60 */
+/* 64 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -39974,7 +40565,7 @@ module.exports = function generate_enum(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 61 */
+/* 65 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40131,7 +40722,7 @@ module.exports = function generate_format(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 62 */
+/* 66 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40152,8 +40743,8 @@ module.exports = function generate_if(it, $keyword, $ruleType) {
   var $nextValid = 'valid' + $it.level;
   var $thenSch = it.schema['then'],
     $elseSch = it.schema['else'],
-    $thenPresent = $thenSch !== undefined && (it.opts.strictKeywords ? typeof $thenSch == 'object' && Object.keys($thenSch).length > 0 : it.util.schemaHasRules($thenSch, it.RULES.all)),
-    $elsePresent = $elseSch !== undefined && (it.opts.strictKeywords ? typeof $elseSch == 'object' && Object.keys($elseSch).length > 0 : it.util.schemaHasRules($elseSch, it.RULES.all)),
+    $thenPresent = $thenSch !== undefined && (it.opts.strictKeywords ? (typeof $thenSch == 'object' && Object.keys($thenSch).length > 0) || $thenSch === false : it.util.schemaHasRules($thenSch, it.RULES.all)),
+    $elsePresent = $elseSch !== undefined && (it.opts.strictKeywords ? (typeof $elseSch == 'object' && Object.keys($elseSch).length > 0) || $elseSch === false : it.util.schemaHasRules($elseSch, it.RULES.all)),
     $currentBaseId = $it.baseId;
   if ($thenPresent || $elsePresent) {
     var $ifClause;
@@ -40241,7 +40832,7 @@ module.exports = function generate_if(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 63 */
+/* 67 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40313,7 +40904,7 @@ module.exports = function generate_items(it, $keyword, $ruleType) {
         l1 = arr1.length - 1;
       while ($i < l1) {
         $sch = arr1[$i += 1];
-        if ((it.opts.strictKeywords ? typeof $sch == 'object' && Object.keys($sch).length > 0 : it.util.schemaHasRules($sch, it.RULES.all))) {
+        if ((it.opts.strictKeywords ? (typeof $sch == 'object' && Object.keys($sch).length > 0) || $sch === false : it.util.schemaHasRules($sch, it.RULES.all))) {
           out += ' ' + ($nextValid) + ' = true; if (' + ($data) + '.length > ' + ($i) + ') { ';
           var $passData = $data + '[' + $i + ']';
           $it.schema = $sch;
@@ -40336,7 +40927,7 @@ module.exports = function generate_items(it, $keyword, $ruleType) {
         }
       }
     }
-    if (typeof $additionalItems == 'object' && (it.opts.strictKeywords ? typeof $additionalItems == 'object' && Object.keys($additionalItems).length > 0 : it.util.schemaHasRules($additionalItems, it.RULES.all))) {
+    if (typeof $additionalItems == 'object' && (it.opts.strictKeywords ? (typeof $additionalItems == 'object' && Object.keys($additionalItems).length > 0) || $additionalItems === false : it.util.schemaHasRules($additionalItems, it.RULES.all))) {
       $it.schema = $additionalItems;
       $it.schemaPath = it.schemaPath + '.additionalItems';
       $it.errSchemaPath = it.errSchemaPath + '/additionalItems';
@@ -40360,7 +40951,7 @@ module.exports = function generate_items(it, $keyword, $ruleType) {
         $closingBraces += '}';
       }
     }
-  } else if ((it.opts.strictKeywords ? typeof $schema == 'object' && Object.keys($schema).length > 0 : it.util.schemaHasRules($schema, it.RULES.all))) {
+  } else if ((it.opts.strictKeywords ? (typeof $schema == 'object' && Object.keys($schema).length > 0) || $schema === false : it.util.schemaHasRules($schema, it.RULES.all))) {
     $it.schema = $schema;
     $it.schemaPath = $schemaPath;
     $it.errSchemaPath = $errSchemaPath;
@@ -40388,7 +40979,7 @@ module.exports = function generate_items(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 64 */
+/* 68 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40475,7 +41066,7 @@ module.exports = function generate_multipleOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 65 */
+/* 69 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40493,7 +41084,7 @@ module.exports = function generate_not(it, $keyword, $ruleType) {
   var $it = it.util.copy(it);
   $it.level++;
   var $nextValid = 'valid' + $it.level;
-  if ((it.opts.strictKeywords ? typeof $schema == 'object' && Object.keys($schema).length > 0 : it.util.schemaHasRules($schema, it.RULES.all))) {
+  if ((it.opts.strictKeywords ? (typeof $schema == 'object' && Object.keys($schema).length > 0) || $schema === false : it.util.schemaHasRules($schema, it.RULES.all))) {
     $it.schema = $schema;
     $it.schemaPath = $schemaPath;
     $it.errSchemaPath = $errSchemaPath;
@@ -40566,7 +41157,7 @@ module.exports = function generate_not(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 66 */
+/* 70 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40598,7 +41189,7 @@ module.exports = function generate_oneOf(it, $keyword, $ruleType) {
       l1 = arr1.length - 1;
     while ($i < l1) {
       $sch = arr1[$i += 1];
-      if ((it.opts.strictKeywords ? typeof $sch == 'object' && Object.keys($sch).length > 0 : it.util.schemaHasRules($sch, it.RULES.all))) {
+      if ((it.opts.strictKeywords ? (typeof $sch == 'object' && Object.keys($sch).length > 0) || $sch === false : it.util.schemaHasRules($sch, it.RULES.all))) {
         $it.schema = $sch;
         $it.schemaPath = $schemaPath + '[' + $i + ']';
         $it.errSchemaPath = $errSchemaPath + '/' + $i;
@@ -40646,7 +41237,7 @@ module.exports = function generate_oneOf(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 67 */
+/* 71 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40728,7 +41319,7 @@ module.exports = function generate_pattern(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 68 */
+/* 72 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -40923,7 +41514,7 @@ module.exports = function generate_properties(it, $keyword, $ruleType) {
       while (i3 < l3) {
         $propertyKey = arr3[i3 += 1];
         var $sch = $schema[$propertyKey];
-        if ((it.opts.strictKeywords ? typeof $sch == 'object' && Object.keys($sch).length > 0 : it.util.schemaHasRules($sch, it.RULES.all))) {
+        if ((it.opts.strictKeywords ? (typeof $sch == 'object' && Object.keys($sch).length > 0) || $sch === false : it.util.schemaHasRules($sch, it.RULES.all))) {
           var $prop = it.util.getProperty($propertyKey),
             $passData = $data + $prop,
             $hasDefault = $useDefaults && $sch.default !== undefined;
@@ -41026,7 +41617,7 @@ module.exports = function generate_properties(it, $keyword, $ruleType) {
       while (i4 < l4) {
         $pProperty = arr4[i4 += 1];
         var $sch = $pProperties[$pProperty];
-        if ((it.opts.strictKeywords ? typeof $sch == 'object' && Object.keys($sch).length > 0 : it.util.schemaHasRules($sch, it.RULES.all))) {
+        if ((it.opts.strictKeywords ? (typeof $sch == 'object' && Object.keys($sch).length > 0) || $sch === false : it.util.schemaHasRules($sch, it.RULES.all))) {
           $it.schema = $sch;
           $it.schemaPath = it.schemaPath + '.patternProperties' + it.util.getProperty($pProperty);
           $it.errSchemaPath = it.errSchemaPath + '/patternProperties/' + it.util.escapeFragment($pProperty);
@@ -41070,7 +41661,7 @@ module.exports = function generate_properties(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 69 */
+/* 73 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41090,7 +41681,7 @@ module.exports = function generate_propertyNames(it, $keyword, $ruleType) {
   $it.level++;
   var $nextValid = 'valid' + $it.level;
   out += 'var ' + ($errs) + ' = errors;';
-  if ((it.opts.strictKeywords ? typeof $schema == 'object' && Object.keys($schema).length > 0 : it.util.schemaHasRules($schema, it.RULES.all))) {
+  if ((it.opts.strictKeywords ? (typeof $schema == 'object' && Object.keys($schema).length > 0) || $schema === false : it.util.schemaHasRules($schema, it.RULES.all))) {
     $it.schema = $schema;
     $it.schemaPath = $schemaPath;
     $it.errSchemaPath = $errSchemaPath;
@@ -41158,7 +41749,7 @@ module.exports = function generate_propertyNames(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 70 */
+/* 74 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41192,7 +41783,7 @@ module.exports = function generate_required(it, $keyword, $ruleType) {
         while (i1 < l1) {
           $property = arr1[i1 += 1];
           var $propertySch = it.schema.properties[$property];
-          if (!($propertySch && (it.opts.strictKeywords ? typeof $propertySch == 'object' && Object.keys($propertySch).length > 0 : it.util.schemaHasRules($propertySch, it.RULES.all)))) {
+          if (!($propertySch && (it.opts.strictKeywords ? (typeof $propertySch == 'object' && Object.keys($propertySch).length > 0) || $propertySch === false : it.util.schemaHasRules($propertySch, it.RULES.all)))) {
             $required[$required.length] = $property;
           }
         }
@@ -41435,7 +42026,7 @@ module.exports = function generate_required(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 71 */
+/* 75 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41528,7 +42119,7 @@ module.exports = function generate_uniqueItems(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 72 */
+/* 76 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -41584,13 +42175,13 @@ module.exports = function (metaSchema, keywordsJsonPointers) {
 
 
 /***/ }),
-/* 73 */
+/* 77 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var MissingRefError = __webpack_require__(19).MissingRef;
+var MissingRefError = __webpack_require__(20).MissingRef;
 
 module.exports = compileAsync;
 
@@ -41681,15 +42272,15 @@ function compileAsync(schema, meta, callback) {
 
 
 /***/ }),
-/* 74 */
+/* 78 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
 var IDENTIFIER = /^[a-z_$][a-z0-9_$-]*$/i;
-var customRuleCode = __webpack_require__(75);
-var definitionSchema = __webpack_require__(76);
+var customRuleCode = __webpack_require__(79);
+var definitionSchema = __webpack_require__(80);
 
 module.exports = {
   add: addKeyword,
@@ -41834,7 +42425,7 @@ function validateKeyword(definition, throwError) {
 
 
 /***/ }),
-/* 75 */
+/* 79 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -42069,13 +42660,13 @@ module.exports = function generate_custom(it, $keyword, $ruleType) {
 
 
 /***/ }),
-/* 76 */
+/* 80 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var metaSchema = __webpack_require__(32);
+var metaSchema = __webpack_require__(33);
 
 module.exports = {
   $id: 'https://github.com/ajv-validator/ajv/blob/master/lib/definition_schema.js',
@@ -42113,25 +42704,25 @@ module.exports = {
 
 
 /***/ }),
-/* 77 */
+/* 81 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"$schema\":\"http://json-schema.org/draft-07/schema#\",\"$id\":\"https://raw.githubusercontent.com/ajv-validator/ajv/master/lib/refs/data.json#\",\"description\":\"Meta-schema for $data reference (JSON Schema extension proposal)\",\"type\":\"object\",\"required\":[\"$data\"],\"properties\":{\"$data\":{\"type\":\"string\",\"anyOf\":[{\"format\":\"relative-json-pointer\"},{\"format\":\"json-pointer\"}]}},\"additionalProperties\":false}");
 
 /***/ }),
-/* 78 */
+/* 82 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"id\":\"http://json-schema.org/draft-04/schema#\",\"$schema\":\"http://json-schema.org/draft-04/schema#\",\"description\":\"Core schema meta-schema\",\"definitions\":{\"schemaArray\":{\"type\":\"array\",\"minItems\":1,\"items\":{\"$ref\":\"#\"}},\"positiveInteger\":{\"type\":\"integer\",\"minimum\":0},\"positiveIntegerDefault0\":{\"allOf\":[{\"$ref\":\"#/definitions/positiveInteger\"},{\"default\":0}]},\"simpleTypes\":{\"enum\":[\"array\",\"boolean\",\"integer\",\"null\",\"number\",\"object\",\"string\"]},\"stringArray\":{\"type\":\"array\",\"items\":{\"type\":\"string\"},\"minItems\":1,\"uniqueItems\":true}},\"type\":\"object\",\"properties\":{\"id\":{\"type\":\"string\"},\"$schema\":{\"type\":\"string\"},\"title\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"default\":{},\"multipleOf\":{\"type\":\"number\",\"minimum\":0,\"exclusiveMinimum\":true},\"maximum\":{\"type\":\"number\"},\"exclusiveMaximum\":{\"type\":\"boolean\",\"default\":false},\"minimum\":{\"type\":\"number\"},\"exclusiveMinimum\":{\"type\":\"boolean\",\"default\":false},\"maxLength\":{\"$ref\":\"#/definitions/positiveInteger\"},\"minLength\":{\"$ref\":\"#/definitions/positiveIntegerDefault0\"},\"pattern\":{\"type\":\"string\",\"format\":\"regex\"},\"additionalItems\":{\"anyOf\":[{\"type\":\"boolean\"},{\"$ref\":\"#\"}],\"default\":{}},\"items\":{\"anyOf\":[{\"$ref\":\"#\"},{\"$ref\":\"#/definitions/schemaArray\"}],\"default\":{}},\"maxItems\":{\"$ref\":\"#/definitions/positiveInteger\"},\"minItems\":{\"$ref\":\"#/definitions/positiveIntegerDefault0\"},\"uniqueItems\":{\"type\":\"boolean\",\"default\":false},\"maxProperties\":{\"$ref\":\"#/definitions/positiveInteger\"},\"minProperties\":{\"$ref\":\"#/definitions/positiveIntegerDefault0\"},\"required\":{\"$ref\":\"#/definitions/stringArray\"},\"additionalProperties\":{\"anyOf\":[{\"type\":\"boolean\"},{\"$ref\":\"#\"}],\"default\":{}},\"definitions\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"properties\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"patternProperties\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"dependencies\":{\"type\":\"object\",\"additionalProperties\":{\"anyOf\":[{\"$ref\":\"#\"},{\"$ref\":\"#/definitions/stringArray\"}]}},\"enum\":{\"type\":\"array\",\"minItems\":1,\"uniqueItems\":true},\"type\":{\"anyOf\":[{\"$ref\":\"#/definitions/simpleTypes\"},{\"type\":\"array\",\"items\":{\"$ref\":\"#/definitions/simpleTypes\"},\"minItems\":1,\"uniqueItems\":true}]},\"format\":{\"type\":\"string\"},\"allOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"anyOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"oneOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"not\":{\"$ref\":\"#\"}},\"dependencies\":{\"exclusiveMaximum\":[\"maximum\"],\"exclusiveMinimum\":[\"minimum\"]},\"default\":{}}");
 
 /***/ }),
-/* 79 */
+/* 83 */
 /***/ (function(module) {
 
 module.exports = JSON.parse("{\"$schema\":\"http://json-schema.org/draft-06/schema#\",\"$id\":\"http://json-schema.org/draft-06/schema#\",\"title\":\"Core schema meta-schema\",\"definitions\":{\"schemaArray\":{\"type\":\"array\",\"minItems\":1,\"items\":{\"$ref\":\"#\"}},\"nonNegativeInteger\":{\"type\":\"integer\",\"minimum\":0},\"nonNegativeIntegerDefault0\":{\"allOf\":[{\"$ref\":\"#/definitions/nonNegativeInteger\"},{\"default\":0}]},\"simpleTypes\":{\"enum\":[\"array\",\"boolean\",\"integer\",\"null\",\"number\",\"object\",\"string\"]},\"stringArray\":{\"type\":\"array\",\"items\":{\"type\":\"string\"},\"uniqueItems\":true,\"default\":[]}},\"type\":[\"object\",\"boolean\"],\"properties\":{\"$id\":{\"type\":\"string\",\"format\":\"uri-reference\"},\"$schema\":{\"type\":\"string\",\"format\":\"uri\"},\"$ref\":{\"type\":\"string\",\"format\":\"uri-reference\"},\"title\":{\"type\":\"string\"},\"description\":{\"type\":\"string\"},\"default\":{},\"examples\":{\"type\":\"array\",\"items\":{}},\"multipleOf\":{\"type\":\"number\",\"exclusiveMinimum\":0},\"maximum\":{\"type\":\"number\"},\"exclusiveMaximum\":{\"type\":\"number\"},\"minimum\":{\"type\":\"number\"},\"exclusiveMinimum\":{\"type\":\"number\"},\"maxLength\":{\"$ref\":\"#/definitions/nonNegativeInteger\"},\"minLength\":{\"$ref\":\"#/definitions/nonNegativeIntegerDefault0\"},\"pattern\":{\"type\":\"string\",\"format\":\"regex\"},\"additionalItems\":{\"$ref\":\"#\"},\"items\":{\"anyOf\":[{\"$ref\":\"#\"},{\"$ref\":\"#/definitions/schemaArray\"}],\"default\":{}},\"maxItems\":{\"$ref\":\"#/definitions/nonNegativeInteger\"},\"minItems\":{\"$ref\":\"#/definitions/nonNegativeIntegerDefault0\"},\"uniqueItems\":{\"type\":\"boolean\",\"default\":false},\"contains\":{\"$ref\":\"#\"},\"maxProperties\":{\"$ref\":\"#/definitions/nonNegativeInteger\"},\"minProperties\":{\"$ref\":\"#/definitions/nonNegativeIntegerDefault0\"},\"required\":{\"$ref\":\"#/definitions/stringArray\"},\"additionalProperties\":{\"$ref\":\"#\"},\"definitions\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"properties\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"patternProperties\":{\"type\":\"object\",\"additionalProperties\":{\"$ref\":\"#\"},\"default\":{}},\"dependencies\":{\"type\":\"object\",\"additionalProperties\":{\"anyOf\":[{\"$ref\":\"#\"},{\"$ref\":\"#/definitions/stringArray\"}]}},\"propertyNames\":{\"$ref\":\"#\"},\"const\":{},\"enum\":{\"type\":\"array\",\"minItems\":1,\"uniqueItems\":true},\"type\":{\"anyOf\":[{\"$ref\":\"#/definitions/simpleTypes\"},{\"type\":\"array\",\"items\":{\"$ref\":\"#/definitions/simpleTypes\"},\"minItems\":1,\"uniqueItems\":true}]},\"format\":{\"type\":\"string\"},\"allOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"anyOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"oneOf\":{\"$ref\":\"#/definitions/schemaArray\"},\"not\":{\"$ref\":\"#\"}},\"default\":{}}");
 
 /***/ }),
-/* 80 */
+/* 84 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -42141,9 +42732,452 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "treeModeMixins", function() { return /* binding */ treeModeMixins; });
 
-// EXTERNAL MODULE: ./src/js/vanilla-picker/index.js
-var vanilla_picker = __webpack_require__(13);
-var vanilla_picker_default = /*#__PURE__*/__webpack_require__.n(vanilla_picker);
+// CONCATENATED MODULE: ./src/js/autocomplete.js
+
+
+var defaultFilterFunction = {
+  start: function start(token, match, config) {
+    return match.indexOf(token) === 0;
+  },
+  contain: function contain(token, match, config) {
+    return match.indexOf(token) > -1;
+  }
+};
+function autocomplete(config) {
+  config = config || {};
+  config.filter = config.filter || 'start';
+  config.trigger = config.trigger || 'keydown';
+  config.confirmKeys = config.confirmKeys || [39, 35, 9]; // right, end, tab
+
+  config.caseSensitive = config.caseSensitive || false; // autocomplete case sensitive
+
+  var fontSize = '';
+  var fontFamily = '';
+  var wrapper = document.createElement('div');
+  wrapper.style.position = 'relative';
+  wrapper.style.outline = '0';
+  wrapper.style.border = '0';
+  wrapper.style.margin = '0';
+  wrapper.style.padding = '0';
+  var dropDown = document.createElement('div');
+  dropDown.className = 'autocomplete dropdown';
+  dropDown.style.position = 'absolute';
+  dropDown.style.visibility = 'hidden';
+  var spacer;
+  var leftSide; // <-- it will contain the leftSide part of the textfield (the bit that was already autocompleted)
+
+  var createDropDownController = function createDropDownController(elem, rs) {
+    var rows = [];
+    var ix = 0;
+    var oldIndex = -1; // TODO: move this styling in JS to SCSS
+
+    var onMouseOver = function onMouseOver() {
+      this.style.backgroundColor = '#ddd';
+    };
+
+    var onMouseOut = function onMouseOut() {
+      this.style.backgroundColor = '';
+    };
+
+    var onMouseDown = function onMouseDown() {
+      p.hide();
+      p.onmouseselection(this.__hint, p.rs);
+    };
+
+    var p = {
+      rs: rs,
+      hide: function hide() {
+        elem.style.visibility = 'hidden'; // rs.hideDropDown();
+      },
+      refresh: function refresh(token, array) {
+        elem.style.visibility = 'hidden';
+        ix = 0;
+        elem.textContent = '';
+        var vph = window.innerHeight || document.documentElement.clientHeight;
+        var rect = elem.parentNode.getBoundingClientRect();
+        var distanceToTop = rect.top - 6; // heuristic give 6px
+
+        var distanceToBottom = vph - rect.bottom - 6; // distance from the browser border.
+
+        rows = [];
+        var filterFn = typeof config.filter === 'function' ? config.filter : defaultFilterFunction[config.filter];
+        var filtered = !filterFn ? [] : array.filter(function (match) {
+          return filterFn(config.caseSensitive ? token : token.toLowerCase(), config.caseSensitive ? match : match.toLowerCase(), config);
+        });
+        rows = filtered.map(function (row) {
+          var divRow = document.createElement('div');
+          divRow.className = 'item'; // divRow.style.color = config.color;
+
+          divRow.onmouseover = onMouseOver;
+          divRow.onmouseout = onMouseOut;
+          divRow.onmousedown = onMouseDown;
+          divRow.__hint = row;
+          divRow.textContent = '';
+          divRow.appendChild(document.createTextNode(row.substring(0, token.length)));
+          var b = document.createElement('b');
+          b.appendChild(document.createTextNode(row.substring(token.length)));
+          divRow.appendChild(b);
+          elem.appendChild(divRow);
+          return divRow;
+        });
+
+        if (rows.length === 0) {
+          return; // nothing to show.
+        }
+
+        if (rows.length === 1 && (token.toLowerCase() === rows[0].__hint.toLowerCase() && !config.caseSensitive || token === rows[0].__hint && config.caseSensitive)) {
+          return; // do not show the dropDown if it has only one element which matches what we have just displayed.
+        }
+
+        if (rows.length < 2) return;
+        p.highlight(0);
+
+        if (distanceToTop > distanceToBottom * 3) {
+          // Heuristic (only when the distance to the to top is 4 times more than distance to the bottom
+          elem.style.maxHeight = distanceToTop + 'px'; // we display the dropDown on the top of the input text
+
+          elem.style.top = '';
+          elem.style.bottom = '100%';
+        } else {
+          elem.style.top = '100%';
+          elem.style.bottom = '';
+          elem.style.maxHeight = distanceToBottom + 'px';
+        }
+
+        elem.style.visibility = 'visible';
+      },
+      highlight: function highlight(index) {
+        if (oldIndex !== -1 && rows[oldIndex]) {
+          rows[oldIndex].className = 'item';
+        }
+
+        rows[index].className = 'item hover';
+        oldIndex = index;
+      },
+      move: function move(step) {
+        // moves the selection either up or down (unless it's not possible) step is either +1 or -1.
+        if (elem.style.visibility === 'hidden') return ''; // nothing to move if there is no dropDown. (this happens if the user hits escape and then down or up)
+
+        if (ix + step === -1 || ix + step === rows.length) return rows[ix].__hint; // NO CIRCULAR SCROLLING.
+
+        ix += step;
+        p.highlight(ix);
+        return rows[ix].__hint; // txtShadow.value = uRows[uIndex].__hint ;
+      },
+      onmouseselection: function onmouseselection() {} // it will be overwritten.
+
+    };
+    return p;
+  };
+
+  function setEndOfContenteditable(contentEditableElement) {
+    var range, selection;
+
+    if (document.createRange) {
+      // Firefox, Chrome, Opera, Safari, IE 9+
+      range = document.createRange(); // Create a range (a range is a like the selection but invisible)
+
+      range.selectNodeContents(contentEditableElement); // Select the entire contents of the element with the range
+
+      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+
+      selection = window.getSelection(); // get the selection object (allows you to change selection)
+
+      selection.removeAllRanges(); // remove any selections already made
+
+      selection.addRange(range); // make the range you have just created the visible selection
+    } else if (document.selection) {
+      // IE 8 and lower
+      range = document.body.createTextRange(); // Create a range (a range is a like the selection but invisible)
+
+      range.moveToElementText(contentEditableElement); // Select the entire contents of the element with the range
+
+      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+
+      range.select(); // Select the range (make it the visible selection
+    }
+  }
+
+  function calculateWidthForText(text) {
+    if (spacer === undefined) {
+      // on first call only.
+      spacer = document.createElement('span');
+      spacer.style.visibility = 'hidden';
+      spacer.style.position = 'fixed';
+      spacer.style.outline = '0';
+      spacer.style.margin = '0';
+      spacer.style.padding = '0';
+      spacer.style.border = '0';
+      spacer.style.left = '0';
+      spacer.style.whiteSpace = 'pre';
+      spacer.style.fontSize = fontSize;
+      spacer.style.fontFamily = fontFamily;
+      spacer.style.fontWeight = 'normal';
+      document.body.appendChild(spacer);
+    }
+
+    spacer.textContent = text;
+    return spacer.getBoundingClientRect().right;
+  }
+
+  var rs = {
+    onArrowDown: function onArrowDown() {},
+    // defaults to no action.
+    onArrowUp: function onArrowUp() {},
+    // defaults to no action.
+    onEnter: function onEnter() {},
+    // defaults to no action.
+    onTab: function onTab() {},
+    // defaults to no action.
+    startFrom: 0,
+    options: [],
+    element: null,
+    elementHint: null,
+    elementStyle: null,
+    wrapper: wrapper,
+    // Only to allow  easy access to the HTML elements to the final user (possibly for minor customizations)
+    show: function show(element, startPos, options) {
+      var _this = this;
+
+      this.startFrom = startPos;
+      this.wrapper.remove();
+
+      if (this.elementHint) {
+        this.elementHint.remove();
+        this.elementHint = null;
+      }
+
+      if (fontSize === '') {
+        fontSize = window.getComputedStyle(element).getPropertyValue('font-size');
+      }
+
+      if (fontFamily === '') {
+        fontFamily = window.getComputedStyle(element).getPropertyValue('font-family');
+      }
+
+      dropDown.style.marginLeft = '0';
+      dropDown.style.marginTop = element.getBoundingClientRect().height + 'px';
+      this.options = options.map(String);
+
+      if (this.element !== element) {
+        this.element = element;
+        this.elementStyle = {
+          zIndex: this.element.style.zIndex,
+          position: this.element.style.position,
+          backgroundColor: this.element.style.backgroundColor,
+          borderColor: this.element.style.borderColor
+        };
+      }
+
+      this.element.style.zIndex = 3;
+      this.element.style.position = 'relative';
+      this.element.style.backgroundColor = 'transparent';
+      this.element.style.borderColor = 'transparent';
+      this.elementHint = element.cloneNode();
+      this.elementHint.className = 'autocomplete hint';
+      this.elementHint.style.zIndex = 2;
+      this.elementHint.style.position = 'absolute';
+
+      this.elementHint.onfocus = function () {
+        _this.element.focus();
+      };
+
+      if (this.element.addEventListener) {
+        this.element.removeEventListener('keydown', keyDownHandler);
+        this.element.addEventListener('keydown', keyDownHandler, false);
+        this.element.removeEventListener('blur', onBlurHandler);
+        this.element.addEventListener('blur', onBlurHandler, false);
+      }
+
+      wrapper.appendChild(this.elementHint);
+      wrapper.appendChild(dropDown);
+      element.parentElement.appendChild(wrapper);
+      this.repaint(element);
+    },
+    setText: function setText(text) {
+      this.element.innerText = text;
+    },
+    getText: function getText() {
+      return this.element.innerText;
+    },
+    hideDropDown: function hideDropDown() {
+      this.wrapper.remove();
+
+      if (this.elementHint) {
+        this.elementHint.remove();
+        this.elementHint = null;
+        dropDownController.hide();
+        this.element.style.zIndex = this.elementStyle.zIndex;
+        this.element.style.position = this.elementStyle.position;
+        this.element.style.backgroundColor = this.elementStyle.backgroundColor;
+        this.element.style.borderColor = this.elementStyle.borderColor;
+      }
+    },
+    repaint: function repaint(element) {
+      var text = element.innerText;
+      text = text.replace('\n', '');
+      var optionsLength = this.options.length; // breaking text in leftSide and token.
+
+      var token = text.substring(this.startFrom);
+      leftSide = text.substring(0, this.startFrom);
+
+      for (var i = 0; i < optionsLength; i++) {
+        var opt = this.options[i];
+
+        if (!config.caseSensitive && opt.toLowerCase().indexOf(token.toLowerCase()) === 0 || config.caseSensitive && opt.indexOf(token) === 0) {
+          // <-- how about upperCase vs. lowercase
+          this.elementHint.innerText = leftSide + token + opt.substring(token.length);
+          this.elementHint.realInnerText = leftSide + opt;
+          break;
+        }
+      } // moving the dropDown and refreshing it.
+
+
+      dropDown.style.left = calculateWidthForText(leftSide) + 'px';
+      dropDownController.refresh(token, this.options);
+      this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + 10 + 'px';
+      var wasDropDownHidden = dropDown.style.visibility === 'hidden';
+
+      if (!wasDropDownHidden) {
+        this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + dropDown.clientWidth + 'px';
+      }
+    }
+  };
+  var dropDownController = createDropDownController(dropDown, rs);
+
+  var keyDownHandler = function (e) {
+    // console.log("Keydown:" + e.keyCode);
+    e = e || window.event;
+    var keyCode = e.keyCode;
+    if (this.elementHint == null) return;
+
+    if (keyCode === 33) {
+      return;
+    } // page up (do nothing)
+
+
+    if (keyCode === 34) {
+      return;
+    } // page down (do nothing);
+
+
+    if (keyCode === 27) {
+      // escape
+      rs.hideDropDown();
+      rs.element.focus();
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    var text = this.element.innerText;
+    text = text.replace('\n', '');
+
+    if (config.confirmKeys.indexOf(keyCode) >= 0) {
+      //  (autocomplete triggered)
+      if (keyCode === 9) {
+        if (this.elementHint.innerText.length === 0) {
+          rs.onTab();
+        }
+      }
+
+      if (this.elementHint.innerText.length > 0) {
+        // if there is a hint
+        if (this.element.innerText !== this.elementHint.realInnerText) {
+          this.element.innerText = this.elementHint.realInnerText;
+          rs.hideDropDown();
+          setEndOfContenteditable(this.element);
+
+          if (keyCode === 9) {
+            rs.element.focus();
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }
+      }
+
+      return;
+    }
+
+    if (keyCode === 13) {
+      // enter  (autocomplete triggered)
+      if (this.elementHint.innerText.length === 0) {
+        // if there is a hint
+        rs.onEnter();
+      } else {
+        var wasDropDownHidden = dropDown.style.visibility === 'hidden';
+        dropDownController.hide();
+
+        if (wasDropDownHidden) {
+          rs.hideDropDown();
+          rs.element.focus();
+          rs.onEnter();
+          return;
+        }
+
+        this.element.innerText = this.elementHint.realInnerText;
+        rs.hideDropDown();
+        setEndOfContenteditable(this.element);
+        e.preventDefault();
+        e.stopPropagation();
+      }
+
+      return;
+    }
+
+    if (keyCode === 40) {
+      // down
+      var token = text.substring(this.startFrom);
+      var m = dropDownController.move(+1);
+
+      if (m === '') {
+        rs.onArrowDown();
+      }
+
+      this.elementHint.innerText = leftSide + token + m.substring(token.length);
+      this.elementHint.realInnerText = leftSide + m;
+      e.preventDefault();
+      e.stopPropagation();
+      return;
+    }
+
+    if (keyCode === 38) {
+      // up
+      var _token = text.substring(this.startFrom);
+
+      var _m = dropDownController.move(-1);
+
+      if (_m === '') {
+        rs.onArrowUp();
+      }
+
+      this.elementHint.innerText = leftSide + _token + _m.substring(_token.length);
+      this.elementHint.realInnerText = leftSide + _m;
+      e.preventDefault();
+      e.stopPropagation();
+    }
+  }.bind(rs);
+
+  var onBlurHandler = function onBlurHandler(e) {
+    rs.hideDropDown(); // console.log("Lost focus.");
+  };
+
+  dropDownController.onmouseselection = function (text, rs) {
+    rs.element.innerText = rs.elementHint.innerText = leftSide + text;
+    rs.hideDropDown();
+    window.setTimeout(function () {
+      rs.element.focus();
+      setEndOfContenteditable(rs.element);
+    }, 1);
+  };
+
+  return rs;
+}
+// EXTERNAL MODULE: ./src/js/ContextMenu.js
+var ContextMenu = __webpack_require__(3);
+
+// EXTERNAL MODULE: ./src/js/FocusTracker.js
+var FocusTracker = __webpack_require__(9);
 
 // CONCATENATED MODULE: ./src/js/Highlighter.js
 
@@ -42255,915 +43289,24 @@ var Highlighter = /*#__PURE__*/function () {
 
   return Highlighter;
 }();
-// EXTERNAL MODULE: ./src/js/util.js
-var util = __webpack_require__(0);
-
-// CONCATENATED MODULE: ./src/js/NodeHistory.js
-
-
-function NodeHistory_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function NodeHistory_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function NodeHistory_createClass(Constructor, protoProps, staticProps) { if (protoProps) NodeHistory_defineProperties(Constructor.prototype, protoProps); if (staticProps) NodeHistory_defineProperties(Constructor, staticProps); return Constructor; }
-
-
-/**
- * @constructor History
- * Store action history, enables undo and redo
- * @param {JSONEditor} editor
- */
-
-var NodeHistory_NodeHistory = /*#__PURE__*/function () {
-  function NodeHistory(editor) {
-    NodeHistory_classCallCheck(this, NodeHistory);
-
-    this.editor = editor;
-    this.history = [];
-    this.index = -1;
-    this.clear(); // helper function to find a Node from a path
-
-    function findNode(path) {
-      return editor.node.findNodeByInternalPath(path);
-    } // map with all supported actions
-
-
-    this.actions = {
-      editField: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          var node = parentNode.childs[params.index];
-          node.updateField(params.oldValue);
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var node = parentNode.childs[params.index];
-          node.updateField(params.newValue);
-        }
-      },
-      editValue: {
-        undo: function undo(params) {
-          findNode(params.path).updateValue(params.oldValue);
-        },
-        redo: function redo(params) {
-          findNode(params.path).updateValue(params.newValue);
-        }
-      },
-      changeType: {
-        undo: function undo(params) {
-          findNode(params.path).changeType(params.oldType);
-        },
-        redo: function redo(params) {
-          findNode(params.path).changeType(params.newType);
-        }
-      },
-      appendNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.nodes.forEach(function (node) {
-            parentNode.appendChild(node);
-          });
-        }
-      },
-      insertBeforeNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var beforeNode = findNode(params.beforePath);
-          params.nodes.forEach(function (node) {
-            parentNode.insertBefore(node, beforeNode);
-          });
-        }
-      },
-      insertAfterNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var afterNode = findNode(params.afterPath);
-          params.nodes.forEach(function (node) {
-            parentNode.insertAfter(node, afterNode);
-            afterNode = node;
-          });
-        }
-      },
-      removeNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          var beforeNode = parentNode.childs[params.index] || parentNode.append;
-          params.nodes.forEach(function (node) {
-            parentNode.insertBefore(node, beforeNode);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.paths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        }
-      },
-      duplicateNodes: {
-        undo: function undo(params) {
-          var parentNode = findNode(params.parentPath);
-          params.clonePaths.map(findNode).forEach(function (node) {
-            parentNode.removeChild(node);
-          });
-        },
-        redo: function redo(params) {
-          var parentNode = findNode(params.parentPath);
-          var afterNode = findNode(params.afterPath);
-          var nodes = params.paths.map(findNode);
-          nodes.forEach(function (node) {
-            var clone = node.clone();
-
-            if (parentNode.type === 'object') {
-              var existingFieldNames = parentNode.getFieldNames();
-              clone.field = Object(util["findUniqueName"])(node.field, existingFieldNames);
-            }
-
-            parentNode.insertAfter(clone, afterNode);
-            afterNode = clone;
-          });
-        }
-      },
-      moveNodes: {
-        undo: function undo(params) {
-          var oldParentNode = findNode(params.oldParentPath);
-          var newParentNode = findNode(params.newParentPath);
-          var oldBeforeNode = oldParentNode.childs[params.oldIndex] || oldParentNode.append; // first copy the nodes, then move them
-
-          var nodes = newParentNode.childs.slice(params.newIndex, params.newIndex + params.count);
-          nodes.forEach(function (node, index) {
-            node.field = params.fieldNames[index];
-            oldParentNode.moveBefore(node, oldBeforeNode);
-          }); // This is a hack to work around an issue that we don't know tha original
-          // path of the new parent after dragging, as the node is already moved at that time.
-
-          if (params.newParentPathRedo === null) {
-            params.newParentPathRedo = newParentNode.getInternalPath();
-          }
-        },
-        redo: function redo(params) {
-          var oldParentNode = findNode(params.oldParentPathRedo);
-          var newParentNode = findNode(params.newParentPathRedo);
-          var newBeforeNode = newParentNode.childs[params.newIndexRedo] || newParentNode.append; // first copy the nodes, then move them
-
-          var nodes = oldParentNode.childs.slice(params.oldIndexRedo, params.oldIndexRedo + params.count);
-          nodes.forEach(function (node, index) {
-            node.field = params.fieldNames[index];
-            newParentNode.moveBefore(node, newBeforeNode);
-          });
-        }
-      },
-      sort: {
-        undo: function undo(params) {
-          var node = findNode(params.path);
-          node.hideChilds();
-          node.childs = params.oldChilds;
-          node.updateDom({
-            updateIndexes: true
-          });
-          node.showChilds();
-        },
-        redo: function redo(params) {
-          var node = findNode(params.path);
-          node.hideChilds();
-          node.childs = params.newChilds;
-          node.updateDom({
-            updateIndexes: true
-          });
-          node.showChilds();
-        }
-      },
-      transform: {
-        undo: function undo(params) {
-          findNode(params.path).setInternalValue(params.oldValue); // TODO: would be nice to restore the state of the node and childs
-        },
-        redo: function redo(params) {
-          findNode(params.path).setInternalValue(params.newValue); // TODO: would be nice to restore the state of the node and childs
-        }
-      } // TODO: restore the original caret position and selection with each undo
-      // TODO: implement history for actions "expand", "collapse", "scroll", "setDocument"
-
-    };
-  }
-  /**
-   * The method onChange is executed when the History is changed, and can
-   * be overloaded.
-   */
-
-
-  NodeHistory_createClass(NodeHistory, [{
-    key: "onChange",
-    value: function onChange() {}
-    /**
-     * Add a new action to the history
-     * @param {String} action  The executed action. Available actions: "editField",
-     *                         "editValue", "changeType", "appendNode",
-     *                         "removeNode", "duplicateNode", "moveNode"
-     * @param {Object} params  Object containing parameters describing the change.
-     *                         The parameters in params depend on the action (for
-     *                         example for "editValue" the Node, old value, and new
-     *                         value are provided). params contains all information
-     *                         needed to undo or redo the action.
-     */
-
-  }, {
-    key: "add",
-    value: function add(action, params) {
-      this.index++;
-      this.history[this.index] = {
-        action: action,
-        params: params,
-        timestamp: new Date()
-      }; // remove redo actions which are invalid now
-
-      if (this.index < this.history.length - 1) {
-        this.history.splice(this.index + 1, this.history.length - this.index - 1);
-      } // fire onchange event
-
-
-      this.onChange();
-    }
-    /**
-     * Clear history
-     */
-
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.history = [];
-      this.index = -1; // fire onchange event
-
-      this.onChange();
-    }
-    /**
-     * Check if there is an action available for undo
-     * @return {Boolean} canUndo
-     */
-
-  }, {
-    key: "canUndo",
-    value: function canUndo() {
-      return this.index >= 0;
-    }
-    /**
-     * Check if there is an action available for redo
-     * @return {Boolean} canRedo
-     */
-
-  }, {
-    key: "canRedo",
-    value: function canRedo() {
-      return this.index < this.history.length - 1;
-    }
-    /**
-     * Undo the last action
-     */
-
-  }, {
-    key: "undo",
-    value: function undo() {
-      if (this.canUndo()) {
-        var obj = this.history[this.index];
-
-        if (obj) {
-          var action = this.actions[obj.action];
-
-          if (action && action.undo) {
-            action.undo(obj.params);
-
-            if (obj.params.oldSelection) {
-              try {
-                this.editor.setDomSelection(obj.params.oldSelection);
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          } else {
-            console.error(new Error('unknown action "' + obj.action + '"'));
-          }
-        }
-
-        this.index--; // fire onchange event
-
-        this.onChange();
-      }
-    }
-    /**
-     * Redo the last action
-     */
-
-  }, {
-    key: "redo",
-    value: function redo() {
-      if (this.canRedo()) {
-        this.index++;
-        var obj = this.history[this.index];
-
-        if (obj) {
-          var action = this.actions[obj.action];
-
-          if (action && action.redo) {
-            action.redo(obj.params);
-
-            if (obj.params.newSelection) {
-              try {
-                this.editor.setDomSelection(obj.params.newSelection);
-              } catch (err) {
-                console.error(err);
-              }
-            }
-          } else {
-            console.error(new Error('unknown action "' + obj.action + '"'));
-          }
-        } // fire onchange event
-
-
-        this.onChange();
-      }
-    }
-    /**
-     * Destroy history
-     */
-
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.editor = null;
-      this.history = [];
-      this.index = -1;
-    }
-  }]);
-
-  return NodeHistory;
-}();
 // EXTERNAL MODULE: ./src/js/i18n.js
 var i18n = __webpack_require__(1);
 
-// CONCATENATED MODULE: ./src/js/SearchBox.js
+// EXTERNAL MODULE: ./src/js/jmespathQuery.js
+var jmespathQuery = __webpack_require__(4);
 
+// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
+var ModeSwitcher = __webpack_require__(10);
 
-function SearchBox_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function SearchBox_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function SearchBox_createClass(Constructor, protoProps, staticProps) { if (protoProps) SearchBox_defineProperties(Constructor.prototype, protoProps); if (staticProps) SearchBox_defineProperties(Constructor, staticProps); return Constructor; }
-
-
-/**
- * @constructor SearchBox
- * Create a search box in given HTML container
- * @param {JSONEditor} editor    The JSON Editor to attach to
- * @param {Element} container               HTML container element of where to
- *                                          create the search box
- */
-
-var SearchBox_SearchBox = /*#__PURE__*/function () {
-  function SearchBox(editor, container) {
-    SearchBox_classCallCheck(this, SearchBox);
-
-    var searchBox = this;
-    this.editor = editor;
-    this.timeout = undefined;
-    this.delay = 200; // ms
-
-    this.lastText = undefined;
-    this.results = null;
-    this.dom = {};
-    this.dom.container = container;
-    var wrapper = document.createElement('div');
-    this.dom.wrapper = wrapper;
-    wrapper.className = 'jsoneditor-search';
-    container.appendChild(wrapper);
-    var results = document.createElement('div');
-    this.dom.results = results;
-    results.className = 'jsoneditor-results';
-    wrapper.appendChild(results);
-    var divInput = document.createElement('div');
-    this.dom.input = divInput;
-    divInput.className = 'jsoneditor-frame';
-    divInput.title = Object(i18n["c" /* translate */])('searchTitle');
-    wrapper.appendChild(divInput);
-    var refreshSearch = document.createElement('button');
-    refreshSearch.type = 'button';
-    refreshSearch.className = 'jsoneditor-refresh';
-    divInput.appendChild(refreshSearch);
-    var search = document.createElement('input');
-    search.type = 'text';
-    this.dom.search = search;
-
-    search.oninput = function (event) {
-      searchBox._onDelayedSearch(event);
-    };
-
-    search.onchange = function (event) {
-      // For IE 9
-      searchBox._onSearch();
-    };
-
-    search.onkeydown = function (event) {
-      searchBox._onKeyDown(event);
-    };
-
-    search.onkeyup = function (event) {
-      searchBox._onKeyUp(event);
-    };
-
-    refreshSearch.onclick = function (event) {
-      search.select();
-    }; // TODO: ESC in FF restores the last input, is a FF bug, https://bugzilla.mozilla.org/show_bug.cgi?id=598819
-
-
-    divInput.appendChild(search);
-    var searchNext = document.createElement('button');
-    searchNext.type = 'button';
-    searchNext.title = Object(i18n["c" /* translate */])('searchNextResultTitle');
-    searchNext.className = 'jsoneditor-next';
-
-    searchNext.onclick = function () {
-      searchBox.next();
-    };
-
-    divInput.appendChild(searchNext);
-    var searchPrevious = document.createElement('button');
-    searchPrevious.type = 'button';
-    searchPrevious.title = Object(i18n["c" /* translate */])('searchPreviousResultTitle');
-    searchPrevious.className = 'jsoneditor-previous';
-
-    searchPrevious.onclick = function () {
-      searchBox.previous();
-    };
-
-    divInput.appendChild(searchPrevious);
-  }
-  /**
-   * Go to the next search result
-   * @param {boolean} [focus]   If true, focus will be set to the next result
-   *                            focus is false by default.
-   */
-
-
-  SearchBox_createClass(SearchBox, [{
-    key: "next",
-    value: function next(focus) {
-      if (this.results) {
-        var index = this.resultIndex !== null ? this.resultIndex + 1 : 0;
-
-        if (index > this.results.length - 1) {
-          index = 0;
-        }
-
-        this._setActiveResult(index, focus);
-      }
-    }
-    /**
-     * Go to the prevous search result
-     * @param {boolean} [focus]   If true, focus will be set to the next result
-     *                            focus is false by default.
-     */
-
-  }, {
-    key: "previous",
-    value: function previous(focus) {
-      if (this.results) {
-        var max = this.results.length - 1;
-        var index = this.resultIndex !== null ? this.resultIndex - 1 : max;
-
-        if (index < 0) {
-          index = max;
-        }
-
-        this._setActiveResult(index, focus);
-      }
-    }
-    /**
-     * Set new value for the current active result
-     * @param {Number} index
-     * @param {boolean} [focus]   If true, focus will be set to the next result.
-     *                            focus is false by default.
-     * @private
-     */
-
-  }, {
-    key: "_setActiveResult",
-    value: function _setActiveResult(index, focus) {
-      // de-activate current active result
-      if (this.activeResult) {
-        var prevNode = this.activeResult.node;
-        var prevElem = this.activeResult.elem;
-
-        if (prevElem === 'field') {
-          delete prevNode.searchFieldActive;
-        } else {
-          delete prevNode.searchValueActive;
-        }
-
-        prevNode.updateDom();
-      }
-
-      if (!this.results || !this.results[index]) {
-        // out of range, set to undefined
-        this.resultIndex = undefined;
-        this.activeResult = undefined;
-        return;
-      }
-
-      this.resultIndex = index; // set new node active
-
-      var node = this.results[this.resultIndex].node;
-      var elem = this.results[this.resultIndex].elem;
-
-      if (elem === 'field') {
-        node.searchFieldActive = true;
-      } else {
-        node.searchValueActive = true;
-      }
-
-      this.activeResult = this.results[this.resultIndex];
-      node.updateDom(); // TODO: not so nice that the focus is only set after the animation is finished
-
-      node.scrollTo(function () {
-        if (focus) {
-          node.focus(elem);
-        }
-      });
-    }
-    /**
-     * Cancel any running onDelayedSearch.
-     * @private
-     */
-
-  }, {
-    key: "_clearDelay",
-    value: function _clearDelay() {
-      if (this.timeout !== undefined) {
-        clearTimeout(this.timeout);
-        delete this.timeout;
-      }
-    }
-    /**
-     * Start a timer to execute a search after a short delay.
-     * Used for reducing the number of searches while typing.
-     * @param {Event} event
-     * @private
-     */
-
-  }, {
-    key: "_onDelayedSearch",
-    value: function _onDelayedSearch(event) {
-      // execute the search after a short delay (reduces the number of
-      // search actions while typing in the search text box)
-      this._clearDelay();
-
-      var searchBox = this;
-      this.timeout = setTimeout(function (event) {
-        searchBox._onSearch();
-      }, this.delay);
-    }
-    /**
-     * Handle onSearch event
-     * @param {boolean} [forceSearch]  If true, search will be executed again even
-     *                                 when the search text is not changed.
-     *                                 Default is false.
-     * @private
-     */
-
-  }, {
-    key: "_onSearch",
-    value: function _onSearch(forceSearch) {
-      this._clearDelay();
-
-      var value = this.dom.search.value;
-      var text = value.length > 0 ? value : undefined;
-
-      if (text !== this.lastText || forceSearch) {
-        // only search again when changed
-        this.lastText = text;
-        this.results = this.editor.search(text);
-        var MAX_SEARCH_RESULTS = this.results[0] ? this.results[0].node.MAX_SEARCH_RESULTS : Infinity; // try to maintain the current active result if this is still part of the new search results
-
-        var activeResultIndex = 0;
-
-        if (this.activeResult) {
-          for (var i = 0; i < this.results.length; i++) {
-            if (this.results[i].node === this.activeResult.node) {
-              activeResultIndex = i;
-              break;
-            }
-          }
-        }
-
-        this._setActiveResult(activeResultIndex, false); // display search results
-
-
-        if (text !== undefined) {
-          var resultCount = this.results.length;
-
-          if (resultCount === 0) {
-            this.dom.results.textContent = "no\xA0results";
-          } else if (resultCount === 1) {
-            this.dom.results.textContent = "1\xA0result";
-          } else if (resultCount > MAX_SEARCH_RESULTS) {
-            this.dom.results.textContent = MAX_SEARCH_RESULTS + "+\xA0results";
-          } else {
-            this.dom.results.textContent = resultCount + "\xA0results";
-          }
-        } else {
-          this.dom.results.textContent = '';
-        }
-      }
-    }
-    /**
-     * Handle onKeyDown event in the input box
-     * @param {Event} event
-     * @private
-     */
-
-  }, {
-    key: "_onKeyDown",
-    value: function _onKeyDown(event) {
-      var keynum = event.which;
-
-      if (keynum === 27) {
-        // ESC
-        this.dom.search.value = ''; // clear search
-
-        this._onSearch();
-
-        event.preventDefault();
-        event.stopPropagation();
-      } else if (keynum === 13) {
-        // Enter
-        if (event.ctrlKey) {
-          // force to search again
-          this._onSearch(true);
-        } else if (event.shiftKey) {
-          // move to the previous search result
-          this.previous();
-        } else {
-          // move to the next search result
-          this.next();
-        }
-
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }
-    /**
-     * Handle onKeyUp event in the input box
-     * @param {Event} event
-     * @private
-     */
-
-  }, {
-    key: "_onKeyUp",
-    value: function _onKeyUp(event) {
-      var keynum = event.keyCode;
-
-      if (keynum !== 27 && keynum !== 13) {
-        // !show and !Enter
-        this._onDelayedSearch(event); // For IE 9
-
-      }
-    }
-    /**
-     * Clear the search results
-     */
-
-  }, {
-    key: "clear",
-    value: function clear() {
-      this.dom.search.value = '';
-
-      this._onSearch();
-    }
-    /**
-     * Refresh searchResults if there is a search value
-     */
-
-  }, {
-    key: "forceSearch",
-    value: function forceSearch() {
-      this._onSearch(true);
-    }
-    /**
-     * Test whether the search box value is empty
-     * @returns {boolean} Returns true when empty.
-     */
-
-  }, {
-    key: "isEmpty",
-    value: function isEmpty() {
-      return this.dom.search.value === '';
-    }
-    /**
-     * Destroy the search box
-     */
-
-  }, {
-    key: "destroy",
-    value: function destroy() {
-      this.editor = null;
-      this.dom.container.removeChild(this.dom.wrapper);
-      this.dom = null;
-      this.results = null;
-      this.activeResult = null;
-
-      this._clearDelay();
-    }
-  }]);
-
-  return SearchBox;
-}();
-// EXTERNAL MODULE: ./src/js/ContextMenu.js
-var ContextMenu = __webpack_require__(3);
-
-// CONCATENATED MODULE: ./src/js/TreePath.js
-
-
-function TreePath_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-function TreePath_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
-
-function TreePath_createClass(Constructor, protoProps, staticProps) { if (protoProps) TreePath_defineProperties(Constructor.prototype, protoProps); if (staticProps) TreePath_defineProperties(Constructor, staticProps); return Constructor; }
-
-
-
-
-/**
- * Creates a component that visualize path selection in tree based editors
- * @param {HTMLElement} container
- * @param {HTMLElement} root
- * @constructor
- */
-
-var TreePath_TreePath = /*#__PURE__*/function () {
-  function TreePath(container, root) {
-    TreePath_classCallCheck(this, TreePath);
-
-    if (container) {
-      this.root = root;
-      this.path = document.createElement('div');
-      this.path.className = 'jsoneditor-treepath';
-      this.path.setAttribute('tabindex', 0);
-      this.contentMenuClicked = false;
-      container.appendChild(this.path);
-      this.reset();
-    }
-  }
-  /**
-   * Reset component to initial status
-   */
-
-
-  TreePath_createClass(TreePath, [{
-    key: "reset",
-    value: function reset() {
-      this.path.textContent = Object(i18n["c" /* translate */])('selectNode');
-    }
-    /**
-     * Renders the component UI according to a given path objects
-     * @param {Array<{name: String, childs: Array}>} pathObjs a list of path objects
-     *
-     */
-
-  }, {
-    key: "setPath",
-    value: function setPath(pathObjs) {
-      var me = this;
-      this.path.textContent = '';
-
-      if (pathObjs && pathObjs.length) {
-        pathObjs.forEach(function (pathObj, idx) {
-          var pathEl = document.createElement('span');
-          var sepEl;
-          pathEl.className = 'jsoneditor-treepath-element';
-          pathEl.innerText = pathObj.name;
-          pathEl.onclick = _onSegmentClick.bind(me, pathObj);
-          me.path.appendChild(pathEl);
-
-          if (pathObj.children.length) {
-            sepEl = document.createElement('span');
-            sepEl.className = 'jsoneditor-treepath-seperator';
-            sepEl.textContent = "\u25BA";
-
-            sepEl.onclick = function () {
-              me.contentMenuClicked = true;
-              var items = [];
-              pathObj.children.forEach(function (child) {
-                items.push({
-                  text: child.name,
-                  className: 'jsoneditor-type-modes' + (pathObjs[idx + 1] + 1 && pathObjs[idx + 1].name === child.name ? ' jsoneditor-selected' : ''),
-                  click: _onContextMenuItemClick.bind(me, pathObj, child.name)
-                });
-              });
-              var menu = new ContextMenu["a" /* ContextMenu */](items);
-              menu.show(sepEl, me.root, true);
-            };
-
-            me.path.appendChild(sepEl);
-          }
-
-          if (idx === pathObjs.length - 1) {
-            var leftRectPos = (sepEl || pathEl).getBoundingClientRect().right;
-
-            if (me.path.offsetWidth < leftRectPos) {
-              me.path.scrollLeft = leftRectPos;
-            }
-
-            if (me.path.scrollLeft) {
-              var showAllBtn = document.createElement('span');
-              showAllBtn.className = 'jsoneditor-treepath-show-all-btn';
-              showAllBtn.title = 'show all path';
-              showAllBtn.textContent = '...';
-              showAllBtn.onclick = _onShowAllClick.bind(me, pathObjs);
-              me.path.insertBefore(showAllBtn, me.path.firstChild);
-            }
-          }
-        });
-      }
-
-      function _onShowAllClick(pathObjs) {
-        me.contentMenuClicked = false;
-        Object(util["addClassName"])(me.path, 'show-all');
-        me.path.style.width = me.path.parentNode.getBoundingClientRect().width - 10 + 'px';
-
-        me.path.onblur = function () {
-          if (me.contentMenuClicked) {
-            me.contentMenuClicked = false;
-            me.path.focus();
-            return;
-          }
-
-          Object(util["removeClassName"])(me.path, 'show-all');
-          me.path.onblur = undefined;
-          me.path.style.width = '';
-          me.setPath(pathObjs);
-        };
-      }
-
-      function _onSegmentClick(pathObj) {
-        if (this.selectionCallback) {
-          this.selectionCallback(pathObj);
-        }
-      }
-
-      function _onContextMenuItemClick(pathObj, selection) {
-        if (this.contextMenuCallback) {
-          this.contextMenuCallback(pathObj, selection);
-        }
-      }
-    }
-    /**
-     * set a callback function for selection of path section
-     * @param {Function} callback function to invoke when section is selected
-     */
-
-  }, {
-    key: "onSectionSelected",
-    value: function onSectionSelected(callback) {
-      if (typeof callback === 'function') {
-        this.selectionCallback = callback;
-      }
-    }
-    /**
-     * set a callback function for selection of path section
-     * @param {Function} callback function to invoke when section is selected
-     */
-
-  }, {
-    key: "onContextMenuItemSelected",
-    value: function onContextMenuItemSelected(callback) {
-      if (typeof callback === 'function') {
-        this.contextMenuCallback = callback;
-      }
-    }
-  }]);
-
-  return TreePath;
-}();
 // EXTERNAL MODULE: ./node_modules/javascript-natural-sort/naturalSort.js
-var naturalSort = __webpack_require__(11);
+var naturalSort = __webpack_require__(13);
 var naturalSort_default = /*#__PURE__*/__webpack_require__.n(naturalSort);
 
 // EXTERNAL MODULE: ./src/js/createAbsoluteAnchor.js
 var createAbsoluteAnchor = __webpack_require__(12);
+
+// EXTERNAL MODULE: ./src/js/util.js
+var util = __webpack_require__(0);
 
 // CONCATENATED MODULE: ./src/js/appendNodeFactory.js
 
@@ -43590,8 +43733,6 @@ var constants = __webpack_require__(2);
 // CONCATENATED MODULE: ./src/js/Node.js
 
 
-var _this4 = undefined;
-
 function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
 
 function Node_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -43684,9 +43825,13 @@ var Node_Node = /*#__PURE__*/function () {
           if (typeof editable === 'boolean') {
             this.editable.field = editable;
             this.editable.value = editable;
-          } else {
+          } else if (_typeof(editable) === 'object' && editable !== null) {
             if (typeof editable.field === 'boolean') this.editable.field = editable.field;
             if (typeof editable.value === 'boolean') this.editable.value = editable.value;
+          } else {
+            console.error('Invalid return value for function onEditable.', 'Actual value:', editable, '.', 'Either a boolean or object { field: boolean, value: boolean } expected.');
+            this.editable.field = false;
+            this.editable.value = false;
           }
         }
       }
@@ -44722,9 +44867,10 @@ var Node_Node = /*#__PURE__*/function () {
         // create a temporary row, to prevent the scroll position from jumping
         // when removing the node
         var tbody = this.dom.tr ? this.dom.tr.parentNode : undefined;
+        var trTemp;
 
         if (tbody) {
-          var trTemp = document.createElement('tr');
+          trTemp = document.createElement('tr');
           trTemp.style.height = tbody.clientHeight + 'px';
           tbody.appendChild(trTemp);
         }
@@ -44746,7 +44892,7 @@ var Node_Node = /*#__PURE__*/function () {
           this.insertBefore(node, beforeNode, updateDom);
         }
 
-        if (tbody) {
+        if (tbody && trTemp) {
           tbody.removeChild(trTemp);
         }
       }
@@ -45611,10 +45757,10 @@ var Node_Node = /*#__PURE__*/function () {
 
         if (tooltip) {
           domField.title = tooltip;
-        } // make backgound color lightgray when empty
+        } // make background color lightgray when empty
 
 
-        var isEmpty = String(this.field) === '' && this.parent.type !== 'array';
+        var isEmpty = String(this.field) === '' && this.parent && this.parent.type !== 'array';
 
         if (isEmpty) {
           Object(util["addClassName"])(domField, 'jsoneditor-empty');
@@ -46285,11 +46431,7 @@ var Node_Node = /*#__PURE__*/function () {
       var dom = this.dom;
       var node = this;
 
-      var expandable = this._hasChilds();
-
-      if (typeof this.editor.options.onEvent === 'function') {
-        this._onEvent(event);
-      } // check if mouse is on menu or on dragarea.
+      var expandable = this._hasChilds(); // check if mouse is on menu or on dragarea.
       // If so, highlight current row and its childs
 
 
@@ -46392,7 +46534,7 @@ var Node_Node = /*#__PURE__*/function () {
               // if read-only, we use the regular click behavior of an anchor
               if (Object(util["isUrl"])(this.value)) {
                 event.preventDefault();
-                window.open(this.value, '_blank');
+                window.open(this.value, '_blank', 'noopener');
               }
             }
 
@@ -46503,6 +46645,11 @@ var Node_Node = /*#__PURE__*/function () {
 
       if (type === 'keydown') {
         this.onKeyDown(event);
+      } // fire after applying for example a change by clicking a checkbox
+
+
+      if (typeof this.editor.options.onEvent === 'function') {
+        this._onEvent(event);
       }
     }
     /**
@@ -46519,14 +46666,16 @@ var Node_Node = /*#__PURE__*/function () {
     key: "_onEvent",
     value: function _onEvent(event) {
       var element = event.target;
+      var isField = element === this.dom.field;
+      var isValue = element === this.dom.value || element === this.dom.checkbox || element === this.dom.select;
 
-      if (element === this.dom.field || element === this.dom.value) {
+      if (isField || isValue) {
         var info = {
           field: this.getField(),
           path: this.getPath()
         }; // For leaf values, include value
 
-        if (!this._hasChilds() && element === this.dom.value) {
+        if (isValue && !this._hasChilds()) {
           info.value = this.getValue();
         }
 
@@ -46567,7 +46716,7 @@ var Node_Node = /*#__PURE__*/function () {
         if (target === this.dom.value) {
           if (!this.editable.value || event.ctrlKey) {
             if (Object(util["isUrl"])(this.value)) {
-              window.open(this.value, '_blank');
+              window.open(this.value, '_blank', 'noopener');
               handled = true;
             }
           }
@@ -46789,8 +46938,9 @@ var Node_Node = /*#__PURE__*/function () {
           handled = true;
         } else if (altKey && shiftKey && editable) {
           // Alt + Shift + Arrow Right
-          dom = firstNode.getDom();
-          var prevDom = dom.previousSibling;
+          var _dom = firstNode.getDom();
+
+          var prevDom = _dom.previousSibling;
 
           if (prevDom) {
             prevNode = Node.getNodeFromTarget(prevDom);
@@ -46920,12 +47070,16 @@ var Node_Node = /*#__PURE__*/function () {
   }, {
     key: "_onExpand",
     value: function _onExpand(recurse) {
+      var table;
+      var frame;
+      var scrollTop;
+
       if (recurse) {
         // Take the table offline
-        var table = this.dom.tr.parentNode; // TODO: not nice to access the main table like this
+        table = this.dom.tr.parentNode; // TODO: not nice to access the main table like this
 
-        var frame = table.parentNode;
-        var scrollTop = frame.scrollTop;
+        frame = table.parentNode;
+        scrollTop = frame.scrollTop;
         frame.removeChild(table);
       }
 
@@ -47889,7 +48043,7 @@ var Node_Node = /*#__PURE__*/function () {
       var json = this.getValue();
 
       Object(js_showTransformModal["showTransformModal"])({
-        anchor: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
+        container: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
         json: json,
         queryDescription: queryDescription,
         // can be undefined
@@ -48104,13 +48258,13 @@ Node_Node.onDragStart = function (nodes, event) {
   var offsetY = Object(util["getAbsoluteTop"])(draggedNode.dom.tr) - Object(util["getAbsoluteTop"])(firstNode.dom.tr);
 
   if (!editor.mousemove) {
-    editor.mousemove = Object(util["addEventListener"])(window, 'mousemove', function (event) {
+    editor.mousemove = Object(util["addEventListener"])(event.view, 'mousemove', function (event) {
       Node_Node.onDrag(nodes, event);
     });
   }
 
   if (!editor.mouseup) {
-    editor.mouseup = Object(util["addEventListener"])(window, 'mouseup', function (event) {
+    editor.mouseup = Object(util["addEventListener"])(event.view, 'mouseup', function (event) {
       Node_Node.onDragEnd(nodes, event);
     });
   }
@@ -48356,12 +48510,12 @@ Node_Node.onDragEnd = function (nodes, event) {
   delete editor.drag;
 
   if (editor.mousemove) {
-    Object(util["removeEventListener"])(window, 'mousemove', editor.mousemove);
+    Object(util["removeEventListener"])(event.view, 'mousemove', editor.mousemove);
     delete editor.mousemove;
   }
 
   if (editor.mouseup) {
-    Object(util["removeEventListener"])(window, 'mouseup', editor.mouseup);
+    Object(util["removeEventListener"])(event.view, 'mouseup', editor.mouseup);
     delete editor.mouseup;
   } // Stop any running auto scroll
 
@@ -48433,7 +48587,7 @@ Node_Node._findSchema = function (schema, schemaRefs, path) {
 
       if (typeof key === 'string' && childSchema.patternProperties && !(childSchema.properties && key in childSchema.properties)) {
         for (var prop in childSchema.patternProperties) {
-          if (key.match(prop)) {
+          if (key.match(prop) && (foundSchema.properties || foundSchema.patternProperties)) {
             foundSchema = Node_Node._findSchema(childSchema.patternProperties[prop], schemaRefs, nextPath);
           }
         }
@@ -48539,7 +48693,7 @@ Node_Node.onDuplicate = function (nodes) {
       if (clones[0].parent.type === 'object') {
         // when duplicating a single object property,
         // set focus to the field and keep the original field name
-        clones[0].dom.field.innerHTML = _this4._escapeHTML(nodes[0].field);
+        clones[0].dom.field.innerHTML = nodes[0]._escapeHTML(nodes[0].field);
         clones[0].focus('field');
       } else {
         clones[0].focus();
@@ -48647,455 +48801,903 @@ function Node_hasOwnProperty(object, key) {
 
 var Node_AppendNode = appendNodeFactory(Node_Node);
 var Node_ShowMoreNode = showMoreNodeFactory(Node_Node);
-// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
-var ModeSwitcher = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./src/js/FocusTracker.js
-var FocusTracker = __webpack_require__(9);
-
-// CONCATENATED MODULE: ./src/js/autocomplete.js
+// CONCATENATED MODULE: ./src/js/NodeHistory.js
 
 
-var defaultFilterFunction = {
-  start: function start(token, match, config) {
-    return match.indexOf(token) === 0;
-  },
-  contain: function contain(token, match, config) {
-    return match.indexOf(token) > -1;
-  }
-};
-function autocomplete(config) {
-  config = config || {};
-  config.filter = config.filter || 'start';
-  config.trigger = config.trigger || 'keydown';
-  config.confirmKeys = config.confirmKeys || [39, 35, 9]; // right, end, tab
+function NodeHistory_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
-  config.caseSensitive = config.caseSensitive || false; // autocomplete case sensitive
+function NodeHistory_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-  var fontSize = '';
-  var fontFamily = '';
-  var wrapper = document.createElement('div');
-  wrapper.style.position = 'relative';
-  wrapper.style.outline = '0';
-  wrapper.style.border = '0';
-  wrapper.style.margin = '0';
-  wrapper.style.padding = '0';
-  var dropDown = document.createElement('div');
-  dropDown.className = 'autocomplete dropdown';
-  dropDown.style.position = 'absolute';
-  dropDown.style.visibility = 'hidden';
-  var spacer;
-  var leftSide; // <-- it will contain the leftSide part of the textfield (the bit that was already autocompleted)
+function NodeHistory_createClass(Constructor, protoProps, staticProps) { if (protoProps) NodeHistory_defineProperties(Constructor.prototype, protoProps); if (staticProps) NodeHistory_defineProperties(Constructor, staticProps); return Constructor; }
 
-  var createDropDownController = function createDropDownController(elem, rs) {
-    var rows = [];
-    var ix = 0;
-    var oldIndex = -1; // TODO: move this styling in JS to SCSS
 
-    var onMouseOver = function onMouseOver() {
-      this.style.backgroundColor = '#ddd';
-    };
+/**
+ * @constructor History
+ * Store action history, enables undo and redo
+ * @param {JSONEditor} editor
+ */
 
-    var onMouseOut = function onMouseOut() {
-      this.style.backgroundColor = '';
-    };
+var NodeHistory_NodeHistory = /*#__PURE__*/function () {
+  function NodeHistory(editor) {
+    NodeHistory_classCallCheck(this, NodeHistory);
 
-    var onMouseDown = function onMouseDown() {
-      p.hide();
-      p.onmouseselection(this.__hint, p.rs);
-    };
+    this.editor = editor;
+    this.history = [];
+    this.index = -1;
+    this.clear(); // helper function to find a Node from a path
 
-    var p = {
-      rs: rs,
-      hide: function hide() {
-        elem.style.visibility = 'hidden'; // rs.hideDropDown();
+    function findNode(path) {
+      return editor.node.findNodeByInternalPath(path);
+    } // map with all supported actions
+
+
+    this.actions = {
+      editField: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          var node = parentNode.childs[params.index];
+          node.updateField(params.oldValue);
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var node = parentNode.childs[params.index];
+          node.updateField(params.newValue);
+        }
       },
-      refresh: function refresh(token, array) {
-        elem.style.visibility = 'hidden';
-        ix = 0;
-        elem.textContent = '';
-        var vph = window.innerHeight || document.documentElement.clientHeight;
-        var rect = elem.parentNode.getBoundingClientRect();
-        var distanceToTop = rect.top - 6; // heuristic give 6px
+      editValue: {
+        undo: function undo(params) {
+          findNode(params.path).updateValue(params.oldValue);
+        },
+        redo: function redo(params) {
+          findNode(params.path).updateValue(params.newValue);
+        }
+      },
+      changeType: {
+        undo: function undo(params) {
+          findNode(params.path).changeType(params.oldType);
+        },
+        redo: function redo(params) {
+          findNode(params.path).changeType(params.newType);
+        }
+      },
+      appendNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.nodes.forEach(function (node) {
+            parentNode.appendChild(node);
+          });
+        }
+      },
+      insertBeforeNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var beforeNode = findNode(params.beforePath);
+          params.nodes.forEach(function (node) {
+            parentNode.insertBefore(node, beforeNode);
+          });
+        }
+      },
+      insertAfterNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var afterNode = findNode(params.afterPath);
+          params.nodes.forEach(function (node) {
+            parentNode.insertAfter(node, afterNode);
+            afterNode = node;
+          });
+        }
+      },
+      removeNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          var beforeNode = parentNode.childs[params.index] || parentNode.append;
+          params.nodes.forEach(function (node) {
+            parentNode.insertBefore(node, beforeNode);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.paths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        }
+      },
+      duplicateNodes: {
+        undo: function undo(params) {
+          var parentNode = findNode(params.parentPath);
+          params.clonePaths.map(findNode).forEach(function (node) {
+            parentNode.removeChild(node);
+          });
+        },
+        redo: function redo(params) {
+          var parentNode = findNode(params.parentPath);
+          var afterNode = findNode(params.afterPath);
+          var nodes = params.paths.map(findNode);
+          nodes.forEach(function (node) {
+            var clone = node.clone();
 
-        var distanceToBottom = vph - rect.bottom - 6; // distance from the browser border.
+            if (parentNode.type === 'object') {
+              var existingFieldNames = parentNode.getFieldNames();
+              clone.field = Object(util["findUniqueName"])(node.field, existingFieldNames);
+            }
 
-        rows = [];
-        var filterFn = typeof config.filter === 'function' ? config.filter : defaultFilterFunction[config.filter];
-        var filtered = !filterFn ? [] : array.filter(function (match) {
-          return filterFn(config.caseSensitive ? token : token.toLowerCase(), config.caseSensitive ? match : match.toLowerCase(), config);
-        });
-        rows = filtered.map(function (row) {
-          var divRow = document.createElement('div');
-          divRow.className = 'item'; // divRow.style.color = config.color;
+            parentNode.insertAfter(clone, afterNode);
+            afterNode = clone;
+          });
+        }
+      },
+      moveNodes: {
+        undo: function undo(params) {
+          var oldParentNode = findNode(params.oldParentPath);
+          var newParentNode = findNode(params.newParentPath);
+          var oldBeforeNode = oldParentNode.childs[params.oldIndex] || oldParentNode.append; // first copy the nodes, then move them
 
-          divRow.onmouseover = onMouseOver;
-          divRow.onmouseout = onMouseOut;
-          divRow.onmousedown = onMouseDown;
-          divRow.__hint = row;
-          divRow.textContent = '';
-          divRow.appendChild(document.createTextNode(row.substring(0, token.length)));
-          var b = document.createElement('b');
-          b.appendChild(document.createTextNode(row.substring(token.length)));
-          divRow.appendChild(b);
-          elem.appendChild(divRow);
-          return divRow;
-        });
+          var nodes = newParentNode.childs.slice(params.newIndex, params.newIndex + params.count);
+          nodes.forEach(function (node, index) {
+            node.field = params.fieldNames[index];
+            oldParentNode.moveBefore(node, oldBeforeNode);
+          }); // This is a hack to work around an issue that we don't know tha original
+          // path of the new parent after dragging, as the node is already moved at that time.
 
-        if (rows.length === 0) {
-          return; // nothing to show.
+          if (params.newParentPathRedo === null) {
+            params.newParentPathRedo = newParentNode.getInternalPath();
+          }
+        },
+        redo: function redo(params) {
+          var oldParentNode = findNode(params.oldParentPathRedo);
+          var newParentNode = findNode(params.newParentPathRedo);
+          var newBeforeNode = newParentNode.childs[params.newIndexRedo] || newParentNode.append; // first copy the nodes, then move them
+
+          var nodes = oldParentNode.childs.slice(params.oldIndexRedo, params.oldIndexRedo + params.count);
+          nodes.forEach(function (node, index) {
+            node.field = params.fieldNames[index];
+            newParentNode.moveBefore(node, newBeforeNode);
+          });
+        }
+      },
+      sort: {
+        undo: function undo(params) {
+          var node = findNode(params.path);
+          node.hideChilds();
+          node.childs = params.oldChilds;
+          node.updateDom({
+            updateIndexes: true
+          });
+          node.showChilds();
+        },
+        redo: function redo(params) {
+          var node = findNode(params.path);
+          node.hideChilds();
+          node.childs = params.newChilds;
+          node.updateDom({
+            updateIndexes: true
+          });
+          node.showChilds();
+        }
+      },
+      transform: {
+        undo: function undo(params) {
+          findNode(params.path).setInternalValue(params.oldValue); // TODO: would be nice to restore the state of the node and childs
+        },
+        redo: function redo(params) {
+          findNode(params.path).setInternalValue(params.newValue); // TODO: would be nice to restore the state of the node and childs
+        }
+      } // TODO: restore the original caret position and selection with each undo
+      // TODO: implement history for actions "expand", "collapse", "scroll", "setDocument"
+
+    };
+  }
+  /**
+   * The method onChange is executed when the History is changed, and can
+   * be overloaded.
+   */
+
+
+  NodeHistory_createClass(NodeHistory, [{
+    key: "onChange",
+    value: function onChange() {}
+    /**
+     * Add a new action to the history
+     * @param {String} action  The executed action. Available actions: "editField",
+     *                         "editValue", "changeType", "appendNode",
+     *                         "removeNode", "duplicateNode", "moveNode"
+     * @param {Object} params  Object containing parameters describing the change.
+     *                         The parameters in params depend on the action (for
+     *                         example for "editValue" the Node, old value, and new
+     *                         value are provided). params contains all information
+     *                         needed to undo or redo the action.
+     */
+
+  }, {
+    key: "add",
+    value: function add(action, params) {
+      this.index++;
+      this.history[this.index] = {
+        action: action,
+        params: params,
+        timestamp: new Date()
+      }; // remove redo actions which are invalid now
+
+      if (this.index < this.history.length - 1) {
+        this.history.splice(this.index + 1, this.history.length - this.index - 1);
+      } // fire onchange event
+
+
+      this.onChange();
+    }
+    /**
+     * Clear history
+     */
+
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.history = [];
+      this.index = -1; // fire onchange event
+
+      this.onChange();
+    }
+    /**
+     * Check if there is an action available for undo
+     * @return {Boolean} canUndo
+     */
+
+  }, {
+    key: "canUndo",
+    value: function canUndo() {
+      return this.index >= 0;
+    }
+    /**
+     * Check if there is an action available for redo
+     * @return {Boolean} canRedo
+     */
+
+  }, {
+    key: "canRedo",
+    value: function canRedo() {
+      return this.index < this.history.length - 1;
+    }
+    /**
+     * Undo the last action
+     */
+
+  }, {
+    key: "undo",
+    value: function undo() {
+      if (this.canUndo()) {
+        var obj = this.history[this.index];
+
+        if (obj) {
+          var action = this.actions[obj.action];
+
+          if (action && action.undo) {
+            action.undo(obj.params);
+
+            if (obj.params.oldSelection) {
+              try {
+                this.editor.setDomSelection(obj.params.oldSelection);
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          } else {
+            console.error(new Error('unknown action "' + obj.action + '"'));
+          }
         }
 
-        if (rows.length === 1 && (token.toLowerCase() === rows[0].__hint.toLowerCase() && !config.caseSensitive || token === rows[0].__hint && config.caseSensitive)) {
-          return; // do not show the dropDown if it has only one element which matches what we have just displayed.
+        this.index--; // fire onchange event
+
+        this.onChange();
+      }
+    }
+    /**
+     * Redo the last action
+     */
+
+  }, {
+    key: "redo",
+    value: function redo() {
+      if (this.canRedo()) {
+        this.index++;
+        var obj = this.history[this.index];
+
+        if (obj) {
+          var action = this.actions[obj.action];
+
+          if (action && action.redo) {
+            action.redo(obj.params);
+
+            if (obj.params.newSelection) {
+              try {
+                this.editor.setDomSelection(obj.params.newSelection);
+              } catch (err) {
+                console.error(err);
+              }
+            }
+          } else {
+            console.error(new Error('unknown action "' + obj.action + '"'));
+          }
+        } // fire onchange event
+
+
+        this.onChange();
+      }
+    }
+    /**
+     * Destroy history
+     */
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.editor = null;
+      this.history = [];
+      this.index = -1;
+    }
+  }]);
+
+  return NodeHistory;
+}();
+// CONCATENATED MODULE: ./src/js/SearchBox.js
+
+
+function SearchBox_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function SearchBox_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function SearchBox_createClass(Constructor, protoProps, staticProps) { if (protoProps) SearchBox_defineProperties(Constructor.prototype, protoProps); if (staticProps) SearchBox_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+/**
+ * @constructor SearchBox
+ * Create a search box in given HTML container
+ * @param {JSONEditor} editor    The JSON Editor to attach to
+ * @param {Element} container               HTML container element of where to
+ *                                          create the search box
+ */
+
+var SearchBox_SearchBox = /*#__PURE__*/function () {
+  function SearchBox(editor, container) {
+    SearchBox_classCallCheck(this, SearchBox);
+
+    var searchBox = this;
+    this.editor = editor;
+    this.timeout = undefined;
+    this.delay = 200; // ms
+
+    this.lastText = undefined;
+    this.results = null;
+    this.dom = {};
+    this.dom.container = container;
+    var wrapper = document.createElement('div');
+    this.dom.wrapper = wrapper;
+    wrapper.className = 'jsoneditor-search';
+    container.appendChild(wrapper);
+    var results = document.createElement('div');
+    this.dom.results = results;
+    results.className = 'jsoneditor-results';
+    wrapper.appendChild(results);
+    var divInput = document.createElement('div');
+    this.dom.input = divInput;
+    divInput.className = 'jsoneditor-frame';
+    divInput.title = Object(i18n["c" /* translate */])('searchTitle');
+    wrapper.appendChild(divInput);
+    var refreshSearch = document.createElement('button');
+    refreshSearch.type = 'button';
+    refreshSearch.className = 'jsoneditor-refresh';
+    divInput.appendChild(refreshSearch);
+    var search = document.createElement('input');
+    search.type = 'text';
+    this.dom.search = search;
+
+    search.oninput = function (event) {
+      searchBox._onDelayedSearch(event);
+    };
+
+    search.onchange = function (event) {
+      // For IE 9
+      searchBox._onSearch();
+    };
+
+    search.onkeydown = function (event) {
+      searchBox._onKeyDown(event);
+    };
+
+    search.onkeyup = function (event) {
+      searchBox._onKeyUp(event);
+    };
+
+    refreshSearch.onclick = function (event) {
+      search.select();
+    }; // TODO: ESC in FF restores the last input, is a FF bug, https://bugzilla.mozilla.org/show_bug.cgi?id=598819
+
+
+    divInput.appendChild(search);
+    var searchNext = document.createElement('button');
+    searchNext.type = 'button';
+    searchNext.title = Object(i18n["c" /* translate */])('searchNextResultTitle');
+    searchNext.className = 'jsoneditor-next';
+
+    searchNext.onclick = function () {
+      searchBox.next();
+    };
+
+    divInput.appendChild(searchNext);
+    var searchPrevious = document.createElement('button');
+    searchPrevious.type = 'button';
+    searchPrevious.title = Object(i18n["c" /* translate */])('searchPreviousResultTitle');
+    searchPrevious.className = 'jsoneditor-previous';
+
+    searchPrevious.onclick = function () {
+      searchBox.previous();
+    };
+
+    divInput.appendChild(searchPrevious);
+  }
+  /**
+   * Go to the next search result
+   * @param {boolean} [focus]   If true, focus will be set to the next result
+   *                            focus is false by default.
+   */
+
+
+  SearchBox_createClass(SearchBox, [{
+    key: "next",
+    value: function next(focus) {
+      if (this.results) {
+        var index = this.resultIndex !== null ? this.resultIndex + 1 : 0;
+
+        if (index > this.results.length - 1) {
+          index = 0;
         }
 
-        if (rows.length < 2) return;
-        p.highlight(0);
+        this._setActiveResult(index, focus);
+      }
+    }
+    /**
+     * Go to the prevous search result
+     * @param {boolean} [focus]   If true, focus will be set to the next result
+     *                            focus is false by default.
+     */
 
-        if (distanceToTop > distanceToBottom * 3) {
-          // Heuristic (only when the distance to the to top is 4 times more than distance to the bottom
-          elem.style.maxHeight = distanceToTop + 'px'; // we display the dropDown on the top of the input text
+  }, {
+    key: "previous",
+    value: function previous(focus) {
+      if (this.results) {
+        var max = this.results.length - 1;
+        var index = this.resultIndex !== null ? this.resultIndex - 1 : max;
 
-          elem.style.top = '';
-          elem.style.bottom = '100%';
+        if (index < 0) {
+          index = max;
+        }
+
+        this._setActiveResult(index, focus);
+      }
+    }
+    /**
+     * Set new value for the current active result
+     * @param {Number} index
+     * @param {boolean} [focus]   If true, focus will be set to the next result.
+     *                            focus is false by default.
+     * @private
+     */
+
+  }, {
+    key: "_setActiveResult",
+    value: function _setActiveResult(index, focus) {
+      // de-activate current active result
+      if (this.activeResult) {
+        var prevNode = this.activeResult.node;
+        var prevElem = this.activeResult.elem;
+
+        if (prevElem === 'field') {
+          delete prevNode.searchFieldActive;
         } else {
-          elem.style.top = '100%';
-          elem.style.bottom = '';
-          elem.style.maxHeight = distanceToBottom + 'px';
+          delete prevNode.searchValueActive;
         }
 
-        elem.style.visibility = 'visible';
-      },
-      highlight: function highlight(index) {
-        if (oldIndex !== -1 && rows[oldIndex]) {
-          rows[oldIndex].className = 'item';
+        prevNode.updateDom();
+      }
+
+      if (!this.results || !this.results[index]) {
+        // out of range, set to undefined
+        this.resultIndex = undefined;
+        this.activeResult = undefined;
+        return;
+      }
+
+      this.resultIndex = index; // set new node active
+
+      var node = this.results[this.resultIndex].node;
+      var elem = this.results[this.resultIndex].elem;
+
+      if (elem === 'field') {
+        node.searchFieldActive = true;
+      } else {
+        node.searchValueActive = true;
+      }
+
+      this.activeResult = this.results[this.resultIndex];
+      node.updateDom(); // TODO: not so nice that the focus is only set after the animation is finished
+
+      node.scrollTo(function () {
+        if (focus) {
+          node.focus(elem);
+        }
+      });
+    }
+    /**
+     * Cancel any running onDelayedSearch.
+     * @private
+     */
+
+  }, {
+    key: "_clearDelay",
+    value: function _clearDelay() {
+      if (this.timeout !== undefined) {
+        clearTimeout(this.timeout);
+        delete this.timeout;
+      }
+    }
+    /**
+     * Start a timer to execute a search after a short delay.
+     * Used for reducing the number of searches while typing.
+     * @param {Event} event
+     * @private
+     */
+
+  }, {
+    key: "_onDelayedSearch",
+    value: function _onDelayedSearch(event) {
+      // execute the search after a short delay (reduces the number of
+      // search actions while typing in the search text box)
+      this._clearDelay();
+
+      var searchBox = this;
+      this.timeout = setTimeout(function (event) {
+        searchBox._onSearch();
+      }, this.delay);
+    }
+    /**
+     * Handle onSearch event
+     * @param {boolean} [forceSearch]  If true, search will be executed again even
+     *                                 when the search text is not changed.
+     *                                 Default is false.
+     * @private
+     */
+
+  }, {
+    key: "_onSearch",
+    value: function _onSearch(forceSearch) {
+      this._clearDelay();
+
+      var value = this.dom.search.value;
+      var text = value.length > 0 ? value : undefined;
+
+      if (text !== this.lastText || forceSearch) {
+        // only search again when changed
+        this.lastText = text;
+        this.results = this.editor.search(text);
+        var MAX_SEARCH_RESULTS = this.results[0] ? this.results[0].node.MAX_SEARCH_RESULTS : Infinity; // try to maintain the current active result if this is still part of the new search results
+
+        var activeResultIndex = 0;
+
+        if (this.activeResult) {
+          for (var i = 0; i < this.results.length; i++) {
+            if (this.results[i].node === this.activeResult.node) {
+              activeResultIndex = i;
+              break;
+            }
+          }
         }
 
-        rows[index].className = 'item hover';
-        oldIndex = index;
-      },
-      move: function move(step) {
-        // moves the selection either up or down (unless it's not possible) step is either +1 or -1.
-        if (elem.style.visibility === 'hidden') return ''; // nothing to move if there is no dropDown. (this happens if the user hits escape and then down or up)
+        this._setActiveResult(activeResultIndex, false); // display search results
 
-        if (ix + step === -1 || ix + step === rows.length) return rows[ix].__hint; // NO CIRCULAR SCROLLING.
 
-        ix += step;
-        p.highlight(ix);
-        return rows[ix].__hint; // txtShadow.value = uRows[uIndex].__hint ;
-      },
-      onmouseselection: function onmouseselection() {} // it will be overwritten.
+        if (text !== undefined) {
+          var resultCount = this.results.length;
 
-    };
-    return p;
-  };
+          if (resultCount === 0) {
+            this.dom.results.textContent = "no\xA0results";
+          } else if (resultCount === 1) {
+            this.dom.results.textContent = "1\xA0result";
+          } else if (resultCount > MAX_SEARCH_RESULTS) {
+            this.dom.results.textContent = MAX_SEARCH_RESULTS + "+\xA0results";
+          } else {
+            this.dom.results.textContent = resultCount + "\xA0results";
+          }
+        } else {
+          this.dom.results.textContent = '';
+        }
+      }
+    }
+    /**
+     * Handle onKeyDown event in the input box
+     * @param {Event} event
+     * @private
+     */
 
-  function setEndOfContenteditable(contentEditableElement) {
-    var range, selection;
+  }, {
+    key: "_onKeyDown",
+    value: function _onKeyDown(event) {
+      var keynum = event.which;
 
-    if (document.createRange) {
-      // Firefox, Chrome, Opera, Safari, IE 9+
-      range = document.createRange(); // Create a range (a range is a like the selection but invisible)
+      if (keynum === 27) {
+        // ESC
+        this.dom.search.value = ''; // clear search
 
-      range.selectNodeContents(contentEditableElement); // Select the entire contents of the element with the range
+        this._onSearch();
 
-      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+        event.preventDefault();
+        event.stopPropagation();
+      } else if (keynum === 13) {
+        // Enter
+        if (event.ctrlKey) {
+          // force to search again
+          this._onSearch(true);
+        } else if (event.shiftKey) {
+          // move to the previous search result
+          this.previous();
+        } else {
+          // move to the next search result
+          this.next();
+        }
 
-      selection = window.getSelection(); // get the selection object (allows you to change selection)
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }
+    /**
+     * Handle onKeyUp event in the input box
+     * @param {Event} event
+     * @private
+     */
 
-      selection.removeAllRanges(); // remove any selections already made
+  }, {
+    key: "_onKeyUp",
+    value: function _onKeyUp(event) {
+      var keynum = event.keyCode;
 
-      selection.addRange(range); // make the range you have just created the visible selection
-    } else if (document.selection) {
-      // IE 8 and lower
-      range = document.body.createTextRange(); // Create a range (a range is a like the selection but invisible)
+      if (keynum !== 27 && keynum !== 13) {
+        // !show and !Enter
+        this._onDelayedSearch(event); // For IE 9
 
-      range.moveToElementText(contentEditableElement); // Select the entire contents of the element with the range
+      }
+    }
+    /**
+     * Clear the search results
+     */
 
-      range.collapse(false); // collapse the range to the end point. false means collapse to end rather than the start
+  }, {
+    key: "clear",
+    value: function clear() {
+      this.dom.search.value = '';
 
-      range.select(); // Select the range (make it the visible selection
+      this._onSearch();
+    }
+    /**
+     * Refresh searchResults if there is a search value
+     */
+
+  }, {
+    key: "forceSearch",
+    value: function forceSearch() {
+      this._onSearch(true);
+    }
+    /**
+     * Test whether the search box value is empty
+     * @returns {boolean} Returns true when empty.
+     */
+
+  }, {
+    key: "isEmpty",
+    value: function isEmpty() {
+      return this.dom.search.value === '';
+    }
+    /**
+     * Destroy the search box
+     */
+
+  }, {
+    key: "destroy",
+    value: function destroy() {
+      this.editor = null;
+      this.dom.container.removeChild(this.dom.wrapper);
+      this.dom = null;
+      this.results = null;
+      this.activeResult = null;
+
+      this._clearDelay();
+    }
+  }]);
+
+  return SearchBox;
+}();
+// CONCATENATED MODULE: ./src/js/TreePath.js
+
+
+function TreePath_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function TreePath_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function TreePath_createClass(Constructor, protoProps, staticProps) { if (protoProps) TreePath_defineProperties(Constructor.prototype, protoProps); if (staticProps) TreePath_defineProperties(Constructor, staticProps); return Constructor; }
+
+
+
+
+/**
+ * Creates a component that visualize path selection in tree based editors
+ * @param {HTMLElement} container
+ * @param {HTMLElement} root
+ * @constructor
+ */
+
+var TreePath_TreePath = /*#__PURE__*/function () {
+  function TreePath(container, root) {
+    TreePath_classCallCheck(this, TreePath);
+
+    if (container) {
+      this.root = root;
+      this.path = document.createElement('div');
+      this.path.className = 'jsoneditor-treepath';
+      this.path.setAttribute('tabindex', 0);
+      this.contentMenuClicked = false;
+      container.appendChild(this.path);
+      this.reset();
     }
   }
+  /**
+   * Reset component to initial status
+   */
 
-  function calculateWidthForText(text) {
-    if (spacer === undefined) {
-      // on first call only.
-      spacer = document.createElement('span');
-      spacer.style.visibility = 'hidden';
-      spacer.style.position = 'fixed';
-      spacer.style.outline = '0';
-      spacer.style.margin = '0';
-      spacer.style.padding = '0';
-      spacer.style.border = '0';
-      spacer.style.left = '0';
-      spacer.style.whiteSpace = 'pre';
-      spacer.style.fontSize = fontSize;
-      spacer.style.fontFamily = fontFamily;
-      spacer.style.fontWeight = 'normal';
-      document.body.appendChild(spacer);
+
+  TreePath_createClass(TreePath, [{
+    key: "reset",
+    value: function reset() {
+      this.path.textContent = Object(i18n["c" /* translate */])('selectNode');
     }
+    /**
+     * Renders the component UI according to a given path objects
+     * @param {Array<{name: String, childs: Array}>} pathObjs a list of path objects
+     *
+     */
 
-    spacer.textContent = text;
-    return spacer.getBoundingClientRect().right;
-  }
+  }, {
+    key: "setPath",
+    value: function setPath(pathObjs) {
+      var me = this;
+      this.path.textContent = '';
 
-  var rs = {
-    onArrowDown: function onArrowDown() {},
-    // defaults to no action.
-    onArrowUp: function onArrowUp() {},
-    // defaults to no action.
-    onEnter: function onEnter() {},
-    // defaults to no action.
-    onTab: function onTab() {},
-    // defaults to no action.
-    startFrom: 0,
-    options: [],
-    element: null,
-    elementHint: null,
-    elementStyle: null,
-    wrapper: wrapper,
-    // Only to allow  easy access to the HTML elements to the final user (possibly for minor customizations)
-    show: function show(element, startPos, options) {
-      var _this = this;
+      if (pathObjs && pathObjs.length) {
+        pathObjs.forEach(function (pathObj, idx) {
+          var pathEl = document.createElement('span');
+          var sepEl;
+          pathEl.className = 'jsoneditor-treepath-element';
+          pathEl.innerText = pathObj.name;
+          pathEl.onclick = _onSegmentClick.bind(me, pathObj);
+          me.path.appendChild(pathEl);
 
-      this.startFrom = startPos;
-      this.wrapper.remove();
+          if (pathObj.children.length) {
+            sepEl = document.createElement('span');
+            sepEl.className = 'jsoneditor-treepath-seperator';
+            sepEl.textContent = "\u25BA";
 
-      if (this.elementHint) {
-        this.elementHint.remove();
-        this.elementHint = null;
+            sepEl.onclick = function () {
+              me.contentMenuClicked = true;
+              var items = [];
+              pathObj.children.forEach(function (child) {
+                items.push({
+                  text: child.name,
+                  className: 'jsoneditor-type-modes' + (pathObjs[idx + 1] + 1 && pathObjs[idx + 1].name === child.name ? ' jsoneditor-selected' : ''),
+                  click: _onContextMenuItemClick.bind(me, pathObj, child.name)
+                });
+              });
+              var menu = new ContextMenu["a" /* ContextMenu */](items);
+              menu.show(sepEl, me.root, true);
+            };
+
+            me.path.appendChild(sepEl);
+          }
+
+          if (idx === pathObjs.length - 1) {
+            var leftRectPos = (sepEl || pathEl).getBoundingClientRect().right;
+
+            if (me.path.offsetWidth < leftRectPos) {
+              me.path.scrollLeft = leftRectPos;
+            }
+
+            if (me.path.scrollLeft) {
+              var showAllBtn = document.createElement('span');
+              showAllBtn.className = 'jsoneditor-treepath-show-all-btn';
+              showAllBtn.title = 'show all path';
+              showAllBtn.textContent = '...';
+              showAllBtn.onclick = _onShowAllClick.bind(me, pathObjs);
+              me.path.insertBefore(showAllBtn, me.path.firstChild);
+            }
+          }
+        });
       }
 
-      if (fontSize === '') {
-        fontSize = window.getComputedStyle(element).getPropertyValue('font-size');
-      }
+      function _onShowAllClick(pathObjs) {
+        me.contentMenuClicked = false;
+        Object(util["addClassName"])(me.path, 'show-all');
+        me.path.style.width = me.path.parentNode.getBoundingClientRect().width - 10 + 'px';
 
-      if (fontFamily === '') {
-        fontFamily = window.getComputedStyle(element).getPropertyValue('font-family');
-      }
+        me.path.onblur = function () {
+          if (me.contentMenuClicked) {
+            me.contentMenuClicked = false;
+            me.path.focus();
+            return;
+          }
 
-      dropDown.style.marginLeft = '0';
-      dropDown.style.marginTop = element.getBoundingClientRect().height + 'px';
-      this.options = options.map(String);
-
-      if (this.element !== element) {
-        this.element = element;
-        this.elementStyle = {
-          zIndex: this.element.style.zIndex,
-          position: this.element.style.position,
-          backgroundColor: this.element.style.backgroundColor,
-          borderColor: this.element.style.borderColor
+          Object(util["removeClassName"])(me.path, 'show-all');
+          me.path.onblur = undefined;
+          me.path.style.width = '';
+          me.setPath(pathObjs);
         };
       }
 
-      this.element.style.zIndex = 3;
-      this.element.style.position = 'relative';
-      this.element.style.backgroundColor = 'transparent';
-      this.element.style.borderColor = 'transparent';
-      this.elementHint = element.cloneNode();
-      this.elementHint.className = 'autocomplete hint';
-      this.elementHint.style.zIndex = 2;
-      this.elementHint.style.position = 'absolute';
-
-      this.elementHint.onfocus = function () {
-        _this.element.focus();
-      };
-
-      if (this.element.addEventListener) {
-        this.element.removeEventListener('keydown', keyDownHandler);
-        this.element.addEventListener('keydown', keyDownHandler, false);
-        this.element.removeEventListener('blur', onBlurHandler);
-        this.element.addEventListener('blur', onBlurHandler, false);
-      }
-
-      wrapper.appendChild(this.elementHint);
-      wrapper.appendChild(dropDown);
-      element.parentElement.appendChild(wrapper);
-      this.repaint(element);
-    },
-    setText: function setText(text) {
-      this.element.innerText = text;
-    },
-    getText: function getText() {
-      return this.element.innerText;
-    },
-    hideDropDown: function hideDropDown() {
-      this.wrapper.remove();
-
-      if (this.elementHint) {
-        this.elementHint.remove();
-        this.elementHint = null;
-        dropDownController.hide();
-        this.element.style.zIndex = this.elementStyle.zIndex;
-        this.element.style.position = this.elementStyle.position;
-        this.element.style.backgroundColor = this.elementStyle.backgroundColor;
-        this.element.style.borderColor = this.elementStyle.borderColor;
-      }
-    },
-    repaint: function repaint(element) {
-      var text = element.innerText;
-      text = text.replace('\n', '');
-      var optionsLength = this.options.length; // breaking text in leftSide and token.
-
-      var token = text.substring(this.startFrom);
-      leftSide = text.substring(0, this.startFrom);
-
-      for (var i = 0; i < optionsLength; i++) {
-        var opt = this.options[i];
-
-        if (!config.caseSensitive && opt.toLowerCase().indexOf(token.toLowerCase()) === 0 || config.caseSensitive && opt.indexOf(token) === 0) {
-          // <-- how about upperCase vs. lowercase
-          this.elementHint.innerText = leftSide + token + opt.substring(token.length);
-          this.elementHint.realInnerText = leftSide + opt;
-          break;
-        }
-      } // moving the dropDown and refreshing it.
-
-
-      dropDown.style.left = calculateWidthForText(leftSide) + 'px';
-      dropDownController.refresh(token, this.options);
-      this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + 10 + 'px';
-      var wasDropDownHidden = dropDown.style.visibility === 'hidden';
-
-      if (!wasDropDownHidden) {
-        this.elementHint.style.width = calculateWidthForText(this.elementHint.innerText) + dropDown.clientWidth + 'px';
-      }
-    }
-  };
-  var dropDownController = createDropDownController(dropDown, rs);
-
-  var keyDownHandler = function (e) {
-    // console.log("Keydown:" + e.keyCode);
-    e = e || window.event;
-    var keyCode = e.keyCode;
-    if (this.elementHint == null) return;
-
-    if (keyCode === 33) {
-      return;
-    } // page up (do nothing)
-
-
-    if (keyCode === 34) {
-      return;
-    } // page down (do nothing);
-
-
-    if (keyCode === 27) {
-      // escape
-      rs.hideDropDown();
-      rs.element.focus();
-      e.preventDefault();
-      e.stopPropagation();
-      return;
-    }
-
-    var text = this.element.innerText;
-    text = text.replace('\n', '');
-
-    if (config.confirmKeys.indexOf(keyCode) >= 0) {
-      //  (autocomplete triggered)
-      if (keyCode === 9) {
-        if (this.elementHint.innerText.length === 0) {
-          rs.onTab();
+      function _onSegmentClick(pathObj) {
+        if (this.selectionCallback) {
+          this.selectionCallback(pathObj);
         }
       }
 
-      if (this.elementHint.innerText.length > 0) {
-        // if there is a hint
-        if (this.element.innerText !== this.elementHint.realInnerText) {
-          this.element.innerText = this.elementHint.realInnerText;
-          rs.hideDropDown();
-          setEndOfContenteditable(this.element);
-
-          if (keyCode === 9) {
-            rs.element.focus();
-            e.preventDefault();
-            e.stopPropagation();
-          }
+      function _onContextMenuItemClick(pathObj, selection) {
+        if (this.contextMenuCallback) {
+          this.contextMenuCallback(pathObj, selection);
         }
       }
-
-      return;
     }
+    /**
+     * set a callback function for selection of path section
+     * @param {Function} callback function to invoke when section is selected
+     */
 
-    if (keyCode === 13) {
-      // enter  (autocomplete triggered)
-      if (this.elementHint.innerText.length === 0) {
-        // if there is a hint
-        rs.onEnter();
-      } else {
-        var wasDropDownHidden = dropDown.style.visibility === 'hidden';
-        dropDownController.hide();
-
-        if (wasDropDownHidden) {
-          rs.hideDropDown();
-          rs.element.focus();
-          rs.onEnter();
-          return;
-        }
-
-        this.element.innerText = this.elementHint.realInnerText;
-        rs.hideDropDown();
-        setEndOfContenteditable(this.element);
-        e.preventDefault();
-        e.stopPropagation();
+  }, {
+    key: "onSectionSelected",
+    value: function onSectionSelected(callback) {
+      if (typeof callback === 'function') {
+        this.selectionCallback = callback;
       }
-
-      return;
     }
+    /**
+     * set a callback function for selection of path section
+     * @param {Function} callback function to invoke when section is selected
+     */
 
-    if (keyCode === 40) {
-      // down
-      var token = text.substring(this.startFrom);
-      var m = dropDownController.move(+1);
-
-      if (m === '') {
-        rs.onArrowDown();
+  }, {
+    key: "onContextMenuItemSelected",
+    value: function onContextMenuItemSelected(callback) {
+      if (typeof callback === 'function') {
+        this.contextMenuCallback = callback;
       }
-
-      this.elementHint.innerText = leftSide + token + m.substring(token.length);
-      this.elementHint.realInnerText = leftSide + m;
-      e.preventDefault();
-      e.stopPropagation();
-      return;
     }
+  }]);
 
-    if (keyCode === 38) {
-      // up
-      var _token = text.substring(this.startFrom);
-
-      var _m = dropDownController.move(-1);
-
-      if (_m === '') {
-        rs.onArrowUp();
-      }
-
-      this.elementHint.innerText = leftSide + _token + _m.substring(_token.length);
-      this.elementHint.realInnerText = leftSide + _m;
-      e.preventDefault();
-      e.stopPropagation();
-    }
-  }.bind(rs);
-
-  var onBlurHandler = function onBlurHandler(e) {
-    rs.hideDropDown(); // console.log("Lost focus.");
-  };
-
-  dropDownController.onmouseselection = function (text, rs) {
-    rs.element.innerText = rs.elementHint.innerText = leftSide + text;
-    rs.hideDropDown();
-    window.setTimeout(function () {
-      rs.element.focus();
-      setEndOfContenteditable(rs.element);
-    }, 1);
-  };
-
-  return rs;
-}
-// EXTERNAL MODULE: ./src/js/jmespathQuery.js
-var jmespathQuery = __webpack_require__(4);
+  return TreePath;
+}();
+// EXTERNAL MODULE: ./src/js/vanilla-picker/index.js
+var vanilla_picker = __webpack_require__(14);
+var vanilla_picker_default = /*#__PURE__*/__webpack_require__.n(vanilla_picker);
 
 // CONCATENATED MODULE: ./src/js/treemode.js
 
@@ -49228,7 +49830,7 @@ treemode._setOptions = function (options) {
         var pickerHeight = 300; // estimated height of the color picker
 
         var top = parent.getBoundingClientRect().top;
-        var windowHeight = window.innerHeight;
+        var windowHeight = Object(util["getWindow"])(parent).innerHeight;
         var showOnTop = windowHeight - top < pickerHeight && top > pickerHeight;
         new vanilla_picker_default.a({
           parent: parent,
@@ -49397,7 +49999,7 @@ treemode.setText = function (jsonText) {
     this.set(Object(util["parse"])(jsonText)); // this can throw an error
   } catch (err) {
     // try to repair json, replace JavaScript notation with JSON notation
-    var repairedJsonText = Object(util["repair"])(jsonText); // try to parse again
+    var repairedJsonText = Object(util["trySimpleJsonRepair"])(jsonText); // try to parse again
 
     this.set(Object(util["parse"])(repairedJsonText)); // this can throw an error
   }
@@ -49414,7 +50016,7 @@ treemode.updateText = function (jsonText) {
     this.update(Object(util["parse"])(jsonText)); // this can throw an error
   } catch (err) {
     // try to repair json, replace JavaScript notation with JSON notation
-    var repairJsonText = Object(util["repair"])(jsonText); // try to parse again
+    var repairJsonText = Object(util["trySimpleJsonRepair"])(jsonText); // try to parse again
 
     this.update(Object(util["parse"])(repairJsonText)); // this can throw an error
   }
@@ -49737,8 +50339,8 @@ treemode._renderValidationErrors = function (errorNodes) {
       node: pair[0],
       child: pair[1],
       error: {
-        message: pair[0].type === 'object' ? 'Contains invalid properties' // object
-        : 'Contains invalid items' // array
+        message: pair[0].type === 'object' ? Object(i18n["c" /* translate */])('containsInvalidProperties') // object
+        : Object(i18n["c" /* translate */])('containsInvalidItems') // array
 
       }
     };
@@ -50405,7 +51007,7 @@ treemode._updateDragDistance = function (event) {
 };
 /**
  * Start multi selection of nodes by dragging the mouse
- * @param event
+ * @param {MouseEvent} event
  * @private
  */
 
@@ -50430,13 +51032,13 @@ treemode._onMultiSelectStart = function (event) {
   var editor = this;
 
   if (!this.mousemove) {
-    this.mousemove = Object(util["addEventListener"])(window, 'mousemove', function (event) {
+    this.mousemove = Object(util["addEventListener"])(event.view, 'mousemove', function (event) {
       editor._onMultiSelect(event);
     });
   }
 
   if (!this.mouseup) {
-    this.mouseup = Object(util["addEventListener"])(window, 'mouseup', function (event) {
+    this.mouseup = Object(util["addEventListener"])(event.view, 'mouseup', function (event) {
       editor._onMultiSelectEnd(event);
     });
   }
@@ -50445,7 +51047,7 @@ treemode._onMultiSelectStart = function (event) {
 };
 /**
  * Multiselect nodes by dragging
- * @param event
+ * @param {MouseEvent} event
  * @private
  */
 
@@ -50494,11 +51096,12 @@ treemode._onMultiSelect = function (event) {
 };
 /**
  * End of multiselect nodes by dragging
+ * @param {MouseEvent} event
  * @private
  */
 
 
-treemode._onMultiSelectEnd = function () {
+treemode._onMultiSelectEnd = function (event) {
   // set focus to the context menu button of the first node
   if (this.multiselection.nodes[0]) {
     this.multiselection.nodes[0].dom.menu.focus();
@@ -50508,12 +51111,12 @@ treemode._onMultiSelectEnd = function () {
   this.multiselection.end = null; // cleanup global event listeners
 
   if (this.mousemove) {
-    Object(util["removeEventListener"])(window, 'mousemove', this.mousemove);
+    Object(util["removeEventListener"])(event.view, 'mousemove', this.mousemove);
     delete this.mousemove;
   }
 
   if (this.mouseup) {
-    Object(util["removeEventListener"])(window, 'mouseup', this.mouseup);
+    Object(util["removeEventListener"])(event.view, 'mouseup', this.mouseup);
     delete this.mouseup;
   }
 };
@@ -50628,6 +51231,12 @@ treemode._showAutoComplete = function (element) {
   var jsonElementType = '';
   if (element.className.indexOf('jsoneditor-value') >= 0) jsonElementType = 'value';
   if (element.className.indexOf('jsoneditor-field') >= 0) jsonElementType = 'field';
+
+  if (jsonElementType === '') {
+    // Unknown element field. Could be a button or something else
+    return;
+  }
+
   var self = this;
   setTimeout(function () {
     if (node && (self.options.autocomplete.trigger === 'focus' || element.innerText.length > 0)) {
@@ -50985,7 +51594,7 @@ var treeModeMixins = [{
 }];
 
 /***/ }),
-/* 81 */
+/* 85 */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -50995,32 +51604,18 @@ __webpack_require__.r(__webpack_exports__);
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, "previewModeMixins", function() { return /* binding */ previewModeMixins; });
 
-// EXTERNAL MODULE: ./src/js/i18n.js
-var i18n = __webpack_require__(1);
-
-// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
-var ModeSwitcher = __webpack_require__(8);
-
-// EXTERNAL MODULE: ./src/js/ErrorTable.js
-var ErrorTable = __webpack_require__(15);
-
-// EXTERNAL MODULE: ./src/js/showSortModal.js
-var showSortModal = __webpack_require__(5);
-
-// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
-var showTransformModal = __webpack_require__(6);
-
-// EXTERNAL MODULE: ./src/js/textmode.js + 1 modules
-var textmode = __webpack_require__(21);
+// EXTERNAL MODULE: ./node_modules/simple-json-repair/lib/cjs/index-commonjs.js
+var index_commonjs = __webpack_require__(8);
+var index_commonjs_default = /*#__PURE__*/__webpack_require__.n(index_commonjs);
 
 // EXTERNAL MODULE: ./src/js/constants.js
 var constants = __webpack_require__(2);
 
+// EXTERNAL MODULE: ./src/js/ErrorTable.js
+var ErrorTable = __webpack_require__(16);
+
 // EXTERNAL MODULE: ./src/js/FocusTracker.js
 var FocusTracker = __webpack_require__(9);
-
-// EXTERNAL MODULE: ./src/js/util.js
-var util = __webpack_require__(0);
 
 // CONCATENATED MODULE: ./src/js/History.js
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -51120,10 +51715,29 @@ var History = /*#__PURE__*/function () {
 
   return History;
 }();
+// EXTERNAL MODULE: ./src/js/i18n.js
+var i18n = __webpack_require__(1);
+
 // EXTERNAL MODULE: ./src/js/jmespathQuery.js
 var jmespathQuery = __webpack_require__(4);
 
+// EXTERNAL MODULE: ./src/js/ModeSwitcher.js
+var ModeSwitcher = __webpack_require__(10);
+
+// EXTERNAL MODULE: ./src/js/showSortModal.js
+var showSortModal = __webpack_require__(5);
+
+// EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
+var showTransformModal = __webpack_require__(6);
+
+// EXTERNAL MODULE: ./src/js/textmode.js + 1 modules
+var textmode = __webpack_require__(22);
+
+// EXTERNAL MODULE: ./src/js/util.js
+var util = __webpack_require__(0);
+
 // CONCATENATED MODULE: ./src/js/previewmode.js
+
 
 
 
@@ -51521,7 +52135,7 @@ previewmode._showTransformModal = function () {
 
 
     Object(showTransformModal["showTransformModal"])({
-      anchor: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
+      container: modalAnchor || constants["a" /* DEFAULT_MODAL_ANCHOR */],
       json: json,
       queryDescription: queryDescription,
       // can be undefined
@@ -51591,9 +52205,13 @@ previewmode.format = function () {
 
 previewmode.repair = function () {
   var text = this.getText();
-  var repairedText = Object(util["repair"])(text);
 
-  this._setTextAndFireOnChange(repairedText);
+  try {
+    var repairedText = index_commonjs_default()(text);
+
+    this._setTextAndFireOnChange(repairedText);
+  } catch (err) {// repair was not successful, do nothing
+  }
 };
 /**
  * Set focus to the editor

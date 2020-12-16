@@ -4,7 +4,7 @@
             "type": "object",
             "obj_type": "charcoal/admin/user/acl-role",
             "input_type": "charcoal/admin/property/input/checkbox",
-            "pattern": "{{ident}}",
+            "pattern": "{{name}}",
             "multiple": true
         }
     },

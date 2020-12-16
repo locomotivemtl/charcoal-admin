@@ -1,7 +1,38 @@
 {
+    "labels": {
+        "name": {
+            "fr": "Rôle",
+            "en": "Role"
+        },
+        "singular_name": {
+            "fr": "Rôle",
+            "en": "Role"
+        },
+        "edit_item": {
+            "fr": "Rôle",
+            "en": "Edit role"
+        },
+        "create_item": {
+            "fr": "Créer un rôle",
+            "en": "Create role"
+        },
+        "new_item": {
+            "fr": "Nouveau rôle",
+            "en": "New role"
+        },
+        "all_items": {
+            "fr": "Liste des rôles",
+            "en": "All roles"
+        },
+        "menu_items": {
+            "fr": "Rôle",
+            "en": "Role"
+        }
+    },
     "properties": {
         "parent": {
-            "obj_type": "charcoal/admin/user/acl-role"
+            "obj_type": "charcoal/admin/user/acl-role",
+            "pattern": "{{name}}"
         }
     },
 
@@ -33,7 +64,14 @@
                 "groups": {
                     "info": {
                         "title": "Informations",
+                        "layout": {
+                            "structure": [
+                                { "columns": [ 1, 1 ] },
+                                { "columns": [ 1, 1 ] }
+                            ]
+                        },
                         "properties": [
+                            "name",
                             "ident",
                             "parent",
                             "superuser"
@@ -72,10 +110,6 @@
 
         "dashboards": {
             "admin.edit": {
-                "title": {
-                    "en": "Role",
-                    "fr": "Rôle"
-                },
                 "layout": {
                     "structure": [
                         { "columns": [ 1 ] }
@@ -95,10 +129,6 @@
                 }
             },
             "admin.table": {
-                "title": {
-                    "en": "Roles list",
-                    "fr": "Liste des rôles"
-                },
                 "layout": {
                     "structure": [
                         { "columns": [ 1 ] }

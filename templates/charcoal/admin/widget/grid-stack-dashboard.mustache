@@ -1,0 +1,97 @@
+        <div class="dashboard{{# ident }} dashboard-{{ . }}{{/ ident }}">
+            <div class="card-grid grid-stack">
+                {{# widgets }}
+
+                <div class="grid-stack-item widget{{# ident }} widget-{{ . }}{{/ ident }}"
+                     data-gs-auto-position="true"
+                     data-gs-x="{{ gridStack.x }}"
+                     data-gs-y="{{ gridStack.y }}"
+                     data-gs-width="{{ gridStack.width }}"
+                     data-gs-height="{{ grid_stack.height }}"
+                     data-gs-id="{{ ident }}">
+                    <div class="card grid-stack-item-content">
+
+                        <div class="card-body">
+                            {{# showTitle }}
+                            <h5>{{ title }}</h5>
+                            {{/ showTitle }}
+
+                                {{# showActions }}
+                            <div class="widget-actions">
+                                {{# actions }}
+                                <a href="{{ url }}">{{ label }}</a>
+                                {{/ actions }}
+                            </div>
+                            {{/ showActions }}
+
+                                {{!--
+                                Include the widget's partial (template).
+                                Magic (global) variable $widget_template, set by dashboard's controller
+                                --}}
+                                {{> $widget_template }}
+                        </div>
+                    </div>
+                </div>
+
+                {{/ widgets }}
+            </div>
+
+        </div>
+
+{{# addCssRequirement }}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.min.css" />
+{{/ addCssRequirement }}
+{{# addJsRequirement }}
+<script type="text/javascript" src="https://cdn.jsdelivr.net/npm/lodash@4.17.10/lodash.min.js"></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.min.js'></script>
+<script type="text/javascript" src='https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.4.0/gridstack.jQueryUI.min.js'></script>
+{{/ addJsRequirement }}
+
+{{# addJs }}
+<script type="text/javascript">
+    $(function () {
+        $('.grid-stack').gridstack({
+            animate: true,
+            float: false
+        });
+
+        this.saveGrid = function () {
+            this.serializedData = _.map($('.grid-stack > .grid-stack-item:visible'), function (el) {
+                el = $(el);
+                var node = el.data('_gridstack_node');
+                return {
+                    x: node.x,
+                    y: node.y,
+                    width: node.width,
+                    height: node.height,
+                    id: node.id
+                };
+            }, this);
+
+            $.ajax({
+                method: 'POST',
+                url: Charcoal.Admin.admin_url() + 'object/update',
+                data: {
+                    obj_type: 'charcoal/admin/user',
+                    obj_id: '{{ adminUser.username }}',
+                    preferences: {
+                        grid_stack: this.serializedData
+                    }
+                },
+                dataType: 'json'
+            }).done(function (response) {
+                console.debug(response);
+                if (response.feedbacks) {
+                    Charcoal.Admin.feedback(response.feedbacks).dispatch();
+                }
+            });
+
+            return false;
+        }.bind(this);
+
+        $('.grid-stack').on('change', this.saveGrid);
+    });
+</script>
+{{/ addJs }}
+
+{{> charcoal/admin/template/inc.footer }}

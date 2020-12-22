@@ -71,7 +71,8 @@ class GridStackDashboardWidget extends AdminWidget implements
 
         // Load gridStack from user preferences
         $user = $this->adminUser();
-        $userGridStack = json_decode($user->preferences(), true)['grid_stack'] ?: [];
+        // $userGridStack = json_decode($user->preferences(), true)['grid_stack'] ?: [];
+        $userGridStack = [];
         $parsedUserGridStack = [];
 
         array_walk($userGridStack, function ($item) use (&$parsedUserGridStack) {

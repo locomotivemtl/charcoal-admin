@@ -265,6 +265,14 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * @return boolean
+     */
+    public function hasPropertyVal()
+    {
+        return (!empty($val) || is_numeric($val));
+    }
+
+    /**
      * @param string $lang The language code / ident.
      * @return PropertyInputInterface Chainable
      */
@@ -574,6 +582,16 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
+     * @return boolean
+     */
+    public function hasInputVal()
+    {
+        $val = $this->inputVal();
+
+        return (!empty($val) || is_numeric($val));
+    }
+
+    /**
      * Set the hint to the browser for which keyboard to display.
      *
      * @param  string $inputMode The input type.
@@ -628,7 +646,6 @@ abstract class AbstractPropertyInput implements
         }
         return $this->inputType;
     }
-
 
     /**
      * Determine if the property has an affix.

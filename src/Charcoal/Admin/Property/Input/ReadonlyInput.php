@@ -149,6 +149,18 @@ class ReadonlyInput extends AbstractPropertyInput
     }
 
     /**
+     * @return boolean
+     */
+    public function hasInputVal()
+    {
+        if ($this->hasValue === null) {
+            $this->inputVal();
+        }
+
+        return $this->hasValue;
+    }
+
+    /**
      * Show/hide the property's placeholder text if the value is empty.
      *
      * @param boolean $show Show (TRUE) or hide (FALSE) the notes.

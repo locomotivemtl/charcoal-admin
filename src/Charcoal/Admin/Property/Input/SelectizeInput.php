@@ -98,6 +98,15 @@ class SelectizeInput extends SelectInput
     private $formIdent;
 
     /**
+     * The form data to use while creating objects through Selectize.
+     *
+     * Must be an array
+     *
+     * @var array|null
+     */
+    private $formData;
+
+    /**
      * Check used to parse multi Choice map against the obj properties.
      *
      * @var boolean
@@ -371,6 +380,25 @@ class SelectizeInput extends SelectInput
     public function setFormIdent($formIdent)
     {
         $this->formIdent = $formIdent;
+
+        return $this;
+    }
+
+    /**
+     * @return array|null
+     */
+    public function getFormData(): ?array
+    {
+        return $this->formData;
+    }
+
+    /**
+     * @param array|null $formData FormData for SelectizeInput.
+     * @return self
+     */
+    public function setFormData(?array $formData): self
+    {
+        $this->formData = $formData;
 
         return $this;
     }
@@ -971,6 +999,7 @@ class SelectizeInput extends SelectInput
             'allow_update'             => $this->allowUpdate(),
             'allow_create'             => $this->allowCreate(),
 
+            'form_data'                => $this->getFormData(),
             'form_ident'               => $this->formIdent(),
             'selectize_selector'       => '#'.$this->inputId(),
             'selectize_options'        => $this->selectizeOptions(),

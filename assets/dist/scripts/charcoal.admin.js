@@ -10131,6 +10131,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
         this.selectize = null;
         this.selectize_selector = null;
+        this.form_data = {};
         this.form_ident = null;
         this.selectize_options = {};
         this.choice_obj_map = {};
@@ -10186,6 +10187,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
         this.pattern = opts.data.pattern || this.pattern;
         this.multiple = opts.data.multiple || this.multiple;
         this.separator = opts.data.multiple_separator || this.multiple_separator || ',';
+        this.form_data = opts.data.form_data || this.form_data;
         this.form_ident = opts.data.form_ident || this.form_ident;
 
         this.selectize_selector = opts.data.selectize_selector || this.selectize_selector;
@@ -10317,7 +10319,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     };
 
     Selectize.prototype.create_item = function (input, callback, opts) {
-        var form_data = {};
+        var form_data = this.form_data || {};
         opts = opts || {};
         var self = this;
         var type = this.obj_type;

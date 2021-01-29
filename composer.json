@@ -26,7 +26,7 @@
         }
     },
     "require": {
-        "php": ">7.1",
+        "php": "^7.3",
         "barryvdh/elfinder-flysystem-driver": "^0.2.1",
         "guzzlehttp/guzzle": "^6.3",
         "kriswallsmith/assetic": "^1.4",

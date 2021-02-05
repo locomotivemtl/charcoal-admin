@@ -56,7 +56,7 @@ class CopyAssetsScript extends AdminScript
         $this->dir = realpath($dirPath);
         if (!$this->dir) {
             $climate->orange('Directory does not exist. Creating it…');
-            mkdir($dirPath, null, true);
+            mkdir($dirPath, 0755, true);
             $this->dir = realpath($dirPath);
         }
 

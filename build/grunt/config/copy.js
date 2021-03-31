@@ -21,6 +21,12 @@ module.exports = {
             },
             {
                 expand: true,
+                cwd:   '<%= paths.npm %>/bootstrap-select/dist/js/',
+                src:   [ 'i18n/**/*.*' ],
+                dest:  '<%= paths.js.dist %>/vendors/bootstrap-select/'
+            },
+            {
+                expand: true,
                 cwd:   '<%= paths.npm %>/recorderjs/dist/',
                 src:   [ '**/*.*', '*/*.*', '*.*' ],
                 dest:  '<%= paths.js.dist %>/vendors/recorderjs/'

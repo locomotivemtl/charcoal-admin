@@ -4,6 +4,9 @@
 
     @used-by `charcoal/admin/property/input/select`
 --}}
+{{# addJsRequirement }}
+    <script src="{{ baseUrl }}assets/admin/scripts/vendors/bootstrap-select/i18n/defaults-{{ locale }}.min.js"></script>
+{{/ addJsRequirement }}
 {{# addJs }}
 <script>
 Charcoal.Admin.manager().add_property_input({

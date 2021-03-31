@@ -501,9 +501,9 @@ class SelectizeInput extends SelectInput
         }
 
         if ($this->deferred()) {
-            $placeholder = $this->translator()->trans('Search...');
+            $placeholder = $this->translator()->trans('Search…');
         } else {
-            $placeholder = $this->translator()->trans('Select...');
+            $placeholder = $this->translator()->trans('Select…');
         }
 
         $options['placeholder'] = $placeholder;

@@ -25,7 +25,7 @@
         "selectize-bootstrap-4": "https://github.com/papakay/selectize-bootstrap-4-style",
         "tempusdominus-bootstrap-4": "~5.1.0",
         "timeago": "^1.6.5",
-        "tinymce": "^4.9.11",
+        "tinymce": "^5.6.0",
         "tinymce-i18n": "^19.9.17"
     },
     "devDependencies": {

@@ -611,7 +611,30 @@ class SelectizeInput extends SelectInput
      */
     protected function parseSelectizeOptions(array $settings)
     {
+        // Translate labels
+        $settings = $this->recursiveTranslation($settings);
+
         return $settings;
+    }
+
+    /**
+     * @param array $array The array of possible translation.
+     * @return array
+     */
+    private function recursiveTranslation(array $array)
+    {
+        foreach ($array as &$item) {
+            if (is_array($item)) {
+                $locales = array_keys($item);
+                if (count(array_intersect($locales, $this->translator()->availableLocales()))) {
+                    $item = (string)$this->translator()->translation($item);
+                } else {
+                    $item = $this->recursiveTranslation($item);
+                }
+            }
+        }
+
+        return $array;
     }
 
     /**

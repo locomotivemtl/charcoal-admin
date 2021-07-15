@@ -55,8 +55,6 @@ class LogoutAction extends AdminAction
                 return $response->withStatus(204);
             }
         } catch (Exception $e) {
-            error_log($e->getMessage());
-            error_log($e->getTraceAsString());
             $this->addFeedback('error', strtr($errorThrown, [
                 '{{ errorThrown }}' => $e->getMessage()
             ]));

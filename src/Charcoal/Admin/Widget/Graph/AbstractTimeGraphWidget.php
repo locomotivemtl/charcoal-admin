@@ -64,13 +64,13 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
      */
     public function setGroupingType($type)
     {
-        if ($type == 'hour') {
+        if ($type === 'hour') {
             $this->groupingType = 'hour';
             return $this->setGroupingTypeByHour();
-        } elseif ($type == 'day') {
+        } elseif ($type === 'day') {
             $this->groupingType = 'day';
             return $this->setGroupingTypeByDay();
-        } elseif ($type == 'month') {
+        } elseif ($type === 'month') {
             $this->groupingType = 'month';
             return $this->setGroupingTypeByMonth();
         } else {

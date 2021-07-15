@@ -4,6 +4,9 @@
     "title": "Charcoal Admin",
     "version": "1.0.0",
     "author": "Locomotive <info@locomotive.ca>",
+    "engines": {
+        "node": "^14.15"
+    },
     "dependencies": {
         "@claviska/jquery-minicolors": "^2.3.5",
         "@shopify/draggable": "^1.0.0-beta.8",

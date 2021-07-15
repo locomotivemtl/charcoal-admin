@@ -22,7 +22,7 @@ class ObjectFormWidgetTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $logger = new NullLogger();
         $this->obj = new ObjectFormWidget([

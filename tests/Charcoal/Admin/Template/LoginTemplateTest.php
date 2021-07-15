@@ -28,7 +28,7 @@ class LoginTemplateTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->obj = new LoginTemplate([
             'logger' => new NullLogger()

@@ -46,7 +46,7 @@ class LogoutActionTest extends AbstractTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         if (session_id()) {
             session_unset();

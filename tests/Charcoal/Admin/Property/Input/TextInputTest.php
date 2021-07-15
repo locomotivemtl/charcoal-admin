@@ -23,7 +23,7 @@ class TextInputTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $container = new Container();
         $containerProvider = new ContainerProvider();

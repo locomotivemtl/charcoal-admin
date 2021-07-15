@@ -25,7 +25,7 @@ class LogoutTemplateTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->obj = new LogoutTemplate([
             'logger' => new NullLogger()

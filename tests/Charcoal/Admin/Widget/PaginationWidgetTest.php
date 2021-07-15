@@ -24,7 +24,7 @@ class PaginationWidgetTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->obj = new PaginationWidget([
             'logger' => new NullLogger()

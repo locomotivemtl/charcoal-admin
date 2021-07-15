@@ -48,15 +48,14 @@
         "studio-42/elfinder": "2.1.59"
     },
     "require-dev": {
-        "mockery/mockery": "^1.0",
-        "phpunit/phpunit": "^7.5",
-        "squizlabs/php_codesniffer": "^3.3",
-        "php-coveralls/php-coveralls": "^2.2",
-        "cache/void-adapter": "^0.3",
-        "mustache/mustache": "^2.11",
-        "tedivm/stash": "~0.14",
         "league/csv": "^9.5",
-        "seld/jsonlint": "^1.7"
+        "mockery/mockery": "^1.0",
+        "mustache/mustache": "^2.11",
+        "php-coveralls/php-coveralls": "^2.2",
+        "phpunit/phpunit": "^9.0",
+        "seld/jsonlint": "^1.8",
+        "squizlabs/php_codesniffer": "^3.5",
+        "tedivm/stash": "~0.16"
     },
     "suggest": {
         "league/csv": "To use the exporter (to CSV).",

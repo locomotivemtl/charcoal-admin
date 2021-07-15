@@ -29,7 +29,9 @@ use Charcoal\Admin\Ui\CollectionContainerTrait;
  */
 class TableWidget extends AdminWidget implements CollectionContainerInterface
 {
-    use ActionContainerTrait;
+    use ActionContainerTrait {
+        ActionContainerTrait::resolveActionType as resolveDefaultActionType;
+    }
     use CollectionContainerTrait {
         CollectionContainerTrait::configureCollectionLoader as configureCollectionLoaderFromTrait;
         CollectionContainerTrait::parsePropertyCell as parseCollectionPropertyCell;
@@ -125,6 +127,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     protected $parsedListActions = false;
 
     /**
+     * Keep track if list actions are being parsed.
+     *
+     * @var boolean
+     */
+    protected $parsingListActions = false;
+
+    /**
      * Object actions ars displayed by default.
      *
      * @var boolean
@@ -151,6 +160,13 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      * @var boolean
      */
     protected $parsedObjectActions = false;
+
+    /**
+     * Keep track if object actions are being parsed.
+     *
+     * @var boolean
+     */
+    protected $parsingObjectActions = false;
 
     /**
      * Set the widget data.
@@ -541,7 +557,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
 
         $objectActions = [];
         if (is_array($this->objectActions)) {
+            $this->parsingObjectActions = true;
             $objectActions = $this->parseAsObjectActions($this->objectActions);
+            $this->parsingObjectActions = false;
         }
 
         return $objectActions;
@@ -587,12 +605,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $this->parsedObjectActions = false;
 
+        $this->parsingObjectActions = true;
         $actions = $this->mergeActions($this->defaultObjectActions(), $actions);
-
-        /** Enable seamless button group */
-        if (isset($actions['edit'])) {
-            $actions['edit']['actionType'] = 'seamless';
-        }
+        $this->parsingObjectActions = false;
 
         $this->objectActions = $actions;
 
@@ -611,7 +626,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function createObjectActions(array $actions)
     {
+        $this->parsingObjectActions = true;
         $objectActions = $this->parseActions($actions);
+        $this->parsingObjectActions = false;
 
         return $objectActions;
     }
@@ -823,6 +840,31 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     public function sortable()
     {
         return $this->sortable;
+    }
+
+    /**
+     * Resolve the action's type.
+     *
+     * @param  mixed   $action The action structure.
+     * @param  boolean $row    Whether to resolve action type for a row.
+     * @return string
+     */
+    protected function resolveActionType($action, $row = false)
+    {
+        if ($row || $this->parsingObjectActions) {
+            switch ($action['ident']) {
+                case 'reset':
+                    return 'warning';
+
+                case 'delete':
+                    return 'danger';
+
+                default:
+                    return 'seamless';
+            }
+        }
+
+        return $this->resolveDefaultActionType($action);
     }
 
     /**
@@ -1129,7 +1171,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $this->parsedListActions = false;
 
+        $this->parsingListActions = true;
         $this->listActions = $this->mergeActions($this->defaultListActions(), $actions);
+        $this->parsingListActions = false;
 
         return $this;
     }
@@ -1148,7 +1192,9 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
     {
         $this->actionsPriority = $this->defaultActionPriority();
 
+        $this->parsingListActions = true;
         $listActions = $this->parseAsListActions($actions);
+        $this->parsingListActions = false;
 
         return $listActions;
     }

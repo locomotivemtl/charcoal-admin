@@ -692,7 +692,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
         $actions = $this->listActions();
 
         $filteredArray = array_filter($actions, function ($action) {
-            return $action['empty'];
+            return $action['empty'] && $action['active'];
         });
 
         return array_values($filteredArray);

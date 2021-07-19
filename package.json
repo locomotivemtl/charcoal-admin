@@ -28,8 +28,8 @@
         "selectize-bootstrap-4": "https://github.com/papakay/selectize-bootstrap-4-style",
         "tempusdominus-bootstrap-4": "^5.39.0",
         "timeago": "^1.6.5",
-        "tinymce": "^4.9.11",
-        "tinymce-i18n": "^19.9.17"
+        "tinymce": "^5.8.2",
+        "tinymce-i18n": "^20.12.25"
     },
     "devDependencies": {
         "@lodder/grunt-postcss": "^3.0.1",

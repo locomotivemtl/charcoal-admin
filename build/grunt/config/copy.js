@@ -34,14 +34,14 @@ module.exports = {
             {
                 expand: true,
                 cwd:   '<%= paths.npm %>/tinymce/',
-                src:   [ 'skins/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'themes/**/theme.min.js', 'tinymce.min.js' ],
-                dest:  '<%= paths.js.dist %>/vendors/tinymce/'
+                src:   [ 'icons/**/*.*', 'plugins/**/plugin.min.js', 'plugins/**/*.{css,gif,swf}', 'skins/**/*.*', 'themes/**/theme.min.js', 'tinymce.min.js' ],
+                dest:  '<%= paths.dist %>/tinymce/'
             },
             {
                 expand: true,
-                cwd:   '<%= paths.npm %>/tinymce-i18n/',
-                src:   [ 'langs/**/*.*' ],
-                dest:  '<%= paths.js.dist %>/vendors/tinymce/'
+                cwd:   '<%= paths.npm %>/tinymce-i18n/langs5/',
+                src:   [ '*.js' ],
+                dest:  '<%= paths.dist %>/tinymce/langs/'
             },
             {
                 expand: true,

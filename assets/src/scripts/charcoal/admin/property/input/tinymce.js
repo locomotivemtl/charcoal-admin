@@ -45,7 +45,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.init = function () {
  * @return {thisArg} Chainable.
  */
 Charcoal.Admin.Property_Input_Tinymce.prototype.base_url = function () {
-    return Charcoal.Admin.base_url() + 'assets/admin/scripts/vendors/tinymce';
+    return Charcoal.Admin.base_url() + 'assets/admin/tinymce';
 };
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts) {
@@ -64,61 +64,115 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
     var default_opts = {
         language: locale,
 
-        // Plugins
+        /**
+         * Plugins
+         *
+         * By default, TinyMCE does not load any plugins.
+         *
+         * @link https://www.tiny.cloud/docs/configure/integration-and-setup/#plugins
+         *
+         * Custom Charcoal plugins:
+         *
+         * - charcoal
+         * - placeholder
+         */
         plugins: [
             'advlist',
-            'anchor',
+            // 'anchor',
             'autolink',
             'autoresize',
-            //'autosave',
-            //'bbcode',
+            // 'autosave',
+            // 'bbcode',
             'charcoal',
             'charmap',
             'code',
-            'colorpicker',
-            'contextmenu',
-            //'directionality',
-            //'emoticons',
-            //'fullpage',
+            // 'codesample',
+            // 'directionality',
+            // 'emoticons',
+            // 'fullpage',
             'fullscreen',
+            // 'help',
             'hr',
             'image',
-            //'imagetools',
-            //'insertdatetime',
-            //'layer',
-            //'legacyoutput',
+            // 'imagetools',
+            // 'importcss',
+            // 'insertdatetime',
+            // 'legacyoutput',
             'link',
             'lists',
-            //'importcss',
             'media',
             'nonbreaking',
             'noneditable',
-            //'pagebreak',
+            // 'pagebreak',
             'paste',
             'placeholder',
-            //'preview',
-            //'print',
-            //'save',
+            // 'preview',
+            // 'print',
+            'quickbars',
+            // 'save',
             'searchreplace',
-            //'spellchecker',
+            // 'spellchecker',
             'tabfocus',
             'table',
-            //'template',
-            //'textcolor',
-            //'textpattern',
+            // 'template',
+            // 'textpattern',
+            // 'toc',
             'visualblocks',
             'visualchars',
             'wordcount'
         ],
-
-        // Toolbar
-        toolbar: 'undo redo | ' +
-        'styleselect | ' +
-        'bold italic | ' +
-        'forecolor backcolor | ' +
-        'alignleft aligncenter alignright alignjustify | ' +
-        'bullist numlist outdent indent | ' +
-        'link image anchor',
+        /**
+         * Toolbars
+         *
+         * @link https://www.tiny.cloud/docs/configure/editor-appearance/#toolbar
+         * @link https://github.com/tinymce/tinymce/blob/5.8.2/modules/tinymce/src/themes/silver/main/ts/ui/toolbar/Integration.ts#L38-L60
+         *
+         * Default TinyMCE toolbar:
+         *
+         * - `undo redo`
+         * - `styleselect`
+         * - `bold italic`
+         * - `alignleft aligncenter alignright alignjustify`
+         * - `outdent indent`
+         * - `permanentpen`
+         * - `addcomment`
+         *
+         * Default Charcoal toolbar:
+         *
+         * - `undo redo`
+         * - `formatselect`
+         * - `bold italic`
+         * - `alignleft aligncenter alignright alignjustify`
+         * - `bullist numlist`
+         * - `outdent indent`
+         * - `link image`
+         */
+        toolbar: [
+            'undo redo',
+            'styleselect',
+            'bold italic',
+            'alignleft aligncenter alignright alignjustify',
+            'bullist numlist',
+            'outdent indent',
+            'link image'
+        ].join(' | '),
+        /**
+         * Context Menu
+         *
+         * @link https://www.tiny.cloud/docs/configure/editor-appearance/#contextmenu
+         * @link https://github.com/tinymce/tinymce/blob/5.8.2/modules/tinymce/src/themes/silver/main/ts/ui/menus/contextmenu/Settings.ts#L31
+         *
+         * Default TinyMCR contextmenu
+         *
+         * - `link linkchecker image imagetools table spellchecker configurepermanentpen`
+         *
+         * Default Charcoal toolbar:
+         *
+         * - `link linkchecker image imagetools table`
+         */
+        contextmenu: [
+            'link linkchecker image imagetools table'
+        ].join(' | '),
 
         // General
         browser_spellcheck: true,
@@ -145,11 +199,8 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
         remove_script_host: false,
 
         // Plugins options
-        autoresize_min_height: '150px',
-        autoresize_max_height: '400px',
-        //code_dialog_width: '400px',
-        //code_dialog_height: '400px',
-        contextmenu: 'link image inserttable | cell row column deletetable',
+        min_height: '150px',
+        max_height: '400px',
 
         file_picker_callback: $.proxy(this.elfinder_browser, null, this),
         //image_list: [],
@@ -274,56 +325,64 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function () {
 };
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_callback = function (file, elf) {
-    // pass selected file data to TinyMCE
-    parent.tinyMCE.activeEditor.windowManager.getParams().oninsert(file, elf);
-    parent.tinyMCE.activeEditor.windowManager.close();
+    if (this.elfinder_dialog) {
+        this.elfinder_dialog.onInsert(file, elf);
+        this.elfinder_dialog.close();
+    } else {
+        window.parent.alert('Something went wrong. Could not insert file.');
+        window.parent.postMessage({
+            mceAction: 'close'
+        });
+    }
 };
 
 Charcoal.Admin.Property_Input_Tinymce.prototype.elfinder_browser = function (control, callback, value, meta) {
     var editor = this;
 
-    window.tinyMCE.activeEditor.windowManager.open({
-        file:      control.data.elfinder_url + '&' + $.param(meta),
-        title:     control.data.dialog_title || '',
-        width:     900,
-        height:    450,
-        resizable: 'yes'
-    }, {
-        oninsert: function (file, elf) {
-            var url, regex, alias, selected;
-
-            // URL normalization
-            url = file.url;
-            regex = /\/[^/]+?\/\.\.\//;
-            while (url.match(regex)) {
-                url = url.replace(regex, '/');
-            }
-
-            selected = editor.selection.getContent();
-
-            if (selected.length === 0 && editor.selection.getNode().nodeName === 'A') {
-                selected = editor.selection.getNode().textContent;
-            }
-
-            // Generate a nice file info
-            alias = file.name + ' (' + elf.formatSize(file.size) + ')';
-
-            // Provide file and text for the link dialog
-            if (meta.filetype === 'file') {
-                callback(url, { text: (selected || alias), title: alias });
-            }
-
-            // Provide image and alt text for the image dialog
-            if (meta.filetype === 'image') {
-                callback(url, { alt: alias });
-            }
-
-            // Provide alternative source and posted for the media dialog
-            if (meta.filetype === 'media') {
-                callback(url);
-            }
-        }
+    control.elfinder_dialog = window.tinyMCE.activeEditor.windowManager.openUrl({
+        url:    control.data.elfinder_url + '&' + $.param(meta),
+        title:  control.data.dialog_title || '',
+        width:  900,
+        height: 450
     });
+
+    control.elfinder_dialog.onInsert = function (file, elf) {
+        var url, regex, alias, selected;
+
+        // URL normalization
+        url = file.url;
+        regex = /\/[^/]+?\/\.\.\//;
+        while (url.match(regex)) {
+            url = url.replace(regex, '/');
+        }
+
+        selected = editor.selection.getContent();
+
+        if (selected.length === 0 && editor.selection.getNode().nodeName === 'A') {
+            selected = editor.selection.getNode().textContent;
+        }
+
+        // Generate a nice file info
+        alias = file.name + ' (' + elf.formatSize(file.size) + ')';
+
+        // Provide file and text for the link dialog
+        if (meta.filetype === 'file') {
+            callback(url, { text: (selected || alias), title: alias });
+        }
+
+        // Provide image and alt text for the image dialog
+        if (meta.filetype === 'image') {
+            callback(url, { alt: alias });
+        }
+
+        // Provide alternative source and posted for the media dialog
+        if (meta.filetype === 'media') {
+            callback(url);
+        }
+    }
+
+    console.log('Dialog:', control.elfinder_dialog);
+    console.groupEnd();
 
     return false;
 };

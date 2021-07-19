@@ -11,11 +11,11 @@ module.exports = {
     },
     vendors: {
         files: {
-            '<%= paths.js.dist %>/vendors/tinymce/plugins/charcoal/plugin.min.js': [
-                '<%= paths.js.src %>/charcoal/admin/tinymce/plugins/charcoal/plugin.js'
+            '<%= paths.dist %>/tinymce/plugins/charcoal/plugin.min.js': [
+                '<%= paths.js.src %>/tinymce/plugins/charcoal/plugin.js'
             ],
-            '<%= paths.js.dist %>/vendors/tinymce/plugins/placeholder/plugin.min.js': [
-                '<%= paths.js.src %>/charcoal/admin/tinymce/plugins/placeholder/plugin.js'
+            '<%= paths.dist %>/tinymce/plugins/placeholder/plugin.min.js': [
+                '<%= paths.js.src %>/tinymce/plugins/placeholder/plugin.js'
             ],
             '<%= paths.js.dist %>/charcoal.admin.vendors.min.js': [
                 '<%= concat.vendors.dest %>'

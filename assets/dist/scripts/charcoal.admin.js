@@ -12526,8 +12526,7 @@ Charcoal.Admin.Template_Login.prototype = Object.create(Charcoal.Admin.Template.
 Charcoal.Admin.Template_Login.prototype.constructor = Charcoal.Admin.Template_Login;
 Charcoal.Admin.Template_Login.prototype.parent = Charcoal.Admin.Template.prototype;
 
-Charcoal.Admin.Template_Login.prototype.init = function (opts) {
-    window.console.debug(opts);
+Charcoal.Admin.Template_Login.prototype.init = function (/*opts*/) {
     this.bind_events();
 };
 

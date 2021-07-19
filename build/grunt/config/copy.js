@@ -47,7 +47,7 @@ module.exports = {
                 expand: true,
                 cwd:    '<%= paths.npm %>/jsoneditor/dist/',
                 src:    [ '**/*.*', '*/*.*', '*.*' ],
-                dest:   '<%= paths.js.dist %>/vendors/jsoneditor/'
+                dest:   '<%= paths.dist %>/jsoneditor/'
             }
         ]
     },

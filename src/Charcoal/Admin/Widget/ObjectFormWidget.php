@@ -49,11 +49,11 @@ class ObjectFormWidget extends FormWidget implements
     protected $allowReload = false;
 
     /**
-     * Force the form widget to refresh the page after update.
+     * Force the form widget to reload the page after update.
      *
-     * @var boolean $forceRefresh
+     * @var boolean $forcePageReload
      */
-    protected $forceRefresh = false;
+    protected $forcePageReload = false;
 
     /**
      * @return string
@@ -187,18 +187,18 @@ class ObjectFormWidget extends FormWidget implements
     /**
      * @return boolean
      */
-    public function forceRefresh()
+    public function forcePageReload()
     {
-        return $this->forceRefresh;
+        return $this->forcePageReload;
     }
 
     /**
-     * @param boolean $forceRefresh ForceRefresh for ObjectFormWidget.
+     * @param boolean $forcePageReload ForcePageReload for ObjectFormWidget.
      * @return self
      */
-    public function setForceRefresh($forceRefresh)
+    public function setForcePageReload($forcePageReload)
     {
-        $this->forceRefresh = $forceRefresh;
+        $this->forcePageReload = $forcePageReload;
 
         return $this;
     }
@@ -371,7 +371,7 @@ class ObjectFormWidget extends FormWidget implements
             'group_display_mode' => $this->groupDisplayMode(),
             'group_conditions'   => $this->groupsConditionalLogic(),
             'allow_reload'       => $this->allowReload(),
-            'force_refresh'      => $this->forceRefresh()
+            'force_page_reload'  => $this->forcePageReload(),
         ];
     }
 

@@ -4108,7 +4108,7 @@ Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts) {
     this.group_conditions = opts.data.group_conditions;
     this.$form            = $(this.form_selector);
     this.allow_reload     = opts.data.allow_reload;
-    this.force_refresh     = opts.data.force_refresh;
+    this.force_refresh    = opts.data.force_refresh;
     this.useDefaultAction = opts.data.use_default_action;
 
     return this;

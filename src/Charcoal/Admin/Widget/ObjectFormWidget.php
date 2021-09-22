@@ -371,7 +371,7 @@ class ObjectFormWidget extends FormWidget implements
             'group_display_mode' => $this->groupDisplayMode(),
             'group_conditions'   => $this->groupsConditionalLogic(),
             'allow_reload'       => $this->allowReload(),
-            'force_refresh'       => $this->forceRefresh()
+            'force_refresh'      => $this->forceRefresh()
         ];
     }
 

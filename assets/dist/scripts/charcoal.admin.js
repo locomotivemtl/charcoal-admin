@@ -2193,9 +2193,9 @@ Charcoal.Admin = (function () {
     Manager.prototype.empty = function () {
         reset();
 
-        this.display   = null;
-        this.actions   = [];
-        this.storage   = [];
+        this.display = null;
+        this.actions = [];
+        this.storage = [];
     };
 
     /**

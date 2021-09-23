@@ -357,35 +357,6 @@
     };
 
     /**
-     * Callbacks to execute after the dialog box is dispatched
-     */
-    Manager.prototype.addCallback = function (callback) {
-        this.callbacks.push(callback);
-
-        return this;
-    };
-
-    /**
-     * Alias of {@see Manager.prototype.addCallback}
-     */
-    Manager.prototype.add_callback = function (callback) {
-        return this.addCallback(callback);
-    };
-
-    /**
-     * Run all callbacks
-     */
-    Manager.prototype.runCallbacks = function (callbacks) {
-        if (callbacks && callbacks.length > 0) {
-            for (var k = 0; k < callbacks.length; k++) {
-                if (typeof callbacks[k] === 'function') {
-                    callbacks[k]();
-                }
-            }
-        }
-    }
-
-    /**
      * Dispatch the results of all feedback accumulated.
      *
      * @return this
@@ -436,7 +407,6 @@
             switch (display) {
                 case 'toast':
                     config.dismissible = buttons.length === 0;
-                    config.callbacks = this.callbacks;
                     new Notification(config);
                     break;
 
@@ -461,7 +431,6 @@
 
         this.display   = null;
         this.actions   = [];
-        this.callbacks = [];
         this.storage   = [];
     };
 
@@ -574,10 +543,6 @@
             delay: 3200
         }, config);
 
-        if (!config.callbacks) {
-            config.callbacks = [];
-        }
-
         this.$elem = $('<article class="c-notifications_item alert fade show" role="alert"></article>');
         this.$elem.prop('id', this.config.id);
         this.$elem.addClass('alert-' + this.config.type.replace('type-', ''));
@@ -630,8 +595,6 @@
                 this.config.delay
             );
         }
-
-        Manager.prototype.runCallbacks(config.callbacks);
 
         return this;
     };

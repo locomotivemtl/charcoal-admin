@@ -436,10 +436,8 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
                 '&obj_id=' + response.obj_id;
         }
     } else {
-        if (this.force_page_reload) {
-            Charcoal.Admin.feedback().add_callback(function () {
-                window.location.reload();
-            });
+        if (this.force_page_reload && !response.need_confirmation) {
+            window.location.reload();
         }
 
         if (this.allow_reload) {

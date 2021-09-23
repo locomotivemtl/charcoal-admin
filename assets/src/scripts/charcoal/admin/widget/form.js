@@ -437,11 +437,8 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
         }
     } else {
         if (this.force_page_reload) {
-            Charcoal.Admin.feedback().add_action({
-                label:    commonL10n.continue,
-                callback: function () {
-                    window.location.reload();
-                }
+            Charcoal.Admin.feedback().add_callback(function () {
+                window.location.reload();
             });
         }
 

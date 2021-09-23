@@ -2121,6 +2121,35 @@ Charcoal.Admin = (function () {
     };
 
     /**
+     * Callbacks to execute after the dialog box is dispatched
+     */
+    Manager.prototype.addCallback = function (callback) {
+        this.callbacks.push(callback);
+
+        return this;
+    };
+
+    /**
+     * Alias of {@see Manager.prototype.addCallback}
+     */
+    Manager.prototype.add_callback = function (callback) {
+        return this.addCallback(callback);
+    };
+
+    /**
+     * Run all callbacks
+     */
+    Manager.prototype.runCallbacks = function (callbacks) {
+        if (callbacks && callbacks.length > 0) {
+            for (var k = 0; k < callbacks.length; k++) {
+                if (typeof callbacks[k] === 'function') {
+                    callbacks[k]();
+                }
+            }
+        }
+    }
+
+    /**
      * Dispatch the results of all feedback accumulated.
      *
      * @return this
@@ -2171,6 +2200,7 @@ Charcoal.Admin = (function () {
             switch (display) {
                 case 'toast':
                     config.dismissible = buttons.length === 0;
+                    config.callbacks = this.callbacks;
                     new Notification(config);
                     break;
 
@@ -2193,9 +2223,10 @@ Charcoal.Admin = (function () {
     Manager.prototype.empty = function () {
         reset();
 
-        this.display = null;
-        this.actions = [];
-        this.storage = [];
+        this.display   = null;
+        this.actions   = [];
+        this.callbacks = [];
+        this.storage   = [];
     };
 
     /**
@@ -2307,6 +2338,10 @@ Charcoal.Admin = (function () {
             delay: 3200
         }, config);
 
+        if (!config.callbacks) {
+            config.callbacks = [];
+        }
+
         this.$elem = $('<article class="c-notifications_item alert fade show" role="alert"></article>');
         this.$elem.prop('id', this.config.id);
         this.$elem.addClass('alert-' + this.config.type.replace('type-', ''));
@@ -2359,6 +2394,8 @@ Charcoal.Admin = (function () {
                 this.config.delay
             );
         }
+
+        Manager.prototype.runCallbacks(config.callbacks);
 
         return this;
     };
@@ -4495,11 +4532,8 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
         }
     } else {
         if (this.force_page_reload) {
-            Charcoal.Admin.feedback().add_action({
-                label:    commonL10n.continue,
-                callback: function () {
-                    window.location.reload();
-                }
+            Charcoal.Admin.feedback().add_callback(function () {
+                window.location.reload();
             });
         }
 

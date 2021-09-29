@@ -42,15 +42,16 @@ Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
 Charcoal.Admin.Widget_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Form.prototype.set_properties = function (opts) {
-    this.widget_id        = opts.id || this.widget_id;
-    this.obj_type         = opts.data.obj_type || this.obj_type;
-    this.obj_id           = Charcoal.Admin.parseNumber(opts.data.obj_id || this.obj_id);
-    this.form_selector    = opts.data.form_selector || this.form_selector;
-    this.isTab            = opts.data.tab;
-    this.group_conditions = opts.data.group_conditions;
-    this.$form            = $(this.form_selector);
-    this.allow_reload     = opts.data.allow_reload;
-    this.useDefaultAction = opts.data.use_default_action;
+    this.widget_id         = opts.id || this.widget_id;
+    this.obj_type          = opts.data.obj_type || this.obj_type;
+    this.obj_id            = Charcoal.Admin.parseNumber(opts.data.obj_id || this.obj_id);
+    this.form_selector     = opts.data.form_selector || this.form_selector;
+    this.isTab             = opts.data.tab;
+    this.group_conditions  = opts.data.group_conditions;
+    this.$form             = $(this.form_selector);
+    this.allow_reload      = opts.data.allow_reload;
+    this.force_page_reload = opts.data.force_page_reload;
+    this.useDefaultAction  = opts.data.use_default_action;
 
     return this;
 };
@@ -435,6 +436,10 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function ($form, $trigger
                 '&obj_id=' + response.obj_id;
         }
     } else {
+        if (this.force_page_reload && !response.need_confirmation) {
+            window.location.reload();
+        }
+
         if (this.allow_reload) {
             var manager = Charcoal.Admin.manager();
             var widgets = manager.components.widgets;

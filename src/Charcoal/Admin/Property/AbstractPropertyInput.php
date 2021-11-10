@@ -810,6 +810,7 @@ abstract class AbstractPropertyInput implements
     /**
      * Render the given template from string.
      *
+     * @see    \Charcoal\Admin\Property\AbstractPropertyDisplay::renderTranslatableTemplate()
      * @see    \Charcoal\View\ViewableInterface::renderTemplate()
      * @param  mixed $templateString The template to render.
      * @return string The rendered template.

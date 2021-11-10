@@ -17,6 +17,10 @@ use Pimple\Container;
 use Charcoal\Model\DescribableInterface;
 use Charcoal\Model\DescribableTrait;
 
+// From 'charcoal-view'
+use Charcoal\View\ViewableInterface;
+use Charcoal\View\ViewableTrait;
+
 // From 'charcoal-translator'
 use Charcoal\Translator\Translation;
 use Charcoal\Translator\TranslatorAwareTrait;
@@ -35,11 +39,13 @@ use Charcoal\Admin\Property\PropertyDisplayInterface;
 abstract class AbstractPropertyDisplay implements
     DescribableInterface,
     PropertyDisplayInterface,
-    LoggerAwareInterface
+    LoggerAwareInterface,
+    ViewableInterface
 {
     use DescribableTrait;
     use LoggerAwareTrait;
     use TranslatorAwareTrait;
+    use ViewableTrait;
 
     /**
      * @var string
@@ -393,6 +399,46 @@ abstract class AbstractPropertyDisplay implements
     }
 
     /**
+     * Render the given template from string.
+     *
+     * @see    \Charcoal\Admin\Property\AbstractPropertyInput::renderTranslatableTemplate()
+     * @see    \Charcoal\View\ViewableInterface::renderTemplate()
+     * @param  mixed $templateString The template to render.
+     * @return string The rendered template.
+     */
+    public function renderTranslatableTemplate($templateString)
+    {
+        if ($templateString instanceof Translation) {
+            $origLang = $this->translator()->getLocale();
+            foreach ($this->translator()->availableLocales() as $lang) {
+                if (!isset($templateString[$lang])) {
+                    continue;
+                }
+                $translation = $templateString[$lang];
+                $isBlank = empty($translation) && !is_numeric($translation);
+                if (!$isBlank) {
+                    $this->translator()->setLocale($lang);
+                    $translation = $this->renderTemplate($translation);
+                    if ($translation !== null) {
+                        $templateString[$lang] = $translation;
+                    }
+                }
+            }
+            $this->translator()->setLocale($origLang);
+            $templateString->isRendered = true;
+
+            return $templateString;
+        } elseif (is_string($templateString)) {
+            $isBlank = empty($templateString) && !is_numeric($templateString);
+            if (!$isBlank) {
+                return $this->renderTemplate($templateString);
+            }
+        }
+
+        return '';
+    }
+
+    /**
      * Inject dependencies from a DI Container.
      *
      * @param Container $container A dependencies container instance.
@@ -402,6 +448,9 @@ abstract class AbstractPropertyDisplay implements
     {
         // Fullfill TranslatorAwareTrait dependencies
         $this->setTranslator($container['translator']);
+
+        // Fulfills the ViewableTrait dependencies
+        $this->setView($container['view']);
     }
 
     /**

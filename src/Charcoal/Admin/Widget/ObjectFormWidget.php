@@ -572,15 +572,17 @@ class ObjectFormWidget extends FormWidget implements
      */
     public function hasL10nFormProperties()
     {
-        if ($this->hasObj()) {
+        if ($this->validateObjType()) {
             $locales = count($this->translator()->availableLocales());
             if ($locales > 1) {
+                $model = $this->proto();
+
                 foreach ($this->getFormProperties() as $formProp) {
                     $modelProp = $formProp->property();
                     if ($modelProp['l10n']) {
                         return true;
                     } elseif ($modelProp instanceof ModelStructureProperty) {
-                        $metadata = $this->obj()->property($modelProp['ident'])->getStructureMetadata();
+                        $metadata = $model->property($modelProp['ident'])->getStructureMetadata();
                         foreach ($metadata->properties() as $prop) {
                             if (isset($prop['l10n']) && $prop['l10n']) {
                                 return true;

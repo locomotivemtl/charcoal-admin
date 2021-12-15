@@ -44,6 +44,11 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
     protected $inputClass;
 
     /**
+     * @var array $inputOptions
+     */
+    protected $inputOptions;
+
+    /**
      * @var string $inputMode
      */
     protected $inputMode;
@@ -220,6 +225,43 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
         }
 
         return $name;
+    }
+
+    /**
+     * Set the input options.
+     *
+     * @param  array $options Optional property input settings.
+     * @return self
+     */
+    public function setInputOptions(array $options)
+    {
+        $this->inputOptions = array_merge($this->getDefaultInputOptions(), $options);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the input options.
+     *
+     * @return array
+     */
+    public function getInputOptions()
+    {
+        if ($this->inputOptions === null) {
+            $this->setInputOptions([]);
+        }
+
+        return $this->inputOptions;
+    }
+
+    /**
+     * Retrieve the default display options.
+     *
+     * @return array
+     */
+    public function getDefaultInputOptions()
+    {
+        return [];
     }
 
     /**

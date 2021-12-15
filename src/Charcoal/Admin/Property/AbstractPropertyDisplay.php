@@ -41,7 +41,7 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
     protected $displayClass;
 
     /**
-     * @var mixed $displayOptions
+     * @var array $displayOptions
      */
     protected $displayOptions;
 
@@ -177,6 +177,39 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
         }
 
         return $name;
+    }
+
+    /**
+     * Set the display options.
+     *
+     * @param  array $options Optional property display settings.
+     * @return self
+     */
+    public function setDisplayOptions(array $options)
+    {
+        $this->displayOptions = array_merge($this->getDefaultDisplayOptions(), $options);
+
+        return $this;
+    }
+
+    /**
+     * Retrieve the display options.
+     *
+     * @return array
+     */
+    public function getDisplayOptions()
+    {
+        return $this->displayOptions;
+    }
+
+    /**
+     * Retrieve the default display options.
+     *
+     * @return array
+     */
+    public function getDefaultDisplayOptions()
+    {
+        return [];
     }
 
     /**

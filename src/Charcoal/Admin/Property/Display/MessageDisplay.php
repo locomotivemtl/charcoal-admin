@@ -60,6 +60,14 @@ class MessageDisplay extends AbstractPropertyDisplay implements
     }
 
     /**
+     * @return bool
+     */
+    public function hasMessage()
+    {
+        return !!$this->message;
+    }
+
+    /**
      * @return Translation|null
      */
     public function getMessage()

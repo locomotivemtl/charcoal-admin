@@ -107,7 +107,7 @@ class ReadonlyInput extends AbstractPropertyInput
             if ($this->showPlaceholder()) {
                 $this->hasValue = true;
 
-                return $this->placeholder();
+                return $this->escapeVal((string)$this->placeholder());
             } else {
                 $this->hasValue = false;
 
@@ -128,7 +128,7 @@ class ReadonlyInput extends AbstractPropertyInput
 
         $this->hasValue = true;
 
-        return $val;
+        return $this->escapeVal($val);
     }
 
     /**

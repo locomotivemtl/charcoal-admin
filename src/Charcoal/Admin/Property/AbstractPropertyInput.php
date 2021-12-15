@@ -49,6 +49,11 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
     protected $inputOptions;
 
     /**
+     * @var array|null
+     */
+    protected $inputEscapeOptions;
+
+    /**
      * @var string $inputMode
      */
     protected $inputMode;
@@ -265,6 +270,98 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
     }
 
     /**
+     * Sets the escape callback.
+     *
+     * Alias of {@see self::setInputEscapeOptions()}.
+     *
+     * @param  mixed $escape The escape options.
+     * @throws InvalidArgumentException If the escape argument is invalid.
+     * @return self
+     */
+    public function setInputEscape($escape)
+    {
+        $this->setInputEscapeOptions($this->parseEscapeOptions($escape));
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the current escape callback.
+     *
+     * @return callable|null
+     */
+    public function getInputEscape()
+    {
+        return $this->getInputEscapeOptions()['function'] ?? null;
+    }
+
+    /**
+     * Sets the escape options.
+     *
+     * @param  mixed $escape The escape options.
+     * @throws InvalidArgumentException If the escape argument is invalid.
+     * @return self
+     */
+    public function setInputEscapeOptions($escape)
+    {
+        $this->inputEscapeOptions = $this->parseEscapeOptions($escape);
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the current escape options.
+     *
+     * @return array|null
+     */
+    public function getInputEscapeOptions()
+    {
+        return $this->inputEscapeOptions;
+    }
+
+    /**
+     * Escapes the given value according to input escape options.
+     *
+     * @param  string $val    The value to escape.
+     * @param  array $options Optional escape options.
+     * @throws InvalidArgumentException If the value to escape is not a string.
+     * @return string
+     */
+    public function escapeVal($val, array $options = [])
+    {
+        if (!is_string($val)) {
+            throw new InvalidArgumentException(
+                'Expected string to escape'
+            );
+        }
+
+        if (isset($options['function'])) {
+            $escape  = $this->parseEscapeOptions($options);
+            $options = [];
+        } else {
+            $escape = $this->getInputEscapeOptions();
+
+            if (!isset($escape['function'])) {
+                return $val;
+            }
+        }
+
+        $callback = $escape['function'];
+
+        if (!isset($escape['parameters'])) {
+            return $callback($val);
+        }
+
+        $args = $escape['parameters'];
+
+        if (isset($options['parameters']) && is_array($options['parameters'])) {
+            $args = array_replace($args, $options['parameters']);
+        }
+
+        return $callback($val, ...$args);
+    }
+
+    /**
      * @uses   AbstractProperty::inputVal() Must handle string sanitization of value.
      * @throws UnexpectedValueException If the value is invalid.
      * @return string
@@ -287,7 +384,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
             ));
         }
 
-        return $val;
+        return $this->escapeVal($val);
     }
 
     /**

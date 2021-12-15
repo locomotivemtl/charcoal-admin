@@ -90,6 +90,6 @@ class MessageDisplay extends AbstractPropertyDisplay implements
             }
         }
 
-        return $this->message;
+        return $this->escapeVal($this->message);
     }
 }

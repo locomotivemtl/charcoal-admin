@@ -52,6 +52,8 @@ abstract class AbstractProperty implements
     use TranslatorAwareTrait;
     use ViewableTrait;
 
+    const DEFAULT_ESCAPE_FUNCTION = 'htmlspecialchars';
+
     /**
      * @var ModelPropertyInterface $property
      */
@@ -265,6 +267,141 @@ abstract class AbstractProperty implements
     public function ident()
     {
         return $this->ident;
+    }
+
+    /**
+     * Escapes the given value.
+     *
+     * This method should be extended in sub-classes.
+     * If a valid "function" option is not passed,
+     * this method does nothing.
+     *
+     * @param  string $val    The value to escape.
+     * @param  array $options Optional escape options.
+     * @throws InvalidArgumentException If the value to escape is not a string.
+     * @return string
+     */
+    public function escapeVal($val, array $options = [])
+    {
+        if (!is_string($val)) {
+            throw new InvalidArgumentException(
+                'Expected string to escape'
+            );
+        }
+
+        if (isset($options['function'])) {
+            $escape  = $this->parseEscapeOptions($options);
+            $options = [];
+        } else {
+            return $val;
+        }
+
+        $callback = $escape['function'];
+
+        if (!isset($escape['parameters'])) {
+            return $callback($val);
+        }
+
+        $args = $escape['parameters'];
+
+        if (isset($options['parameters']) && is_array($options['parameters'])) {
+            $args = array_replace($args, $options['parameters']);
+        }
+
+        return $callback($val, ...$args);
+    }
+
+    /**
+     * Parses the raw escape options.
+     *
+     * @param  mixed $escape The escape function name, callback, options array,
+     *     FALSE to disable, TRUE or NULL to use default function.
+     * @throws InvalidArgumentException If the escape argument is invalid.
+     * @return array|null
+     */
+    public function parseEscapeOptions($escape)
+    {
+        if ($escape === false) {
+            return null;
+        }
+
+        if ($escape === true) {
+            $escape = $this->getDefaultEscapeOptions();
+        }
+
+        if (is_string($escape) || is_callable($escape)) {
+            $escape = [
+                'function' => $escape,
+            ];
+        } elseif (!is_array($escape)) {
+            throw new InvalidArgumentException(
+                'Expected escape function name, function expression, or options array'
+            );
+        } elseif (!isset($escape['function'])) {
+            throw new InvalidArgumentException(
+                'Missing escape function name or expression'
+            );
+        }
+
+        $this->assertValidEscapeFunction($escape['function']);
+
+        if (is_string($escape['function'])) {
+            $escape['function'] = $this->wrapEscapeFunction($escape['function']);
+        }
+
+        return $escape;
+    }
+
+    /**
+     * Wraps the raw escape function.
+     *
+     * @param  callable $callback The escape function name or expression.
+     * @throws InvalidArgumentException If the escape argument is invalid.
+     * @return callable
+     */
+    protected function wrapEscapeFunction(callable $callback)
+    {
+        return function ($value) use ($callback) {
+            return call_user_func_array($callback, func_get_args());
+        };
+    }
+
+    /**
+     * Asserts that the escape function is valid, throws an exception if not.
+     *
+     * @param  mixed $escape The escape function name or expression.
+     * @throws InvalidArgumentException If an invalid function name or expression.
+     * @return void
+     */
+    protected function assertValidEscapeFunction($escape)
+    {
+        if (is_string($escape)) {
+            if (!function_exists($escape)) {
+                throw new InvalidArgumentException(sprintf(
+                    'Undefined escape function named "%s"',
+                    $escape
+                ));
+            }
+        }
+
+        if (!is_callable($escape)) {
+            throw new InvalidArgumentException(sprintf(
+                'Expected escape function name or function expression, received "%s"',
+                is_object($escape) ? get_class($escape) : gettype($escape)
+            ));
+        }
+    }
+
+    /**
+     * Retrieve the default escape function and settings.
+     *
+     * @return array
+     */
+    public function getDefaultEscapeOptions()
+    {
+        return [
+            'function' => static::DEFAULT_ESCAPE_FUNCTION,
+        ];
     }
 
     /**

@@ -46,6 +46,11 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
     protected $displayOptions;
 
     /**
+     * @var array|null
+     */
+    protected $displayEscapeOptions;
+
+    /**
      * Set the model property instance.
      *
      * Reset the display name when the property changes.
@@ -213,6 +218,98 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
     }
 
     /**
+     * Sets the escape callback.
+     *
+     * Alias of {@see self::setDisplayEscapeOptions()}.
+     *
+     * @param  mixed $escape The escape options.
+     * @throws InvalidArgumentException If the escape argument is invalid.
+     * @return self
+     */
+    public function setDisplayEscape($escape)
+    {
+        $this->setDisplayEscapeOptions($this->parseEscapeOptions($escape));
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the current escape callback.
+     *
+     * @return callable|null
+     */
+    public function getDisplayEscape()
+    {
+        return $this->getDisplayEscapeOptions()['function'] ?? null;
+    }
+
+    /**
+     * Sets the escape options.
+     *
+     * @param  mixed $escape The escape options.
+     * @throws InvalidArgumentException If the escape argument is invalid.
+     * @return self
+     */
+    public function setDisplayEscapeOptions($escape)
+    {
+        $this->displayEscapeOptions = $this->parseEscapeOptions($escape);
+
+        return $this;
+    }
+
+    /**
+     * Retrieves the current escape options.
+     *
+     * @return array|null
+     */
+    public function getDisplayEscapeOptions()
+    {
+        return $this->displayEscapeOptions;
+    }
+
+    /**
+     * Escapes the given value according to display escape options.
+     *
+     * @param  string $val    The value to escape.
+     * @param  array $options Optional escape options.
+     * @throws InvalidArgumentException If the value to escape is not a string.
+     * @return string
+     */
+    public function escapeVal($val, array $options = [])
+    {
+        if (!is_string($val)) {
+            throw new InvalidArgumentException(
+                'Expected string to escape'
+            );
+        }
+
+        if (isset($options['function'])) {
+            $escape  = $this->parseEscapeOptions($options);
+            $options = [];
+        } else {
+            $escape = $this->getDisplayEscapeOptions();
+
+            if (!isset($escape['function'])) {
+                return $val;
+            }
+        }
+
+        $callback = $escape['function'];
+
+        if (!isset($escape['parameters'])) {
+            return $callback($val);
+        }
+
+        $args = $escape['parameters'];
+
+        if (isset($options['parameters']) && is_array($options['parameters'])) {
+            $args = array_replace($args, $options['parameters']);
+        }
+
+        return $callback($val, ...$args);
+    }
+
+    /**
      * @return string
      */
     public function displayVal()
@@ -233,7 +330,7 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
             ));
         }
 
-        return $val;
+        return $this->escapeVal($val);
     }
 
     /**

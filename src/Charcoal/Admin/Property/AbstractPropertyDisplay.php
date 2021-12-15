@@ -2,70 +2,23 @@
 
 namespace Charcoal\Admin\Property;
 
-use Traversable;
 use InvalidArgumentException;
-
-// From PSR-3
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\NullLogger;
-
-// From Pimple
-use Pimple\Container;
-
-// From 'charcoal-core'
-use Charcoal\Model\DescribableInterface;
-use Charcoal\Model\DescribableTrait;
-
-// From 'charcoal-view'
-use Charcoal\View\ViewableInterface;
-use Charcoal\View\ViewableTrait;
-
-// From 'charcoal-translator'
-use Charcoal\Translator\Translation;
-use Charcoal\Translator\TranslatorAwareTrait;
+use UnexpectedValueException;
 
 // From 'charcoal-property'
-use Charcoal\Property\PropertyFactory;
 use Charcoal\Property\PropertyInterface;
-use Charcoal\Property\PropertyMetadata;
 
 // From 'charcoal-admin'
+use Charcoal\Admin\Property\AbstractProperty;
 use Charcoal\Admin\Property\PropertyDisplayInterface;
 
 /**
- *
+ * Base Admin model property display
  */
-abstract class AbstractPropertyDisplay implements
-    DescribableInterface,
-    PropertyDisplayInterface,
-    LoggerAwareInterface,
-    ViewableInterface
+abstract class AbstractPropertyDisplay extends AbstractProperty implements
+    PropertyDisplayInterface
 {
-    use DescribableTrait;
-    use LoggerAwareTrait;
-    use TranslatorAwareTrait;
-    use ViewableTrait;
-
-    /**
-     * @var string
-     */
-    private $lang;
-
-    /**
-     * @var string
-     */
-    private $ident;
-
-    /**
-     * @var boolean
-     */
-    private $multiple;
-
-    /**
-     * @var string
-     */
-    protected $type;
+    const DEFAULT_DISPLAY_TYPE = 'charcoal/admin/property/display/text';
 
     /**
      * @var string
@@ -73,33 +26,19 @@ abstract class AbstractPropertyDisplay implements
     protected $displayType;
 
     /**
+     * @var string $displayId
+     */
+    protected $displayId;
+
+    /**
      * @var string
      */
     protected $displayName;
 
     /**
-     * @var string $displayId
-     */
-    protected $displayId = null;
-    /**
      * @var string $displayClass
      */
-    protected $displayClass = '';
-
-    /**
-     * @var array $propertyData
-     */
-    private $propertyData = [];
-
-    /**
-     * @var mixed $propertyVal
-     */
-    private $propertyVal;
-
-    /**
-     * @var PropertyInterface $property
-     */
-    private $property;
+    protected $displayClass;
 
     /**
      * @var mixed $displayOptions
@@ -107,133 +46,48 @@ abstract class AbstractPropertyDisplay implements
     protected $displayOptions;
 
     /**
-     * @param array|ArrayAccess $data Optional. Dependencies.
-     */
-    public function __construct($data = null)
-    {
-        if (!isset($data['logger'])) {
-            $data['logger'] = new NullLogger();
-        }
-        $this->setLogger($data['logger']);
-
-        // DI Container can optionally be set in property constructor.
-        if (isset($data['container'])) {
-            $this->setDependencies($data['container']);
-        }
-    }
-
-    /**
-     * This function takes an array and fill the model object with its value.
+     * Set the model property instance.
      *
-     * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
+     * Reset the display name when the property changes.
      *
-     * For example, calling with `setData(['properties'=>$properties])` would call
-     * `setProperties($properties)`, becasue `setProperties()` exists.
-     *
-     * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
-     * on the metadata object, because the method `set_foobar()` does not exist.
-     *
-     * @param array $data The display data.
+     * @param  PropertyInterface $property The property.
      * @return self
      */
-    public function setData(array $data)
+    public function setProperty(PropertyInterface $property)
     {
-        foreach ($data as $prop => $val) {
-            $func = [$this, $this->setter($prop)];
-            if (is_callable($func)) {
-                call_user_func($func, $val);
-                unset($data[$prop]);
-            } else {
-                $this->{$prop} = $val;
-            }
-        }
-
-        $this->propertyData = $data;
+        parent::setProperty($property);
+        $this->displayName = null;
 
         return $this;
     }
 
     /**
-     * @param mixed $val The property value.
+     * @param  string $displayType The display type.
+     * @throws InvalidArgumentException If provided argument is not of type 'string'.
      * @return self
      */
-    public function setPropertyVal($val)
+    public function setDisplayType($displayType)
     {
-        $this->propertyVal = $val;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function propertyVal()
-    {
-        return $this->propertyVal;
-    }
-
-    /**
-     * @param string $lang The language code / ident.
-     * @return self
-     */
-    public function setLang($lang)
-    {
-        $this->lang = $lang;
-        return $this;
-    }
-
-    /**
-     * Get the input language
-     * @return string
-     */
-    public function lang()
-    {
-        if ($this->lang === null) {
-            return $this->translator()->getLocale();
-        }
-
-        return $this->lang;
-    }
-
-    /**
-     * @param string $ident Display identifier.
-     * @throws InvalidArgumentException If the ident is not a string.
-     * @return self
-     */
-    public function setIdent($ident)
-    {
-        if (!is_string($ident)) {
+        if (!is_string($displayType)) {
             throw new InvalidArgumentException(
-                'Property Display identifier must be string'
+                'Property Display Type must be a string.'
             );
         }
-        $this->ident = $ident;
+
+        $this->displayType = $displayType;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function ident()
+    public function displayType()
     {
-        return $this->ident;
-    }
+        if ($this->displayType === null) {
+            $this->displayType = static::DEFAULT_DISPLAY_TYPE;
+        }
 
-    /**
-     * @param boolean $multiple Multiple flag.
-     * @return self
-     */
-    public function setMultiple($multiple)
-    {
-        $this->multiple = !!$multiple;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function multiple()
-    {
-        return $this->multiple;
+        return $this->displayType;
     }
 
     /**
@@ -256,8 +110,9 @@ abstract class AbstractPropertyDisplay implements
     public function displayId()
     {
         if (!$this->displayId) {
-            $this->displayId = 'display_'.uniqid();
+            $this->displayId = $this->generateDisplayId();
         }
+
         return $this->displayId;
     }
 
@@ -330,183 +185,41 @@ abstract class AbstractPropertyDisplay implements
     public function displayVal()
     {
         $prop = $this->p();
-        return $prop->displayVal($this->propertyVal());
-    }
+        $val  = $prop->displayVal($this->propertyVal(), [
+            'lang' => $this->lang(),
+        ]);
 
-    /**
-     * @param string $displayType The display type.
-     * @throws InvalidArgumentException If provided argument is not of type 'string'.
-     * @return  AbstractPropertyDisplay Chainable
-     */
-    public function setDisplayType($displayType)
-    {
-        if (!is_string($displayType)) {
-            throw new InvalidArgumentException(
-                'Property Display Type must be a string.'
-            );
-        }
-        $this->displayType = $displayType;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function displayType()
-    {
-        if ($this->displayType === null) {
-            $this->displayType = 'charcoal/admin/property/display/text';
-        }
-        return $this->displayType;
-    }
-
-    /**
-     * @return string
-     */
-    public function propertyIdent()
-    {
-        return $this->p()['ident'];
-    }
-
-    /**
-     * @param PropertyInterface $p The property.
-     * @return AbstractPropertyDisplay Chainable
-     */
-    public function setProperty(PropertyInterface $p)
-    {
-        $this->property = $p;
-        $this->displayName = null;
-
-        return $this;
-    }
-
-    /**
-     * @return PropertyInterface
-     */
-    public function property()
-    {
-        return $this->property;
-    }
-
-    /**
-     * Alias of {@see self::property()}
-     *
-     * @return PropertyInterface
-     */
-    public function p()
-    {
-        return $this->property();
-    }
-
-    /**
-     * Render the given template from string.
-     *
-     * @see    \Charcoal\Admin\Property\AbstractPropertyInput::renderTranslatableTemplate()
-     * @see    \Charcoal\View\ViewableInterface::renderTemplate()
-     * @param  mixed $templateString The template to render.
-     * @return string The rendered template.
-     */
-    public function renderTranslatableTemplate($templateString)
-    {
-        if ($templateString instanceof Translation) {
-            $origLang = $this->translator()->getLocale();
-            foreach ($this->translator()->availableLocales() as $lang) {
-                if (!isset($templateString[$lang])) {
-                    continue;
-                }
-                $translation = $templateString[$lang];
-                $isBlank = empty($translation) && !is_numeric($translation);
-                if (!$isBlank) {
-                    $this->translator()->setLocale($lang);
-                    $translation = $this->renderTemplate($translation);
-                    if ($translation !== null) {
-                        $templateString[$lang] = $translation;
-                    }
-                }
-            }
-            $this->translator()->setLocale($origLang);
-            $templateString->isRendered = true;
-
-            return $templateString;
-        } elseif (is_string($templateString)) {
-            $isBlank = empty($templateString) && !is_numeric($templateString);
-            if (!$isBlank) {
-                return $this->renderTemplate($templateString);
-            }
+        if ($val === null) {
+            return '';
         }
 
-        return '';
+        if (!is_scalar($val)) {
+            throw new UnexpectedValueException(sprintf(
+                'Property Display Value must be a string, received %s',
+                (is_object($val) ? get_class($val) : gettype($val))
+            ));
+        }
+
+        return $val;
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
+     * @return boolean
      */
-    protected function setDependencies(Container $container)
+    public function hasDisplayVal()
     {
-        // Fullfill TranslatorAwareTrait dependencies
-        $this->setTranslator($container['translator']);
+        $val = $this->displayVal();
 
-        // Fulfills the ViewableTrait dependencies
-        $this->setView($container['view']);
+        return (!empty($val) || is_numeric($val));
     }
 
     /**
-     * Create a new metadata object.
-     *
-     * @param  array $data Optional metadata to merge on the object.
-     * @return PropertyMetadata
-     */
-    protected function createMetadata(array $data = null)
-    {
-        $class = $this->metadataClass();
-        return new $class($data);
-    }
-
-    /**
-     * Retrieve the class name of the metadata object.
+     * Generate a unique display ID.
      *
      * @return string
      */
-    protected function metadataClass()
+    protected function generateDisplayId()
     {
-        return PropertyMetadata::class;
-    }
-
-    /**
-     * Allow an object to define how the key getter are called.
-     *
-     * @param string $key The key to get the getter from.
-     * @return string The getter method name, for a given key.
-     */
-    protected function getter($key)
-    {
-        $getter = $key;
-        return $this->camelize($getter);
-    }
-
-    /**
-     * Allow an object to define how the key setter are called.
-     *
-     * @param string $key The key to get the setter from.
-     * @return string The setter method name, for a given key.
-     */
-    protected function setter($key)
-    {
-        $setter = 'set_'.$key;
-        return $this->camelize($setter);
-    }
-
-    /**
-     * Transform a snake_case string to camelCase.
-     *
-     * @param string $str The snake_case string to camelize.
-     * @return string The camelCase string.
-     */
-    private function camelize($str)
-    {
-        return lcfirst(implode('', array_map('ucfirst', explode('_', $str))));
+        return 'display_'.uniqid();
     }
 }

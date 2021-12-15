@@ -50,23 +50,6 @@ class ReadonlyInput extends AbstractPropertyInput
     private $propertyDisplayFactory;
 
     /**
-     * Retrieve the property display factory.
-     *
-     * @throws RuntimeException If the property display factory was not previously set.
-     * @return FactoryInterface
-     */
-    public function propertyDisplayFactory()
-    {
-        if (!isset($this->propertyDisplayFactory)) {
-            throw new RuntimeException(
-                sprintf('Property Display Factory is not defined for "%s"', get_class($this))
-            );
-        }
-
-        return $this->propertyDisplayFactory;
-    }
-
-    /**
      * @uses   AbstractProperty::inputVal() Must handle string sanitization of value.
      * @throws UnexpectedValueException If the value is invalid.
      * @return string
@@ -101,7 +84,7 @@ class ReadonlyInput extends AbstractPropertyInput
             $data = array_replace_recursive($metadata['admin'], $data);
         }
 
-        $display = $this->propertyDisplayFactory()->create($displayType);
+        $display = $this->getPropertyDisplayFactory()->create($displayType);
         $display->setDisplayType($displayType);
         $display->setProperty($property);
         $display->setData($data);
@@ -208,5 +191,22 @@ class ReadonlyInput extends AbstractPropertyInput
     protected function setPropertyDisplayFactory(FactoryInterface $factory)
     {
         $this->propertyDisplayFactory = $factory;
+    }
+
+    /**
+     * Retrieve the property display factory.
+     *
+     * @throws RuntimeException If the property display factory was not previously set.
+     * @return FactoryInterface
+     */
+    protected function getPropertyDisplayFactory()
+    {
+        if (!isset($this->propertyDisplayFactory)) {
+            throw new RuntimeException(
+                sprintf('Property Display Factory is not defined for "%s"', get_class($this))
+            );
+        }
+
+        return $this->propertyDisplayFactory;
     }
 }

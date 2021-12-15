@@ -2,94 +2,26 @@
 
 namespace Charcoal\Admin\Property;
 
-use Traversable;
-use UnexpectedValueException;
 use InvalidArgumentException;
-
-// From PSR-3
-use Psr\Log\LoggerAwareInterface;
-use Psr\Log\LoggerAwareTrait;
-use Psr\Log\NullLogger;
-
-// From Pimple
-use Pimple\Container;
-
-// From 'charcoal-core'
-use Charcoal\Model\DescribableInterface;
-use Charcoal\Model\DescribableTrait;
-use Charcoal\Model\ModelInterface;
-
-// From 'charcoal-view'
-use Charcoal\View\ViewableInterface;
-use Charcoal\View\ViewableTrait;
+use UnexpectedValueException;
 
 // From 'charcoal-translator'
 use Charcoal\Translator\Translation;
-use Charcoal\Translator\TranslatorAwareTrait;
 
 // From 'charcoal-property'
 use Charcoal\Property\PropertyInterface;
-use Charcoal\Property\PropertyMetadata;
-
-// From 'charcoal-app'
-use Charcoal\App\DebugAwareTrait;
 
 // From 'charcoal-admin'
+use Charcoal\Admin\Property\AbstractProperty;
 use Charcoal\Admin\Property\PropertyInputInterface;
 
 /**
- *
+ * Base Admin model property control
  */
-abstract class AbstractPropertyInput implements
-    DescribableInterface,
-    PropertyInputInterface,
-    LoggerAwareInterface,
-    ViewableInterface
+abstract class AbstractPropertyInput extends AbstractProperty implements
+    PropertyInputInterface
 {
-    use DebugAwareTrait;
-    use DescribableTrait;
-    use LoggerAwareTrait;
-    use TranslatorAwareTrait;
-    use ViewableTrait;
-
-    const DEFAULT_INPUT_TYPE = 'text';
-
-    /**
-     * @var string $lang
-     */
-    private $lang;
-
-    /**
-     * @var string $ident
-     */
-    private $ident;
-
-    /**
-     * @var boolean $readOnly
-     */
-    private $readOnly;
-
-    /**
-     * @var boolean $required
-     */
-    private $required;
-
-    /**
-     * @var boolean $disabled
-     */
-    private $disabled;
-
-    /**
-     * @var boolean $multiple
-     */
-    private $multiple;
-
-    /**
-     * The control type for the HTML element `<input>`.
-     *
-     * @var string $type
-     */
-    protected $type;
+    const DEFAULT_INPUT_TYPE = 'charcoal/admin/property/input/text';
 
     /**
      * @var string $inputType
@@ -97,9 +29,9 @@ abstract class AbstractPropertyInput implements
     protected $inputType;
 
     /**
-     * @var string $inputMode
+     * @var string $inputId
      */
-    protected $inputMode;
+    protected $inputId;
 
     /**
      * @var string $inputName
@@ -107,19 +39,14 @@ abstract class AbstractPropertyInput implements
     protected $inputName;
 
     /**
-     * @var string $inputId
-     */
-    protected $inputId;
-
-    /**
      * @var string $inputClass
      */
-    protected $inputClass = '';
+    protected $inputClass;
 
     /**
-     * @var Translation|string|null $placeholder
+     * @var string $inputMode
      */
-    private $placeholder;
+    protected $inputMode;
 
     /**
      * The control's prefix.
@@ -136,329 +63,69 @@ abstract class AbstractPropertyInput implements
     protected $inputSuffix;
 
     /**
-     * @var array $propertyData
+     * @var Translation|string|null $placeholder
      */
-    private $propertyData = [];
+    protected $placeholder;
 
     /**
-     * @var mixed $propertyVal
+     * @var boolean $readOnly
      */
-    private $propertyVal;
+    protected $readOnly;
 
     /**
-     * @var PropertyInterface $property
+     * @var boolean $required
      */
-    private $property;
+    protected $required;
 
     /**
-     * Holds a list of all renderable classes.
-     *
-     * Format: `class => boolean`
-     *
-     * @var boolean[]
+     * @var boolean $disabled
      */
-    protected static $objRenderableCache = [];
+    protected $disabled;
 
     /**
-     * @param array|\ArrayAccess $data Constructor data.
-     */
-    public function __construct($data = null)
-    {
-        if (!isset($data['logger'])) {
-            $data['logger'] = new NullLogger();
-        }
-        $this->setLogger($data['logger']);
-
-        if (isset($data['metadata_loader'])) {
-            $this->setMetadataLoader($data['metadata_loader']);
-        }
-
-        // DI Container can optionally be set in property constructor.
-        if (isset($data['container'])) {
-            $this->setDependencies($data['container']);
-        }
-    }
-
-    /**
-     * This function takes an array and fill the model object with its value.
+     * Set the model property instance.
      *
-     * This method either calls a setter for each key (`set_{$key}()`) or sets a public member.
+     * Reset the input name when the property changes.
      *
-     * For example, calling with `setData(['properties'=>$properties])` would call
-     * `setProperties($properties)`, becasue `setProperties()` exists.
-     *
-     * But calling with `setData(['foobar'=>$foo])` would set the `$foobar` member
-     * on the metadata object, because the method `set_foobar()` does not exist.
-     *
-     * @param array $data The input data.
+     * @param  PropertyInterface $property The property.
      * @return self
      */
-    public function setData(array $data)
+    public function setProperty(PropertyInterface $property)
     {
-        foreach ($data as $prop => $val) {
-            $func = [$this, $this->setter($prop)];
-            if (is_callable($func)) {
-                call_user_func($func, $val);
-                unset($data[$prop]);
-            } else {
-                $this->{$prop} = $val;
-            }
-        }
-
-        $this->propertyData = $data;
+        parent::setProperty($property);
+        $this->inputName = null;
 
         return $this;
     }
 
     /**
-     * Retrieve the control's data options for JavaScript components.
-     *
-     * @return array
-     */
-    public function controlDataForJs()
-    {
-        return [];
-    }
-
-    /**
-     * Retrieve the control's {@see self::controlDataForJs() options} as a JSON string.
-     *
-     * @return string Returns data serialized with {@see json_encode()}.
-     */
-    final public function controlDataForJsAsJson()
-    {
-        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
-
-        if ($this->debug()) {
-            $options = ($options | JSON_PRETTY_PRINT);
-        }
-
-        return json_encode($this->controlDataForJs(), $options);
-    }
-
-    /**
-     * Retrieve the control's {@see self::controlDataForJs() options} as a JSON string, protected from Mustache.
-     *
-     * @return string Returns a stringified JSON object, protected from Mustache rendering.
-     */
-    public function escapedControlDataForJsAsJson()
-    {
-        return '{{=<% %>=}}'.$this->controlDataForJsAsJson().'<%={{ }}=%>';
-    }
-
-    /**
-     * @param mixed $val The property value.
-     * @return PropertyInputInterface Chainable
-     */
-    public function setPropertyVal($val)
-    {
-        $this->propertyVal = $val;
-        return $this;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function propertyVal()
-    {
-        return $this->propertyVal;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hasPropertyVal()
-    {
-        return (!empty($val) || is_numeric($val));
-    }
-
-    /**
-     * @param string $lang The language code / ident.
-     * @return PropertyInputInterface Chainable
-     */
-    public function setLang($lang)
-    {
-        $this->lang = $lang;
-        return $this;
-    }
-
-    /**
-     * Get the input language
-     * @return string
-     */
-    public function lang()
-    {
-        if ($this->lang === null) {
-            return $this->translator()->getLocale();
-        }
-
-        return $this->lang;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function hidden()
-    {
-        if ($this->p()['l10n']) {
-            if ($this->lang() != $this->translator()->getLocale()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
-     * @param string $ident Input identifier.
-     * @throws InvalidArgumentException If the ident is not a string.
+     * @param  string $inputType The input type.
+     * @throws InvalidArgumentException If the provided argument is not a string.
      * @return self
+     * @todo   [mcaskill 2016-11-16]: Rename to `controlType` or `controlTemplate`.
      */
-    public function setIdent($ident)
+    public function setInputType($inputType)
     {
-        if (!is_string($ident)) {
+        if (!is_string($inputType)) {
             throw new InvalidArgumentException(
-                'Property Input identifier must be string'
+                'Property Input Type must be a string.'
             );
         }
-        $this->ident = $ident;
+
+        $this->inputType = $inputType;
         return $this;
     }
 
     /**
      * @return string
      */
-    public function ident()
+    public function inputType()
     {
-        return $this->ident;
-    }
-
-    /**
-     * @param boolean $readOnly The read-only flag.
-     * @return self
-     */
-    public function setReadOnly($readOnly)
-    {
-        $this->readOnly = !!$readOnly;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function readOnly()
-    {
-        return $this->readOnly;
-    }
-
-    /**
-     * @param boolean $required Required flag.
-     * @return self
-     */
-    public function setRequired($required)
-    {
-        $this->required = !!$required;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function required()
-    {
-        return $this->required;
-    }
-
-    /**
-     * @param boolean $disabled Disabled flag.
-     * @return self
-     */
-    public function setDisabled($disabled)
-    {
-        $this->disabled = !!$disabled;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function disabled()
-    {
-        return $this->disabled;
-    }
-
-    /**
-     * @param boolean $multiple Multiple flag.
-     * @return self
-     */
-    public function setMultiple($multiple)
-    {
-        $this->multiple = !!$multiple;
-        return $this;
-    }
-
-    /**
-     * @return boolean
-     */
-    public function multiple()
-    {
-        return $this->multiple;
-    }
-
-    /**
-     * Set the form control's placeholder.
-     *
-     * A placeholder is a hint to the user of what can be entered
-     * in the property control.
-     *
-     * @param  mixed $placeholder The placeholder attribute.
-     * @return self
-     */
-    public function setPlaceholder($placeholder)
-    {
-        if ($placeholder === null || $placeholder === '') {
-            $this->placeholder = '';
-            return $this;
+        if ($this->inputType === null) {
+            $this->inputType = static::DEFAULT_INPUT_TYPE;
         }
 
-        $this->placeholder = $this->translator()->translation($placeholder);
-        if ($this->placeholder instanceof Translation) {
-            $this->placeholder->isRendered = false;
-        } else {
-            $this->placeholder = '';
-        }
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the placeholder.
-     *
-     * @return Translation|string|null
-     */
-    public function placeholder()
-    {
-        if ($this->placeholder === null) {
-            $metadata = $this->metadata();
-
-            if (isset($metadata['data']['placeholder'])) {
-                $this->setPlaceholder($metadata['data']['placeholder']);
-            } else {
-                $this->placeholder = '';
-            }
-        }
-
-        if ($this->placeholder instanceof Translation) {
-            if (isset($this->placeholder->isRendered) && $this->placeholder->isRendered === false) {
-                $this->placeholder = $this->renderTranslatableTemplate($this->placeholder);
-            }
-
-            if ($this->lang()) {
-                return $this->placeholder[$this->lang()];
-            }
-        }
-
-        return $this->placeholder;
+        return $this->inputType;
     }
 
     /**
@@ -564,7 +231,7 @@ abstract class AbstractPropertyInput implements
     {
         $prop = $this->p();
         $val  = $prop->inputVal($this->propertyVal(), [
-            'lang' => $this->lang()
+            'lang' => $this->lang(),
         ]);
 
         if ($val === null) {
@@ -620,34 +287,6 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * @param  string $inputType The input type.
-     * @throws InvalidArgumentException If the provided argument is not a string.
-     * @return self
-     * @todo   [mcaskill 2016-11-16]: Rename to `controlType` or `controlTemplate`.
-     */
-    public function setInputType($inputType)
-    {
-        if (!is_string($inputType)) {
-            throw new InvalidArgumentException(
-                'Property Input Type must be a string.'
-            );
-        }
-        $this->inputType = $inputType;
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function inputType()
-    {
-        if ($this->inputType === null) {
-            $this->inputType = 'charcoal/admin/property/input/text';
-        }
-        return $this->inputType;
-    }
-
-    /**
      * Determine if the property has an affix.
      *
      * ### Textual `<input>`s only
@@ -668,13 +307,17 @@ abstract class AbstractPropertyInput implements
      * Retrieve the control's prefix.
      *
      * @param  mixed $affix Text to display before the control.
-     * @throws InvalidArgumentException If the suffix is not translatable.
      * @return self
      */
     public function setInputPrefix($affix)
     {
-        $this->inputPrefix = $this->translator()->translation($affix);
-        $this->inputPrefix->isRendered = false;
+        $affix = $this->translator()->translation($affix);
+
+        if ($affix instanceof Translation) {
+            $affix->isRendered = false;
+        }
+
+        $this->inputPrefix = $affix;
 
         return $this;
     }
@@ -703,13 +346,17 @@ abstract class AbstractPropertyInput implements
      * Retrieve the control's suffix.
      *
      * @param  mixed $affix Text to display after the control.
-     * @throws InvalidArgumentException If the suffix is not translatable.
      * @return self
      */
     public function setInputSuffix($affix)
     {
-        $this->inputSuffix = $this->translator()->translation($affix);
-        $this->inputSuffix->isRendered = false;
+        $affix = $this->translator()->translation($affix);
+
+        if ($affix instanceof Translation) {
+            $affix->isRendered = false;
+        }
+
+        $this->inputSuffix = $affix;
 
         return $this;
     }
@@ -735,180 +382,173 @@ abstract class AbstractPropertyInput implements
     }
 
     /**
-     * Set the control type for the HTML element `<input>`.
-     *
-     * @param  string $type The control type.
-     * @throws InvalidArgumentException If the provided argument is not a string.
-     * @return self
-     * @todo   [mcaskill 2016-11-16]: Rename to `inputType`.
-     */
-    public function setType($type)
-    {
-        if (!is_string($type)) {
-            throw new InvalidArgumentException(
-                'HTML Input Type must be a string.'
-            );
-        }
-
-        $this->type = $type;
-
-        return $this;
-    }
-
-    /**
-     * Retrieve the control type for the HTML element `<input>`.
-     *
-     * @return string
-     */
-    public function type()
-    {
-        if ($this->type === null) {
-            $this->type = self::DEFAULT_INPUT_TYPE;
-        }
-
-        return $this->type;
-    }
-
-    /**
-     * @return string
-     */
-    public function propertyIdent()
-    {
-        return $this->p()->ident();
-    }
-
-    /**
-     * @param PropertyInterface $p The property.
-     * @return self
-     */
-    public function setProperty(PropertyInterface $p)
-    {
-        $this->property  = $p;
-        $this->inputName = null;
-
-        return $this;
-    }
-
-    /**
-     * @return PropertyInterface
-     */
-    public function property()
-    {
-        return $this->property;
-    }
-
-    /**
-     * Alias of {@see self::property()}
-     *
-     * @return PropertyInterface
-     */
-    public function p()
-    {
-        return $this->property();
-    }
-
-    /**
-     * Render the given template from string.
-     *
-     * @see    \Charcoal\Admin\Property\AbstractPropertyDisplay::renderTranslatableTemplate()
-     * @see    \Charcoal\View\ViewableInterface::renderTemplate()
-     * @param  mixed $templateString The template to render.
-     * @return string The rendered template.
-     */
-    public function renderTranslatableTemplate($templateString)
-    {
-        if ($templateString instanceof Translation) {
-            $origLang = $this->translator()->getLocale();
-            foreach ($this->translator()->availableLocales() as $lang) {
-                if (!isset($templateString[$lang])) {
-                    continue;
-                }
-                $translation = $templateString[$lang];
-                $isBlank = empty($translation) && !is_numeric($translation);
-                if (!$isBlank) {
-                    $this->translator()->setLocale($lang);
-                    $translation = $this->renderTemplate($translation);
-                    if ($translation !== null) {
-                        $templateString[$lang] = $translation;
-                    }
-                }
-            }
-            $this->translator()->setLocale($origLang);
-            $templateString->isRendered = true;
-
-            return $templateString;
-        } elseif (is_string($templateString)) {
-            $isBlank = empty($templateString) && !is_numeric($templateString);
-            if (!$isBlank) {
-                return $this->renderTemplate($templateString);
-            }
-        }
-
-        return '';
-    }
-
-    /**
-     * Determine if the model implements {@see \Charcoal\View\ViewableInterface}.
-     *
-     * @see \Charcoal\Admin\Ui\ObjectContainerTrait::isObjRenderable()
-     *
-     * @param  string|object $obj      Object type or instance to test.
-     * @param  boolean       $toString Whether to test for `__toString()`.
      * @return boolean
      */
-    protected function isObjRenderable($obj, $toString = false)
+    public function hidden()
     {
-        if (is_string($obj)) {
-            if (!method_exists($this, 'modelFactory')) {
-                return false;
-            }
-
-            $obj = $this->modelFactory()->get($obj);
-        }
-
-        if (!is_object($obj)) {
-            return false;
-        }
-
-        $key = get_class($obj);
-
-        if (isset(static::$objRenderableCache[$key])) {
-            return static::$objRenderableCache[$key];
-        }
-
-        $check = false;
-        if (is_object($obj)) {
-            if (($obj instanceof ViewableInterface) && ($obj->view() instanceof ViewInterface)) {
-                $check = true;
-            } elseif ($toString && is_callable([ $obj, '__toString()' ])) {
-                $check = true;
+        if ($this->p()['l10n']) {
+            if ($this->lang() != $this->translator()->getLocale()) {
+                return true;
             }
         }
 
-        static::$objRenderableCache[$key] = $check;
-
-        return static::$objRenderableCache[$key];
+        return false;
     }
 
     /**
-     * Inject dependencies from a DI Container.
-     *
-     * @param Container $container A dependencies container instance.
-     * @return void
+     * @param boolean $readOnly The read-only flag.
+     * @return self
      */
-    protected function setDependencies(Container $container)
+    public function setReadOnly($readOnly)
     {
-        // Fullfills the DescribableTrait dependencies
-        $this->setMetadataLoader($container['metadata/loader']);
+        $this->readOnly = !!$readOnly;
+        return $this;
+    }
 
-        // Fulfills the TranslatorAwareTrait dependencies
-        $this->setTranslator($container['translator']);
+    /**
+     * @return boolean
+     */
+    public function readOnly()
+    {
+        return $this->readOnly;
+    }
 
-        // Fulfills the ViewableTrait dependencies
-        $this->setView($container['view']);
+    /**
+     * @param boolean $required Required flag.
+     * @return self
+     */
+    public function setRequired($required)
+    {
+        $this->required = !!$required;
+        return $this;
+    }
 
-        // Fulfills the DebugAwareTrait dependencies
-        $this->setDebug($container['debug']);
+    /**
+     * @return boolean
+     */
+    public function required()
+    {
+        return $this->required;
+    }
+
+    /**
+     * @param boolean $disabled Disabled flag.
+     * @return self
+     */
+    public function setDisabled($disabled)
+    {
+        $this->disabled = !!$disabled;
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function disabled()
+    {
+        return $this->disabled;
+    }
+
+    /**
+     * Set the form control's placeholder.
+     *
+     * A placeholder is a hint to the user of what can be entered
+     * in the property control.
+     *
+     * @param  mixed $placeholder The placeholder attribute.
+     * @return self
+     */
+    public function setPlaceholder($placeholder)
+    {
+        if ($placeholder === null || $placeholder === '') {
+            $this->placeholder = '';
+            return $this;
+        }
+
+        $this->placeholder = $this->translator()->translation($placeholder);
+        if ($this->placeholder instanceof Translation) {
+            $this->placeholder->isRendered = false;
+        } else {
+            $this->placeholder = '';
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return bool
+     */
+    public function hasPlaceholder()
+    {
+        $placeholder = $this->placeholder();
+
+        return !!$placeholder;
+    }
+
+    /**
+     * Retrieve the placeholder.
+     *
+     * @return Translation|string|null
+     */
+    public function placeholder()
+    {
+        if ($this->placeholder === null) {
+            $metadata = $this->metadata();
+
+            if (isset($metadata['data']['placeholder'])) {
+                $this->setPlaceholder($metadata['data']['placeholder']);
+            } else {
+                $this->placeholder = '';
+            }
+        }
+
+        if ($this->placeholder instanceof Translation) {
+            if (isset($this->placeholder->isRendered) && $this->placeholder->isRendered === false) {
+                $this->placeholder = $this->renderTranslatableTemplate($this->placeholder);
+            }
+
+            if ($this->lang()) {
+                return $this->placeholder[$this->lang()];
+            }
+        }
+
+        return $this->placeholder;
+    }
+
+    /**
+     * Retrieve the control's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function controlDataForJs()
+    {
+        return [];
+    }
+
+    /**
+     * Retrieve the control's {@see self::controlDataForJs() options} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    final public function controlDataForJsAsJson()
+    {
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->controlDataForJs(), $options);
+    }
+
+    /**
+     * Retrieve the control's {@see self::controlDataForJs() options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    public function escapedControlDataForJsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->controlDataForJsAsJson().'<%={{ }}=%>';
     }
 
     /**
@@ -919,62 +559,5 @@ abstract class AbstractPropertyInput implements
     protected function generateInputId()
     {
         return 'input_'.uniqid();
-    }
-
-    /**
-     * Create a new metadata object.
-     *
-     * @param  array $data Optional metadata to merge on the object.
-     * @return PropertyMetadata
-     */
-    protected function createMetadata(array $data = null)
-    {
-        $class = $this->metadataClass();
-        return new $class($data);
-    }
-
-    /**
-     * Retrieve the class name of the metadata object.
-     *
-     * @return string
-     */
-    protected function metadataClass()
-    {
-        return PropertyMetadata::class;
-    }
-
-    /**
-     * Allow an object to define how the key getter are called.
-     *
-     * @param string $key The key to get the getter from.
-     * @return string The getter method name, for a given key.
-     */
-    protected function getter($key)
-    {
-        $getter = $key;
-        return $this->camelize($getter);
-    }
-
-    /**
-     * Allow an object to define how the key setter are called.
-     *
-     * @param string $key The key to get the setter from.
-     * @return string The setter method name, for a given key.
-     */
-    protected function setter($key)
-    {
-        $setter = 'set_'.$key;
-        return $this->camelize($setter);
-    }
-
-    /**
-     * Transform a snake_case string to camelCase.
-     *
-     * @param string $str The snake_case string to camelize.
-     * @return string The camelCase string.
-     */
-    private function camelize($str)
-    {
-        return lcfirst(implode('', array_map('ucfirst', explode('_', $str))));
     }
 }

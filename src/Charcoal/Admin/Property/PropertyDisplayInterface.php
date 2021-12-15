@@ -2,36 +2,28 @@
 
 namespace Charcoal\Admin\Property;
 
-use Traversable;
-
-// From 'charcoal-property'
-use Charcoal\Property\PropertyInterface;
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\PropertyInterface as AdminPropertyInterface;
 
 /**
- * Defines a property display element.
+ * Defines a model property display Admin decorator.
  */
-interface PropertyDisplayInterface
+interface PropertyDisplayInterface extends AdminPropertyInterface
 {
     /**
-     * @param array|Traversable $data The display data.
-     * @return Display Chainable
+     * @param  string $displayType The display type.
+     * @return self
      */
-    public function setData(array $data);
-
-    /**
-     * @param string $ident The display identifier.
-     * @return PropertyDisplayInterface Chainable
-     */
-    public function setIdent($ident);
+    public function setDisplayType($displayType);
 
     /**
      * @return string
      */
-    public function ident();
+    public function displayType();
 
     /**
-     * @param string $displayId The display id.
-     * @return Display Chainable
+     * @param  string $displayId The display id.
+     * @return self
      */
     public function setDisplayId($displayId);
 
@@ -49,31 +41,4 @@ interface PropertyDisplayInterface
      * @return string
      */
     public function displayVal();
-
-    /**
-     * @param string $displayType The display type.
-     * @return PropertyDisplayInterface Chainable
-     */
-    public function setDisplayType($displayType);
-
-    /**
-     * @return string
-     */
-    public function displayType();
-
-    /**
-     * @param PropertyInterface $p The property.
-     * @return PropertyDisplayInterface Chainable
-     */
-    public function setProperty(PropertyInterface $p);
-
-    /**
-     * @return PropertyInterface
-     */
-    public function property();
-
-    /**
-     * @return PropertyInterface
-     */
-    public function p();
 }

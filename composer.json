@@ -31,7 +31,7 @@
         "guzzlehttp/guzzle": "^6.0 || ^7.0",
         "kriswallsmith/assetic": "^1.4",
         "laminas/laminas-permissions-acl": "^2.8",
-        "locomotivemtl/charcoal-app": "~0.8",
+        "locomotivemtl/charcoal-app": "~0.9",
         "locomotivemtl/charcoal-cache": "~0.1",
         "locomotivemtl/charcoal-cms": "~0.9",
         "locomotivemtl/charcoal-core": "~0.6",

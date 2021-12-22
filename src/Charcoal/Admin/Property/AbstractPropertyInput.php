@@ -280,7 +280,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
      */
     public function setInputEscape($escape)
     {
-        $this->setInputEscapeOptions($this->parseEscapeOptions($escape));
+        $this->setInputEscapeOptions($escape);
 
         return $this;
     }

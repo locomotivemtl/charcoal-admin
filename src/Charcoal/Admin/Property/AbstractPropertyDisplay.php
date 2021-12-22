@@ -228,7 +228,7 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
      */
     public function setDisplayEscape($escape)
     {
-        $this->setDisplayEscapeOptions($this->parseEscapeOptions($escape));
+        $this->setDisplayEscapeOptions($escape);
 
         return $this;
     }

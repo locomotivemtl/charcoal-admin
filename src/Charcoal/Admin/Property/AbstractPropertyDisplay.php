@@ -198,6 +198,24 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
     }
 
     /**
+     * Retrieve the display option value.
+     *
+     * @param  string $key     The display option key.
+     * @param  mixed  $default The fallback display option.
+     * @return mixed
+     */
+    public function getDisplayOption($key, $default = null)
+    {
+        $options = $this->getDisplayOptions();
+
+        if (isset($options[$key])) {
+            return $options[$key];
+        }
+
+        return $default;
+    }
+
+    /**
      * Retrieve the display options.
      *
      * @return array

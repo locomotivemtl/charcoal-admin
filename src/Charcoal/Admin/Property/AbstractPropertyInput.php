@@ -246,6 +246,24 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
     }
 
     /**
+     * Retrieve the input option value.
+     *
+     * @param  string $key     The input option key.
+     * @param  mixed  $default The fallback input option.
+     * @return mixed
+     */
+    public function getInputOption($key, $default = null)
+    {
+        $options = $this->getInputOptions();
+
+        if (isset($options[$key])) {
+            return $options[$key];
+        }
+
+        return $default;
+    }
+
+    /**
      * Retrieve the input options.
      *
      * @return array

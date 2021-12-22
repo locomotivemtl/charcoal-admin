@@ -209,9 +209,27 @@ abstract class AbstractProperty implements
      */
     public function hasPropertyVal()
     {
-        $val = $this->propertyVal();
+        $propertyValue = $this->propertyVal();
 
-        return (!empty($val) || is_numeric($val));
+        if (!is_scalar($propertyValue)) {
+            if ($propertyValue instanceof Translation) {
+                foreach ($propertyValue->data() as $translationValue) {
+                    if ($translationValue !== null && $translationValue !== '') {
+                        return true;
+                    }
+                }
+
+                return false;
+            }
+
+            if (is_countable($propertyValue)) {
+                return count($propertyValue) > 0;
+            }
+
+            return (bool)$propertyValue;
+        }
+
+        return ($propertyValue !== null && $propertyValue !== '');
     }
 
     /**

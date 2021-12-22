@@ -178,6 +178,8 @@
 "Invalid email or password";"Courriel ou mot de passe invalide"
 "You are now logged out.";"Votre déconnexion a bien été effectuée."
 "An error occurred while logging out";"Une erreur est survenue lors de la déconnexion"
+"Try again";"Essayer à nouveau"
+"Try again later";"Réessayez plus tard "
 "Missing email.";"Courriel manquant."
 "Missing CAPTCHA response.";"Réponse CAPTCHA manquante."
 "Invalid or malformed CAPTCHA response.";"Réponse CAPTCHA invalide ou malformé."

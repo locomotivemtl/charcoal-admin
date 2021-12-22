@@ -457,7 +457,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
      */
     public function hasInputAffix()
     {
-        return ($this->inputPrefix() || $this->inputSuffix());
+        return ($this->hasInputPrefix() || $this->hasInputSuffix());
     }
 
     /**
@@ -472,11 +472,23 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
 
         if ($affix instanceof Translation) {
             $affix->isRendered = false;
+        } else {
+            $affix = false;
         }
 
         $this->inputPrefix = $affix;
 
         return $this;
+    }
+
+    /**
+     * Determine if the property has a prefix.
+     *
+     * @return boolean
+     */
+    public function hasInputPrefix()
+    {
+        return (bool)$this->inputPrefix();
     }
 
     /**
@@ -496,7 +508,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
             }
         }
 
-        return $this->inputPrefix;
+        return $this->inputPrefix ?? null;
     }
 
     /**
@@ -511,11 +523,23 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
 
         if ($affix instanceof Translation) {
             $affix->isRendered = false;
+        } else {
+            $affix = false;
         }
 
         $this->inputSuffix = $affix;
 
         return $this;
+    }
+
+    /**
+     * Determine if the property has a suffix.
+     *
+     * @return boolean
+     */
+    public function hasInputSuffix()
+    {
+        return (bool)$this->inputSuffix();
     }
 
     /**
@@ -535,7 +559,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
             }
         }
 
-        return $this->inputSuffix;
+        return $this->inputSuffix ?? null;
     }
 
     /**
@@ -617,17 +641,15 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
      */
     public function setPlaceholder($placeholder)
     {
-        if ($placeholder === null || $placeholder === '') {
-            $this->placeholder = '';
-            return $this;
+        $placeholder = $this->translator()->translation($placeholder);
+
+        if ($placeholder instanceof Translation) {
+            $placeholder->isRendered = false;
+        } else {
+            $placeholder = false;
         }
 
-        $this->placeholder = $this->translator()->translation($placeholder);
-        if ($this->placeholder instanceof Translation) {
-            $this->placeholder->isRendered = false;
-        } else {
-            $this->placeholder = '';
-        }
+        $this->placeholder = $placeholder;
 
         return $this;
     }
@@ -637,9 +659,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
      */
     public function hasPlaceholder()
     {
-        $placeholder = $this->placeholder();
-
-        return !!$placeholder;
+        return (bool)$this->placeholder();
     }
 
     /**
@@ -654,8 +674,6 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
 
             if (isset($metadata['data']['placeholder'])) {
                 $this->setPlaceholder($metadata['data']['placeholder']);
-            } else {
-                $this->placeholder = '';
             }
         }
 
@@ -669,7 +687,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
             }
         }
 
-        return $this->placeholder;
+        return $this->placeholder ?? null;
     }
 
     /**

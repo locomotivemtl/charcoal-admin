@@ -4,4 +4,14 @@
 
     `charcoal/admin/property/input/readonly`
 --}}
-<div class="form-control-plaintext">{{# hasInputVal }}{{& displayVal }}{{/ hasInputVal }}{{^ hasInputVal }}—{{/ hasInputVal }}</div>
+{{# hasPropertyVal }}
+    {{# showAsCodeBlock }}
+        <pre class="pre-scrollable"><code>{{ renderVal }}</code></pre>
+    {{/ showAsCodeBlock }}
+    {{^ showAsCodeBlock }}
+        <div class="form-control-plaintext">{{& renderVal }}</div>
+    {{/ showAsCodeBlock }}
+{{/ hasPropertyVal }}
+{{^ hasPropertyVal }}
+    <div class="form-control-plaintext">—</div>
+{{/ hasPropertyVal }}

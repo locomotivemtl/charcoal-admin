@@ -56,6 +56,13 @@ class FormWidget extends AdminWidget implements
     protected $groupsTemplate;
 
     /**
+     * The form's group tabs template path.
+     *
+     * @var string
+     */
+    protected $tabsTemplate;
+
+    /**
      * The form's sidebars.
      *
      * @var array
@@ -108,6 +115,7 @@ class FormWidget extends AdminWidget implements
     public function setData(array $data)
     {
         $this->setDefaultFormGroupsTemplate();
+        $this->setDefaultFormTabsTemplate();
 
         parent::setData($data);
 
@@ -698,6 +706,49 @@ class FormWidget extends AdminWidget implements
     public function defaultFormGroupsTemplate()
     {
         return 'charcoal/admin/template/form/groups-wrapper';
+    }
+
+    /**
+     * Set the form tabs partial template path.
+     *
+     * @param  string $partial The partial template to render the form tabs within.
+     * @return FormWidget Chainable
+     */
+    public function setTabsTemplate($partial)
+    {
+        $this->setDynamicTemplate('form_tabs_template', $partial);
+        $this->tabsTemplate = $partial;
+        return $this;
+    }
+
+    /**
+     * Retrieve the form tabs partial template path.
+     *
+     * @return string
+     */
+    public function tabsTemplate()
+    {
+        if ($this->tabsTemplate === null) {
+            $this->setDefaultFormTabsTemplate();
+        }
+
+        return $this->tabsTemplate;
+    }
+
+    /**
+     * @return void
+     */
+    public function setDefaultFormTabsTemplate()
+    {
+        $this->setTabsTemplate($this->defaultFormTabsTemplate());
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultFormTabsTemplate()
+    {
+        return 'charcoal/admin/template/form/nav-tabs';
     }
 
     /**

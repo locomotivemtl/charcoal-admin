@@ -11,7 +11,7 @@
     <div class="o-flex c-form-widget -object-form{{# isTabbable }} -tabbed{{/ isTabbable }}">
         <div class="o-flex_main c-form-widget_form">
             {{# isTabbable }}
-                {{> charcoal/admin/template/form/nav-tabs }}
+                {{> $form_tabs_template }}
             {{/ isTabbable }}
 
             {{> $form_groups_template }}

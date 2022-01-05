@@ -1,10 +1,10 @@
 {{!--
-    Togglable Tabs
-    ==============
+    Togglable Pills
+    ===============
 
-    @used-by charcoal/admin/template/object-form
+    @used-by charcoal/admin/template/quick-form
 --}}
-<ul class="c-form-widget_nav nav nav-tabs{{# tabCssClasses }} {{.}}{{/ tabCssClasses }}" role="tablist">
+<ul class="nav nav-pills{{# tabCssClasses }} {{.}}{{/ tabCssClasses }} justify-content-end" role="tablist">
     {{# groups }}
     <li class="nav-item">
         <a class="nav-link{{^ showTitle }} hide-title{{/ showTitle }}{{^ isHidden }} active{{/ isHidden }} js-group-tabs"

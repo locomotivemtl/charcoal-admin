@@ -78,8 +78,8 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * @param array $data The widget data.
-     * @return ObjectForm Chainable
+     * @param  array $data The widget data.
+     * @return ObjectFormWidget Chainable
      */
     public function setData(array $data)
     {

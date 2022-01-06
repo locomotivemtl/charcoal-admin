@@ -8,8 +8,8 @@
 <div id="{{ inputId }}" style="height:30em;"></div>
 
 {{# addJsRequirement }}
-    <link href="/assets/admin/jsoneditor/jsoneditor.css" rel="stylesheet" type="text/css">
-    <script src="/assets/admin/jsoneditor/jsoneditor.js"></script>
+    <link href="/assets/admin/jsoneditor/jsoneditor.min.css" rel="stylesheet" type="text/css">
+    <script src="/assets/admin/jsoneditor/jsoneditor.min.js"></script>
 {{/ addJsRequirement }}
 
 {{=<% %>=}}
@@ -26,14 +26,14 @@
         var options = {
             modes: [ 'code', 'tree' ],
             onChangeText: function(text) {
-                document.getElementById("hidden_{{ inputId }}").value = text;
+                document.getElementById('hidden_{{ inputId }}').value = text;
             }
         };
         var editor = new JSONEditor(container, options);
 
         {{# jsonVal }}
             editor.set(jsonVal_{{ inputId }});
-            document.getElementById("hidden_{{ inputId }}").value = editor.getText();
+            document.getElementById('hidden_{{ inputId }}').value = editor.getText();
         {{/ jsonVal }}
     </script>
 {{/ addJs }}

@@ -24,8 +24,8 @@
  * Copyright (c) 2011-2021 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.5.1
- * @date    2021-06-30
+ * @version 9.5.11
+ * @date    2021-12-29
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -57,7 +57,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
 
@@ -559,7 +559,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 /**
  * Show errors and schema warnings in a clickable table view
@@ -700,7 +700,7 @@ var ErrorTable = /*#__PURE__*/function () {
 
             var _pre = document.createElement('pre');
 
-            _pre.appendChild(document.createTextNode(error.message));
+            _pre.appendChild(document.createTextNode(error.message.replace(/<br>/gi, '\n')));
 
             td4.appendChild(_pre);
             trEl.appendChild(td4);
@@ -795,7 +795,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 var FocusTracker = /*#__PURE__*/function () {
   function FocusTracker(config) {
@@ -1214,39 +1214,35 @@ JSONEditor.prototype.setMode = function (mode) {
   options.mode = mode;
   var config = JSONEditor.modes[mode];
 
-  if (config) {
-    try {
-      var asText = config.data === 'text';
-      name = this.getName();
-      data = this[asText ? 'getText' : 'get'](); // get text or json
-
-      this.destroy();
-      clear(this);
-      extend(this, config.mixin);
-      this.create(container, options);
-      this.setName(name);
-      this[asText ? 'setText' : 'set'](data); // set text or json
-
-      if (typeof config.load === 'function') {
-        try {
-          config.load.call(this);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-
-      if (typeof options.onModeChange === 'function' && mode !== oldMode) {
-        try {
-          options.onModeChange(mode, oldMode);
-        } catch (err) {
-          console.error(err);
-        }
-      }
-    } catch (err) {
-      this._onError(err);
-    }
-  } else {
+  if (!config) {
     throw new Error('Unknown mode "' + options.mode + '"');
+  }
+
+  var asText = config.data === 'text';
+  name = this.getName();
+  data = this[asText ? 'getText' : 'get'](); // get text or json
+
+  this.destroy();
+  clear(this);
+  extend(this, config.mixin);
+  this.create(container, options);
+  this.setName(name);
+  this[asText ? 'setText' : 'set'](data); // set text or json
+
+  if (typeof config.load === 'function') {
+    try {
+      config.load.call(this);
+    } catch (err) {
+      console.error(err);
+    }
+  }
+
+  if (typeof options.onModeChange === 'function' && mode !== oldMode) {
+    try {
+      options.onModeChange(mode, oldMode);
+    } catch (err) {
+      console.error(err);
+    }
   }
 };
 /**
@@ -1260,7 +1256,8 @@ JSONEditor.prototype.getMode = function () {
 };
 /**
  * Throw an error. If an error callback is configured in options.error, this
- * callback will be invoked. Else, a regular error is thrown.
+ * callback will be invoked. Else, a basic alert window with the error message
+ * will be shown to the user.
  * @param {Error} err
  * @private
  */
@@ -1270,7 +1267,7 @@ JSONEditor.prototype._onError = function (err) {
   if (this.options && typeof this.options.onError === 'function') {
     this.options.onError(err);
   } else {
-    throw err;
+    alert(err.toString());
   }
 };
 /**
@@ -1445,7 +1442,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
 
@@ -1649,7 +1646,7 @@ module.exports = ace;
 window.ace.define('ace/theme/jsoneditor', ['require', 'exports', 'module', 'ace/lib/dom'], function (acequire, exports, module) {
   exports.isDark = false;
   exports.cssClass = 'ace-jsoneditor';
-  exports.cssText = ".ace-jsoneditor .ace_gutter {\nbackground: #ebebeb;\ncolor: #333\n}\n\n.ace-jsoneditor.ace_editor {\nfont-family: \"dejavu sans mono\", \"droid sans mono\", consolas, monaco, \"lucida console\", \"courier new\", courier, monospace, sans-serif;\nline-height: 1.3;\nbackground-color: #fff;\n}\n.ace-jsoneditor .ace_print-margin {\nwidth: 1px;\nbackground: #e8e8e8\n}\n.ace-jsoneditor .ace_scroller {\nbackground-color: #FFFFFF\n}\n.ace-jsoneditor .ace_text-layer {\ncolor: gray\n}\n.ace-jsoneditor .ace_variable {\ncolor: #1a1a1a\n}\n.ace-jsoneditor .ace_cursor {\nborder-left: 2px solid #000000\n}\n.ace-jsoneditor .ace_overwrite-cursors .ace_cursor {\nborder-left: 0px;\nborder-bottom: 1px solid #000000\n}\n.ace-jsoneditor .ace_marker-layer .ace_selection {\nbackground: lightgray\n}\n.ace-jsoneditor.ace_multiselect .ace_selection.ace_start {\nbox-shadow: 0 0 3px 0px #FFFFFF;\nborder-radius: 2px\n}\n.ace-jsoneditor .ace_marker-layer .ace_step {\nbackground: rgb(255, 255, 0)\n}\n.ace-jsoneditor .ace_marker-layer .ace_bracket {\nmargin: -1px 0 0 -1px;\nborder: 1px solid #BFBFBF\n}\n.ace-jsoneditor .ace_marker-layer .ace_active-line {\nbackground: #FFFBD1\n}\n.ace-jsoneditor .ace_gutter-active-line {\nbackground-color : #dcdcdc\n}\n.ace-jsoneditor .ace_marker-layer .ace_selected-word {\nborder: 1px solid lightgray\n}\n.ace-jsoneditor .ace_invisible {\ncolor: #BFBFBF\n}\n.ace-jsoneditor .ace_keyword,\n.ace-jsoneditor .ace_meta,\n.ace-jsoneditor .ace_support.ace_constant.ace_property-value {\ncolor: #AF956F\n}\n.ace-jsoneditor .ace_keyword.ace_operator {\ncolor: #484848\n}\n.ace-jsoneditor .ace_keyword.ace_other.ace_unit {\ncolor: #96DC5F\n}\n.ace-jsoneditor .ace_constant.ace_language {\ncolor: darkorange\n}\n.ace-jsoneditor .ace_constant.ace_numeric {\ncolor: red\n}\n.ace-jsoneditor .ace_constant.ace_character.ace_entity {\ncolor: #BF78CC\n}\n.ace-jsoneditor .ace_invalid {\ncolor: #FFFFFF;\nbackground-color: #FF002A;\n}\n.ace-jsoneditor .ace_fold {\nbackground-color: #AF956F;\nborder-color: #000000\n}\n.ace-jsoneditor .ace_storage,\n.ace-jsoneditor .ace_support.ace_class,\n.ace-jsoneditor .ace_support.ace_function,\n.ace-jsoneditor .ace_support.ace_other,\n.ace-jsoneditor .ace_support.ace_type {\ncolor: #C52727\n}\n.ace-jsoneditor .ace_string {\ncolor: green\n}\n.ace-jsoneditor .ace_comment {\ncolor: #BCC8BA\n}\n.ace-jsoneditor .ace_entity.ace_name.ace_tag,\n.ace-jsoneditor .ace_entity.ace_other.ace_attribute-name {\ncolor: #606060\n}\n.ace-jsoneditor .ace_markup.ace_underline {\ntext-decoration: underline\n}\n.ace-jsoneditor .ace_indent-guide {\nbackground: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y\n}";
+  exports.cssText = ".ace-jsoneditor .ace_gutter {\nbackground: #ebebeb;\ncolor: #333\n}\n\n.ace-jsoneditor.ace_editor {\nline-height: 1.3;\nbackground-color: #fff;\n}\n.ace-jsoneditor .ace_print-margin {\nwidth: 1px;\nbackground: #e8e8e8\n}\n.ace-jsoneditor .ace_scroller {\nbackground-color: #FFFFFF\n}\n.ace-jsoneditor .ace_text-layer {\ncolor: gray\n}\n.ace-jsoneditor .ace_variable {\ncolor: #1a1a1a\n}\n.ace-jsoneditor .ace_cursor {\nborder-left: 2px solid #000000\n}\n.ace-jsoneditor .ace_overwrite-cursors .ace_cursor {\nborder-left: 0px;\nborder-bottom: 1px solid #000000\n}\n.ace-jsoneditor .ace_marker-layer .ace_selection {\nbackground: lightgray\n}\n.ace-jsoneditor.ace_multiselect .ace_selection.ace_start {\nbox-shadow: 0 0 3px 0px #FFFFFF;\nborder-radius: 2px\n}\n.ace-jsoneditor .ace_marker-layer .ace_step {\nbackground: rgb(255, 255, 0)\n}\n.ace-jsoneditor .ace_marker-layer .ace_bracket {\nmargin: -1px 0 0 -1px;\nborder: 1px solid #BFBFBF\n}\n.ace-jsoneditor .ace_marker-layer .ace_active-line {\nbackground: #FFFBD1\n}\n.ace-jsoneditor .ace_gutter-active-line {\nbackground-color : #dcdcdc\n}\n.ace-jsoneditor .ace_marker-layer .ace_selected-word {\nborder: 1px solid lightgray\n}\n.ace-jsoneditor .ace_invisible {\ncolor: #BFBFBF\n}\n.ace-jsoneditor .ace_keyword,\n.ace-jsoneditor .ace_meta,\n.ace-jsoneditor .ace_support.ace_constant.ace_property-value {\ncolor: #AF956F\n}\n.ace-jsoneditor .ace_keyword.ace_operator {\ncolor: #484848\n}\n.ace-jsoneditor .ace_keyword.ace_other.ace_unit {\ncolor: #96DC5F\n}\n.ace-jsoneditor .ace_constant.ace_language {\ncolor: darkorange\n}\n.ace-jsoneditor .ace_constant.ace_numeric {\ncolor: red\n}\n.ace-jsoneditor .ace_constant.ace_character.ace_entity {\ncolor: #BF78CC\n}\n.ace-jsoneditor .ace_invalid {\ncolor: #FFFFFF;\nbackground-color: #FF002A;\n}\n.ace-jsoneditor .ace_fold {\nbackground-color: #AF956F;\nborder-color: #000000\n}\n.ace-jsoneditor .ace_storage,\n.ace-jsoneditor .ace_support.ace_class,\n.ace-jsoneditor .ace_support.ace_function,\n.ace-jsoneditor .ace_support.ace_other,\n.ace-jsoneditor .ace_support.ace_type {\ncolor: #C52727\n}\n.ace-jsoneditor .ace_string {\ncolor: green\n}\n.ace-jsoneditor .ace_comment {\ncolor: #BCC8BA\n}\n.ace-jsoneditor .ace_entity.ace_name.ace_tag,\n.ace-jsoneditor .ace_entity.ace_other.ace_attribute-name {\ncolor: #606060\n}\n.ace-jsoneditor .ace_markup.ace_underline {\ntext-decoration: underline\n}\n.ace-jsoneditor .ace_indent-guide {\nbackground: url(\"data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAACCAYAAACZgbYnAAAAE0lEQVQImWP4////f4bLly//BwAmVgd1/w11/gAAAABJRU5ErkJggg==\") right repeat-y\n}";
   var dom = acequire('../lib/dom');
   dom.importCssString(exports.cssText, exports.cssClass);
 });
@@ -3961,34 +3958,34 @@ Selectr.prototype.add = function (data, checkDuplicate) {
     } // User passed a single object to the method
     // or Selectr passed an object from an array
     else if ("[object Object]" === Object.prototype.toString.call(data)) {
-        if (checkDuplicate) {
-          var dupe = false;
-          util.each(this.options, function (i, option) {
-            if (option.value.toLowerCase() === data.value.toLowerCase()) {
-              dupe = true;
-            }
-          });
-
-          if (dupe) {
-            return false;
+      if (checkDuplicate) {
+        var dupe = false;
+        util.each(this.options, function (i, option) {
+          if (option.value.toLowerCase() === data.value.toLowerCase()) {
+            dupe = true;
           }
+        });
+
+        if (dupe) {
+          return false;
         }
+      }
 
-        var option = util.createElement('option', data);
-        this.data.push(data); // Add the new option to the list
+      var option = util.createElement('option', data);
+      this.data.push(data); // Add the new option to the list
 
-        this.options.push(option); // Add the index for later use
+      this.options.push(option); // Add the index for later use
 
-        option.idx = this.options.length > 0 ? this.options.length - 1 : 0; // Create a new item
+      option.idx = this.options.length > 0 ? this.options.length - 1 : 0; // Create a new item
 
-        createItem.call(this, option); // Select the item if required
+      createItem.call(this, option); // Select the item if required
 
-        if (data.selected) {
-          this.select(option.idx);
-        }
+      if (data.selected) {
+        this.select(option.idx);
+      }
 
-        return option;
-      } // We may have had an empty select so update
+      return option;
+    } // We may have had an empty select so update
     // the placeholder to reflect the changes.
 
 
@@ -5661,20 +5658,22 @@ if (typeof Element !== 'undefined') {
   // Polyfill for array remove
   (function () {
     function polyfill(item) {
-      if ('remove' in item) {
-        return;
-      }
-
-      Object.defineProperty(item, 'remove', {
-        configurable: true,
-        enumerable: true,
-        writable: true,
-        value: function remove() {
-          if (this.parentNode !== undefined) {
-            this.parentNode.removeChild(this);
-          }
+      if (typeof item !== 'undefined') {
+        if ('remove' in item) {
+          return;
         }
-      });
+
+        Object.defineProperty(item, 'remove', {
+          configurable: true,
+          enumerable: true,
+          writable: true,
+          value: function remove() {
+            if (this.parentNode !== undefined) {
+              this.parentNode.removeChild(this);
+            }
+          }
+        });
+      }
     }
 
     if (typeof window.Element !== 'undefined') {
@@ -5747,7 +5746,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 // EXTERNAL MODULE: ./node_modules/jsonrepair/lib/umd/jsonrepair.min.js
-var jsonrepair_min = __webpack_require__(664);
+var jsonrepair_min = __webpack_require__(928);
 var jsonrepair_min_default = /*#__PURE__*/__webpack_require__.n(jsonrepair_min);
 // EXTERNAL MODULE: ./src/js/constants.js
 var constants = __webpack_require__(188);
@@ -5760,7 +5759,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 /**
  * Keep track on any history, be able
@@ -6102,8 +6101,12 @@ previewmode.create = function (container) {
     if (this.options && this.options.modes && this.options.modes.length) {
       this.modeSwitcher = new ModeSwitcher/* ModeSwitcher */.x(this.menu, this.options.modes, this.options.mode, function onSwitch(mode) {
         // switch mode and restore focus
-        me.setMode(mode);
-        me.modeSwitcher.focus();
+        try {
+          me.setMode(mode);
+          me.modeSwitcher.focus();
+        } catch (err) {
+          me._onError(err);
+        }
       });
     }
   }
@@ -6714,7 +6717,7 @@ var i18n = __webpack_require__(907);
  * @returns {string | undefined} Returns the string representation of the JSON object.
  */
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function stringifyPartial(value, space, limit) {
   var _space; // undefined by default
@@ -7134,7 +7137,7 @@ __webpack_require__.d(__webpack_exports__, {
 });
 
 // EXTERNAL MODULE: ./node_modules/jsonrepair/lib/umd/jsonrepair.min.js
-var jsonrepair_min = __webpack_require__(664);
+var jsonrepair_min = __webpack_require__(928);
 var jsonrepair_min_default = /*#__PURE__*/__webpack_require__.n(jsonrepair_min);
 // EXTERNAL MODULE: ./src/js/ace/index.js
 var ace = __webpack_require__(170);
@@ -7205,7 +7208,7 @@ function validateCustom(json, onValidate) {
 ;// CONCATENATED MODULE: ./src/js/textmode.js
 
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -7436,8 +7439,12 @@ textmode.create = function (container) {
     if (this.options && this.options.modes && this.options.modes.length) {
       this.modeSwitcher = new ModeSwitcher/* ModeSwitcher */.x(this.menu, this.options.modes, this.options.mode, function onSwitch(mode) {
         // switch mode and restore focus
-        me.setMode(mode);
-        me.modeSwitcher.focus();
+        try {
+          me.setMode(mode);
+          me.modeSwitcher.focus();
+        } catch (err) {
+          me._onError(err);
+        }
       });
     }
 
@@ -7452,7 +7459,7 @@ textmode.create = function (container) {
         // TODO: this anchor falls below the margin of the content,
         // therefore the normal a.href does not work. We use a click event
         // for now, but this should be fixed.
-        window.open(poweredBy.href, poweredBy.target, 'noopener');
+        window.open(poweredBy.href, poweredBy.target, 'noreferrer');
       };
 
       this.menu.appendChild(poweredBy);
@@ -7481,7 +7488,7 @@ textmode.create = function (container) {
       readOnly: isReadOnly
     });
     aceEditor.setShowPrintMargin(false);
-    aceEditor.setFontSize('13px');
+    aceEditor.setFontSize('14px');
     aceSession.setMode('ace/mode/json');
     aceSession.setTabSize(this.indentation);
     aceSession.setUseSoftTabs(true);
@@ -7660,26 +7667,29 @@ textmode._updateHistoryButtons = function () {
 
 
 textmode._showSortModal = function () {
-  var me = this;
-  var container = this.options.modalAnchor || constants/* DEFAULT_MODAL_ANCHOR */.qD;
-  var json = this.get();
+  try {
+    var onSort = function onSort(sortedBy) {
+      if (Array.isArray(json)) {
+        var sortedJson = (0,util.sort)(json, sortedBy.path, sortedBy.direction);
+        me.sortedBy = sortedBy;
+        me.update(sortedJson);
+      }
 
-  function onSort(sortedBy) {
-    if (Array.isArray(json)) {
-      var sortedJson = (0,util.sort)(json, sortedBy.path, sortedBy.direction);
-      me.sortedBy = sortedBy;
-      me.update(sortedJson);
-    }
+      if ((0,util.isObject)(json)) {
+        var _sortedJson = (0,util.sortObjectKeys)(json, sortedBy.direction);
 
-    if ((0,util.isObject)(json)) {
-      var _sortedJson = (0,util.sortObjectKeys)(json, sortedBy.direction);
+        me.sortedBy = sortedBy;
+        me.update(_sortedJson);
+      }
+    };
 
-      me.sortedBy = sortedBy;
-      me.update(_sortedJson);
-    }
+    var me = this;
+    var container = this.options.modalAnchor || constants/* DEFAULT_MODAL_ANCHOR */.qD;
+    var json = this.get();
+    (0,showSortModal.showSortModal)(container, json, onSort, me.sortedBy);
+  } catch (err) {
+    this._onError(err);
   }
-
-  (0,showSortModal.showSortModal)(container, json, onSort, me.sortedBy);
 };
 /**
  * Open a transform modal
@@ -7690,25 +7700,29 @@ textmode._showSortModal = function () {
 textmode._showTransformModal = function () {
   var _this3 = this;
 
-  var _this$options = this.options,
-      modalAnchor = _this$options.modalAnchor,
-      createQuery = _this$options.createQuery,
-      executeQuery = _this$options.executeQuery,
-      queryDescription = _this$options.queryDescription;
-  var json = this.get();
-  (0,showTransformModal.showTransformModal)({
-    container: modalAnchor || constants/* DEFAULT_MODAL_ANCHOR */.qD,
-    json: json,
-    queryDescription: queryDescription,
-    // can be undefined
-    createQuery: createQuery,
-    executeQuery: executeQuery,
-    onTransform: function onTransform(query) {
-      var updatedJson = executeQuery(json, query);
+  try {
+    var _this$options = this.options,
+        modalAnchor = _this$options.modalAnchor,
+        _createQuery = _this$options.createQuery,
+        _executeQuery = _this$options.executeQuery,
+        queryDescription = _this$options.queryDescription;
+    var json = this.get();
+    (0,showTransformModal.showTransformModal)({
+      container: modalAnchor || constants/* DEFAULT_MODAL_ANCHOR */.qD,
+      json: json,
+      queryDescription: queryDescription,
+      // can be undefined
+      createQuery: _createQuery,
+      executeQuery: _executeQuery,
+      onTransform: function onTransform(query) {
+        var updatedJson = _executeQuery(json, query);
 
-      _this3.update(updatedJson);
-    }
-  });
+        _this3.update(updatedJson);
+      }
+    });
+  } catch (err) {
+    this._onError(err);
+  }
 };
 /**
  * Handle text selection
@@ -8815,7 +8829,7 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); return Constructor; }
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 var Highlighter = /*#__PURE__*/function () {
   function Highlighter() {
@@ -9348,6 +9362,14 @@ var constants = __webpack_require__(188);
 ;// CONCATENATED MODULE: ./src/js/Node.js
 
 
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -9362,13 +9384,13 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 function Node_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function Node_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function Node_createClass(Constructor, protoProps, staticProps) { if (protoProps) Node_defineProperties(Constructor.prototype, protoProps); if (staticProps) Node_defineProperties(Constructor, staticProps); return Constructor; }
+function Node_createClass(Constructor, protoProps, staticProps) { if (protoProps) Node_defineProperties(Constructor.prototype, protoProps); if (staticProps) Node_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
 
@@ -12161,7 +12183,7 @@ var Node = /*#__PURE__*/function () {
               // if read-only, we use the regular click behavior of an anchor
               if ((0,util.isUrl)(this.value)) {
                 event.preventDefault();
-                window.open(this.value, '_blank', 'noopener');
+                window.open(this.value, '_blank', 'noreferrer');
               }
             }
 
@@ -12343,7 +12365,7 @@ var Node = /*#__PURE__*/function () {
         if (target === this.dom.value) {
           if (!this.editable.value || event.ctrlKey) {
             if ((0,util.isUrl)(this.value)) {
-              window.open(this.value, '_blank', 'noopener');
+              window.open(this.value, '_blank', 'noreferrer');
               handled = true;
             }
           }
@@ -14251,7 +14273,14 @@ Node._findSchema = function (topLevelSchema, schemaRefs, path) {
             var reference = {
               $ref: '#/'.concat(relativePath)
             };
-            return Node._findSchema(referencedSchema, schemaRefs, nextPath, reference);
+            var auxNextPath = [];
+            auxNextPath.push(nextKey);
+
+            if (nextPath.length > 0) {
+              auxNextPath.push.apply(auxNextPath, _toConsumableArray(nextPath));
+            }
+
+            return Node._findSchema(referencedSchema, schemaRefs, auxNextPath, reference);
           } else {
             throw Error("Unable to resolve reference ".concat(ref));
           }
@@ -14492,7 +14521,7 @@ function NodeHistory_classCallCheck(instance, Constructor) { if (!(instance inst
 
 function NodeHistory_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function NodeHistory_createClass(Constructor, protoProps, staticProps) { if (protoProps) NodeHistory_defineProperties(Constructor.prototype, protoProps); if (staticProps) NodeHistory_defineProperties(Constructor, staticProps); return Constructor; }
+function NodeHistory_createClass(Constructor, protoProps, staticProps) { if (protoProps) NodeHistory_defineProperties(Constructor.prototype, protoProps); if (staticProps) NodeHistory_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
 /**
@@ -14847,7 +14876,7 @@ function SearchBox_classCallCheck(instance, Constructor) { if (!(instance instan
 
 function SearchBox_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function SearchBox_createClass(Constructor, protoProps, staticProps) { if (protoProps) SearchBox_defineProperties(Constructor.prototype, protoProps); if (staticProps) SearchBox_defineProperties(Constructor, staticProps); return Constructor; }
+function SearchBox_createClass(Constructor, protoProps, staticProps) { if (protoProps) SearchBox_defineProperties(Constructor.prototype, protoProps); if (staticProps) SearchBox_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
 /**
@@ -15222,7 +15251,7 @@ function TreePath_classCallCheck(instance, Constructor) { if (!(instance instanc
 
 function TreePath_defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
 
-function TreePath_createClass(Constructor, protoProps, staticProps) { if (protoProps) TreePath_defineProperties(Constructor.prototype, protoProps); if (staticProps) TreePath_defineProperties(Constructor, staticProps); return Constructor; }
+function TreePath_createClass(Constructor, protoProps, staticProps) { if (protoProps) TreePath_defineProperties(Constructor.prototype, protoProps); if (staticProps) TreePath_defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
 
 
 
@@ -16469,8 +16498,12 @@ treemode._createFrame = function () {
       var me = this;
       this.modeSwitcher = new ModeSwitcher/* ModeSwitcher */.x(this.menu, this.options.modes, this.options.mode, function onSwitch(mode) {
         // switch mode and restore focus
-        me.setMode(mode);
-        me.modeSwitcher.focus();
+        try {
+          me.setMode(mode);
+          me.modeSwitcher.focus();
+        } catch (err) {
+          me._onError(err);
+        }
       });
     } // create search box
 
@@ -17341,6 +17374,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "getSelectionOffset": function() { return /* binding */ getSelectionOffset; },
 /* harmony export */   "setSelectionOffset": function() { return /* binding */ setSelectionOffset; },
 /* harmony export */   "getInnerText": function() { return /* binding */ getInnerText; },
+/* harmony export */   "removeReturnsAndSurroundingWhitespace": function() { return /* binding */ removeReturnsAndSurroundingWhitespace; },
 /* harmony export */   "hasParentNode": function() { return /* binding */ hasParentNode; },
 /* harmony export */   "getInternetExplorerVersion": function() { return /* binding */ getInternetExplorerVersion; },
 /* harmony export */   "isFirefox": function() { return /* binding */ isFirefox; },
@@ -17379,14 +17413,14 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_polyfills__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(233);
 /* harmony import */ var javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(javascript_natural_sort__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var jsonrepair__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(664);
+/* harmony import */ var jsonrepair__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(928);
 /* harmony import */ var jsonrepair__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(jsonrepair__WEBPACK_IMPORTED_MODULE_2__);
 /* harmony import */ var _assets_jsonlint_jsonlint__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(589);
 /* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
 /* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(907);
 
 
-function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
 
 
@@ -17803,8 +17837,8 @@ function getInnerText(element, buffer) {
 
 
   if (element.nodeValue) {
-    // remove return characters and the whitespace surrounding return characters
-    var trimmedValue = element.nodeValue.replace(/\s*\n\s*/g, '');
+    // remove return characters and the whitespaces surrounding those return characters
+    var trimmedValue = removeReturnsAndSurroundingWhitespace(element.nodeValue);
 
     if (trimmedValue !== '') {
       return buffer.flush() + trimmedValue;
@@ -17849,6 +17883,13 @@ function getInnerText(element, buffer) {
 
 
   return '';
+} // regular expression matching one or multiple return characters with all their
+// enclosing white spaces
+
+function removeReturnsAndSurroundingWhitespace(text) {
+  return text.replace(/(\b|^)\s*(\b|$)/g, function (match) {
+    return /\n/.exec(match) ? '' : match;
+  });
 }
 /**
  * Test whether an element has the provided parent node somewhere up the node tree.
@@ -20921,13 +20962,6 @@ function escapeJsonPointer(str) {
 
 /***/ }),
 
-/***/ 664:
-/***/ (function(module) {
-
-!function(e,n){ true?module.exports=n():0}(this,function(){"use strict";function f(e,n){if(!(this instanceof f))throw new SyntaxError("Constructor must be called with the new operator");this.message=e+" (char "+n+")",this.char=n,this.stack=(new Error).stack}(f.prototype=new Error).constructor=Error;var o={"'":!0,"‘":!0,"’":!0,"`":!0,"´":!0},u={'"':!0,"“":!0,"”":!0};function c(e){return n.test(e)}var n=/^[a-zA-Z_]$/;var s=/^[0-9a-fA-F]$/;function a(e){return t.test(e)}var t=/^[0-9]$/;function l(e){return" "===e||"\t"===e||"\n"===e||"\r"===e}function h(e){return" "===e||" "<=e&&e<=" "||" "===e||" "===e||"　"===e}function d(e){return!0===o[e]}function w(e){return!0===u[e]}function b(e){return!0===o[e]?"'":!0===u[e]?'"':e}function e(e,n){n=e.lastIndexOf(n);return-1!==n?e.substring(0,n)+e.substring(n+1):e}function r(e,n){var t=e.length;if(!l(e[t-1]))return e+n;for(;l(e[t-1]);)t--;return e.substring(0,t)+n+e.substring(t)}var i=0,g=1,v=2,p=3,x=4,k=5,m=6,y={"":!0,"{":!0,"}":!0,"[":!0,"]":!0,":":!0,",":!0,"(":!0,")":!0,";":!0,"+":!0},I={'"':'"',"\\":"\\","/":"/",b:"\b",f:"\f",n:"\n",r:"\r",t:"\t"},E={"\b":"\\b","\f":"\\f","\n":"\\n","\r":"\\r","\t":"\\t"},A={null:"null",true:"true",false:"false"},j={None:"null",True:"true",False:"false"},$="",O="",T=0,C="",F="",S=m;function U(){T++,C=$.charAt(T)}function z(){U(),"\\"===C&&U()}function N(){return S===i&&("["===F||"{"===F)||S===v||S===g||S===p}function V(){O+=F,S=m,F="",y[C]?(S=i,F=C,U()):function(){if(a(C)||"-"===C){if(S=g,"-"===C){if(F+=C,U(),!a(C))throw new f("Invalid number, digit expected",T)}else"0"===C&&(F+=C,U());for(;a(C);)F+=C,U();if("."===C){if(F+=C,U(),!a(C))throw new f("Invalid number, digit expected",T);for(;a(C);)F+=C,U()}if("e"===C||"E"===C){if(F+=C,U(),"+"!==C&&"-"!==C||(F+=C,U()),!a(C))throw new f("Invalid number, digit expected",T);for(;a(C);)F+=C,U()}}else"\\"===C&&'"'===$.charAt(T+1)?(U(),_(z)):_(U)}(),S===x&&(F=function(e){for(var n="",t=0;t<e.length;t++){var r=e[t];n+=h(r)?" ":r}return n}(F),V()),S===k&&(S=m,F="",V())}function Z(){","===F&&(F="",S=m,V())}function _(e){if(!0===o[n=C]||!0===u[n]){var n=b(C),t=d(C)?d:w;for(F+='"',S=v,e();""!==C&&!t(C);)if("\\"===C)if(e(),void 0!==I[C])F+="\\"+C,e();else if("u"===C){F+="\\u",e();for(var r=0;r<4;r++){if(i=C,!s.test(i))throw new f("Invalid unicode character",T-F.length);F+=C,e()}}else{if("'"!==C)throw new f('Invalid escape character "\\'+C+'"',T);F+="'",e()}else E[C]?F+=E[C]:F+='"'===C?'\\"':C,e();if(b(C)!==n)throw new f("End of string expected",T-F.length);return F+='"',void e()}var i,n;!function(){if(c(C))for(S=p;c(C)||a(C)||"$"===C;)F+=C,U();else!function(){if(l(C)||h(C))for(S=x;l(C)||h(C);)F+=C,U();else!function(){if("/"!==C||"*"!==$[T+1])if("/"!==C||"/"!==$[T+1])!function(){S=m;for(;""!==C;)F+=C,U();throw new f('Syntax error in part "'+F+'"',T-F.length)}();else for(S=k;""!==C&&"\n"!==C;)F+=C,U();else{for(S=k;""!==C&&("*"!==C||"*"===C&&"/"!==$[T+1]);)F+=C,U();"*"===C&&"/"===$[T+1]&&(F+=C,U(),F+=C,U())}}()}()}()}function q(){if(S!==i||"{"!==F)!function(){if(S!==i||"["!==F)!function(){if(S!==v)(S!==g?function(){if(S!==p)!function(){throw new f(""===F?"Unexpected end of json string":"Value expected",T-F.length)}();else if(A[F])V();else{if(j[F])return F=j[F],V();var e=F,n=O.length;if(F="",V(),S===i&&"("===F)return F="",V(),q(),S===i&&")"===F&&(F="",V(),S===i&&";"===F&&(F="",V()));for(O=function(e,n,t){return e.substring(0,t)+n+e.substring(t)}(O,'"'.concat(e),n);S===p||S===g;)V();O+='"'}}:V)();else for(V();S===i&&"+"===F;){var e;F="",V(),S===v&&(e=O.lastIndexOf('"'),O=O.substring(0,e)+F.substring(1),F="",V())}}();else if(V(),S!==i||"]"!==F){for(;;)if(q(),S===i&&","===F){if(V(),S===i&&"]"===F){O=e(O,",");break}if(""===F){O=e(O,",");break}}else{if(!N())break;O=r(O,",")}S===i&&"]"===F?V():O=r(O,"]")}else V()}();else if(V(),S!==i||"}"!==F){for(;;){if(S!==p&&S!==g||(S=v,F='"'.concat(F,'"')),S!==v)throw new f("Object key expected",T-F.length);if(V(),S===i&&":"===F)V();else{if(!N())throw new f("Colon expected",T-F.length);O=r(O,":")}if(q(),S===i&&","===F){if(V(),S===i&&"}"===F){O=e(O,",");break}if(""===F){O=e(O,",");break}}else{if(S!==v&&S!==g&&S!==p)break;O=r(O,",")}}S===i&&"}"===F?V():O=r(O,"}")}else V()}return function(e){O="",T=0,C=($=e).charAt(0),F="",S=m,V();var n=S;if(q(),Z(),""===F)return O;if(n===S&&N()){for(var t="";n===S&&N();)t+=O=r(O,","),O="",q(),Z();return"[\n".concat(t).concat(O,"\n]")}throw new f("Unexpected characters",T-F.length)}});
-
-/***/ }),
-
 /***/ 483:
 /***/ (function(module, exports) {
 
@@ -21533,6 +21567,13 @@ var __WEBPACK_AMD_DEFINE_FACTORY__, __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_
 
 }));
 
+
+/***/ }),
+
+/***/ 928:
+/***/ (function(module) {
+
+!function(e,n){ true?module.exports=n():0}(this,function(){"use strict";function f(e,n){if(!(this instanceof f))throw new SyntaxError("Constructor must be called with the new operator");this.message=e+" (char "+n+")",this.char=n,this.stack=(new Error).stack}(f.prototype=new Error).constructor=Error;var o={"'":!0,"‘":!0,"’":!0,"`":!0,"´":!0},u={'"':!0,"“":!0,"”":!0};function c(e){return n.test(e)}var n=/^[a-zA-Z_]$/;var s=/^[0-9a-fA-F]$/;function a(e){return t.test(e)}var t=/^[0-9]$/;function l(e){return" "===e||"\t"===e||"\n"===e||"\r"===e}function h(e){return" "===e||" "<=e&&e<=" "||" "===e||" "===e||"　"===e}function d(e){return!0===o[e]}function w(e){return!0===u[e]}function b(e){return!0===o[e]?"'":!0===u[e]?'"':e}function e(e,n){n=e.lastIndexOf(n);return-1!==n?e.substring(0,n)+e.substring(n+1):e}function r(e,n){var t=e.length;if(!l(e[t-1]))return e+n;for(;l(e[t-1]);)t--;return e.substring(0,t)+n+e.substring(t)}var i=0,g=1,v=2,p=3,x=4,k=5,m=6,y={"":!0,"{":!0,"}":!0,"[":!0,"]":!0,":":!0,",":!0,"(":!0,")":!0,";":!0,"+":!0},I={'"':'"',"\\":"\\","/":"/",b:"\b",f:"\f",n:"\n",r:"\r",t:"\t"},E={"\b":"\\b","\f":"\\f","\n":"\\n","\r":"\\r","\t":"\\t"},A={null:"null",true:"true",false:"false"},j={None:"null",True:"true",False:"false"},$="",O="",T=0,C="",F="",S=m;function U(){T++,C=$.charAt(T)}function z(){U(),"\\"===C&&U()}function N(){return S===i&&("["===F||"{"===F)||S===v||S===g||S===p}function V(){O+=F,S=m,F="",y[C]?(S=i,F=C,U()):function(){if(a(C)||"-"===C){if(S=g,"-"===C){if(F+=C,U(),!a(C))throw new f("Invalid number, digit expected",T)}else"0"===C&&(F+=C,U());for(;a(C);)F+=C,U();if("."===C){if(F+=C,U(),!a(C))throw new f("Invalid number, digit expected",T);for(;a(C);)F+=C,U()}if("e"===C||"E"===C){if(F+=C,U(),"+"!==C&&"-"!==C||(F+=C,U()),!a(C))throw new f("Invalid number, digit expected",T);for(;a(C);)F+=C,U()}}else"\\"===C&&'"'===$.charAt(T+1)?(U(),_(z)):_(U)}(),S===x&&(F=function(e){for(var n="",t=0;t<e.length;t++){var r=e[t];n+=h(r)?" ":r}return n}(F),V()),S===k&&(S=m,F="",V())}function Z(){","===F&&(F="",S=m,V())}function _(e){if(!0===o[n=C]||!0===u[n]){var n=b(C),t=d(C)?d:w;for(F+='"',S=v,e();""!==C&&!t(C);)if("\\"===C)if(e(),void 0!==I[C])F+="\\"+C,e();else if("u"===C){F+="\\u",e();for(var r=0;r<4;r++){if(i=C,!s.test(i))throw new f("Invalid unicode character",T-F.length);F+=C,e()}}else{if("'"!==C)throw new f('Invalid escape character "\\'+C+'"',T);F+="'",e()}else E[C]?F+=E[C]:F+='"'===C?'\\"':C,e();if(b(C)!==n)throw new f("End of string expected",T-F.length);return F+='"',void e()}var i,n;!function(){if(c(C))for(S=p;c(C)||a(C)||"$"===C;)F+=C,U();else!function(){if(l(C)||h(C))for(S=x;l(C)||h(C);)F+=C,U();else!function(){if("/"!==C||"*"!==$[T+1])if("/"!==C||"/"!==$[T+1])!function(){S=m;for(;""!==C;)F+=C,U();throw new f('Syntax error in part "'+F+'"',T-F.length)}();else for(S=k;""!==C&&"\n"!==C;)F+=C,U();else{for(S=k;""!==C&&("*"!==C||"*"===C&&"/"!==$[T+1]);)F+=C,U();"*"===C&&"/"===$[T+1]&&(F+=C,U(),F+=C,U())}}()}()}()}function q(){if(S!==i||"{"!==F)!function(){if(S!==i||"["!==F)!function(){if(S!==v)(S!==g?function(){if(S!==p)!function(){throw new f(""===F?"Unexpected end of json string":"Value expected",T-F.length)}();else if(A[F])V();else{if(j[F])return F=j[F],V();var e=F,n=O.length;if(F="",V(),S===i&&"("===F)return F="",V(),q(),S===i&&")"===F&&(F="",V(),S===i&&";"===F&&(F="",V()));for(O=function(e,n,t){return e.substring(0,t)+n+e.substring(t)}(O,'"'.concat(e),n);S===p||S===g;)V();O+='"'}}:V)();else for(V();S===i&&"+"===F;){var e;F="",V(),S===v&&(e=O.lastIndexOf('"'),O=O.substring(0,e)+F.substring(1),F="",V())}}();else if(V(),S!==i||"]"!==F){for(;;)if(q(),S===i&&","===F){if(V(),S===i&&"]"===F){O=e(O,",");break}if(""===F){O=e(O,",");break}}else{if(!N())break;O=r(O,",")}S===i&&"]"===F?V():O=r(O,"]")}else V()}();else if(V(),S!==i||"}"!==F){for(;;){if(S!==p&&S!==g||(S=v,F='"'.concat(F,'"')),S!==v)throw new f("Object key expected",T-F.length);if(V(),S===i&&":"===F)V();else{if(!N())throw new f("Colon expected",T-F.length);O=r(O,":")}if(q(),S===i&&","===F){if(V(),S===i&&"}"===F){O=e(O,",");break}if(""===F){O=e(O,",");break}}else{if(S!==v&&S!==g&&S!==p)break;O=r(O,",")}}S===i&&"}"===F?V():O=r(O,"}")}else V()}return function(e){O="",T=0,C=($=e).charAt(0),F="",S=m,V();var n=S;if(q(),Z(),""===F)return O;if(n===S&&N()){for(var t="";n===S&&N();)t+=O=r(O,","),O="",q(),Z();return"[\n".concat(t).concat(O,"\n]")}throw new f("Unexpected characters",T-F.length)}});
 
 /***/ })
 

@@ -111,7 +111,6 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
             'quickbars',
             // 'save',
             'searchreplace',
-            // 'spellchecker',
             'tabfocus',
             'table',
             // 'template',
@@ -162,7 +161,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
          * @link https://www.tiny.cloud/docs/configure/editor-appearance/#contextmenu
          * @link https://github.com/tinymce/tinymce/blob/5.8.2/modules/tinymce/src/themes/silver/main/ts/ui/menus/contextmenu/Settings.ts#L31
          *
-         * Default TinyMCR contextmenu
+         * Default TinyMCE contextmenu
          *
          * - `link linkchecker image imagetools table spellchecker configurepermanentpen`
          *
@@ -181,7 +180,6 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
         // Cleanup / Output
         allow_conditional_comments: true,
-        convert_fonts_to_spans: true,
         forced_root_block: 'p',
         //forced_root_block_attrs: {},
         // remove_trailing_brs: true

@@ -340,6 +340,7 @@ Charcoal.Admin = (function () {
         base_url:      null,
         admin_url:     null,
         admin_path:    null,
+        versions:      {},
     };
 
     /**
@@ -363,6 +364,20 @@ Charcoal.Admin = (function () {
         }
 
         return options.debug || false;
+    };
+
+    /**
+     * Returns the version of the project's asset.
+     *
+     * @param  {string} [asset] - The asset to lookup.
+     * @return {?string} - The asset version.
+     */
+    Admin.version = function (asset) {
+        if (!asset) {
+            asset = 'admin';
+        }
+
+        return options.versions[asset] || null;
     };
 
     /**
@@ -12062,6 +12077,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.set_properties = function (opts)
 
     var default_opts = {
         language: locale,
+        cache_suffix: Charcoal.Admin.version('tinymce'),
 
         /**
          * Plugins
@@ -12293,6 +12309,11 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.create_tinymce = function () {
 
     if (typeof window.tinyMCE !== 'object') {
         var url = this.base_url() + '/tinymce.min.js';
+        var ver = Charcoal.Admin.version('tinymce');
+        if (ver) {
+            url += '?v=' + ver;
+        }
+
         Charcoal.Admin.loadScript(url, this.create_tinymce.bind(this));
 
         return this;

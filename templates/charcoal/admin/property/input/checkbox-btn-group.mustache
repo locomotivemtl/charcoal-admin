@@ -12,7 +12,7 @@
             {{> charcoal/admin/property/control/choice }}
             <span class="u-vertical-center">
                 {{# sprite }}
-                <svg fill="currentColor" viewBox="0 0 25 25" height=25 role='img'><use xlink:href='{{# withBaseUrl }}assets/admin/images/svgs.svg#{{ sprite }}{{/ withBaseUrl }}'></use></svg>
+                <svg fill="currentColor" viewBox="0 0 25 25" height=25 role='img'><use xlink:href='{{# withBaseUrl }}assets/admin/images/svgs.svg?v={{ assetsVersions.admin }}#{{ sprite }}{{/ withBaseUrl }}'></use></svg>
                 <span>&nbsp;</span>
                 {{/ sprite }}
                 <span>{{& label }}</span>

@@ -57,6 +57,26 @@ class AdminTemplate extends AbstractTemplate implements
     use SecurityTrait;
     use TranslatorAwareTrait;
 
+    /**
+     * Charcoal's static assets versions.
+     *
+     * @var array<string, string>
+     */
+    const ASSETS_VERSIONS = [
+        'admin'            => '0.28.0-20220106',
+        'bootstrap-select' => '1.13.18-20220106',
+        'echarts'          => '5.2.2-20220106',
+        'elfinder'         => '2.1.60-20220106',
+        'jsoneditor'       => '9.6.0-20220106',
+        'jquery'           => '3.6.0-20220106',
+        'tinymce'          => '5.10.2-20220106',
+    ];
+
+    /**
+     * Google reCAPTCHA JS API URI.
+     *
+     * @var string
+     */
     const GOOGLE_RECAPTCHA_CLIENT_URL = 'https://www.google.com/recaptcha/api.js';
 
     /**
@@ -222,6 +242,27 @@ class AdminTemplate extends AbstractTemplate implements
             // Navigation Menusa
             'main_menu_item', 'secondary_menu_item', 'system_menu_item',
         ];
+    }
+
+    /**
+     * Retrieve the assets versions for cache busting.
+     *
+     * @return array<string, string>
+     */
+    public function getAssetsVersions()
+    {
+        return self::ASSETS_VERSIONS;
+    }
+
+    /**
+     * Retrieve the assets version(s) for cache busting.
+     *
+     * @param  string $asset The asset to retrieve.
+     * @return string|null
+     */
+    public function getAssetsVersion($asset)
+    {
+        return self::ASSETS_VERSIONS[$asset] ?? null;
     }
 
     /**
@@ -1004,7 +1045,7 @@ class AdminTemplate extends AbstractTemplate implements
      */
     private function parseMainMenuItem(array $menuItem, $menuIdent = null, $currentIdent = null)
     {
-        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg#icon-';
+        $svgUri = $this->baseUrl().'assets/admin/images/svgs.svg?v='.$this->getAssetsVersion('admin').'#icon-';
 
         if (isset($menuItem['ident'])) {
             $menuIdent = $menuItem['ident'];
@@ -1167,6 +1208,7 @@ class AdminTemplate extends AbstractTemplate implements
     {
         return [
             'debug'      => $this->debug(),
+            'versions'   => $this->getAssetsVersions(),
             'base_url'   => $this->baseUrl(),
             'admin_url'  => $this->adminUrl(),
             'admin_path' => $this->adminConfig('basePath'),

@@ -35,6 +35,7 @@ Charcoal.Admin = (function () {
         base_url:      null,
         admin_url:     null,
         admin_path:    null,
+        versions:      {},
     };
 
     /**
@@ -58,6 +59,20 @@ Charcoal.Admin = (function () {
         }
 
         return options.debug || false;
+    };
+
+    /**
+     * Returns the version of the project's asset.
+     *
+     * @param  {string} [asset] - The asset to lookup.
+     * @return {?string} - The asset version.
+     */
+    Admin.version = function (asset) {
+        if (!asset) {
+            asset = 'admin';
+        }
+
+        return options.versions[asset] || null;
     };
 
     /**

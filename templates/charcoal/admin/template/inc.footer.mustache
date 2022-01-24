@@ -22,11 +22,11 @@
         {{> charcoal/admin/l10n/bootstrap-dialog.js }}
     </script>
 
-    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.vendors{{^ debug }}.min{{/ debug }}.js"></script>
+    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.vendors{{^ debug }}.min{{/ debug }}.js?v={{ assetsVersions.admin }}"></script>
 
     {{& jsRequirements }}
 
-    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin{{^ debug }}.min{{/ debug }}.js"></script>
+    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin{{^ debug }}.min{{/ debug }}.js?v={{ assetsVersions.admin }}"></script>
 
     <script>
         Charcoal.Admin.set_data({{& adminDataForJsAsJson }});

@@ -9,7 +9,8 @@
 
 (function () {
     'use strict';
-    var jqver = '3.4.1',    // jQuery
+    var elver = '2.1.60',   // elFinder version
+        jqver = '3.4.1',    // jQuery version
         uiver = '1.12.1',   // jQuery UI version
         cdnjs = 'https://cdnjs.cloudflare.com/ajax/libs',
 
@@ -197,7 +198,13 @@
 
     // Configure RequireJS (REQUIRED)
     require.config({
-        // baseUrl: './js',
+        urlArgs: function (id, url) {
+            if (url.indexOf('/elfinder/') !== -1) {
+                return (url.indexOf('?') === -1 ? '?' : '&') + 'v=' + elver;
+            }
+
+            return '';
+        },
         paths: {
             'jquery':                cdnjs + '/jquery/' + (ie8 ? '1.12.4' : jqver) + '/jquery.min',
             'jquery-ui':             cdnjs + '/jqueryui/' + uiver + '/jquery-ui.min',

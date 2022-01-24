@@ -12,19 +12,19 @@
             <div id="{{ inputId }}_tablist" class="nav btn-group-vertical btn-group-toggle flex-nowrap h-100" role="tablist" aria-label="{{# _t }}Audio Actions{{/ _t }}" aria-orientation="vertical">
                 {{# textEnabled }}
                     <button id="{{ inputId }}_text_tab" type="button" data-pane="text" data-toggle="tab" data-target="#{{ inputId }}_text_panel" role="tab" aria-controls="{{ inputId }}_text_panel" aria-selected="true" class="o-toolbox_button btn btn-outline-secondary active">
-                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-text"></use></svg>
+                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg?v={{ assetsVersions.admin }}#icon-text"></use></svg>
                         <span class="sr-only">{{# _t }}Enter text here{{/ _t }}</span>
                     </button>
                 {{/ textEnabled }}
                 {{# captureEnabled }}
                     <button id="{{ inputId }}_capture_tab" type="button" data-pane="capture" data-toggle="tab" data-target="#{{ inputId }}_capture_panel" role="tab" aria-controls="{{ inputId }}_capture_panel" aria-selected="false" class="o-toolbox_button btn btn-outline-secondary">
-                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-microphone"></use></svg>
+                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg?v={{ assetsVersions.admin }}#icon-microphone"></use></svg>
                         <span class="sr-only">{{# _t }}Record A Message{{/ _t }}</span>
                     </button>
                 {{/ captureEnabled }}
                 {{# uploadEnabled }}
                     <button id="{{ inputId }}_upload_tab" type="button" data-pane="upload" data-toggle="tab" data-target="#{{ inputId }}_upload_panel" role="tab" aria-controls="{{ inputId }}_upload_panel" aria-selected="false" class="o-toolbox_button btn btn-outline-secondary">
-                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg#icon-file"></use></svg>
+                        <svg class="o-toolbox_icon" role="img"><use xlink:href="{{ baseUrl }}assets/admin/images/svgs.svg?v={{ assetsVersions.admin }}#icon-file"></use></svg>
                         <span class="sr-only">{{# _t }}Upload Audio File{{/ _t }}</span>
                     </button>
                 {{/ uploadEnabled }}

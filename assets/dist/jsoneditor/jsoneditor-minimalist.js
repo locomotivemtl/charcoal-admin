@@ -21,11 +21,11 @@
  * License for the specific language governing permissions and limitations under
  * the License.
  *
- * Copyright (c) 2011-2021 Jos de Jong, http://jsoneditoronline.org
+ * Copyright (c) 2011-2022 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.5.11
- * @date    2021-12-29
+ * @version 9.6.0
+ * @date    2022-01-13
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -9467,9 +9467,14 @@ var Node = /*#__PURE__*/function () {
         this.editable.value = this.editor.options.mode !== 'view';
 
         if ((this.editor.options.mode === 'tree' || this.editor.options.mode === 'form') && typeof this.editor.options.onEditable === 'function') {
+          var getValue = this.getValue.bind(this);
           var editable = this.editor.options.onEditable({
             field: this.field,
-            value: this.value,
+
+            get value() {
+              return getValue();
+            },
+
             path: this.getPath()
           });
 
@@ -10410,10 +10415,15 @@ var Node = /*#__PURE__*/function () {
     value: function _updateCssClassName() {
       if (this.dom.field && this.editor && this.editor.options && typeof this.editor.options.onClassName === 'function' && this.dom.tree) {
         (0,util.removeAllClassNames)(this.dom.tree);
+        var getValue = this.getValue.bind(this);
         var addClasses = this.editor.options.onClassName({
           path: this.getPath(),
           field: this.field,
-          value: this.value
+
+          get value() {
+            return getValue();
+          }
+
         }) || '';
         (0,util.addClassName)(this.dom.tree, 'jsoneditor-values ' + addClasses);
       }
@@ -13826,10 +13836,16 @@ var Node = /*#__PURE__*/function () {
       if (this.type === 'object' || this.type === 'array') {
         if (this.editor.options.onNodeName) {
           try {
+            var getValue = this.getValue.bind(this);
             nodeName = this.editor.options.onNodeName({
               path: this.getPath(),
               size: count,
-              type: this.type
+              type: this.type,
+
+              get value() {
+                return getValue();
+              }
+
             });
           } catch (err) {
             console.error('Error in onNodeName callback: ', err);

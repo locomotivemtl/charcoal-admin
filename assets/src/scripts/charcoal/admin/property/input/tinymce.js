@@ -10,6 +10,15 @@
  * @param  {Object}  opts Options for input property
  */
 
+// This prevents bootstrap dialog from blocking focusin with tinymce's dialogs
+// Such as link and image edition dialogs
+// Stolen here: https://github.com/tinymce/tinymce/issues/5169
+$(document).on('focusin', function (e) {
+    if ($(e.target).closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root').length) {
+        e.stopImmediatePropagation();
+    }
+});
+
 Charcoal.Admin.Property_Input_Tinymce = function (opts) {
     Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/tinymce';

@@ -82,6 +82,10 @@ class UpdateAction extends AbstractSaveAction
     public function filterUpdateData(array $data)
     {
         unset(
+            $data['widget_id'],
+            $data['widgetId'],
+            $data['next_url'],
+            $data['nextUrl'],
             $data['obj_type'],
             $data['objType'],
             $data['obj_id'],

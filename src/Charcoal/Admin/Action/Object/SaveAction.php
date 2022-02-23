@@ -89,6 +89,10 @@ class SaveAction extends AbstractSaveAction
     public function filterSaveData(array $data)
     {
         unset(
+            $data['widget_id'],
+            $data['widgetId'],
+            $data['next_url'],
+            $data['nextUrl'],
             $data['obj_type'],
             $data['objType']
         );

@@ -51,7 +51,8 @@ abstract class AbstractSelectableInput extends AbstractPropertyInput implements
      */
     public function choices()
     {
-        $choices = $this->p()->choices();
+        $choices = method_exists($this->p(), 'choices') ? $this->p()->choices() : $this->p()['choices'];
+
         foreach ($choices as $ident => $choice) {
             $choice = $this->parseChoice($ident, $choice);
 

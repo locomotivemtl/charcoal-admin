@@ -84,12 +84,12 @@ class SaveAction extends AbstractSaveAction
     /**
      * Set the dataset used to create the target model.
      *
-     * @param  array $saveData The save data.
+     * @param  array $data The save data.
      * @return SaveAction Chainable
      */
-    public function setSaveData(array $saveData)
+    public function setSaveData(array $data)
     {
-        $this->saveData = $saveData;
+        $this->saveData = $data;
 
         return $this;
     }
@@ -99,7 +99,7 @@ class SaveAction extends AbstractSaveAction
      *
      * @return array
      */
-    public function saveData()
+    public function getSaveData()
     {
         return $this->saveData;
     }
@@ -166,7 +166,7 @@ class SaveAction extends AbstractSaveAction
 
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
-            $obj->setFlatData($this->saveData());
+            $obj->setFlatData($this->getSaveData());
 
             $valid = $this->validate($obj);
             if (!$valid) {
@@ -183,7 +183,7 @@ class SaveAction extends AbstractSaveAction
             }
 
             if ($obj instanceof AuthorableInterface) {
-                $authorIdent = $this->authorIdent();
+                $authorIdent = $this->getAuthorIdent();
                 if (!$obj['lastModifiedBy']) {
                     $obj->setLastModifiedBy($authorIdent);
                 }

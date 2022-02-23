@@ -33,7 +33,7 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     /**
      * @return string
      */
-    protected function authorIdent()
+    protected function getAuthorIdent()
     {
         $user = $this->getAuthenticatedUser();
         return (string)$user->id();

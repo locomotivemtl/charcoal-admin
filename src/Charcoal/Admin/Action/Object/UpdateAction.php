@@ -77,12 +77,12 @@ class UpdateAction extends AbstractSaveAction
     /**
      * Set the dataset used to update the target model.
      *
-     * @param  array $updateData The update data.
+     * @param  array $data The update data.
      * @return UpdateAction Chainable
      */
-    public function setUpdateData(array $updateData)
+    public function setUpdateData(array $data)
     {
-        $this->updateData = $updateData;
+        $this->updateData = $data;
 
         return $this;
     }
@@ -92,7 +92,7 @@ class UpdateAction extends AbstractSaveAction
      *
      * @return array
      */
-    public function updateData()
+    public function getUpdateData()
     {
         return $this->updateData;
     }
@@ -145,7 +145,7 @@ class UpdateAction extends AbstractSaveAction
 
             // Load or reload object (From `ObjectContainerTrait`)
             $obj = $this->loadObj();
-            $obj->mergeData($this->updateData());
+            $obj->mergeData($this->getUpdateData());
 
             $valid = $this->validate($obj);
             if (!$valid) {
@@ -162,7 +162,7 @@ class UpdateAction extends AbstractSaveAction
             }
 
             if ($obj instanceof AuthorableInterface) {
-                $obj->setLastModifiedBy($this->authorIdent());
+                $obj->setLastModifiedBy($this->getAuthorIdent());
             }
 
             $result = $obj->update();

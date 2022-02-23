@@ -54,8 +54,7 @@ class UpdateAction extends AbstractSaveAction
     {
         parent::setDataFromRequest($request);
 
-        $data = $request->getParams();
-        unset($data['obj_type'], $data['objType'], $data['obj_id'], $data['objId']);
+        $data = $this->filterUpdateData($request->getParams());
 
         $this->setUpdateData($data);
 
@@ -72,6 +71,24 @@ class UpdateAction extends AbstractSaveAction
         return array_merge([
             'obj_type', 'obj_id'
         ], parent::validDataFromRequest());
+    }
+
+    /**
+     * Filter the dataset used to update the target model.
+     *
+     * @param  array $data The update data to filter.
+     * @return array
+     */
+    public function filterUpdateData(array $data)
+    {
+        unset(
+            $data['obj_type'],
+            $data['objType'],
+            $data['obj_id'],
+            $data['objId']
+        );
+
+        return $data;
     }
 
     /**

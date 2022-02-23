@@ -61,8 +61,7 @@ class SaveAction extends AbstractSaveAction
     {
         parent::setDataFromRequest($request);
 
-        $data = $request->getParams();
-        unset($data['obj_type'], $data['objType']);
+        $data = $this->filterSaveData($request->getParams());
 
         $this->setSaveData($data);
 
@@ -79,6 +78,22 @@ class SaveAction extends AbstractSaveAction
         return array_merge([
             'obj_type'
         ], parent::validDataFromRequest());
+    }
+
+    /**
+     * Filter the dataset used to create the target model.
+     *
+     * @param  array $data The save data to filter.
+     * @return array
+     */
+    public function filterSaveData(array $data)
+    {
+        unset(
+            $data['obj_type'],
+            $data['objType']
+        );
+
+        return $data;
     }
 
     /**

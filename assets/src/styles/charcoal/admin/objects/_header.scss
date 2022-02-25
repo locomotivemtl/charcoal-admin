@@ -28,4 +28,10 @@
     &.-small {
         height: $unit;
     }
+
+    &.-small\@to-large {
+        @media (max-width: $to-large) {
+            height: $unit;
+        }
+    }
 }

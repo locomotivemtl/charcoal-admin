@@ -7,7 +7,11 @@ Display the "media" dashboard, which consists of elFinder in quasi-fullscreen.
 {{> charcoal/admin/template/inc.header }}
 
 <main class="c-page-container o-flex_main">
-    {{> charcoal/admin/template/inc.page-header }}
+    <header class="c-page-header o-header -small@to-large">
+        <div class="o-container">
+            {{> charcoal/admin/template/inc.page-header-inner }}
+        </div>
+    </header>
     <section class="o-flex">
         <script language="javascript" type="text/javascript">
             function resizeIframe(obj) {

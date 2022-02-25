@@ -18,6 +18,9 @@ use Mustache_LambdaHelper as LambdaHelper;
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
 
+// From 'charcoal-translator'
+use Charcoal\Translator\Translation;
+
 // From 'charcoal-property'
 use Charcoal\Property\FileProperty;
 
@@ -77,7 +80,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Custom localization messages.
      *
-     * @var {\Charcoal\Translator\Translation|string|null}[]|null
+     * @var array<string, (Translation|string|null)>|null
      */
     private $localizations;
 
@@ -154,7 +157,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the title of the page.
      *
-     * @return \Charcoal\Translator\Translation
+     * @return Translation
      */
     public function title()
     {
@@ -248,7 +251,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the localizations.
      *
-     * @return {\Charcoal\Translator\Translation|string}[]|null
+     * @return array<string, (Translation|string|null)>
      */
     public function localizations()
     {
@@ -264,7 +267,7 @@ class ElfinderTemplate extends AdminTemplate
      *
      * @param  string $ident The message ID to lookup.
      * @throws InvalidArgumentException If the message ID is not a string.
-     * @return \Charcoal\Translator\Translation|string|null
+     * @return Translation|string|null
      */
     public function localization($ident)
     {
@@ -285,15 +288,19 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the custom localizations for elFinder.
      *
-     * @return array
+     * @return array<string, array<string, (string|null)>>
      */
     public function elfinderLocalizations()
     {
         $i18n = [];
 
         foreach ($this->localizations() as $id => $translations) {
-            foreach ($translations->data() as $language => $message) {
-                $i18n[$language][$id] = $message;
+            if ($translations instanceof Translation) {
+                foreach ($translations->data() as $language => $message) {
+                    $i18n[$language][$id] = $message;
+                }
+            } else {
+                $i18n[$language][$id] = $translations;
             }
         }
 
@@ -549,7 +556,7 @@ class ElfinderTemplate extends AdminTemplate
     /**
      * Retrieve the default custom localizations.
      *
-     * @return array
+     * @return array<string, (Translation|string|null)>
      */
     protected function defaultLocalizations()
     {

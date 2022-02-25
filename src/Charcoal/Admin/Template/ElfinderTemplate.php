@@ -162,7 +162,7 @@ class ElfinderTemplate extends AdminTemplate
     public function title()
     {
         if ($this->title === null) {
-            $this->title = $this->translator()->translation('Media Manager');
+            $this->title = $this->translator()->translation('filesystem.library.media');
         }
 
         return $this->title;

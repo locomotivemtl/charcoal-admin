@@ -449,7 +449,7 @@ class FileInput extends AbstractPropertyInput
      */
     protected function defaultDialogTitle()
     {
-        return $this->translator()->translation('Media Library');
+        return $this->translator()->translation('filesystem.library.media');
     }
 
     /**

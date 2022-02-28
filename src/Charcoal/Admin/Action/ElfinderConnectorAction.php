@@ -105,13 +105,6 @@ class ElfinderConnectorAction extends AdminAction
     protected $formProperty;
 
     /**
-     * Store the factory instance for the current class.
-     *
-     * @var FactoryInterface
-     */
-    private $propertyFactory;
-
-    /**
      * The related object type.
      *
      * @var string
@@ -749,7 +742,6 @@ class ElfinderConnectorAction extends AdminAction
         $this->publicPath = $container['config']['public_path'];
 
         $this->setElfinderConfig($container['elfinder/config']);
-        $this->setPropertyFactory($container['property/factory']);
         $this->setCallableResolver($container['callableResolver']);
 
         /** @see \Charcoal\App\ServiceProvide\FilesystemServiceProvider */
@@ -878,35 +870,5 @@ class ElfinderConnectorAction extends AdminAction
         }
 
         return $this->elfinderConfig;
-    }
-
-    /**
-     * Set a property factory.
-     *
-     * @param FactoryInterface $factory The property factory,
-     *                                  to createable property values.
-     * @return void
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-    }
-
-    /**
-     * Retrieve the property factory.
-     *
-     * @throws RuntimeException If the property factory was not previously set.
-     * @return FactoryInterface
-     */
-    public function propertyFactory()
-    {
-        if (!isset($this->propertyFactory)) {
-            throw new RuntimeException(sprintf(
-                'Property Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->propertyFactory;
     }
 }

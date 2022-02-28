@@ -12011,6 +12011,7 @@ Charcoal.Admin.Property_Input_Text.prototype.destroy = function () {
 
 // This prevents bootstrap dialog from blocking focusin with tinymce's dialogs
 // Such as link and image edition dialogs
+// Stolen here: https://github.com/tinymce/tinymce/issues/5169
 $(document).on('focusin', function (e) {
     if ($(e.target).closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root').length) {
         e.stopImmediatePropagation();

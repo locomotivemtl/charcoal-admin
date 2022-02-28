@@ -541,6 +541,11 @@
   padding: 4px;
 }
 
+.jsoneditor-modal textarea,
+.jsoneditor-modal #query {
+  border-radius: unset;
+}
+
 .jsoneditor-modal,
 .jsoneditor-modal table td,
 .jsoneditor-modal table th,
@@ -776,6 +781,10 @@ div.jsoneditor-tree div.jsoneditor-color {
   margin: 4px;
   border: 1px solid #808080;
   cursor: pointer;
+}
+
+div.jsoneditor-tree div.jsoneditor-color.jsoneditor-color-readonly {
+  cursor: inherit;
 }
 
 div.jsoneditor-tree div.jsoneditor-date {

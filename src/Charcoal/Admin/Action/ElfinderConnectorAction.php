@@ -551,14 +551,20 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
-     * Trim a file name.
+     * Sanitizes a file name on `upload.presave`.
+     *
+     * Based on {@see \elFinderPluginSanitizer::onUpLoadPreSave()}.
+     *
+     * Expected to be used as a callback on elFinder's connector `bind` setting.
+     *
+     * @todo Move this method to a dedicated plugin class.
      *
      * @param  string $path     The target path.
      * @param  string $name     The target name.
      * @param  string $src      The temporary file name.
      * @param  object $elfinder The elFinder instance.
      * @param  object $volume   The current volume instance.
-     * @return true
+     * @return void|bool|array
      */
     public function sanitizeOnUploadPreSave(&$path, &$name, $src, $elfinder, $volume)
     {
@@ -566,24 +572,50 @@ class ElfinderConnectorAction extends AdminAction
         unset($path, $src, $elfinder, $volume);
 
         if (isset($this->elfinderOptions['plugin']['Sanitizer'])) {
-            $opts = $this->elfinderOptions['plugin']['Sanitizer'];
+            $options = $this->elfinderOptions['plugin']['Sanitizer'];
 
-            if (isset($opts['enable']) && $opts['enable']) {
-                $mask = (is_array($opts['replace']) ? implode($opts['replace']) : $opts['replace']);
-                $ext = '.'.pathinfo($name, PATHINFO_EXTENSION);
-
-                // Strip leading and trailing dashes or underscores
-                $name = trim(str_replace($ext, '', $name), $mask);
-
-                // Squeeze multiple delimiters and whitespace with a single separator
-                $name = preg_replace('!['.preg_quote($mask, '!').'\.\s]{2,}!', $opts['replace'], $name);
-
-                // Reassemble the file name
-                $name .= $ext;
+            if (isset($options['enable']) && $options['enable']) {
+                $name = $this->sanitizeFileName($name, $options);
+                return true;
             }
         }
 
-        return true;
+        return false;
+    }
+
+    /**
+     * Sanitize a file name.
+     *
+     * Trims whitespace and squeezes delimeter.
+     *
+     * @param  string $name    The file name to sanitize.
+     * @param  array  $options The elFinder Sanitizer plugin options.
+     * @return string The sanitized filename.
+     */
+    protected function sanitizeFileName(string $name, array $options): string
+    {
+        if (is_array($options['replace'])) {
+            $mask = implode($options['replace']);
+        } else {
+            $mask = $options['replace'];
+        }
+
+        $ext = '.'.pathinfo($name, PATHINFO_EXTENSION);
+
+        // Strip leading and trailing dashes or underscores
+        $name = trim(str_replace($ext, '', $name), $mask);
+
+        // Squeeze multiple delimiters and whitespace with a single separator
+        $name = preg_replace(
+            '!['.preg_quote($mask, '!').'\.\s]{2,}!',
+            $options['replace'],
+            $name
+        );
+
+        // Reassemble the file name
+        $name .= $ext;
+
+        return $name;
     }
 
     /**

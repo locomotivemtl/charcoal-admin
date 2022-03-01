@@ -245,6 +245,8 @@
 "filesystem.volume.uploads";"Espace"
 "filesystem.volume.public";"Publique"
 "filesystem.volume.private";"Privé"
+"Public";"Publique"
+"Private";"Privé"
 "Support";"Support"
 "Database table created for ""{{ objType }}"".";"Table de base de données créée pour ""{{ objType }}""."
 "Collection: {{ objType }}";"Collection : {{ objType }}"

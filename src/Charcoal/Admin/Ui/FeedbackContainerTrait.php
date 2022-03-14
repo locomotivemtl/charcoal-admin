@@ -18,6 +18,17 @@ trait FeedbackContainerTrait
     protected $feedbacks = [];
 
     /**
+     * Remove all feedback from collection.
+     *
+     * @return self
+     */
+    public function clearFeedback()
+    {
+        $this->feedbacks = [];
+        return $this;
+    }
+
+    /**
      * Determine if there's feedback.
      *
      * @return boolean
@@ -153,17 +164,6 @@ trait FeedbackContainerTrait
     protected function generateFeedbackEntryId()
     {
         return uniqid();
-    }
-
-    /**
-     * Remove all feedback from collection.
-     *
-     * @return self
-     */
-    public function clearFeedback()
-    {
-        $this->feedbacks = [];
-        return $this;
     }
 
     /**

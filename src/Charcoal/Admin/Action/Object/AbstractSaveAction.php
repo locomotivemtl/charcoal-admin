@@ -11,6 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 use Charcoal\Validator\ValidatableInterface;
+use Charcoal\Validator\ValidatorResult;
 
 // From 'charcoal-user'
 use Charcoal\User\Authenticator;
@@ -99,7 +100,66 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
             return $this;
         }
 
-        return $this->addFeedbackFromValidatable($obj, $filters);
+        $validator = $obj->validator();
+
+        $levels = $this->getSupportedValidatorLevelsForFeedback();
+
+        if (is_string($filters) && in_array($filters, $levels)) {
+            $results = call_user_func([ $validator, $filters.'Results' ]);
+            foreach ($results as $result) {
+                $this->addFeedbackFromModelValidatorResult($result, $obj);
+            }
+
+            return $this;
+        }
+
+        if (!is_array($filters) && $filters !== null) {
+            throw new InvalidArgumentException(
+                'Filters must be an array of validation levels or NULL'
+            );
+        }
+
+        $validation = $validator->results();
+        foreach ($validation as $level => $results) {
+            if ($filters === null || in_array($level, $filters)) {
+                foreach ($results as $result) {
+                    $this->addFeedbackFromModelValidatorResult($result, $obj);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add feedback from a model validator result.
+     *
+     * @param  ValidatorResult $result The validation result.
+     * @param  ModelInterface  $obj    The related object.
+     * @return string The unique ID assigned to the feedback.
+     */
+    public function addFeedbackFromModelValidatorResult(ValidatorResult $result, ModelInterface $obj)
+    {
+        $resultKey = $result->ident();
+
+        if (is_string($resultKey)) {
+            $parts = explode('.', $resultKey);
+            $prop  = reset($parts);
+            if (is_string($prop) && $obj->hasProperty($prop)) {
+                $propertyLabel = (string)$obj->property($prop)['label'];
+                $resultMessage = $result->message();
+
+                if (strpos($resultMessage, $propertyLabel) === false) {
+                    $resultMessage = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+                        '{{ errorMessage }}' => $propertyLabel,
+                        '{{ errorThrown }}'  => $resultMessage,
+                    ]);
+                    $result->setMessage($resultMessage);
+                }
+            }
+        }
+
+        return $this->addFeedbackFromValidatorResult($result);
     }
 
     /**

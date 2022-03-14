@@ -131,6 +131,7 @@ Charcoal.Admin.Widget_Search.prototype.parse_search_filters = function (query) {
         props = this.data.properties || [];
         $.each(words, function (i, word) {
             sub_filters = [];
+            word = word.replace(/'/g,'\\\'');
             $.each(props, function (j, prop) {
                 sub_filters.push({
                     property: prop,

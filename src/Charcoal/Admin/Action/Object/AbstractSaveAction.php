@@ -57,6 +57,17 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     }
 
     /**
+     * Determines if object is validatable.
+     *
+     * @param  ModelInterface $obj The object to validate.
+     * @return boolean
+     */
+    public function isValidatable(ModelInterface $obj)
+    {
+        return ($obj instanceof ValidatableInterface);
+    }
+
+    /**
      * Defer object validation.
      *
      * This methos is useful for subclasses.
@@ -66,7 +77,7 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
      */
     public function validate(ModelInterface $obj)
     {
-        if ($obj instanceof ValidatableInterface) {
+        if ($this->isValidatable($obj)) {
             return $obj->validate();
         }
 

@@ -11,7 +11,6 @@ use Psr\Http\Message\ResponseInterface;
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 use Charcoal\Validator\ValidatableInterface;
-use Charcoal\Validator\ValidatorInterface;
 
 // From 'charcoal-user'
 use Charcoal\User\Authenticator;
@@ -85,47 +84,22 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     }
 
     /**
-     * Merge the given object's validation results the response feedback.
+     * Add feedback from an object's validation results.
      *
-     * @param  ModelInterface       $obj     The validated object.
+     * Based on {@see \Charcoal\Admin\Ui\FeedbackContainerTrait::addFeedbackFromValidator()}.
+     *
+     * @param  ModelInterface       $obj     The validatable object.
      * @param  string[]|string|null $filters Filter the levels to merge.
      * @throws InvalidArgumentException If the filters are invalid.
-     * @return SaveAction Chainable
+     * @return self
      */
-    public function addFeedbackFromValidation(ModelInterface $obj, $filters = null)
+    public function addFeedbackFromModel(ModelInterface $obj, $filters = null)
     {
-        if (!($obj instanceof ValidatableInterface)) {
+        if (!$this->isValidatable($obj)) {
             return $this;
         }
 
-        $validator = $obj->validator();
-        $levels    = [ ValidatorInterface::ERROR, ValidatorInterface::WARNING, ValidatorInterface::NOTICE ];
-
-        if (is_string($filters) && in_array($filters, $levels)) {
-            $results = call_user_func([ $validator, $filters.'Results' ]);
-            foreach ($results as $result) {
-                $this->addFeedback($result->level(), $result->message());
-            }
-
-            return $this;
-        }
-
-        if (!is_array($filters) && $filters !== null) {
-            throw new InvalidArgumentException(
-                'Filters must be an array of validation levels or NULL'
-            );
-        }
-
-        $validation = $validator->results();
-        foreach ($validation as $level => $results) {
-            if ($filters === null || in_array($level, $filters)) {
-                foreach ($results as $result) {
-                    $this->addFeedback($result->level(), $result->message());
-                }
-            }
-        }
-
-        return $this;
+        return $this->addFeedbackFromValidatable($obj, $filters);
     }
 
     /**

@@ -195,7 +195,7 @@ class SaveAction extends AbstractSaveAction
                     ]));
                 }
 
-                $this->addFeedbackFromValidation($obj);
+                $this->addFeedbackFromModel($obj);
                 $this->setSuccess(false);
 
                 return $response->withStatus(400);
@@ -221,7 +221,7 @@ class SaveAction extends AbstractSaveAction
                 $this->addFeedback('success', strtr($this->translator()->translate('Created Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
-                $this->addFeedbackFromValidation($obj, [ ModelValidator::NOTICE, ModelValidator::WARNING ]);
+                $this->addFeedbackFromModel($obj, [ ModelValidator::NOTICE, ModelValidator::WARNING ]);
                 $this->setSuccess(true);
 
                 return $response;
@@ -229,7 +229,7 @@ class SaveAction extends AbstractSaveAction
                 $this->setObj(null);
 
                 $this->addFeedback('error', $failMessage);
-                $this->addFeedbackFromValidation($obj);
+                $this->addFeedbackFromModel($obj);
                 $this->setSuccess(false);
 
                 return $response->withStatus(500);

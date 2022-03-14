@@ -2,6 +2,9 @@
 
 namespace Charcoal\Admin\Ui;
 
+use Charcoal\Validator\ValidatableInterface;
+use Charcoal\Validator\ValidatorInterface;
+use Charcoal\Validator\ValidatorResult;
 use InvalidArgumentException;
 use UnexpectedValueException;
 
@@ -105,6 +108,89 @@ trait FeedbackContainerTrait
         $this->feedbacks[] = $entry;
 
         return $entry['id'];
+    }
+
+    /**
+     * Add feedback from an object's validation results.
+     *
+     * @param  ValidatableInterface $obj     The validatable object.
+     * @param  string[]|string|null $filters Filter the levels to merge.
+     * @throws InvalidArgumentException If the filters are invalid.
+     * @return self
+     */
+    public function addFeedbackFromValidatable(ValidatableInterface $obj, $filters = null)
+    {
+        return $this->addFeedbackFromValidator($obj->validator(), $filters);
+    }
+
+    /**
+     * Add feedback from a validator.
+     *
+     * @param  ValidatorInterface   $validator The validator.
+     * @param  string[]|string|null $filters   Filter the levels to merge.
+     * @throws InvalidArgumentException If the filters are invalid.
+     * @return self
+     */
+    public function addFeedbackFromValidator(ValidatorInterface $validator, $filters = null)
+    {
+        $levels = $this->getSupportedValidatorLevelsForFeedback();
+
+        if (is_string($filters) && in_array($filters, $levels)) {
+            $results = call_user_func([ $validator, $filters.'Results' ]);
+            foreach ($results as $result) {
+                $this->addFeedbackFromValidatorResult($result);
+            }
+
+            return $this;
+        }
+
+        if (!is_array($filters) && $filters !== null) {
+            throw new InvalidArgumentException(
+                'Filters must be an array of validation levels or NULL'
+            );
+        }
+
+        $validation = $validator->results();
+        foreach ($validation as $level => $results) {
+            if ($filters === null || in_array($level, $filters)) {
+                foreach ($results as $result) {
+                    $this->addFeedbackFromValidatorResult($result);
+                }
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * Add feedback from a validator result.
+     *
+     * @param  ValidatorResult $result The validation result.
+     * @return string The unique ID assigned to the feedback.
+     */
+    public function addFeedbackFromValidatorResult(ValidatorResult $result)
+    {
+        $entry = [
+            'key'     => $result->ident(),
+            'level'   => $result->level(),
+            'message' => $result->message(),
+        ];
+
+        return $this->addFeedback($entry);
+    }
+
+    /**
+     * Retrieves the support validator levels for feedback.
+     *
+     * @return string[]
+     */
+    public function getSupportedValidatorLevelsForFeedback()
+    {
+        return [
+            ValidatorInterface::ERROR,
+            ValidatorInterface::WARNING,
+            ValidatorInterface::NOTICE,
+        ];
     }
 
     /**

@@ -24,8 +24,8 @@
  * Copyright (c) 2011-2022 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.6.0
- * @date    2022-01-13
+ * @version 9.7.2
+ * @date    2022-02-09
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -11327,7 +11327,7 @@ var Node = /*#__PURE__*/function () {
         } // show color picker when value is a color
 
 
-        if (this.editable.value && this.editor.options.colorPicker && typeof value === 'string' && (0,util.isValidColor)(value)) {
+        if (this.editor.options.colorPicker && typeof value === 'string' && (0,util.isValidColor)(value)) {
           if (!this.dom.color) {
             this.dom.color = document.createElement('div');
             this.dom.color.className = 'jsoneditor-color';
@@ -11339,6 +11339,13 @@ var Node = /*#__PURE__*/function () {
 
 
           (0,util.addClassName)(this.dom.value, 'jsoneditor-color-value');
+
+          if (!this.editable.value) {
+            (0,util.addClassName)(this.dom.color, 'jsoneditor-color-readonly');
+          } else {
+            (0,util.removeClassName)(this.dom.color, 'jsoneditor-color-readonly');
+          }
+
           this.dom.color.style.backgroundColor = value;
         } else {
           // cleanup color picker when displayed
@@ -12126,7 +12133,7 @@ var Node = /*#__PURE__*/function () {
         }
       }
 
-      if (type === 'click' && (event.target === node.dom.tdColor || event.target === node.dom.color)) {
+      if (type === 'click' && (event.target === node.dom.tdColor || event.target === node.dom.color) && this.editable.value) {
         this._showColorPicker();
       } // swap the value of a boolean when the checkbox displayed left is clicked
 
@@ -18976,6 +18983,18 @@ module.exports = function naturalSort (a, b) {
   var TYPE_NULL = 7;
   var TYPE_ARRAY_NUMBER = 8;
   var TYPE_ARRAY_STRING = 9;
+  var TYPE_NAME_TABLE = {
+    0: 'number',
+    1: 'any',
+    2: 'string',
+    3: 'array',
+    4: 'object',
+    5: 'boolean',
+    6: 'expression',
+    7: 'null',
+    8: 'Array<number>',
+    9: 'Array<string>'
+  };
 
   var TOK_EOF = "EOF";
   var TOK_UNQUOTEDIDENTIFIER = "UnquotedIdentifier";
@@ -19387,10 +19406,8 @@ module.exports = function naturalSort (a, b) {
             var node = {type: "Field", name: token.value};
             if (this._lookahead(0) === TOK_LPAREN) {
                 throw new Error("Quoted identifier not allowed for function names.");
-            } else {
-                return node;
             }
-            break;
+            return node;
           case TOK_NOT:
             right = this.expression(bindingPower.Not);
             return {type: "NotExpression", children: [right]};
@@ -19424,10 +19441,8 @@ module.exports = function naturalSort (a, b) {
                 right = this._parseProjectionRHS(bindingPower.Star);
                 return {type: "Projection",
                         children: [{type: "Identity"}, right]};
-            } else {
-                return this._parseMultiselectList();
             }
-            break;
+            return this._parseMultiselectList();
           case TOK_CURRENT:
             return {type: TOK_CURRENT};
           case TOK_EXPREF:
@@ -19459,13 +19474,11 @@ module.exports = function naturalSort (a, b) {
             if (this._lookahead(0) !== TOK_STAR) {
                 right = this._parseDotRHS(rbp);
                 return {type: "Subexpression", children: [left, right]};
-            } else {
-                // Creating a projection.
-                this._advance();
-                right = this._parseProjectionRHS(rbp);
-                return {type: "ValueProjection", children: [left, right]};
             }
-            break;
+            // Creating a projection.
+            this._advance();
+            right = this._parseProjectionRHS(rbp);
+            return {type: "ValueProjection", children: [left, right]};
           case TOK_PIPE:
             right = this.expression(bindingPower.Pipe);
             return {type: TOK_PIPE, children: [left, right]};
@@ -19519,13 +19532,11 @@ module.exports = function naturalSort (a, b) {
             if (token.type === TOK_NUMBER || token.type === TOK_COLON) {
                 right = this._parseIndexExpression();
                 return this._projectIfSlice(left, right);
-            } else {
-                this._match(TOK_STAR);
-                this._match(TOK_RBRACKET);
-                right = this._parseProjectionRHS(bindingPower.Star);
-                return {type: "Projection", children: [left, right]};
             }
-            break;
+            this._match(TOK_STAR);
+            this._match(TOK_RBRACKET);
+            right = this._parseProjectionRHS(bindingPower.Star);
+            return {type: "Projection", children: [left, right]};
           default:
             this._errorToken(this._lookaheadToken(0));
         }
@@ -19702,19 +19713,15 @@ module.exports = function naturalSort (a, b) {
           var matched, current, result, first, second, field, left, right, collected, i;
           switch (node.type) {
             case "Field":
-              if (value === null ) {
-                  return null;
-              } else if (isObject(value)) {
+              if (value !== null && isObject(value)) {
                   field = value[node.name];
                   if (field === undefined) {
                       return null;
                   } else {
                       return field;
                   }
-              } else {
-                return null;
               }
-              break;
+              return null;
             case "Subexpression":
               result = this.visit(node.children[0], value);
               for (i = 1; i < node.children.length; i++) {
@@ -20085,11 +20092,16 @@ module.exports = function naturalSort (a, b) {
                 }
             }
             if (!typeMatched) {
+                var expected = currentSpec
+                    .map(function(typeIdentifier) {
+                        return TYPE_NAME_TABLE[typeIdentifier];
+                    })
+                    .join(',');
                 throw new Error("TypeError: " + name + "() " +
                                 "expected argument " + (i + 1) +
-                                " to be type " + currentSpec +
-                                " but received type " + actualType +
-                                " instead.");
+                                " to be type " + expected +
+                                " but received type " +
+                                TYPE_NAME_TABLE[actualType] + " instead.");
             }
         }
     },

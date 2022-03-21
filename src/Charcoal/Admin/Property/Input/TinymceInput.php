@@ -157,7 +157,7 @@ class TinymceInput extends TextareaInput
      */
     protected function defaultDialogTitle()
     {
-        return $this->translator()->translation('Media Library');
+        return $this->translator()->translation('filesystem.library.media');
     }
 
     /**

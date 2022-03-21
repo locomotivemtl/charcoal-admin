@@ -61,8 +61,7 @@ class SaveAction extends AbstractSaveAction
     {
         parent::setDataFromRequest($request);
 
-        $data = $request->getParams();
-        unset($data['obj_type'], $data['objType']);
+        $data = $this->filterSaveData($request->getParams());
 
         $this->setSaveData($data);
 
@@ -82,14 +81,34 @@ class SaveAction extends AbstractSaveAction
     }
 
     /**
+     * Filter the dataset used to create the target model.
+     *
+     * @param  array $data The save data to filter.
+     * @return array
+     */
+    public function filterSaveData(array $data)
+    {
+        unset(
+            $data['widget_id'],
+            $data['widgetId'],
+            $data['next_url'],
+            $data['nextUrl'],
+            $data['obj_type'],
+            $data['objType']
+        );
+
+        return $data;
+    }
+
+    /**
      * Set the dataset used to create the target model.
      *
-     * @param  array $saveData The save data.
+     * @param  array $data The save data.
      * @return SaveAction Chainable
      */
-    public function setSaveData(array $saveData)
+    public function setSaveData(array $data)
     {
-        $this->saveData = $saveData;
+        $this->saveData = $data;
 
         return $this;
     }
@@ -99,7 +118,7 @@ class SaveAction extends AbstractSaveAction
      *
      * @return array
      */
-    public function saveData()
+    public function getSaveData()
     {
         return $this->saveData;
     }
@@ -166,7 +185,7 @@ class SaveAction extends AbstractSaveAction
 
             // Create or load object (From `ObjectContainerTrait`)
             $obj = $this->obj();
-            $obj->setFlatData($this->saveData());
+            $obj->setFlatData($this->getSaveData());
 
             $valid = $this->validate($obj);
             if (!$valid) {
@@ -176,14 +195,14 @@ class SaveAction extends AbstractSaveAction
                     ]));
                 }
 
-                $this->addFeedbackFromValidation($obj);
+                $this->addFeedbackFromModel($obj);
                 $this->setSuccess(false);
 
                 return $response->withStatus(400);
             }
 
             if ($obj instanceof AuthorableInterface) {
-                $authorIdent = $this->authorIdent();
+                $authorIdent = $this->getAuthorIdent();
                 if (!$obj['lastModifiedBy']) {
                     $obj->setLastModifiedBy($authorIdent);
                 }
@@ -202,7 +221,7 @@ class SaveAction extends AbstractSaveAction
                 $this->addFeedback('success', strtr($this->translator()->translate('Created Object: {{ objId }}'), [
                     '{{ objId }}' => $obj->id()
                 ]));
-                $this->addFeedbackFromValidation($obj, [ ModelValidator::NOTICE, ModelValidator::WARNING ]);
+                $this->addFeedbackFromModel($obj, [ ModelValidator::NOTICE, ModelValidator::WARNING ]);
                 $this->setSuccess(true);
 
                 return $response;
@@ -210,7 +229,7 @@ class SaveAction extends AbstractSaveAction
                 $this->setObj(null);
 
                 $this->addFeedback('error', $failMessage);
-                $this->addFeedbackFromValidation($obj);
+                $this->addFeedbackFromModel($obj);
                 $this->setSuccess(false);
 
                 return $response->withStatus(500);

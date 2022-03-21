@@ -5836,6 +5836,7 @@ Charcoal.Admin.Widget_Search.prototype.parse_search_filters = function (query) {
         props = this.data.properties || [];
         $.each(words, function (i, word) {
             sub_filters = [];
+            word = word.replace(/'/g,'\\\'');
             $.each(props, function (j, prop) {
                 sub_filters.push({
                     property: prop,
@@ -12011,6 +12012,7 @@ Charcoal.Admin.Property_Input_Text.prototype.destroy = function () {
 
 // This prevents bootstrap dialog from blocking focusin with tinymce's dialogs
 // Such as link and image edition dialogs
+// Stolen here: https://github.com/tinymce/tinymce/issues/5169
 $(document).on('focusin', function (e) {
     if ($(e.target).closest('.tox-tinymce-aux, .moxman-window, .tam-assetmanager-root').length) {
         e.stopImmediatePropagation();

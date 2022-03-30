@@ -13,6 +13,11 @@ use Charcoal\Admin\Property\AbstractPropertyInput;
 class SwitchInput extends AbstractPropertyInput
 {
     /**
+     * @var string $inputClass
+     */
+    protected $inputClass = 'switch-lg';
+
+    /**
      * Retrieve the control type for the HTML element `<input>`.
      *
      * @return string

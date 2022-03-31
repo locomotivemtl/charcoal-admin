@@ -60,6 +60,7 @@ Charcoal.Admin.Widget_Table.prototype.set_properties = function () {
     this.sortable           = opts.data.sortable           || this.sortable;
     this.template           = opts.data.template           || this.template;
     this.collection_ident   = opts.data.collection_ident   || 'default'; // @todo remove the hardcoded shit
+    this.show_table_header  = (typeof opts.data.show_table_header !== 'undefined') ? opts.data.show_table_header : true;
 
     if (('properties' in opts.data) && Array.isArray(opts.data.properties)) {
         this.properties = opts.data.properties;
@@ -185,6 +186,7 @@ Charcoal.Admin.Widget_Table.prototype.widget_options = function () {
         template:          this.template,
         sortable:          this.sortable,
         collection_ident:  this.collection_ident,
+        show_table_header: this.show_table_header,
         collection_config: {
             properties:         this.properties,
             properties_options: this.properties_options,

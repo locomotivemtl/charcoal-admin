@@ -27,6 +27,9 @@ Charcoal.Admin.Widget_Table = function (opts) {
     this.list_actions = {};
     this.object_actions = {};
 
+    this.items = 0;
+    this.pages = 0;
+
     this.template = this.properties = this.properties_options = undefined;
 
     this.sortable         = false;

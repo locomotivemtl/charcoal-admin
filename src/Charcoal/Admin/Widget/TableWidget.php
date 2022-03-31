@@ -350,6 +350,8 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             'sortable'         => $this->sortable(),
             'list_actions'     => $this->listActions(),
             'object_actions'   => $this->rawObjectActions(),
+            'total_rows'       => $this->numTotal(),
+            'total_pages'      => $this->numPages(),
         ];
     }
 

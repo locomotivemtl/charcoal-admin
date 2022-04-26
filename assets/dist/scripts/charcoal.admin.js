@@ -3148,6 +3148,11 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
                 message: widgetL10n.loadingFailed
             } ]);
         }
+
+        // Callback
+        if (typeof callback === 'function') {
+            callback.call(that, false);
+        }
     };
 
     complete = function () {

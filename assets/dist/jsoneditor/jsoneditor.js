@@ -24,8 +24,8 @@
  * Copyright (c) 2011-2022 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.7.2
- * @date    2022-02-09
+ * @version 9.7.4
+ * @date    2022-03-15
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -817,6 +817,7 @@ var FocusTracker = /*#__PURE__*/function () {
       }
     }.bind(this);
 
+    this._onBlur = this._onEvent.bind(this);
     this.focusFlag = false;
     this.firstEventFlag = true;
     /*
@@ -827,6 +828,7 @@ var FocusTracker = /*#__PURE__*/function () {
     if (this.onFocus || this.onBlur) {
       document.addEventListener('click', this._onClick);
       document.addEventListener('keyup', this._onKeyUp);
+      document.addEventListener('blur', this._onBlur);
     }
   }
   /**
@@ -840,6 +842,7 @@ var FocusTracker = /*#__PURE__*/function () {
     value: function destroy() {
       document.removeEventListener('click', this._onClick);
       document.removeEventListener('keyup', this._onKeyUp);
+      document.removeEventListener('blur', this._onBlur);
 
       this._onEvent({
         target: document.body
@@ -1319,7 +1322,8 @@ JSONEditor.prototype.setSchema = function (schema, schemaRefs) {
       this.validateSchema = ajv.compile(schema); // add schema to the options, so that when switching to an other mode,
       // the set schema is not lost
 
-      this.options.schema = schema; // validate now
+      this.options.schema = schema;
+      this.options.schemaRefs = schemaRefs; // validate now
 
       this.validate();
     }
@@ -4485,10 +4489,10 @@ module.exports = Selectr;
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "qD": function() { return /* binding */ DEFAULT_MODAL_ANCHOR; },
 /* harmony export */   "EX": function() { return /* binding */ SIZE_LARGE; },
 /* harmony export */   "WF": function() { return /* binding */ MAX_PREVIEW_CHARACTERS; },
-/* harmony export */   "oW": function() { return /* binding */ PREVIEW_HISTORY_LIMIT; }
+/* harmony export */   "oW": function() { return /* binding */ PREVIEW_HISTORY_LIMIT; },
+/* harmony export */   "qD": function() { return /* binding */ DEFAULT_MODAL_ANCHOR; }
 /* harmony export */ });
 var DEFAULT_MODAL_ANCHOR = document.body;
 var SIZE_LARGE = 10 * 1024 * 1024; // 10 MB
@@ -4617,9 +4621,9 @@ module.exports = 'data:application/javascript;base64,Im5vIHVzZSBzdHJpY3QiOwohKGZ
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "m0": function() { return /* binding */ setLanguage; },
+/* harmony export */   "Iu": function() { return /* binding */ translate; },
 /* harmony export */   "cC": function() { return /* binding */ setLanguages; },
-/* harmony export */   "Iu": function() { return /* binding */ translate; }
+/* harmony export */   "m0": function() { return /* binding */ setLanguage; }
 /* harmony export */ });
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4987);
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_polyfills__WEBPACK_IMPORTED_MODULE_0__);
@@ -5585,8 +5589,8 @@ function translate(key, data, lang) {
 
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "r": function() { return /* binding */ createQuery; },
-/* harmony export */   "J": function() { return /* binding */ executeQuery; }
+/* harmony export */   "J": function() { return /* binding */ executeQuery; },
+/* harmony export */   "r": function() { return /* binding */ createQuery; }
 /* harmony export */ });
 /* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5156);
 /* harmony import */ var jmespath__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(jmespath__WEBPACK_IMPORTED_MODULE_0__);
@@ -11296,12 +11300,7 @@ var Node = /*#__PURE__*/function () {
             defaultOption.textContent = '--';
             this.dom.select.appendChild(defaultOption); // Iterate all enum values and add them as options
 
-            for (var i = 0; i < this["enum"].length; i++) {
-              var option = document.createElement('option');
-              option.value = this["enum"][i];
-              option.textContent = this["enum"][i];
-              this.dom.select.appendChild(option);
-            }
+            this._updateEnumOptions();
 
             this.dom.tdSelect = document.createElement('td');
             this.dom.tdSelect.className = 'jsoneditor-tree';
@@ -11322,7 +11321,7 @@ var Node = /*#__PURE__*/function () {
             delete this.valueFieldHTML;
           }
         } else {
-          // cleanup select box when displayed
+          // cleanup select box when displayed, and attach the editable div instead
           if (this.dom.tdSelect) {
             this.dom.tdSelect.parentNode.removeChild(this.dom.tdSelect);
             delete this.dom.tdSelect;
@@ -11330,6 +11329,7 @@ var Node = /*#__PURE__*/function () {
             this.dom.tdValue.innerHTML = this.valueFieldHTML;
             this.dom.tdValue.style.visibility = '';
             delete this.valueFieldHTML;
+            this.dom.tdValue.appendChild(this.dom.value);
           }
         } // show color picker when value is a color
 
@@ -11400,6 +11400,23 @@ var Node = /*#__PURE__*/function () {
         (0,util.stripFormatting)(domValue);
 
         this._updateDomDefault();
+      }
+    }
+  }, {
+    key: "_updateEnumOptions",
+    value: function _updateEnumOptions() {
+      if (!this["enum"] || !this.dom.select) {
+        return;
+      } // clear the existing options
+
+
+      this.dom.select.innerHTML = ''; // Iterate all enum values and add them as options
+
+      for (var i = 0; i < this["enum"].length; i++) {
+        var option = document.createElement('option');
+        option.value = this["enum"][i];
+        option.textContent = this["enum"][i];
+        this.dom.select.appendChild(option);
       }
     }
   }, {
@@ -11847,6 +11864,8 @@ var Node = /*#__PURE__*/function () {
         }
 
         this._updateSchema();
+
+        this._updateEnumOptions();
       } // apply value to DOM
 
 
@@ -14284,7 +14303,7 @@ Node._findSchema = function (topLevelSchema, schemaRefs, path) {
               if (segment in currentSchema) {
                 currentSchema = currentSchema[segment];
               } else {
-                throw Error("Unable to resovle reference ".concat(ref));
+                throw Error("Unable to resolve reference ".concat(ref));
               }
             }
           } catch (err) {
@@ -17381,63 +17400,63 @@ exports.O = function () {
 "use strict";
 __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "parse": function() { return /* binding */ parse; },
-/* harmony export */   "tryJsonRepair": function() { return /* binding */ tryJsonRepair; },
-/* harmony export */   "escapeUnicodeChars": function() { return /* binding */ escapeUnicodeChars; },
-/* harmony export */   "validate": function() { return /* binding */ validate; },
-/* harmony export */   "extend": function() { return /* binding */ extend; },
+/* harmony export */   "addClassName": function() { return /* binding */ addClassName; },
+/* harmony export */   "addEventListener": function() { return /* binding */ addEventListener; },
 /* harmony export */   "clear": function() { return /* binding */ clear; },
-/* harmony export */   "getType": function() { return /* binding */ getType; },
-/* harmony export */   "isUrl": function() { return /* binding */ isUrl; },
-/* harmony export */   "isArray": function() { return /* binding */ isArray; },
-/* harmony export */   "getWindow": function() { return /* binding */ getWindow; },
+/* harmony export */   "compileJSONPointer": function() { return /* binding */ compileJSONPointer; },
+/* harmony export */   "contains": function() { return /* binding */ contains; },
+/* harmony export */   "debounce": function() { return /* binding */ debounce; },
+/* harmony export */   "escapeUnicodeChars": function() { return /* binding */ escapeUnicodeChars; },
+/* harmony export */   "extend": function() { return /* binding */ extend; },
+/* harmony export */   "findUniqueName": function() { return /* binding */ findUniqueName; },
+/* harmony export */   "formatSize": function() { return /* binding */ formatSize; },
+/* harmony export */   "get": function() { return /* binding */ get; },
 /* harmony export */   "getAbsoluteLeft": function() { return /* binding */ getAbsoluteLeft; },
 /* harmony export */   "getAbsoluteTop": function() { return /* binding */ getAbsoluteTop; },
-/* harmony export */   "addClassName": function() { return /* binding */ addClassName; },
+/* harmony export */   "getChildPaths": function() { return /* binding */ getChildPaths; },
+/* harmony export */   "getColorCSS": function() { return /* binding */ getColorCSS; },
+/* harmony export */   "getIndexForPosition": function() { return /* binding */ getIndexForPosition; },
+/* harmony export */   "getInnerText": function() { return /* binding */ getInnerText; },
+/* harmony export */   "getInputSelection": function() { return /* binding */ getInputSelection; },
+/* harmony export */   "getInternetExplorerVersion": function() { return /* binding */ getInternetExplorerVersion; },
+/* harmony export */   "getPositionForPath": function() { return /* binding */ getPositionForPath; },
+/* harmony export */   "getSelection": function() { return /* binding */ getSelection; },
+/* harmony export */   "getSelectionOffset": function() { return /* binding */ getSelectionOffset; },
+/* harmony export */   "getType": function() { return /* binding */ getType; },
+/* harmony export */   "getWindow": function() { return /* binding */ getWindow; },
+/* harmony export */   "hasParentNode": function() { return /* binding */ hasParentNode; },
+/* harmony export */   "improveSchemaError": function() { return /* binding */ improveSchemaError; },
+/* harmony export */   "insideRect": function() { return /* binding */ insideRect; },
+/* harmony export */   "isArray": function() { return /* binding */ isArray; },
+/* harmony export */   "isChildOf": function() { return /* binding */ isChildOf; },
+/* harmony export */   "isFirefox": function() { return /* binding */ isFirefox; },
+/* harmony export */   "isObject": function() { return /* binding */ isObject; },
+/* harmony export */   "isPromise": function() { return /* binding */ isPromise; },
+/* harmony export */   "isTimestamp": function() { return /* binding */ isTimestamp; },
+/* harmony export */   "isUrl": function() { return /* binding */ isUrl; },
+/* harmony export */   "isValidColor": function() { return /* binding */ isValidColor; },
+/* harmony export */   "isValidValidationError": function() { return /* binding */ isValidValidationError; },
+/* harmony export */   "isValidationErrorChanged": function() { return /* binding */ isValidationErrorChanged; },
+/* harmony export */   "limitCharacters": function() { return /* binding */ limitCharacters; },
+/* harmony export */   "makeFieldTooltip": function() { return /* binding */ makeFieldTooltip; },
+/* harmony export */   "parse": function() { return /* binding */ parse; },
+/* harmony export */   "parsePath": function() { return /* binding */ parsePath; },
+/* harmony export */   "parseString": function() { return /* binding */ parseString; },
 /* harmony export */   "removeAllClassNames": function() { return /* binding */ removeAllClassNames; },
 /* harmony export */   "removeClassName": function() { return /* binding */ removeClassName; },
-/* harmony export */   "stripFormatting": function() { return /* binding */ stripFormatting; },
-/* harmony export */   "setEndOfContentEditable": function() { return /* binding */ setEndOfContentEditable; },
-/* harmony export */   "selectContentEditable": function() { return /* binding */ selectContentEditable; },
-/* harmony export */   "getSelection": function() { return /* binding */ getSelection; },
-/* harmony export */   "setSelection": function() { return /* binding */ setSelection; },
-/* harmony export */   "getSelectionOffset": function() { return /* binding */ getSelectionOffset; },
-/* harmony export */   "setSelectionOffset": function() { return /* binding */ setSelectionOffset; },
-/* harmony export */   "getInnerText": function() { return /* binding */ getInnerText; },
-/* harmony export */   "removeReturnsAndSurroundingWhitespace": function() { return /* binding */ removeReturnsAndSurroundingWhitespace; },
-/* harmony export */   "hasParentNode": function() { return /* binding */ hasParentNode; },
-/* harmony export */   "getInternetExplorerVersion": function() { return /* binding */ getInternetExplorerVersion; },
-/* harmony export */   "isFirefox": function() { return /* binding */ isFirefox; },
-/* harmony export */   "addEventListener": function() { return /* binding */ addEventListener; },
 /* harmony export */   "removeEventListener": function() { return /* binding */ removeEventListener; },
-/* harmony export */   "isChildOf": function() { return /* binding */ isChildOf; },
-/* harmony export */   "parsePath": function() { return /* binding */ parsePath; },
-/* harmony export */   "stringifyPath": function() { return /* binding */ stringifyPath; },
-/* harmony export */   "improveSchemaError": function() { return /* binding */ improveSchemaError; },
-/* harmony export */   "isPromise": function() { return /* binding */ isPromise; },
-/* harmony export */   "isValidValidationError": function() { return /* binding */ isValidValidationError; },
-/* harmony export */   "insideRect": function() { return /* binding */ insideRect; },
-/* harmony export */   "debounce": function() { return /* binding */ debounce; },
-/* harmony export */   "textDiff": function() { return /* binding */ textDiff; },
-/* harmony export */   "getInputSelection": function() { return /* binding */ getInputSelection; },
-/* harmony export */   "getIndexForPosition": function() { return /* binding */ getIndexForPosition; },
-/* harmony export */   "getPositionForPath": function() { return /* binding */ getPositionForPath; },
-/* harmony export */   "compileJSONPointer": function() { return /* binding */ compileJSONPointer; },
-/* harmony export */   "getColorCSS": function() { return /* binding */ getColorCSS; },
-/* harmony export */   "isValidColor": function() { return /* binding */ isValidColor; },
-/* harmony export */   "makeFieldTooltip": function() { return /* binding */ makeFieldTooltip; },
-/* harmony export */   "get": function() { return /* binding */ get; },
-/* harmony export */   "findUniqueName": function() { return /* binding */ findUniqueName; },
-/* harmony export */   "getChildPaths": function() { return /* binding */ getChildPaths; },
+/* harmony export */   "removeReturnsAndSurroundingWhitespace": function() { return /* binding */ removeReturnsAndSurroundingWhitespace; },
+/* harmony export */   "selectContentEditable": function() { return /* binding */ selectContentEditable; },
+/* harmony export */   "setEndOfContentEditable": function() { return /* binding */ setEndOfContentEditable; },
+/* harmony export */   "setSelection": function() { return /* binding */ setSelection; },
+/* harmony export */   "setSelectionOffset": function() { return /* binding */ setSelectionOffset; },
 /* harmony export */   "sort": function() { return /* binding */ sort; },
 /* harmony export */   "sortObjectKeys": function() { return /* binding */ sortObjectKeys; },
-/* harmony export */   "parseString": function() { return /* binding */ parseString; },
-/* harmony export */   "isTimestamp": function() { return /* binding */ isTimestamp; },
-/* harmony export */   "formatSize": function() { return /* binding */ formatSize; },
-/* harmony export */   "limitCharacters": function() { return /* binding */ limitCharacters; },
-/* harmony export */   "isObject": function() { return /* binding */ isObject; },
-/* harmony export */   "contains": function() { return /* binding */ contains; },
-/* harmony export */   "isValidationErrorChanged": function() { return /* binding */ isValidationErrorChanged; }
+/* harmony export */   "stringifyPath": function() { return /* binding */ stringifyPath; },
+/* harmony export */   "stripFormatting": function() { return /* binding */ stripFormatting; },
+/* harmony export */   "textDiff": function() { return /* binding */ textDiff; },
+/* harmony export */   "tryJsonRepair": function() { return /* binding */ tryJsonRepair; },
+/* harmony export */   "validate": function() { return /* binding */ validate; }
 /* harmony export */ });
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(4987);
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_polyfills__WEBPACK_IMPORTED_MODULE_0__);

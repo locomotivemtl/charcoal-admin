@@ -1,57 +1,9 @@
 {{!--
-   Select Options Property Input
+   Selectize Tags Property Input
    =============================
 
-   `charcoal/admin/property/input/select`
+   `charcoal/admin/property/input/selectize/tags`
 --}}
-{{# allowClipboardCopy }}
-<div class="input-group">
-{{/ allowClipboardCopy }}
-    {{# multiple }}
-    <input
-        type="text"
-        id="{{ inputId }}"
-        name="{{ inputName }}"
-        class="form-control {{ inputClass }}"
-        value="{{ inputVal }}"
-        {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
-        {{# readOnly }}readonly{{/ readOnly }}
-        {{# required }}required{{/ required }}
-        {{# disabled }}disabled{{/ disabled }}
-    >
-    {{/ multiple }}
-    {{^ multiple }}
-    <select
-        id="{{ inputId }}"
-        name="{{ inputName }}"
-        class="{{ inputClass }}"
-        {{# size }}size="{{ . }}"{{/ size }}
-        {{# placeholder }}placeholder="{{ . }}"{{/ placeholder }}
-        {{# multiple }}multiple{{/ multiple }}
-        {{# required }}required{{/ required }}
-        {{# disabled }}disabled{{/ disabled }}
-    >
-        {{# choices }}
-        {{> charcoal/admin/property/input/select/option }}
-        {{/ choices }}
-    </select>
-    {{/ multiple }}
-{{# allowClipboardCopy }}
-    <span class="input-group-btn">
-        <button id="{{ inputId }}_copy" class="btn btn-lg btn-secondary" type="button" data-clipboard-target="#{{ inputId }}">
-            <span class="fa fa-copy" aria-hidden="true"></span>
-            <span class="sr-only">{{# _t }}Copy To Clipboard{{/ _t }}</span>
-        </button>
-    </span>
-</div>
-{{/ allowClipboardCopy }}
 
-{{# addJs }}
-<script>
-Charcoal.Admin.manager().add_property_input({
-    id:   '{{ inputId }}',
-    type: 'charcoal/admin/property/input/selectize/tags',
-    data: {{& controlDataForJsAsJson }}
-});
-</script>
-{{/ addJs }}
+{{> charcoal/admin/property/input/selectize/tags/control }}
+{{> charcoal/admin/property/input/selectize/js }}

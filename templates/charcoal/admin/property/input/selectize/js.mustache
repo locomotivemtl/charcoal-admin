@@ -1,0 +1,15 @@
+{{!--
+    Selectize Property Input JS Component
+    =====================================
+
+    @used-by `charcoal/admin/property/input/selectize`
+--}}
+{{# addJs }}
+<script>
+Charcoal.Admin.manager().add_property_input({
+    id:   '{{ inputId }}',
+    type: '{{ inputType }}',
+    data: {{& escapedControlDataForJsAsJson }}
+});
+</script>
+{{/ addJs }}

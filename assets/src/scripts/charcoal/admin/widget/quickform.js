@@ -37,10 +37,12 @@ Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
 
 Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
     var that = this;
-    $(document).on('submit', '#' + this.id(), function (e) {
-        e.preventDefault();
+
+    $(document).on('submit.charcoal.bs.dialog', '#' + this.id(), function (event) {
+        event.preventDefault();
         that.submit_form(this);
     });
+
     $('#' + this.id()).on(
         'click.charcoal.bs.dialog',
         '[data-dismiss="dialog"]',

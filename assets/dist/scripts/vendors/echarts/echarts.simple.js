@@ -12284,18 +12284,28 @@
 
     function allLeaveBlur(api) {
       var model = api.getModel();
+      var leaveBlurredSeries = [];
+      var allComponentViews = [];
       model.eachComponent(function (componentType, componentModel) {
         var componentStates = getComponentStates(componentModel);
+        var isSeries = componentType === 'series';
+        var view = isSeries ? api.getViewOfSeriesModel(componentModel) : api.getViewOfComponentModel(componentModel);
+        !isSeries && allComponentViews.push(view);
 
         if (componentStates.isBlured) {
-          var view = componentType === 'series' ? api.getViewOfSeriesModel(componentModel) : api.getViewOfComponentModel(componentModel); // Leave blur anyway
-
+          // Leave blur anyway
           view.group.traverse(function (child) {
             singleLeaveBlur(child);
           });
+          isSeries && leaveBlurredSeries.push(componentModel);
         }
 
         componentStates.isBlured = false;
+      });
+      each(allComponentViews, function (view) {
+        if (view && view.toggleBlurSeries) {
+          view.toggleBlurSeries(leaveBlurredSeries, false, model);
+        }
       });
     }
     function blurSeries(targetSeriesIndex, focus, blurScope, api) {
@@ -12366,8 +12376,8 @@
 
         var view = api.getViewOfComponentModel(componentModel);
 
-        if (view && view.blurSeries) {
-          view.blurSeries(blurredSeries, ecModel);
+        if (view && view.toggleBlurSeries) {
+          view.toggleBlurSeries(blurredSeries, true, ecModel);
         }
       });
     }
@@ -21201,8 +21211,11 @@
 
         for (var i = offset; i < len; i++) {
           var val = chunk[i] = ordinalMeta.parseAndCollect(chunk[i]);
-          dimRawExtent[0] = Math.min(val, dimRawExtent[0]);
-          dimRawExtent[1] = Math.max(val, dimRawExtent[1]);
+
+          if (!isNaN(val)) {
+            dimRawExtent[0] = Math.min(val, dimRawExtent[0]);
+            dimRawExtent[1] = Math.max(val, dimRawExtent[1]);
+          }
         }
 
         dim.ordinalMeta = ordinalMeta;
@@ -21833,7 +21846,7 @@
         var maxArea;
         var area;
         var nextRawIndex;
-        var newIndices = new (getIndicesCtor(this._rawCount))(Math.ceil(len / frameSize) + 2); // First frame use the first data.
+        var newIndices = new (getIndicesCtor(this._rawCount))(Math.min((Math.ceil(len / frameSize) + 2) * 2, len)); // First frame use the first data.
 
         newIndices[sampledIndex++] = currentRawIndex;
 
@@ -21860,7 +21873,9 @@
           var pointAX = i - 1;
           var pointAY = dimStore[currentRawIndex];
           maxArea = -1;
-          nextRawIndex = frameStart; // Find a point from current frame that construct a triangel with largest area with previous selected point
+          nextRawIndex = frameStart;
+          var firstNaNIndex = -1;
+          var countNaN = 0; // Find a point from current frame that construct a triangel with largest area with previous selected point
           // And the average of next frame.
 
           for (var idx = frameStart; idx < frameEnd; idx++) {
@@ -21868,6 +21883,12 @@
             var y = dimStore[rawIndex];
 
             if (isNaN(y)) {
+              countNaN++;
+
+              if (firstNaNIndex < 0) {
+                firstNaNIndex = rawIndex;
+              }
+
               continue;
             } // Calculate triangle area over three buckets
 
@@ -21878,6 +21899,13 @@
               maxArea = area;
               nextRawIndex = rawIndex; // Next a is this b
             }
+          }
+
+          if (countNaN > 0 && countNaN < frameEnd - frameStart) {
+            // Append first NaN point in every bucket.
+            // It is necessary to ensure the correct order of indices.
+            newIndices[sampledIndex++] = Math.min(firstNaNIndex, nextRawIndex);
+            nextRawIndex = Math.max(firstNaNIndex, nextRawIndex);
           }
 
           newIndices[sampledIndex++] = nextRawIndex;
@@ -23324,12 +23352,12 @@
       ComponentView.prototype.updateVisual = function (model, ecModel, api, payload) {// Do nothing;
       };
       /**
-       * Hook for blur target series.
-       * Can be used in marker for blur the markers
+       * Hook for toggle blur target series.
+       * Can be used in marker for blur or leave blur the markers
        */
 
 
-      ComponentView.prototype.blurSeries = function (seriesModels, ecModel) {// Do nothing;
+      ComponentView.prototype.toggleBlurSeries = function (seriesModels, isBlur, ecModel) {// Do nothing;
       };
       /**
        * Traverse the new rendered elements.
@@ -26628,9 +26656,9 @@
     }
 
     var hasWindow = typeof window !== 'undefined';
-    var version$1 = '5.3.0';
+    var version$1 = '5.3.2';
     var dependencies = {
-      zrender: '5.3.0'
+      zrender: '5.3.1'
     };
     var TEST_FRAME_REMAIN_TIME = 1;
     var PRIORITY_PROCESSOR_SERIES_FILTER = 800; // Some data processors depends on the stack result dimension (to calculate data extent).
@@ -32059,6 +32087,11 @@
       }
 
       OrdinalScale.prototype.parse = function (val) {
+        // Caution: Math.round(null) will return `0` rather than `NaN`
+        if (val == null) {
+          return NaN;
+        }
+
         return isString(val) ? this._ordinalMeta.getOrdinal(val) // val might be float.
         : Math.round(val);
       };
@@ -35698,7 +35731,7 @@
           if (isLabelIgnored // Not show when label is not shown in this state.
           || !retrieve2(stateShow, showNormal) // Use normal state by default if not set.
           ) {
-              var stateObj = isNormal ? labelLine : labelLine && labelLine.states.normal;
+              var stateObj = isNormal ? labelLine : labelLine && labelLine.states[stateName];
 
               if (stateObj) {
                 stateObj.ignore = true;
@@ -37255,8 +37288,6 @@
           // Must stop leave transition manually if don't call initProps or updateProps.
           this.childAt(0).stopAnimation('leave');
         }
-
-        this._seriesModel = seriesModel;
       };
 
       Symbol.prototype._updateCommon = function (data, idx, symbolSize, seriesScope, opts) {
@@ -37371,7 +37402,7 @@
         symbolPath.ensureState('blur').style = blurItemStyle;
 
         if (hoverScale) {
-          var scaleRatio = Math.max(1.1, 3 / this._sizeY);
+          var scaleRatio = Math.max(isNumber(hoverScale) ? hoverScale : 1.1, 3 / this._sizeY);
           emphasisState.scaleX = this._sizeX * scaleRatio;
           emphasisState.scaleY = this._sizeY * scaleRatio;
         }
@@ -37384,9 +37415,8 @@
         this.scaleX = this.scaleY = scale;
       };
 
-      Symbol.prototype.fadeOut = function (cb, opt) {
+      Symbol.prototype.fadeOut = function (cb, seriesModel, opt) {
         var symbolPath = this.childAt(0);
-        var seriesModel = this._seriesModel;
         var dataIndex = getECData(this).dataIndex;
         var animationOpt = opt && opt.animation; // Avoid mistaken hover when fading out
 
@@ -37547,7 +37577,7 @@
           var el = oldData.getItemGraphicEl(oldIdx);
           el && el.fadeOut(function () {
             group.remove(el);
-          });
+          }, seriesModel);
         }).execute();
         this._getSymbolPoint = getSymbolPoint;
         this._data = data;
@@ -37617,7 +37647,7 @@
           data.eachItemGraphicEl(function (el) {
             el.fadeOut(function () {
               group.remove(el);
-            });
+            }, data.hostModel);
           });
         } else {
           group.removeAll();
@@ -37678,17 +37708,21 @@
         valueStart = extent[0];
       } else if (valueOrigin === 'end') {
         valueStart = extent[1];
-      } // auto
-      else {
-          // Both positive
-          if (extent[0] > 0) {
-            valueStart = extent[0];
-          } // Both negative
-          else if (extent[1] < 0) {
-              valueStart = extent[1];
-            } // If is one positive, and one negative, onZero shall be true
+      } // If origin is specified as a number, use it as
+      // valueStart directly
+      else if (isNumber(valueOrigin) && !isNaN(valueOrigin)) {
+          valueStart = valueOrigin;
+        } // auto
+        else {
+            // Both positive
+            if (extent[0] > 0) {
+              valueStart = extent[0];
+            } // Both negative
+            else if (extent[1] < 0) {
+                valueStart = extent[1];
+              } // If is one positive, and one negative, onZero shall be true
 
-        }
+          }
 
       return valueStart;
     }
@@ -38429,7 +38463,7 @@
       return points;
     }
 
-    function turnPointsIntoStep(points, coordSys, stepTurnAt) {
+    function turnPointsIntoStep(points, coordSys, stepTurnAt, connectNulls) {
       var baseAxis = coordSys.getBaseAxis();
       var baseIndex = baseAxis.dim === 'x' || baseAxis.dim === 'radius' ? 0 : 1;
       var stepPoints = [];
@@ -38437,8 +38471,19 @@
       var stepPt = [];
       var pt = [];
       var nextPt = [];
+      var filteredPoints = [];
 
-      for (; i < points.length - 2; i += 2) {
+      if (connectNulls) {
+        for (i = 0; i < points.length; i += 2) {
+          if (!isNaN(points[i]) && !isNaN(points[i + 1])) {
+            filteredPoints.push(points[i], points[i + 1]);
+          }
+        }
+
+        points = filteredPoints;
+      }
+
+      for (i = 0; i < points.length - 2; i += 2) {
         nextPt[0] = points[i + 2];
         nextPt[1] = points[i + 3];
         pt[0] = points[i];
@@ -38860,6 +38905,7 @@
         var dataCoordInfo = prepareDataCoordInfo(coordSys, data, valueOrigin);
         var stackedOnPoints = isAreaChart && getStackedOnPoints(coordSys, data, dataCoordInfo);
         var showSymbol = seriesModel.get('showSymbol');
+        var connectNulls = seriesModel.get('connectNulls');
         var isIgnoreFunc = showSymbol && !isCoordSysPolar && getIsIgnoreFunc(seriesModel, data, coordSys); // Remove temporary symbols
 
         var oldData = this._data;
@@ -38910,10 +38956,10 @@
 
           if (step) {
             // TODO If stacked series is not step
-            points = turnPointsIntoStep(points, coordSys, step);
+            points = turnPointsIntoStep(points, coordSys, step, connectNulls);
 
             if (stackedOnPoints) {
-              stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step);
+              stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step, connectNulls);
             }
           }
 
@@ -38970,15 +39016,15 @@
 
           if (!isPointsSame(this._stackedOnPoints, stackedOnPoints) || !isPointsSame(this._points, points)) {
             if (hasAnimation) {
-              this._doUpdateAnimation(data, stackedOnPoints, coordSys, api, step, valueOrigin);
+              this._doUpdateAnimation(data, stackedOnPoints, coordSys, api, step, valueOrigin, connectNulls);
             } else {
               // Not do it in update with animation
               if (step) {
                 // TODO If stacked series is not step
-                points = turnPointsIntoStep(points, coordSys, step);
+                points = turnPointsIntoStep(points, coordSys, step, connectNulls);
 
                 if (stackedOnPoints) {
-                  stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step);
+                  stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step, connectNulls);
                 }
               }
 
@@ -39015,7 +39061,6 @@
         toggleHoverEmphasis(polyline, focus, blurScope, emphasisDisabled);
         var smooth = getSmooth(seriesModel.get('smooth'));
         var smoothMonotone = seriesModel.get('smoothMonotone');
-        var connectNulls = seriesModel.get('connectNulls');
         polyline.setShape({
           smooth: smooth,
           smoothMonotone: smoothMonotone,
@@ -39431,7 +39476,7 @@
       // FIXME Two value axis
 
 
-      LineView.prototype._doUpdateAnimation = function (data, stackedOnPoints, coordSys, api, step, valueOrigin) {
+      LineView.prototype._doUpdateAnimation = function (data, stackedOnPoints, coordSys, api, step, valueOrigin, connectNulls) {
         var polyline = this._polyline;
         var polygon = this._polygon;
         var seriesModel = data.hostModel;
@@ -39443,10 +39488,10 @@
 
         if (step) {
           // TODO If stacked series is not step
-          current = turnPointsIntoStep(diff.current, coordSys, step);
-          stackedOnCurrent = turnPointsIntoStep(diff.stackedOnCurrent, coordSys, step);
-          next = turnPointsIntoStep(diff.next, coordSys, step);
-          stackedOnNext = turnPointsIntoStep(diff.stackedOnNext, coordSys, step);
+          current = turnPointsIntoStep(diff.current, coordSys, step, connectNulls);
+          stackedOnCurrent = turnPointsIntoStep(diff.stackedOnCurrent, coordSys, step, connectNulls);
+          next = turnPointsIntoStep(diff.next, coordSys, step, connectNulls);
+          stackedOnNext = turnPointsIntoStep(diff.stackedOnNext, coordSys, step, connectNulls);
         } // Don't apply animation if diff is large.
         // For better result and avoid memory explosion problems like
         // https://github.com/apache/incubator-echarts/issues/12229
@@ -39704,7 +39749,7 @@
             var size = Math.abs(extent[1] - extent[0]) * (dpr || 1);
             var rate = Math.round(count / size);
 
-            if (rate > 1) {
+            if (isFinite(rate) && rate > 1) {
               if (sampling === 'lttb') {
                 seriesModel.setData(data.lttbDownSample(data.mapDimension(valueAxis.dim), 1 / rate));
               }
@@ -42061,11 +42106,6 @@
         return _this;
       }
 
-      PieView.prototype.init = function () {
-        var sectorGroup = new Group();
-        this._sectorGroup = sectorGroup;
-      };
-
       PieView.prototype.render = function (seriesModel, ecModel, api, payload) {
         var data = seriesModel.getData();
         var oldData = this._data;
@@ -44276,6 +44316,12 @@
           var eventData = AxisBuilder.makeAxisEventDataBase(axisModel);
           eventData.targetType = 'axisLabel';
           eventData.value = rawLabel;
+          eventData.tickIndex = index;
+
+          if (axis.type === 'category') {
+            eventData.dataIndex = tickValue;
+          }
+
           getECData(textEl).eventData = eventData;
         } // FIXME
 

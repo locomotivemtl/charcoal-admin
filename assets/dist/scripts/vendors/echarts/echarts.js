@@ -12537,18 +12537,28 @@
 
     function allLeaveBlur(api) {
       var model = api.getModel();
+      var leaveBlurredSeries = [];
+      var allComponentViews = [];
       model.eachComponent(function (componentType, componentModel) {
         var componentStates = getComponentStates(componentModel);
+        var isSeries = componentType === 'series';
+        var view = isSeries ? api.getViewOfSeriesModel(componentModel) : api.getViewOfComponentModel(componentModel);
+        !isSeries && allComponentViews.push(view);
 
         if (componentStates.isBlured) {
-          var view = componentType === 'series' ? api.getViewOfSeriesModel(componentModel) : api.getViewOfComponentModel(componentModel); // Leave blur anyway
-
+          // Leave blur anyway
           view.group.traverse(function (child) {
             singleLeaveBlur(child);
           });
+          isSeries && leaveBlurredSeries.push(componentModel);
         }
 
         componentStates.isBlured = false;
+      });
+      each(allComponentViews, function (view) {
+        if (view && view.toggleBlurSeries) {
+          view.toggleBlurSeries(leaveBlurredSeries, false, model);
+        }
       });
     }
     function blurSeries(targetSeriesIndex, focus, blurScope, api) {
@@ -12619,8 +12629,8 @@
 
         var view = api.getViewOfComponentModel(componentModel);
 
-        if (view && view.blurSeries) {
-          view.blurSeries(blurredSeries, ecModel);
+        if (view && view.toggleBlurSeries) {
+          view.toggleBlurSeries(blurredSeries, true, ecModel);
         }
       });
     }
@@ -16786,7 +16796,7 @@
      */
 
     function makeValueReadable(value, valueType, useUTC) {
-      var USER_READABLE_DEFUALT_TIME_PATTERN = '{yyyy}-{MM}-{dd} {hh}:{mm}:{ss}';
+      var USER_READABLE_DEFUALT_TIME_PATTERN = '{yyyy}-{MM}-{dd} {HH}:{mm}:{ss}';
 
       function stringToUserReadable(str) {
         return str && trim(str) ? str : '-';
@@ -22135,8 +22145,11 @@
 
         for (var i = offset; i < len; i++) {
           var val = chunk[i] = ordinalMeta.parseAndCollect(chunk[i]);
-          dimRawExtent[0] = Math.min(val, dimRawExtent[0]);
-          dimRawExtent[1] = Math.max(val, dimRawExtent[1]);
+
+          if (!isNaN(val)) {
+            dimRawExtent[0] = Math.min(val, dimRawExtent[0]);
+            dimRawExtent[1] = Math.max(val, dimRawExtent[1]);
+          }
         }
 
         dim.ordinalMeta = ordinalMeta;
@@ -22767,7 +22780,7 @@
         var maxArea;
         var area;
         var nextRawIndex;
-        var newIndices = new (getIndicesCtor(this._rawCount))(Math.ceil(len / frameSize) + 2); // First frame use the first data.
+        var newIndices = new (getIndicesCtor(this._rawCount))(Math.min((Math.ceil(len / frameSize) + 2) * 2, len)); // First frame use the first data.
 
         newIndices[sampledIndex++] = currentRawIndex;
 
@@ -22794,7 +22807,9 @@
           var pointAX = i - 1;
           var pointAY = dimStore[currentRawIndex];
           maxArea = -1;
-          nextRawIndex = frameStart; // Find a point from current frame that construct a triangel with largest area with previous selected point
+          nextRawIndex = frameStart;
+          var firstNaNIndex = -1;
+          var countNaN = 0; // Find a point from current frame that construct a triangel with largest area with previous selected point
           // And the average of next frame.
 
           for (var idx = frameStart; idx < frameEnd; idx++) {
@@ -22802,6 +22817,12 @@
             var y = dimStore[rawIndex];
 
             if (isNaN(y)) {
+              countNaN++;
+
+              if (firstNaNIndex < 0) {
+                firstNaNIndex = rawIndex;
+              }
+
               continue;
             } // Calculate triangle area over three buckets
 
@@ -22812,6 +22833,13 @@
               maxArea = area;
               nextRawIndex = rawIndex; // Next a is this b
             }
+          }
+
+          if (countNaN > 0 && countNaN < frameEnd - frameStart) {
+            // Append first NaN point in every bucket.
+            // It is necessary to ensure the correct order of indices.
+            newIndices[sampledIndex++] = Math.min(firstNaNIndex, nextRawIndex);
+            nextRawIndex = Math.max(firstNaNIndex, nextRawIndex);
           }
 
           newIndices[sampledIndex++] = nextRawIndex;
@@ -24559,12 +24587,12 @@
       ComponentView.prototype.updateVisual = function (model, ecModel, api, payload) {// Do nothing;
       };
       /**
-       * Hook for blur target series.
-       * Can be used in marker for blur the markers
+       * Hook for toggle blur target series.
+       * Can be used in marker for blur or leave blur the markers
        */
 
 
-      ComponentView.prototype.blurSeries = function (seriesModels, ecModel) {// Do nothing;
+      ComponentView.prototype.toggleBlurSeries = function (seriesModels, isBlur, ecModel) {// Do nothing;
       };
       /**
        * Traverse the new rendered elements.
@@ -27994,9 +28022,9 @@
     }
 
     var hasWindow = typeof window !== 'undefined';
-    var version$1 = '5.3.0';
+    var version$1 = '5.3.2';
     var dependencies = {
-      zrender: '5.3.0'
+      zrender: '5.3.1'
     };
     var TEST_FRAME_REMAIN_TIME = 1;
     var PRIORITY_PROCESSOR_SERIES_FILTER = 800; // Some data processors depends on the stack result dimension (to calculate data extent).
@@ -33425,6 +33453,11 @@
       }
 
       OrdinalScale.prototype.parse = function (val) {
+        // Caution: Math.round(null) will return `0` rather than `NaN`
+        if (val == null) {
+          return NaN;
+        }
+
         return isString(val) ? this._ordinalMeta.getOrdinal(val) // val might be float.
         : Math.round(val);
       };
@@ -37396,7 +37429,7 @@
           if (isLabelIgnored // Not show when label is not shown in this state.
           || !retrieve2(stateShow, showNormal) // Use normal state by default if not set.
           ) {
-              var stateObj = isNormal ? labelLine : labelLine && labelLine.states.normal;
+              var stateObj = isNormal ? labelLine : labelLine && labelLine.states[stateName];
 
               if (stateObj) {
                 stateObj.ignore = true;
@@ -39133,7 +39166,7 @@
             patternAttrs.height = imageHeight_1;
         }
         else if (val.svgElement) {
-            child = val.svgElement;
+            child = clone(val.svgElement);
             patternAttrs.width = val.svgWidth;
             patternAttrs.height = val.svgHeight;
         }
@@ -40886,8 +40919,6 @@
           // Must stop leave transition manually if don't call initProps or updateProps.
           this.childAt(0).stopAnimation('leave');
         }
-
-        this._seriesModel = seriesModel;
       };
 
       Symbol.prototype._updateCommon = function (data, idx, symbolSize, seriesScope, opts) {
@@ -41002,7 +41033,7 @@
         symbolPath.ensureState('blur').style = blurItemStyle;
 
         if (hoverScale) {
-          var scaleRatio = Math.max(1.1, 3 / this._sizeY);
+          var scaleRatio = Math.max(isNumber(hoverScale) ? hoverScale : 1.1, 3 / this._sizeY);
           emphasisState.scaleX = this._sizeX * scaleRatio;
           emphasisState.scaleY = this._sizeY * scaleRatio;
         }
@@ -41015,9 +41046,8 @@
         this.scaleX = this.scaleY = scale;
       };
 
-      Symbol.prototype.fadeOut = function (cb, opt) {
+      Symbol.prototype.fadeOut = function (cb, seriesModel, opt) {
         var symbolPath = this.childAt(0);
-        var seriesModel = this._seriesModel;
         var dataIndex = getECData(this).dataIndex;
         var animationOpt = opt && opt.animation; // Avoid mistaken hover when fading out
 
@@ -41178,7 +41208,7 @@
           var el = oldData.getItemGraphicEl(oldIdx);
           el && el.fadeOut(function () {
             group.remove(el);
-          });
+          }, seriesModel);
         }).execute();
         this._getSymbolPoint = getSymbolPoint;
         this._data = data;
@@ -41248,7 +41278,7 @@
           data.eachItemGraphicEl(function (el) {
             el.fadeOut(function () {
               group.remove(el);
-            });
+            }, data.hostModel);
           });
         } else {
           group.removeAll();
@@ -41309,17 +41339,21 @@
         valueStart = extent[0];
       } else if (valueOrigin === 'end') {
         valueStart = extent[1];
-      } // auto
-      else {
-          // Both positive
-          if (extent[0] > 0) {
-            valueStart = extent[0];
-          } // Both negative
-          else if (extent[1] < 0) {
-              valueStart = extent[1];
-            } // If is one positive, and one negative, onZero shall be true
+      } // If origin is specified as a number, use it as
+      // valueStart directly
+      else if (isNumber(valueOrigin) && !isNaN(valueOrigin)) {
+          valueStart = valueOrigin;
+        } // auto
+        else {
+            // Both positive
+            if (extent[0] > 0) {
+              valueStart = extent[0];
+            } // Both negative
+            else if (extent[1] < 0) {
+                valueStart = extent[1];
+              } // If is one positive, and one negative, onZero shall be true
 
-        }
+          }
 
       return valueStart;
     }
@@ -42060,7 +42094,7 @@
       return points;
     }
 
-    function turnPointsIntoStep(points, coordSys, stepTurnAt) {
+    function turnPointsIntoStep(points, coordSys, stepTurnAt, connectNulls) {
       var baseAxis = coordSys.getBaseAxis();
       var baseIndex = baseAxis.dim === 'x' || baseAxis.dim === 'radius' ? 0 : 1;
       var stepPoints = [];
@@ -42068,8 +42102,19 @@
       var stepPt = [];
       var pt = [];
       var nextPt = [];
+      var filteredPoints = [];
 
-      for (; i < points.length - 2; i += 2) {
+      if (connectNulls) {
+        for (i = 0; i < points.length; i += 2) {
+          if (!isNaN(points[i]) && !isNaN(points[i + 1])) {
+            filteredPoints.push(points[i], points[i + 1]);
+          }
+        }
+
+        points = filteredPoints;
+      }
+
+      for (i = 0; i < points.length - 2; i += 2) {
         nextPt[0] = points[i + 2];
         nextPt[1] = points[i + 3];
         pt[0] = points[i];
@@ -42491,6 +42536,7 @@
         var dataCoordInfo = prepareDataCoordInfo(coordSys, data, valueOrigin);
         var stackedOnPoints = isAreaChart && getStackedOnPoints(coordSys, data, dataCoordInfo);
         var showSymbol = seriesModel.get('showSymbol');
+        var connectNulls = seriesModel.get('connectNulls');
         var isIgnoreFunc = showSymbol && !isCoordSysPolar && getIsIgnoreFunc(seriesModel, data, coordSys); // Remove temporary symbols
 
         var oldData = this._data;
@@ -42541,10 +42587,10 @@
 
           if (step) {
             // TODO If stacked series is not step
-            points = turnPointsIntoStep(points, coordSys, step);
+            points = turnPointsIntoStep(points, coordSys, step, connectNulls);
 
             if (stackedOnPoints) {
-              stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step);
+              stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step, connectNulls);
             }
           }
 
@@ -42601,15 +42647,15 @@
 
           if (!isPointsSame(this._stackedOnPoints, stackedOnPoints) || !isPointsSame(this._points, points)) {
             if (hasAnimation) {
-              this._doUpdateAnimation(data, stackedOnPoints, coordSys, api, step, valueOrigin);
+              this._doUpdateAnimation(data, stackedOnPoints, coordSys, api, step, valueOrigin, connectNulls);
             } else {
               // Not do it in update with animation
               if (step) {
                 // TODO If stacked series is not step
-                points = turnPointsIntoStep(points, coordSys, step);
+                points = turnPointsIntoStep(points, coordSys, step, connectNulls);
 
                 if (stackedOnPoints) {
-                  stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step);
+                  stackedOnPoints = turnPointsIntoStep(stackedOnPoints, coordSys, step, connectNulls);
                 }
               }
 
@@ -42646,7 +42692,6 @@
         toggleHoverEmphasis(polyline, focus, blurScope, emphasisDisabled);
         var smooth = getSmooth(seriesModel.get('smooth'));
         var smoothMonotone = seriesModel.get('smoothMonotone');
-        var connectNulls = seriesModel.get('connectNulls');
         polyline.setShape({
           smooth: smooth,
           smoothMonotone: smoothMonotone,
@@ -43062,7 +43107,7 @@
       // FIXME Two value axis
 
 
-      LineView.prototype._doUpdateAnimation = function (data, stackedOnPoints, coordSys, api, step, valueOrigin) {
+      LineView.prototype._doUpdateAnimation = function (data, stackedOnPoints, coordSys, api, step, valueOrigin, connectNulls) {
         var polyline = this._polyline;
         var polygon = this._polygon;
         var seriesModel = data.hostModel;
@@ -43074,10 +43119,10 @@
 
         if (step) {
           // TODO If stacked series is not step
-          current = turnPointsIntoStep(diff.current, coordSys, step);
-          stackedOnCurrent = turnPointsIntoStep(diff.stackedOnCurrent, coordSys, step);
-          next = turnPointsIntoStep(diff.next, coordSys, step);
-          stackedOnNext = turnPointsIntoStep(diff.stackedOnNext, coordSys, step);
+          current = turnPointsIntoStep(diff.current, coordSys, step, connectNulls);
+          stackedOnCurrent = turnPointsIntoStep(diff.stackedOnCurrent, coordSys, step, connectNulls);
+          next = turnPointsIntoStep(diff.next, coordSys, step, connectNulls);
+          stackedOnNext = turnPointsIntoStep(diff.stackedOnNext, coordSys, step, connectNulls);
         } // Don't apply animation if diff is large.
         // For better result and avoid memory explosion problems like
         // https://github.com/apache/incubator-echarts/issues/12229
@@ -43335,7 +43380,7 @@
             var size = Math.abs(extent[1] - extent[0]) * (dpr || 1);
             var rate = Math.round(count / size);
 
-            if (rate > 1) {
+            if (isFinite(rate) && rate > 1) {
               if (sampling === 'lttb') {
                 seriesModel.setData(data.lttbDownSample(data.mapDimension(valueAxis.dim), 1 / rate));
               }
@@ -45691,11 +45736,6 @@
         _this.ignoreLabelLineUpdate = true;
         return _this;
       }
-
-      PieView.prototype.init = function () {
-        var sectorGroup = new Group();
-        this._sectorGroup = sectorGroup;
-      };
 
       PieView.prototype.render = function (seriesModel, ecModel, api, payload) {
         var data = seriesModel.getData();
@@ -48420,6 +48460,12 @@
           var eventData = AxisBuilder.makeAxisEventDataBase(axisModel);
           eventData.targetType = 'axisLabel';
           eventData.value = rawLabel;
+          eventData.tickIndex = index;
+
+          if (axis.type === 'category') {
+            eventData.dataIndex = tickValue;
+          }
+
           getECData(textEl).eventData = eventData;
         } // FIXME
 
@@ -54894,7 +54940,7 @@
         },
         removeOpt: removeAnimationOpt
       });
-      symbolEl.fadeOut(null, {
+      symbolEl.fadeOut(null, data.hostModel, {
         fadeLabel: true,
         animation: removeAnimationOpt
       }); // remove edge as parent node
@@ -55628,6 +55674,7 @@
 
         var node = this.getData().tree.getNodeByDataIndex(dataIndex);
         params.treeAncestors = wrapTreePathInfo(node, this);
+        params.collapsed = !node.isExpand;
         return params;
       };
 
@@ -58001,7 +58048,13 @@
 
       if (thisOption.type === 'color') {
         thisOption.parsedVisual = map(visualArr, function (item) {
-          return parse(item);
+          var color$1 = parse(item);
+
+          if (!color$1 && "development" !== 'production') {
+            warn("'" + item + "' is an illegal color, fallback to '#000000'", true);
+          }
+
+          return color$1 || [0, 0, 0, 1];
         });
       }
 
@@ -61560,8 +61613,6 @@
       return label;
     }
 
-    var PI2$9 = Math.PI * 2;
-
     var GaugeView =
     /** @class */
     function (_super) {
@@ -61597,7 +61648,11 @@
         var showAxis = axisLineModel.get('show');
         var lineStyleModel = axisLineModel.getModel('lineStyle');
         var axisLineWidth = lineStyleModel.get('width');
-        var angleRangeSpan = !((endAngle - startAngle) % PI2$9) && endAngle !== startAngle ? PI2$9 : (endAngle - startAngle) % PI2$9;
+        var angles = [startAngle, endAngle];
+        normalizeArcAngles(angles, !clockwise);
+        startAngle = angles[0];
+        endAngle = angles[1];
+        var angleRangeSpan = endAngle - startAngle;
         var prevEndAngle = startAngle;
 
         for (var i = 0; showAxis && i < colorList.length; i++) {
@@ -61643,12 +61698,6 @@
 
           return colorList[i - 1][1];
         };
-
-        if (!clockwise) {
-          var tmp = startAngle;
-          startAngle = endAngle;
-          endAngle = tmp;
-        }
 
         this._renderTicks(seriesModel, ecModel, api, getColor, posInfo, startAngle, endAngle, clockwise, axisLineWidth);
 
@@ -67856,7 +67905,6 @@
           return;
         }
 
-        var self = this;
         var points = lineData.getItemLayout(idx);
         var period = effectModel.get('period') * 1000;
         var loop = effectModel.get('loop');
@@ -67875,39 +67923,43 @@
 
         if (period !== this._period || loop !== this._loop) {
           symbol.stopAnimation();
+          var delayNum = void 0;
 
-          if (period > 0) {
-            var delayNum = void 0;
-
-            if (isFunction(delayExpr)) {
-              delayNum = delayExpr(idx);
-            } else {
-              delayNum = delayExpr;
-            }
-
-            if (symbol.__t > 0) {
-              delayNum = -period * symbol.__t;
-            }
-
-            symbol.__t = 0;
-            var animator = symbol.animate('', loop).when(period, {
-              __t: 1
-            }).delay(delayNum).during(function () {
-              self._updateSymbolPosition(symbol);
-            });
-
-            if (!loop) {
-              animator.done(function () {
-                self.remove(symbol);
-              });
-            }
-
-            animator.start();
+          if (isFunction(delayExpr)) {
+            delayNum = delayExpr(idx);
+          } else {
+            delayNum = delayExpr;
           }
+
+          if (symbol.__t > 0) {
+            delayNum = -period * symbol.__t;
+          }
+
+          this._animateSymbol(symbol, period, delayNum, loop);
         }
 
         this._period = period;
         this._loop = loop;
+      };
+
+      EffectLine.prototype._animateSymbol = function (symbol, period, delayNum, loop) {
+        if (period > 0) {
+          symbol.__t = 0;
+          var self_1 = this;
+          var animator = symbol.animate('', loop).when(period, {
+            __t: 1
+          }).delay(delayNum).during(function () {
+            self_1._updateSymbolPosition(symbol);
+          });
+
+          if (!loop) {
+            animator.done(function () {
+              self_1.remove(symbol);
+            });
+          }
+
+          animator.start();
+        }
       };
 
       EffectLine.prototype._getLineLength = function (symbol) {
@@ -69365,12 +69417,13 @@
 
       HeatmapView.prototype._renderOnCartesianAndCalendar = function (seriesModel, api, start, end, incremental) {
         var coordSys = seriesModel.coordinateSystem;
+        var isCartesian2d = isCoordinateSystemType(coordSys, 'cartesian2d');
         var width;
         var height;
         var xAxisExtent;
         var yAxisExtent;
 
-        if (isCoordinateSystemType(coordSys, 'cartesian2d')) {
+        if (isCartesian2d) {
           var xAxis = coordSys.getAxis('x');
           var yAxis = coordSys.getAxis('y');
 
@@ -69382,10 +69435,11 @@
             if (!(xAxis.onBand && yAxis.onBand)) {
               throw new Error('Heatmap on cartesian must have two axes with boundaryGap true');
             }
-          }
+          } // add 0.5px to avoid the gaps
 
-          width = xAxis.getBandWidth();
-          height = yAxis.getBandWidth();
+
+          width = xAxis.getBandWidth() + .5;
+          height = yAxis.getBandWidth() + .5;
           xAxisExtent = xAxis.scale.getExtent();
           yAxisExtent = yAxis.scale.getExtent();
         }
@@ -69395,18 +69449,19 @@
         var emphasisStyle = seriesModel.getModel(['emphasis', 'itemStyle']).getItemStyle();
         var blurStyle = seriesModel.getModel(['blur', 'itemStyle']).getItemStyle();
         var selectStyle = seriesModel.getModel(['select', 'itemStyle']).getItemStyle();
+        var borderRadius = seriesModel.get(['itemStyle', 'borderRadius']);
         var labelStatesModels = getLabelStatesModels(seriesModel);
         var emphasisModel = seriesModel.getModel('emphasis');
         var focus = emphasisModel.get('focus');
         var blurScope = emphasisModel.get('blurScope');
         var emphasisDisabled = emphasisModel.get('disabled');
-        var dataDims = isCoordinateSystemType(coordSys, 'cartesian2d') ? [data.mapDimension('x'), data.mapDimension('y'), data.mapDimension('value')] : [data.mapDimension('time'), data.mapDimension('value')];
+        var dataDims = isCartesian2d ? [data.mapDimension('x'), data.mapDimension('y'), data.mapDimension('value')] : [data.mapDimension('time'), data.mapDimension('value')];
 
         for (var idx = start; idx < end; idx++) {
           var rect = void 0;
           var style = data.getItemVisual(idx, 'style');
 
-          if (isCoordinateSystemType(coordSys, 'cartesian2d')) {
+          if (isCartesian2d) {
             var dataDimX = data.get(dataDims[0], idx);
             var dataDimY = data.get(dataDims[1], idx); // Ignore empty data and out of extent data
 
@@ -69417,10 +69472,10 @@
             var point = coordSys.dataToPoint([dataDimX, dataDimY]);
             rect = new Rect({
               shape: {
-                x: Math.floor(Math.round(point[0]) - width / 2),
-                y: Math.floor(Math.round(point[1]) - height / 2),
-                width: Math.ceil(width),
-                height: Math.ceil(height)
+                x: point[0] - width / 2,
+                y: point[1] - height / 2,
+                width: width,
+                height: height
               },
               style: style
             });
@@ -69435,21 +69490,28 @@
               shape: coordSys.dataToRect([data.get(dataDims[0], idx)]).contentShape,
               style: style
             });
-          }
+          } // Optimization for large datset
 
-          var itemModel = data.getItemModel(idx); // Optimization for large datset
 
           if (data.hasItemOption) {
+            var itemModel = data.getItemModel(idx);
             var emphasisModel_1 = itemModel.getModel('emphasis');
             emphasisStyle = emphasisModel_1.getModel('itemStyle').getItemStyle();
             blurStyle = itemModel.getModel(['blur', 'itemStyle']).getItemStyle();
-            selectStyle = itemModel.getModel(['select', 'itemStyle']).getItemStyle();
+            selectStyle = itemModel.getModel(['select', 'itemStyle']).getItemStyle(); // Each item value struct in the data would be firstly
+            // {
+            //     itemStyle: { borderRadius: [30, 30] },
+            //     value: [2022, 02, 22]
+            // }
+
+            borderRadius = itemModel.get(['itemStyle', 'borderRadius']);
             focus = emphasisModel_1.get('focus');
             blurScope = emphasisModel_1.get('blurScope');
             emphasisDisabled = emphasisModel_1.get('disabled');
             labelStatesModels = getLabelStatesModels(itemModel);
           }
 
+          rect.shape.r = borderRadius;
           var rawValue = seriesModel.getRawValue(idx);
           var defaultText = '-';
 
@@ -69824,7 +69886,7 @@
         valueLineWidth *= symbolScale[opt.valueDim.index];
       }
 
-      outputSymbolMeta.valueLineWidth = valueLineWidth;
+      outputSymbolMeta.valueLineWidth = valueLineWidth || 0;
     }
 
     function prepareLayoutInfo(itemModel, symbolSize, layout, symbolRepeat, symbolClip, symbolOffset, symbolPosition, valueLineWidth, boundingLength, repeatCutLength, opt, outputSymbolMeta) {
@@ -70968,7 +71030,13 @@
             textAlign = midAngle > Math.PI / 2 ? 'right' : 'left';
           } else {
             if (!textAlign || textAlign === 'center') {
-              r = (layout.r + layout.r0) / 2;
+              // Put label in the center if it's a circle
+              if (angle === 2 * Math.PI && layout.r0 === 0) {
+                r = 0;
+              } else {
+                r = (layout.r + layout.r0) / 2;
+              }
+
               textAlign = 'center';
             } else if (textAlign === 'left') {
               r = layout.r0 + labelPadding;
@@ -76120,7 +76188,8 @@
             shape: {
               cx: polar.cx,
               cy: polar.cy,
-              r: ticksCoords[i].coord
+              // ensure circle radius >= 0
+              r: Math.max(ticksCoords[i].coord, 0)
             }
           }));
         } // Simple optimization
@@ -78618,7 +78687,8 @@
 
     function updateCommonAttrs(el, elOption, defaultZ, defaultZlevel) {
       if (!el.isGroup) {
-        var elDisplayable = el; // We should not support configure z and zlevel in the element level.
+        var elDisplayable = el;
+        elDisplayable.cursor = retrieve2(elOption.cursor, Displayable.prototype.cursor); // We should not support configure z and zlevel in the element level.
         // But seems we didn't limit it previously. So here still use it to avoid breaking.
 
         elDisplayable.z = retrieve2(elOption.z, defaultZ || 0);
@@ -79967,6 +80037,7 @@
         }
 
         var itemSize = +toolboxModel.get('itemSize');
+        var isVertical = toolboxModel.get('orient') === 'vertical';
         var featureOpts = toolboxModel.get('feature') || {};
         var features = this._features || (this._features = {});
         var featureNames = [];
@@ -80114,13 +80185,12 @@
               formatterParamsExtra: {
                 title: titlesMap[iconName]
               }
-            }); // graphic.enableHoverEmphasis(path);
-
+            });
             path.__title = titlesMap[iconName];
             path.on('mouseover', function () {
               // Should not reuse above hoverStyle, which might be modified.
               var hoverStyle = iconStyleEmphasisModel.getItemStyle();
-              var defaultTextPosition = toolboxModel.get('orient') === 'vertical' ? toolboxModel.get('right') == null ? 'right' : 'left' : toolboxModel.get('bottom') == null ? 'bottom' : 'top';
+              var defaultTextPosition = isVertical ? toolboxModel.get('right') == null && toolboxModel.get('left') !== 'right' ? 'right' : 'left' : toolboxModel.get('bottom') == null && toolboxModel.get('top') !== 'bottom' ? 'bottom' : 'top';
               textContent.setStyle({
                 fill: iconStyleEmphasisModel.get('textFill') || hoverStyle.fill || hoverStyle.stroke || '#000',
                 backgroundColor: iconStyleEmphasisModel.get('textBackgroundColor')
@@ -80131,10 +80201,10 @@
               textContent.ignore = !toolboxModel.get('showTitle'); // Use enterEmphasis and leaveEmphasis provide by ec.
               // There are flags managed by the echarts.
 
-              enterEmphasis(this);
+              api.enterEmphasis(this);
             }).on('mouseout', function () {
               if (featureModel.get(['iconStatus', iconName]) !== 'emphasis') {
-                leaveEmphasis(this);
+                api.leaveEmphasis(this);
               }
 
               textContent.hide();
@@ -80151,14 +80221,14 @@
 
         group.add(makeBackground(group.getBoundingRect(), toolboxModel)); // Adjust icon title positions to avoid them out of screen
 
-        group.eachChild(function (icon) {
+        isVertical || group.eachChild(function (icon) {
           var titleText = icon.__title; // const hoverStyle = icon.hoverStyle;
           // TODO simplify code?
 
           var emphasisState = icon.ensureState('emphasis');
           var emphasisTextConfig = emphasisState.textConfig || (emphasisState.textConfig = {});
           var textContent = icon.getTextContent();
-          var emphasisTextState = textContent && textContent.states.emphasis; // May be background element
+          var emphasisTextState = textContent && textContent.ensureState('emphasis'); // May be background element
 
           if (emphasisTextState && !isFunction(emphasisTextState) && titleText) {
             var emphasisTextStyle = emphasisTextState.style || (emphasisTextState.style = {});
@@ -80172,7 +80242,7 @@
               needPutOnTop = true;
             }
 
-            var topOffset = needPutOnTop ? -5 - rect.height : itemSize + 8;
+            var topOffset = needPutOnTop ? -5 - rect.height : itemSize + 10;
 
             if (offsetX + rect.width / 2 > api.getWidth()) {
               emphasisTextConfig.position = ['100%', topOffset];
@@ -80762,6 +80832,12 @@
       }
 
       DataView.prototype.onclick = function (ecModel, api) {
+        // FIXME: better way?
+        setTimeout(function () {
+          api.dispatchAction({
+            type: 'hideTip'
+          });
+        });
         var container = api.getDom();
         var model = this.model;
 
@@ -80769,18 +80845,19 @@
           container.removeChild(this._dom);
         }
 
-        var root = document.createElement('div');
-        root.style.cssText = 'position:absolute;left:5px;top:5px;bottom:5px;right:5px;';
+        var root = document.createElement('div'); // use padding to avoid 5px whitespace
+
+        root.style.cssText = 'position:absolute;top:0;bottom:0;left:0;right:0;padding:5px';
         root.style.backgroundColor = model.get('backgroundColor') || '#fff'; // Create elements
 
         var header = document.createElement('h4');
         var lang = model.get('lang') || [];
         header.innerHTML = lang[0] || model.get('title');
-        header.style.cssText = 'margin: 10px 20px;';
+        header.style.cssText = 'margin:10px 20px';
         header.style.color = model.get('textColor');
         var viewMain = document.createElement('div');
         var textarea = document.createElement('textarea');
-        viewMain.style.cssText = 'display:block;width:100%;overflow:auto;';
+        viewMain.style.cssText = 'overflow:auto';
         var optionToContent = model.get('optionToContent');
         var contentToOption = model.get('contentToOption');
         var result = getContentFromModel(ecModel);
@@ -80795,19 +80872,22 @@
           }
         } else {
           // Use default textarea
-          viewMain.appendChild(textarea);
           textarea.readOnly = model.get('readOnly');
-          textarea.style.cssText = 'width:100%;height:100%;font-family:monospace;font-size:14px;line-height:1.6rem;';
-          textarea.style.color = model.get('textColor');
-          textarea.style.borderColor = model.get('textareaBorderColor');
-          textarea.style.backgroundColor = model.get('textareaColor');
+          var style = textarea.style; // eslint-disable-next-line max-len
+
+          style.cssText = 'display:block;width:100%;height:100%;font-family:monospace;font-size:14px;line-height:1.6rem;resize:none;box-sizing:border-box;outline:none';
+          style.color = model.get('textColor');
+          style.borderColor = model.get('textareaBorderColor');
+          style.backgroundColor = model.get('textareaColor');
           textarea.value = result.value;
+          viewMain.appendChild(textarea);
         }
 
         var blockMetaList = result.meta;
         var buttonContainer = document.createElement('div');
-        buttonContainer.style.cssText = 'position:absolute;bottom:0;left:0;right:0;';
-        var buttonStyle = 'float:right;margin-right:20px;border:none;' + 'cursor:pointer;padding:2px 5px;font-size:12px;border-radius:3px';
+        buttonContainer.style.cssText = 'position:absolute;bottom:5px;left:0;right:0'; // eslint-disable-next-line max-len
+
+        var buttonStyle = 'float:right;margin-right:20px;border:none;cursor:pointer;padding:2px 5px;font-size:12px;border-radius:3px';
         var closeButton = document.createElement('div');
         var refreshButton = document.createElement('div');
         buttonStyle += ';background-color:' + model.get('buttonColor');
@@ -80824,7 +80904,7 @@
           if (contentToOption == null && optionToContent != null || contentToOption != null && optionToContent == null) {
             if ("development" !== 'production') {
               // eslint-disable-next-line
-              console.warn('It seems you have just provided one of `contentToOption` and `optionToContent` functions but missed the other one. Data change is ignored.');
+              warn('It seems you have just provided one of `contentToOption` and `optionToContent` functions but missed the other one. Data change is ignored.');
             }
 
             close();
@@ -80855,8 +80935,7 @@
         });
         closeButton.innerHTML = lang[1];
         refreshButton.innerHTML = lang[2];
-        refreshButton.style.cssText = buttonStyle;
-        closeButton.style.cssText = buttonStyle;
+        refreshButton.style.cssText = closeButton.style.cssText = buttonStyle;
         !model.get('readOnly') && buttonContainer.appendChild(refreshButton);
         buttonContainer.appendChild(closeButton);
         root.appendChild(header);
@@ -82886,6 +82965,7 @@
         }
 
         var tooltipContent = this._tooltipContent;
+        tooltipContent.setEnterable(tooltipModel.get('enterable'));
         var formatter = tooltipModel.get('formatter');
         positionExpr = positionExpr || tooltipModel.get('position');
         var html = defaultHtml;
@@ -85886,7 +85966,7 @@
         inner$h(drawGroup).keep = true;
       };
 
-      MarkerView.prototype.blurSeries = function (seriesModelList) {
+      MarkerView.prototype.toggleBlurSeries = function (seriesModelList, isBlur) {
         var _this = this;
 
         each(seriesModelList, function (seriesModel) {
@@ -85896,7 +85976,7 @@
             var data = markerModel.getData();
             data.eachItemGraphicEl(function (el) {
               if (el) {
-                enterBlur(el);
+                isBlur ? enterBlur(el) : leaveBlur(el);
               }
             });
           }
@@ -90710,15 +90790,13 @@
         var orient = this._orient;
         var textStyleModel = this.visualMapModel.textStyleModel;
         this.group.add(new ZRText({
-          style: {
+          style: createTextStyle(textStyleModel, {
             x: position[0],
             y: position[1],
             verticalAlign: orient === 'horizontal' ? 'middle' : align,
             align: orient === 'horizontal' ? align : 'center',
-            text: text,
-            font: textStyleModel.getFont(),
-            fill: textStyleModel.getTextColor()
-          }
+            text: text
+          })
         }));
       };
 
@@ -90804,13 +90882,11 @@
             stop(e.event);
           },
           ondragend: onDragEnd,
-          style: {
+          style: createTextStyle(textStyleModel, {
             x: 0,
             y: 0,
-            text: '',
-            font: textStyleModel.getFont(),
-            fill: textStyleModel.getTextColor()
-          }
+            text: ''
+          })
         });
         handleLabel.ensureState('blur').style = {
           opacity: 0.1
@@ -90856,13 +90932,11 @@
         var indicatorLabel = new ZRText({
           silent: true,
           invisible: true,
-          style: {
+          style: createTextStyle(textStyleModel, {
             x: 0,
             y: 0,
-            text: '',
-            font: textStyleModel.getFont(),
-            fill: textStyleModel.getTextColor()
-          }
+            text: ''
+          })
         });
         this.group.add(indicatorLabel);
         var indicatorLabelPoint = [(orient === 'horizontal' ? textSize / 2 : HOVER_LINK_OUT) + itemSize[0] / 2, 0];
@@ -92123,15 +92197,13 @@
         var itemGroup = new Group();
         var textStyleModel = this.visualMapModel.textStyleModel;
         itemGroup.add(new ZRText({
-          style: {
+          style: createTextStyle(textStyleModel, {
             x: showLabel ? itemAlign === 'right' ? itemSize[0] : 0 : itemSize[0] / 2,
             y: itemSize[1] / 2,
             verticalAlign: 'middle',
             align: showLabel ? itemAlign : 'center',
-            text: text,
-            font: textStyleModel.getFont(),
-            fill: textStyleModel.getTextColor()
-          }
+            text: text
+          })
         }));
         group.add(itemGroup);
       };

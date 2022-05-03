@@ -1327,12 +1327,30 @@ Charcoal.Admin = (function () {
      * Retrieve Components
      */
 
+    Manager.prototype.get_property_inputs = function () {
+        return Array.isArray(this.components.property_inputs)
+            ? this.components.property_inputs
+            : [];
+    };
+
     Manager.prototype.get_property_input = function (id) {
         return this.get_component('property_inputs', id);
     };
 
+    Manager.prototype.get_widgets = function () {
+        return Array.isArray(this.components.widgets)
+            ? this.components.widgets
+            : [];
+    };
+
     Manager.prototype.get_widget = function (id) {
         return this.get_component('widgets', id);
+    };
+
+    Manager.prototype.get_templates = function () {
+        return Array.isArray(this.components.templates)
+            ? this.components.templates
+            : [];
     };
 
     Manager.prototype.get_template = function (id) {
@@ -1481,81 +1499,97 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * This is called by the widget.form on form submit
-     * Called save because it's calling the save method on the properties' input
-     * @see admin/widget/form.js submit_form()
-     * @return boolean Success (in case of validation)
+     * Prepares components for form submission.
+     *
+     * This method is called by {@see Charcoal.Admin.Widget_Form.prototype.request_submit form widgets}.
+     *
+     * @param  {Component} [scope] - The component that called this method.
+     * @return {boolean}
      */
-    Manager.prototype.prepare_submit = function () {
-        this.prepare_inputs();
-        this.prepare_widgets();
-        return true;
+    Manager.prototype.prepare_submit = function (scope) {
+        return this.prepare_inputs(scope) && this.prepare_widgets(scope);
     };
 
-    Manager.prototype.prepare_inputs = function () {
-        // Get inputs
-        var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
+    /**
+     * Validates and "saves" property inputs for form submission.
+     *
+     * @param  {Component[]} components - Zero or more components to prepare.
+     * @param  {Component}   [scope]    - The component that called this method.
+     * @return {boolean}
+     */
+    Manager.prototype.prepare_inputs = function (scope) {
+        var inputs = this.get_property_inputs();
 
-        if (!inputs.length) {
-            // No inputs? Move on
+        return this.prepare_components(inputs, scope);
+    };
+
+    /**
+     * Validates and "saves" widgets for form submission.
+     *
+     * @param  {Component[]} components - Zero or more components to prepare.
+     * @param  {Component}   [scope]    - The component that called this method.
+     * @return {boolean}
+     */
+    Manager.prototype.prepare_widgets = function (scope) {
+        var widgets = this.get_widgets();
+
+        return this.prepare_components(widgets, scope);
+    };
+
+    /**
+     * Validates and "saves" components for form submission.
+     *
+     * The "save" is, most often, used to serialize the value of
+     * a complex UI into a hidden form control.
+     *
+     * Each component is expected to add their own feedback if their
+     * value is invalid or errored (via `validate` or `save`).
+     *
+     * @param  {Component[]} components - Zero or more components to prepare.
+     * @param  {Component}   [scope]    - The component that called this method.
+     * @return {boolean}
+     */
+    Manager.prototype.prepare_components = function (components, scope) {
+        if (!components.length) {
             return true;
         }
 
-        var length = inputs.length;
-        var input;
+        var length = components.length,
+            component,
+            result,
+            i;
 
-        // Loop for validation
-        var k = 0;
-        for (; k < length; k++) {
-            input = inputs[ k ];
-            if (typeof input.validate === 'function') {
-                input.validate();
+        for (i = 0; i < length; i++) {
+            component = components[i];
+
+            if (typeof component.will_validate === 'function') {
+                if (component.will_validate(scope) === false) {
+                    continue;
+                }
+            }
+
+            if (typeof component.validate === 'function') {
+                result = component.validate();
+                if (result === false) {
+                    return result;
+                }
             }
         }
 
-        // We should add a check if the validation passed right here, before saving
+        for (i = 0; i < length; i++) {
+            component = components[i];
 
-        // Loop for save
-        var i = 0;
-        for (; i < length; i++) {
-            input = inputs[ i ];
-            if (typeof input.save === 'function') {
-                input.save();
+            if (typeof component.will_save === 'function') {
+                if (component.will_save(scope) === false) {
+                    continue;
+                }
             }
-        }
 
-        return true;
-    };
-
-    Manager.prototype.prepare_widgets = function () {
-        // Get inputs
-        var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
-
-        if (!widgets.length) {
-            // No inputs? Move on
-            return true;
-        }
-
-        var length = widgets.length;
-        var widget;
-
-        // Loop for validation
-        var k = 0;
-        for (; k < length; k++) {
-            widget = widgets[ k ];
-            if (typeof widget.validate === 'function') {
-                widget.validate();
-            }
-        }
-
-        // We should add a check if the validation passed right here, before saving
-
-        // Loop for save
-        var i = 0;
-        for (; i < length; i++) {
-            widget = widgets[ i ];
-            if (typeof widget.save === 'function') {
-                widget.save();
+            if (typeof component.save === 'function') {
+                result = component.save();
+                if (result === false) {
+                    return result;
+                }
             }
         }
 
@@ -2637,6 +2671,53 @@ Charcoal.Admin.Component.prototype.destroy = function () {
     // Do nothing
 };
 
+/**
+ * Stub: Determines if the component is a candidate for validation.
+ *
+ * @param  {Component} [scope] - The parent component that calls for validation.
+ * @return {boolean}
+ */
+// Charcoal.Admin.Component.prototype.will_validate = function (scope) {
+//     return (scope && !$.contains(scope.element()[0], this.element()[0]));
+// };
+
+/**
+ * Stub: Validates the component.
+ *
+ * Each component is expected to add their own feedback if their
+ * value is invalid or errored (via `validate` or `save`).
+ *
+ * @return {boolean} If `false`, the component is invalid.
+ */
+// Charcoal.Admin.Component.prototype.validate = function (scope) {
+//     return true;
+// };
+
+/**
+ * Stub: Determines if the component is a candidate for saving.
+ *
+ * @param  {Component} [scope] - The parent component that calls for save.
+ * @return {boolean}
+ */
+// Charcoal.Admin.Component.prototype.will_save = function (scope) {
+//     return (scope && !$.contains(scope.element()[0], this.element()[0]));
+// };
+
+/**
+ * Stub: Prepares the component to be saved.
+ *
+ * This method can be used to serialize a complex value
+ * or trigger a separate process (such as uploading a file).
+ *
+ * Each component is expected to add their own feedback if their
+ * value is invalid or errored (via `validate` or `save`).
+ *
+ * @return {boolean} If `false`, the component could not save.
+ */
+// Charcoal.Admin.Component.prototype.save = function () {
+//     return true;
+// };
+
 ;(function ($, Admin) {
     'use strict';
 
@@ -3063,15 +3144,6 @@ Charcoal.Admin.Widget.prototype.suppress_feedback = function (flag) {
     }
 
     return this._suppress_feedback || false;
-};
-
-/**
- * Called upon save by the component manager
- *
- * @return {Boolean} Default action is set to true.
- */
-Charcoal.Admin.Widget.prototype.save = function () {
-    return true;
 };
 
 /**
@@ -3761,25 +3833,39 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj) {
     this.element().find('.c-attachments_container > .js-grid-container').append(template);
 
     return this;
-
 };
 
 /**
- * [save description]
- * @return {[type]} [description]
+ * Determines if the component is a candidate for saving.
+ *
+ * @param  {Component} [scope] - The parent component that calls for save.
+ * @return {boolean}
+ */
+Charcoal.Admin.Widget_Attachment.prototype.will_save = function (scope) {
+    return (scope && $.contains(scope.element()[0], this.element()[0]));
+};
+
+/**
+ * Prepares the component to be saved.
+ *
+ * This method triggers the update of relationships between
+ * the primary model and its attachment.
+ *
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Attachment.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
 
-    // Create join from current list.
     this.join();
+
+    return true;
 };
 
 Charcoal.Admin.Widget_Attachment.prototype.join = function (cb) {
     if (!$('#' + this.element().attr('id')).length) {
-        return ;
+        return;
     }
     // Scope
     var that = this;
@@ -5525,16 +5611,31 @@ Charcoal.Admin.Widget_Relation.prototype.add = function (obj) {
 };
 
 /**
- * [save description]
- * @return {[type]} [description]
+ * Determines if the component is a candidate for saving.
+ *
+ * @param  {Component} [scope] - The parent component that calls for save.
+ * @return {boolean}
+ */
+Charcoal.Admin.Widget_Relation.prototype.will_save = function (scope) {
+    return (scope && $.contains(scope.element()[0], this.element()[0]));
+};
+
+/**
+ * Prepares the component to be saved.
+ *
+ * This method triggers the update of relationships between
+ * the primary model and its attachment.
+ *
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Relation.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
 
-    // Create relations from current list.
     this.create_relation();
+
+    return true;
 };
 
 Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb) {
@@ -6129,31 +6230,6 @@ Charcoal.Admin.Property.prototype.set_val = function (val) {
  */
 Charcoal.Admin.Property.prototype.val = function () {
     return this._val;
-};
-
-/**
- * Default validate action
- * Validate should return the validation feedback with a
- * success and / or message
- * IdeaS:
- * Use a validation object that has all necessary methods for
- * strings (max_length, min_length, etc)
- *
- * @return Object validation feedback
- */
-Charcoal.Admin.Property.prototype.validate = function () {
-    // Validate the current
-    return {};
-};
-
-/**
- * Default save action
- *
- * @return {this}
- */
-Charcoal.Admin.Property.prototype.save = function () {
-    // Default action = nothing
-    return this;
 };
 
 /**
@@ -9502,13 +9578,10 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.reverse_translate_coords
 };
 
 /**
- * I believe this should fit the PHP model
- * Added the save() function to be called on form submit
- * Could be inherited from a global Charcoal.Admin.Property Prototype
- * Extra ideas:
- * - save
- * - validate
- * @return this (chainable)
+ * Prepares the component to be saved.
+ *
+ * @param  {Component} [scope] - The component that called this method.
+ * @return {?boolean}
  */
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
     // Get raw map datas
@@ -9528,7 +9601,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
     // Split with classes or data if needed
     this.element().find('input[type=hidden]').val(JSON.stringify(coords));
 
-    return this;
+    return true;
 };
 
 /**
@@ -9848,13 +9921,10 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = functio
 };
 
 /**
- * I believe this should fit the PHP model
- * Added the save() function to be called on form submit
- * Could be inherited from a global Charcoal.Admin.Property Prototype
- * Extra ideas:
- * - save
- * - validate
- * @return this (chainable)
+ * Prepares the component to be saved.
+ *
+ * @param  {Component} [scope] - The component that called this method.
+ * @return {?boolean}
  */
 Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
     // Get raw map datas
@@ -9868,7 +9938,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
     // Split with classes or data if needed
     this.element().find('input[type=hidden]').val(JSON.stringify(places));
 
-    return this;
+    return true;
 };
 
 /**

@@ -234,13 +234,10 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.hide_marker_toolbar = functio
 };
 
 /**
- * I believe this should fit the PHP model
- * Added the save() function to be called on form submit
- * Could be inherited from a global Charcoal.Admin.Property Prototype
- * Extra ideas:
- * - save
- * - validate
- * @return this (chainable)
+ * Prepares the component to be saved.
+ *
+ * @param  {Component} [scope] - The component that called this method.
+ * @return {?boolean}
  */
 Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
     // Get raw map datas
@@ -254,5 +251,5 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
     // Split with classes or data if needed
     this.element().find('input[type=hidden]').val(JSON.stringify(places));
 
-    return this;
+    return true;
 };

@@ -404,25 +404,39 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj) {
     this.element().find('.c-attachments_container > .js-grid-container').append(template);
 
     return this;
-
 };
 
 /**
- * [save description]
- * @return {[type]} [description]
+ * Determines if the component is a candidate for saving.
+ *
+ * @param  {Component} [scope] - The parent component that calls for save.
+ * @return {boolean}
+ */
+Charcoal.Admin.Widget_Attachment.prototype.will_save = function (scope) {
+    return (scope && $.contains(scope.element()[0], this.element()[0]));
+};
+
+/**
+ * Prepares the component to be saved.
+ *
+ * This method triggers the update of relationships between
+ * the primary model and its attachment.
+ *
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Attachment.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
 
-    // Create join from current list.
     this.join();
+
+    return true;
 };
 
 Charcoal.Admin.Widget_Attachment.prototype.join = function (cb) {
     if (!$('#' + this.element().attr('id')).length) {
-        return ;
+        return;
     }
     // Scope
     var that = this;

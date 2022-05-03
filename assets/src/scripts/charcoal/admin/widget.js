@@ -91,15 +91,6 @@ Charcoal.Admin.Widget.prototype.suppress_feedback = function (flag) {
 };
 
 /**
- * Called upon save by the component manager
- *
- * @return {Boolean} Default action is set to true.
- */
-Charcoal.Admin.Widget.prototype.save = function () {
-    return true;
-};
-
-/**
  * Animate the widget out on reload
  * Use callback to define what to do after the animation.
  *

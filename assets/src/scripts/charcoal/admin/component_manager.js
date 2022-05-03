@@ -68,12 +68,30 @@
      * Retrieve Components
      */
 
+    Manager.prototype.get_property_inputs = function () {
+        return Array.isArray(this.components.property_inputs)
+            ? this.components.property_inputs
+            : [];
+    };
+
     Manager.prototype.get_property_input = function (id) {
         return this.get_component('property_inputs', id);
     };
 
+    Manager.prototype.get_widgets = function () {
+        return Array.isArray(this.components.widgets)
+            ? this.components.widgets
+            : [];
+    };
+
     Manager.prototype.get_widget = function (id) {
         return this.get_component('widgets', id);
+    };
+
+    Manager.prototype.get_templates = function () {
+        return Array.isArray(this.components.templates)
+            ? this.components.templates
+            : [];
     };
 
     Manager.prototype.get_template = function (id) {
@@ -222,81 +240,97 @@
     };
 
     /**
-     * This is called by the widget.form on form submit
-     * Called save because it's calling the save method on the properties' input
-     * @see admin/widget/form.js submit_form()
-     * @return boolean Success (in case of validation)
+     * Prepares components for form submission.
+     *
+     * This method is called by {@see Charcoal.Admin.Widget_Form.prototype.request_submit form widgets}.
+     *
+     * @param  {Component} [scope] - The component that called this method.
+     * @return {boolean}
      */
-    Manager.prototype.prepare_submit = function () {
-        this.prepare_inputs();
-        this.prepare_widgets();
-        return true;
+    Manager.prototype.prepare_submit = function (scope) {
+        return this.prepare_inputs(scope) && this.prepare_widgets(scope);
     };
 
-    Manager.prototype.prepare_inputs = function () {
-        // Get inputs
-        var inputs = (typeof this.components.property_inputs !== 'undefined') ? this.components.property_inputs : [];
+    /**
+     * Validates and "saves" property inputs for form submission.
+     *
+     * @param  {Component[]} components - Zero or more components to prepare.
+     * @param  {Component}   [scope]    - The component that called this method.
+     * @return {boolean}
+     */
+    Manager.prototype.prepare_inputs = function (scope) {
+        var inputs = this.get_property_inputs();
 
-        if (!inputs.length) {
-            // No inputs? Move on
+        return this.prepare_components(inputs, scope);
+    };
+
+    /**
+     * Validates and "saves" widgets for form submission.
+     *
+     * @param  {Component[]} components - Zero or more components to prepare.
+     * @param  {Component}   [scope]    - The component that called this method.
+     * @return {boolean}
+     */
+    Manager.prototype.prepare_widgets = function (scope) {
+        var widgets = this.get_widgets();
+
+        return this.prepare_components(widgets, scope);
+    };
+
+    /**
+     * Validates and "saves" components for form submission.
+     *
+     * The "save" is, most often, used to serialize the value of
+     * a complex UI into a hidden form control.
+     *
+     * Each component is expected to add their own feedback if their
+     * value is invalid or errored (via `validate` or `save`).
+     *
+     * @param  {Component[]} components - Zero or more components to prepare.
+     * @param  {Component}   [scope]    - The component that called this method.
+     * @return {boolean}
+     */
+    Manager.prototype.prepare_components = function (components, scope) {
+        if (!components.length) {
             return true;
         }
 
-        var length = inputs.length;
-        var input;
+        var length = components.length,
+            component,
+            result,
+            i;
 
-        // Loop for validation
-        var k = 0;
-        for (; k < length; k++) {
-            input = inputs[ k ];
-            if (typeof input.validate === 'function') {
-                input.validate();
+        for (i = 0; i < length; i++) {
+            component = components[i];
+
+            if (typeof component.will_validate === 'function') {
+                if (component.will_validate(scope) === false) {
+                    continue;
+                }
+            }
+
+            if (typeof component.validate === 'function') {
+                result = component.validate();
+                if (result === false) {
+                    return result;
+                }
             }
         }
 
-        // We should add a check if the validation passed right here, before saving
+        for (i = 0; i < length; i++) {
+            component = components[i];
 
-        // Loop for save
-        var i = 0;
-        for (; i < length; i++) {
-            input = inputs[ i ];
-            if (typeof input.save === 'function') {
-                input.save();
+            if (typeof component.will_save === 'function') {
+                if (component.will_save(scope) === false) {
+                    continue;
+                }
             }
-        }
 
-        return true;
-    };
-
-    Manager.prototype.prepare_widgets = function () {
-        // Get inputs
-        var widgets = (typeof this.components.widgets !== 'undefined') ? this.components.widgets : [];
-
-        if (!widgets.length) {
-            // No inputs? Move on
-            return true;
-        }
-
-        var length = widgets.length;
-        var widget;
-
-        // Loop for validation
-        var k = 0;
-        for (; k < length; k++) {
-            widget = widgets[ k ];
-            if (typeof widget.validate === 'function') {
-                widget.validate();
-            }
-        }
-
-        // We should add a check if the validation passed right here, before saving
-
-        // Loop for save
-        var i = 0;
-        for (; i < length; i++) {
-            widget = widgets[ i ];
-            if (typeof widget.save === 'function') {
-                widget.save();
+            if (typeof component.save === 'function') {
+                result = component.save();
+                if (result === false) {
+                    return result;
+                }
             }
         }
 

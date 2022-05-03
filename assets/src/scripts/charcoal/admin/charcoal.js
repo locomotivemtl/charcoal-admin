@@ -161,6 +161,26 @@ Charcoal.Admin = (function () {
     };
 
     /**
+     * Determines if the URI is absolute.
+     *
+     * @param  {string} uri
+     * @return {boolean}
+     */
+    Admin.is_absolute_url = function (uri) {
+        return /(?:^[a-z][a-z0-9+\.-]*:|\/\/)/i.test(uri);
+    };
+
+    /**
+     * Redirects the window to the URI.
+     *
+     * @param  {string} uri
+     * @return {void}
+     */
+    Admin.redirect_to_url = function (uri) {
+        window.location.href = Admin.is_absolute_url(uri) ? uri : Charcoal.Admin.admin_url() + uri;
+    };
+
+    /**
      * Provides access to the component manager.
      *
      * @return {ComponentManager}

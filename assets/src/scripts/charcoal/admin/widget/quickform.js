@@ -1,4 +1,3 @@
-/* globals commonL10n */
 /**
  * Quick form is called by JS and must be
  * added in the component manager manually.
@@ -9,14 +8,14 @@
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
     Charcoal.Admin.Widget.call(this, opts);
 
-    this.save_callback = opts.save_callback || '';
+    this.save_callback   = opts.save_callback || '';
     this.cancel_callback = opts.cancel_callback || '';
 
     this.form_selector = opts.data.form_selector;
     this.$form         = $(this.form_selector);
 
-    this.save_action   = opts.save_action || 'object/save';
-    this.update_action = opts.update_action || 'object/update';
+    this.save_action     = opts.save_action || 'object/save';
+    this.update_action   = opts.update_action || 'object/update';
     this.extra_form_data = opts.extra_form_data || {};
 
     this.group_conditions = opts.data.group_conditions;
@@ -24,12 +23,22 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.is_new_object = false;
     this.xhr = null;
     this.obj_id = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
-
-    return this;
 };
 Charcoal.Admin.Widget_Quick_Form.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Quick_Form;
 Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
+
+Charcoal.Admin.Widget_Quick_Form.prototype.parse_group_conditions = Charcoal.Admin.Widget_Form.prototype.parse_group_conditions;
+Charcoal.Admin.Widget_Quick_Form.prototype.validate_group_conditions = Charcoal.Admin.Widget_Form.prototype.validate_group_conditions;
+Charcoal.Admin.Widget_Quick_Form.prototype.toggle_conditional_group = Charcoal.Admin.Widget_Form.prototype.toggle_conditional_group;
+Charcoal.Admin.Widget_Quick_Form.prototype.get_input_value = Charcoal.Admin.Widget_Form.prototype.get_input_value;
+Charcoal.Admin.Widget_Quick_Form.prototype.disable_form = Charcoal.Admin.Widget_Form.prototype.disable_form;
+Charcoal.Admin.Widget_Quick_Form.prototype.enable_form = Charcoal.Admin.Widget_Form.prototype.enable_form;
+Charcoal.Admin.Widget_Quick_Form.prototype.request_url = Charcoal.Admin.Widget_Form.prototype.request_url;
+Charcoal.Admin.Widget_Quick_Form.prototype.request_done = Charcoal.Admin.Widget_Form.prototype.request_done;
+Charcoal.Admin.Widget_Quick_Form.prototype.request_failed = Charcoal.Admin.Widget_Form.prototype.request_failed;
+Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
+Charcoal.Admin.Widget_Quick_Form.prototype.add_action_for_next_url = Charcoal.Admin.Widget_Form.prototype.add_action_for_next_url;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
     this.bind_events();
@@ -57,129 +66,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
 };
 
 /**
- * @return {void}
+ * @see    Charcoal.Admin.Widget_Form.prototype.submit_form()
+ * @param  {HTMLFormElement} form - The form to submit.
+ * @return self
  */
-Charcoal.Admin.Widget_Quick_Form.prototype.parse_group_conditions = function () {
-    var that = this;
-
-    $.each(this.group_conditions, function (target, conditions) {
-        var isValid = that.validate_group_conditions(target);
-        if (!isValid) {
-            that.toggle_conditional_group(target, isValid, false);
-        }
-
-        $.each(conditions, function (index, condition) {
-            that.$form.on('change.charcoal.quick.form', '#' + condition.input_id, {
-                condition_target: target
-            }, function (event) {
-                var isValid = that.validate_group_conditions(event.data.condition_target);
-                that.toggle_conditional_group(event.data.condition_target, isValid);
-            });
-        });
-    });
-};
-
-/**
- * @return {boolean}
- */
-Charcoal.Admin.Widget_Quick_Form.prototype.validate_group_conditions = function (target) {
-    var conditions = this.group_conditions[target];
-    var that       = this;
-    var valid      = true;
-
-    $.each(conditions, function (index, condition) {
-        var $input    = that.$form.find('#' + condition.input_id);
-        var input_val = that.get_input_value($input);
-
-        switch (JSON.stringify(condition.operator)) {
-            case '"!=="':
-            case '"!="':
-            case '"!"':
-            case '"not"':
-                if (input_val === condition.value) {
-                    valid = false;
-                    return;
-                }
-                break;
-            default:
-            case '"==="':
-            case '"=="':
-            case '"="':
-            case '"is"':
-                if (input_val !== condition.value) {
-                    valid = false;
-                    return;
-                }
-                break;
-        }
-
-    });
-
-    return valid;
-};
-
-/**
- * @return {void}
- */
-Charcoal.Admin.Widget_Quick_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
-    var $group  = this.$form.find('#' + group);
-    var $inputs = $group.find('select, input, textarea');
-    animate     = animate || true;
-
-    var complete = function () {
-        $inputs.each(function () {
-            $(this).attr('disabled', !flag);
-        });
-    };
-
-    if (flag) {
-        if (animate) {
-            $group.slideDown({
-                easing: 'easeInOutQuad',
-                start:  complete
-            });
-        } else {
-            $group.show(0, complete);
-        }
-    } else {
-        if (animate) {
-            $group.slideUp({
-                easing:   'easeInOutQuad',
-                complete: complete
-            });
-        } else {
-            $group.hide(0, complete);
-        }
-    }
-};
-
-/**
- * @return {*}
- */
-Charcoal.Admin.Widget_Quick_Form.prototype.get_input_value = function ($input) {
-    // skip if disabled
-    if ($input.attr('disabled') === 'disabled') {
-        return null;
-    }
-
-    var val;
-
-    var $inputType = $input.attr('type');
-    switch ($inputType) {
-        case 'select':
-            val = $input.find(':selected').val();
-            break;
-        case 'checkbox':
-            val = $input.is(':checked');
-            break;
-        default:
-            val = $input.val();
-            break;
-    }
-
-    return val;
-};
-
 Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
     if (this.form_working) {
         return;
@@ -230,31 +120,13 @@ Charcoal.Admin.Widget_Quick_Form.prototype.submit_form = function (form) {
         .always($.proxy(this.request_complete, this, $form, $trigger));
 };
 
-Charcoal.Admin.Widget_Quick_Form.prototype.disable_form = Charcoal.Admin.Widget_Form.prototype.disable_form;
-
-Charcoal.Admin.Widget_Quick_Form.prototype.enable_form = Charcoal.Admin.Widget_Form.prototype.enable_form;
-
-Charcoal.Admin.Widget_Quick_Form.prototype.request_url = Charcoal.Admin.Widget_Form.prototype.request_url;
-
-Charcoal.Admin.Widget_Quick_Form.prototype.request_done = Charcoal.Admin.Widget_Form.prototype.request_done;
-
-Charcoal.Admin.Widget_Quick_Form.prototype.request_failed = Charcoal.Admin.Widget_Form.prototype.request_failed;
-
-Charcoal.Admin.Widget_Quick_Form.prototype.request_complete = Charcoal.Admin.Widget_Form.prototype.request_complete;
-
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function ($form, $trigger, response/* ... */) {
     if (response.feedbacks && !this.suppress_feedback()) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 
     if (response.next_url) {
-        // @todo "dynamise" the label
-        Charcoal.Admin.feedback().add_action({
-            label: commonL10n.continue,
-            callback: function () {
-                window.location.href = Charcoal.Admin.admin_url() + response.next_url;
-            }
-        });
+        this.add_action_for_next_url(response.next_url, response.next_url_label);
     }
 
     this.enable_form($form, $trigger);

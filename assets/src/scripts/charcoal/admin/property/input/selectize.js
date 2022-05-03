@@ -330,7 +330,6 @@
 
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
-
                         var callbackOptions = {
                             class: 'new'
                         };

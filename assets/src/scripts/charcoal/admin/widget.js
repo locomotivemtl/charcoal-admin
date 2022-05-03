@@ -248,8 +248,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
 
     dialogOptions.onshown = function (dialog) {
         var xhr,
-            url      = Charcoal.Admin.admin_url() + 'widget/load',
-            data     = dialog_opts;
+            url  = Charcoal.Admin.admin_url() + 'widget/load',
+            data = dialog_opts;
 
         xhr = $.ajax({
             method:   'POST',
@@ -258,17 +258,18 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
             dataType: 'json'
         });
 
-        xhr.then(function (response, textStatus, jqXHR) {
-            if (!response || !response.success) {
-                if (response.feedbacks) {
-                    return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
-                } else {
-                    return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
+        xhr
+            .then(function (response, textStatus, jqXHR) {
+                if (!response || !response.success) {
+                    if (response.feedbacks) {
+                        return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+                    } else {
+                        return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
+                    }
                 }
-            }
 
-            return $.Deferred().resolve(response, textStatus, jqXHR);
-        })
+                return $.Deferred().resolve(response, textStatus, jqXHR);
+            })
             .done(function (response/*, textStatus, jqXHR*/) {
                 dialog.setMessage(response.widget_html);
 

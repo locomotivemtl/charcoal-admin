@@ -159,8 +159,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Form.prototype.parse_group_conditions = function () {
     var that = this;
@@ -183,8 +182,7 @@ Charcoal.Admin.Widget_Form.prototype.parse_group_conditions = function () {
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Form.prototype.validate_group_conditions = function (target) {
     var conditions = this.group_conditions[target];
@@ -223,8 +221,7 @@ Charcoal.Admin.Widget_Form.prototype.validate_group_conditions = function (targe
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
     var $group  = this.$form.find('#' + group);
@@ -259,8 +256,7 @@ Charcoal.Admin.Widget_Form.prototype.toggle_conditional_group = function (group,
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {*}
  */
 Charcoal.Admin.Widget_Form.prototype.get_input_value = function ($input) {
     // skip if disabled
@@ -287,8 +283,7 @@ Charcoal.Admin.Widget_Form.prototype.get_input_value = function ($input) {
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Form.prototype.update_tab_ident = function () {
     var urlParams = Charcoal.Admin.queryParams();

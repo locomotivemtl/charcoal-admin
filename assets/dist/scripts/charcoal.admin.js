@@ -3203,8 +3203,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
 
     dialogOptions.onshown = function (dialog) {
         var xhr,
-            url      = Charcoal.Admin.admin_url() + 'widget/load',
-            data     = dialog_opts;
+            url  = Charcoal.Admin.admin_url() + 'widget/load',
+            data = dialog_opts;
 
         xhr = $.ajax({
             method:   'POST',
@@ -3213,17 +3213,18 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
             dataType: 'json'
         });
 
-        xhr.then(function (response, textStatus, jqXHR) {
-            if (!response || !response.success) {
-                if (response.feedbacks) {
-                    return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
-                } else {
-                    return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
+        xhr
+            .then(function (response, textStatus, jqXHR) {
+                if (!response || !response.success) {
+                    if (response.feedbacks) {
+                        return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+                    } else {
+                        return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
+                    }
                 }
-            }
 
-            return $.Deferred().resolve(response, textStatus, jqXHR);
-        })
+                return $.Deferred().resolve(response, textStatus, jqXHR);
+            })
             .done(function (response/*, textStatus, jqXHR*/) {
                 dialog.setMessage(response.widget_html);
 
@@ -4217,8 +4218,7 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Form.prototype.parse_group_conditions = function () {
     var that = this;
@@ -4241,8 +4241,7 @@ Charcoal.Admin.Widget_Form.prototype.parse_group_conditions = function () {
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Form.prototype.validate_group_conditions = function (target) {
     var conditions = this.group_conditions[target];
@@ -4281,8 +4280,7 @@ Charcoal.Admin.Widget_Form.prototype.validate_group_conditions = function (targe
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
     var $group  = this.$form.find('#' + group);
@@ -4317,8 +4315,7 @@ Charcoal.Admin.Widget_Form.prototype.toggle_conditional_group = function (group,
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {*}
  */
 Charcoal.Admin.Widget_Form.prototype.get_input_value = function ($input) {
     // skip if disabled
@@ -4345,8 +4342,7 @@ Charcoal.Admin.Widget_Form.prototype.get_input_value = function ($input) {
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Form.prototype.update_tab_ident = function () {
     var urlParams = Charcoal.Admin.queryParams();
@@ -5146,8 +5142,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Quick_Form.prototype.parse_group_conditions = function () {
     var that = this;
@@ -5170,8 +5165,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.parse_group_conditions = function () 
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Quick_Form.prototype.validate_group_conditions = function (target) {
     var conditions = this.group_conditions[target];
@@ -5210,8 +5204,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.validate_group_conditions = function 
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {void}
  */
 Charcoal.Admin.Widget_Quick_Form.prototype.toggle_conditional_group = function (group, flag, animate) {
     var $group  = this.$form.find('#' + group);
@@ -5246,8 +5239,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.toggle_conditional_group = function (
 };
 
 /**
- * @see    Charcoal.Admin.Widget_Quick_Form.prototype.submit_form()
- * @return self
+ * @return {*}
  */
 Charcoal.Admin.Widget_Quick_Form.prototype.get_input_value = function ($input) {
     // skip if disabled
@@ -10438,7 +10430,6 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
                     suppress_feedback: (step === 1),
                     save_callback: function (response) {
-
                         var callbackOptions = {
                             class: 'new'
                         };

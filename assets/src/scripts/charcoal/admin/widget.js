@@ -265,7 +265,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
                 dialog.setMessage(response.widget_html);
 
                 if (typeof callback === 'function') {
-                    callback(response);
+                    callback(response, dialog);
                 }
 
                 $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
@@ -348,7 +348,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
  * @param  {Object}   [dialog_opts]        - Dialog settings.
  * @param  {Function} [confirmed_callback] - What to do after the dialog is confirmed?
  * @param  {Function} [cancel_callback]    - What to do after the dialog is canceled?
- * @return {void}
+ * @return {BootstrapDialog}
  */
 Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {
     var defaults = {
@@ -368,5 +368,5 @@ Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callb
 
     var opts = $.extend(defaults, dialog_opts);
 
-    BootstrapDialog.confirm(opts);
+    return BootstrapDialog.confirm(opts);
 };

@@ -37907,7 +37907,6 @@ var effectsEffectTransfer = effect;
         });
 
         return dialog.open();
-
     };
 
     /**

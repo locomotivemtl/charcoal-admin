@@ -230,6 +230,11 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widg
                 obj_id: dialogOptions.widget_options.id,
                 save_callback: function (response) {
                     callback(response);
+
+                    if ((this instanceof Charcoal.Admin.Component) && this.id()) {
+                        Charcoal.Admin.manager().destroy_component('widgets', this.id());
+                    }
+
                     dialog.close();
                 }
             });

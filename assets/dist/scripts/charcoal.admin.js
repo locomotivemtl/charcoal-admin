@@ -1318,7 +1318,7 @@ Charcoal.Admin = (function () {
             this.components[component_type] = this.components[component_type] || [];
             this.components[component_type].push(opts);
 
-        } else {
+        } else {
             console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
         }
     };
@@ -1379,11 +1379,38 @@ Charcoal.Admin = (function () {
     };
 
     /**
+     * Destroy component and remove from the manager
+     *
+     * @param   {string} component_type (widgets, inputs, properties)
+     * @param   {string} component_id
+     * @returns {void}
+     */
+    Manager.prototype.destroy_component = function (component_type, component_id) {
+        if (!this.isReady) {
+            throw new Error('Components must be rendered.');
+        }
+
+        if (component_type in this.components) {
+            this.components[component_type] = this.components[component_type].filter(function (component) {
+                if (component._id !== component_id) {
+                    return true;
+                }
+
+                if (typeof component.destroy === 'function') {
+                    component.destroy();
+                }
+
+                return false;
+            });
+        }
+    };
+
+    /**
      * Remove component from the manager
      *
-     * @param component_type (widgets, inputs, properties)
-     * @param component_id
-     * @returns {undefined}
+     * @param   {string} component_type (widgets, inputs, properties)
+     * @param   {string} component_id
+     * @returns {void}
      */
     Manager.prototype.remove_component = function (component_type, component_id) {
         if (!this.isReady) {
@@ -1395,8 +1422,6 @@ Charcoal.Admin = (function () {
                 return component._id !== component_id;
             });
         }
-
-        return undefined;
     };
 
     /**
@@ -1467,7 +1492,7 @@ Charcoal.Admin = (function () {
                     }
 
                 } catch (error) {
-                    console.error('Was not able to instanciate ' + component_data.ident);
+                    console.error('Was not able to instantiate ' + component_data.ident);
                     console.error(error);
                 }
             }
@@ -1830,7 +1855,7 @@ Charcoal.Admin = (function () {
 ;(function ($, Admin) {
     'use strict';
 
-    var lvls, modes, defs, alts, arr = [], reset = function () {
+    var lvls, modes, defs, alts, reset = function () {
         lvls  = DEFAULTS.supported.slice();
         modes = DEFAULTS.displayModes.slice();
         defs  = $.extend({}, DEFAULTS.definitions);
@@ -1961,7 +1986,7 @@ Charcoal.Admin = (function () {
         var entries = arguments;
 
         if (this.validContext(context)) {
-            entries = arr.slice.call(arguments, 1);
+            entries = Array.prototype.slice.call(arguments, 1);
         } else {
             context = 'global';
         }
@@ -3321,7 +3346,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
                 dialog.setMessage(response.widget_html);
 
                 if (typeof callback === 'function') {
-                    callback(response);
+                    callback(response, dialog);
                 }
 
                 $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
@@ -3404,7 +3429,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
  * @param  {Object}   [dialog_opts]        - Dialog settings.
  * @param  {Function} [confirmed_callback] - What to do after the dialog is confirmed?
  * @param  {Function} [cancel_callback]    - What to do after the dialog is canceled?
- * @return {void}
+ * @return {BootstrapDialog}
  */
 Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {
     var defaults = {
@@ -3424,7 +3449,7 @@ Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callb
 
     var opts = $.extend(defaults, dialog_opts);
 
-    BootstrapDialog.confirm(opts);
+    return BootstrapDialog.confirm(opts);
 };
 
 /* globals commonL10n,attachmentWidgetL10n */
@@ -3779,6 +3804,11 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
                 obj_id: id,
                 save_callback: function (response) {
                     callback(response);
+
+                    if ((this instanceof Charcoal.Admin.Component) && this.id()) {
+                        Charcoal.Admin.manager().destroy_component('widgets', this.id());
+                    }
+
                     dialog.close();
                 }
             });
@@ -5594,6 +5624,11 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widg
                 obj_id: dialogOptions.widget_options.id,
                 save_callback: function (response) {
                     callback(response);
+
+                    if ((this instanceof Charcoal.Admin.Component) && this.id()) {
+                        Charcoal.Admin.manager().destroy_component('widgets', this.id());
+                    }
+
                     dialog.close();
                 }
             });
@@ -10375,11 +10410,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
             dialog_options: {
                 onhide: function () {
                     if (self.widget_id !== undefined) {
-                        var widget = Charcoal.Admin.manager().get_widget(self.widget_id);
-                        if (typeof widget.destroy === 'function') {
-                            widget.destroy();
-                        }
-                        Charcoal.Admin.manager().remove_component('widgets', self.widget_id);
+                        Charcoal.Admin.manager().destroy_component('widgets', self.widget_id);
                     }
 
                     callback({
@@ -11329,7 +11360,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
         }
     };
 
-    this.dialog(data, function (response) {
+    var dialog = this.dialog(data, function (response) {
         if (response.success) {
             // Call the quickForm widget js.
             // Really not a good place to do that.
@@ -11356,7 +11387,8 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                         color: response.obj.color,
                         class: 'new'
                     });
-                    BootstrapDialog.closeAll();
+
+                    dialog.close();
                 }
             });
         }

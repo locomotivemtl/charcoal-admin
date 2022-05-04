@@ -1346,7 +1346,6 @@
         });
 
         return dialog.open();
-
     };
 
     /**

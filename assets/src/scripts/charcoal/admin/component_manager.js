@@ -59,7 +59,7 @@
             this.components[component_type] = this.components[component_type] || [];
             this.components[component_type].push(opts);
 
-        } else {
+        } else {
             console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
         }
     };
@@ -120,11 +120,38 @@
     };
 
     /**
+     * Destroy component and remove from the manager
+     *
+     * @param   {string} component_type (widgets, inputs, properties)
+     * @param   {string} component_id
+     * @returns {void}
+     */
+    Manager.prototype.destroy_component = function (component_type, component_id) {
+        if (!this.isReady) {
+            throw new Error('Components must be rendered.');
+        }
+
+        if (component_type in this.components) {
+            this.components[component_type] = this.components[component_type].filter(function (component) {
+                if (component._id !== component_id) {
+                    return true;
+                }
+
+                if (typeof component.destroy === 'function') {
+                    component.destroy();
+                }
+
+                return false;
+            });
+        }
+    };
+
+    /**
      * Remove component from the manager
      *
-     * @param component_type (widgets, inputs, properties)
-     * @param component_id
-     * @returns {undefined}
+     * @param   {string} component_type (widgets, inputs, properties)
+     * @param   {string} component_id
+     * @returns {void}
      */
     Manager.prototype.remove_component = function (component_type, component_id) {
         if (!this.isReady) {
@@ -136,8 +163,6 @@
                 return component._id !== component_id;
             });
         }
-
-        return undefined;
     };
 
     /**
@@ -208,7 +233,7 @@
                     }
 
                 } catch (error) {
-                    console.error('Was not able to instanciate ' + component_data.ident);
+                    console.error('Was not able to instantiate ' + component_data.ident);
                     console.error(error);
                 }
             }

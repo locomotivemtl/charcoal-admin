@@ -321,6 +321,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
         size:           BootstrapDialog.SIZE_WIDE,
         cssClass:       '-quick-form',
         widget_type:    'charcoal/admin/widget/quick-form',
+        with_data:      true,
         widget_options: {
             obj_type:  type,
             obj_id:    id,
@@ -345,9 +346,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
             Charcoal.Admin.manager().add_widget({
                 id:   response.widget_id,
                 type: 'charcoal/admin/widget/quick-form',
-                data: {
-                    obj_type: type
-                },
+                data: response.widget_data,
                 obj_id: id,
                 save_callback: function (response) {
                     callback(response);

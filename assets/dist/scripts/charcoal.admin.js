@@ -6266,8 +6266,9 @@ Charcoal.Admin.Property.prototype.error = function (data) {
 
 Charcoal.Admin.Property_Input_File = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.file';
-    Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/file';
+
+    Charcoal.Admin.Property.call(this, opts);
 
     this.data   = opts.data;
     this.dialog = null;
@@ -8976,6 +8977,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
 Charcoal.Admin.Property_Input_Audio = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.audio';
     this.input_type = 'charcoal/admin/property/input/audio';
+
     Charcoal.Admin.Property.call(this, opts);
 
     this.data   = opts.data;
@@ -9628,9 +9630,10 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
  */
 
 Charcoal.Admin.Property_Input_Image = function (opts) {
-    Charcoal.Admin.Property.call(this, opts);
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
+
+    Charcoal.Admin.Property.call(this, opts);
 
     this.data   = opts.data;
     this.dialog = null;
@@ -12424,6 +12427,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function () {
 Charcoal.Admin.Property_Input_Video = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.video';
     this.input_type = 'charcoal/admin/property/input/video';
+
     Charcoal.Admin.Property.call(this, opts);
 
     this.data   = opts.data;

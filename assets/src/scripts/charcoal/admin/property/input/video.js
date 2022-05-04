@@ -6,6 +6,7 @@
 Charcoal.Admin.Property_Input_Video = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.video';
     this.input_type = 'charcoal/admin/property/input/video';
+
     Charcoal.Admin.Property.call(this, opts);
 
     this.data   = opts.data;

@@ -74,7 +74,7 @@ Charcoal.Admin.Widget_Search.prototype.init = function () {
 Charcoal.Admin.Widget_Search.prototype.submit = function () {
     this.set_search_query(this.$input.val());
 
-    Charcoal.Admin.manager().components.widgets.forEach(this.dispatch.bind(this));
+    Charcoal.Admin.manager().get_widgets().forEach(this.dispatch.bind(this));
 
     this.set_search_query(null);
 

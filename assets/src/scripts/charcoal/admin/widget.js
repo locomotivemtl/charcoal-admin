@@ -161,6 +161,10 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
 
         that.widget_id = wid;
         that.anim_out(function () {
+            that.destroy();
+
+            // Fresh widget view might include its
+            // component manager registration again.
             that.element().replaceWith(response.widget_html);
             that.set_element($('#' + that.id()));
 
@@ -168,6 +172,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
             that.element().removeClass('is-loading');
             that.element().hide().fadeIn();
             that.init();
+
             // Callback
             if (typeof callback === 'function') {
                 callback.call(that, response);

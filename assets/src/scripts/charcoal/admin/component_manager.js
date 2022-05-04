@@ -4,7 +4,7 @@
  * Implements its own deferred "ready list" based on `jQuery.fn.ready`.
  */
 
-;(function ($, document, undefined) {
+;(function ($, document) {
     'use strict';
 
     // Stored for quick usage
@@ -35,33 +35,98 @@
         });
     };
 
-    Manager.prototype.add_property_input = function (opts) {
-        this.add_component('property_inputs', opts);
+    /**
+     * Adds a property input component.
+     *
+     * @param  {object} component_data - The component definition.
+     * @return {boolean}
+     */
+    Manager.prototype.add_property_input = function (component_data) {
+        return this.add_component('property_inputs', component_data);
     };
 
-    Manager.prototype.add_widget = function (opts) {
-        this.add_component('widgets', opts);
+    /**
+     * Adds a widget component.
+     *
+     * @param  {object} component_data - The component definition.
+     * @return {boolean}
+     */
+    Manager.prototype.add_widget = function (component_data) {
+        return this.add_component('widgets', component_data);
     };
 
-    Manager.prototype.add_template = function (opts) {
-        this.add_component('templates', opts);
+    /**
+     * Adds a template component.
+     *
+     * @param  {object} component_data - The component definition.
+     * @return {boolean}
+     */
+    Manager.prototype.add_template = function (component_data) {
+        return this.add_component('templates', component_data);
     };
 
-    Manager.prototype.add_component = function (component_type, opts) {
-        // Figure out which component to instanciate
-        var ident = Charcoal.Admin.get_object_name(opts.type);
-
-        // Make sure it exists first
-        if (typeof(Charcoal.Admin[ident]) === 'function') {
-            opts.ident = ident;
-
-            // Check if component type array exists in components array
-            this.components[component_type] = this.components[component_type] || [];
-            this.components[component_type].push(opts);
-
-        } else {
-            console.error('Was not able to store ' + ident + ' in ' + component_type + ' sub-array');
+    /**
+     * Add component of Type and Options
+     *
+     * @param   {string} component_group Either "widgets", "inputs", or "properties".
+     * @param   {object} component_data
+     * @returns {boolean}
+     */
+    Manager.prototype.add_component = function (component_group, component_data) {
+        if (!component_data.type) {
+            console.error('Was not able to store component: missing type');
+            return false;
         }
+
+        // Figure out which component to instanciate
+        var component_class_name = Charcoal.Admin.get_object_name(component_data.type);
+
+        // Make sure component class exists first
+        if (typeof Charcoal.Admin[component_class_name] !== 'function') {
+            console.error('Was not able to store component [Charcoal.Admin.' + component_class_name + ']: missing class');
+            return false;
+        }
+
+        component_data.ident = component_class_name;
+
+        if (Array.isArray(this.components[component_group])) {
+            if (component_data.id && this.components[component_group].length) {
+                var component = this.components[component_group].find(function (component) {
+                    return (
+                        // Compare against an instantiated component
+                        (component._id && component._id === component_data.id) ||
+                        // Compare against component data
+                        (component.id && component.id === component_data.id)
+                    );
+                });
+
+                if (component) {
+                    var message = 'Was not able to store component [Charcoal.Admin.' + component_class_name + ']: ' +
+                                component_data.id + ' already registered';
+
+                    if (
+                        // Compare against an instantiated component
+                        (component._type && component._type === component_data.type) ||
+                        // Compare against component data
+                        (component.type && component.type === component_data.type)
+                    ) {
+                        // Assume its a reloaded component
+                        console.warn(message);
+                    } else {
+                        // Something is not right
+                        console.error(message);
+                    }
+
+                    return false;
+                }
+            }
+        } else {
+            this.components[component_group] = [];
+        }
+
+        this.components[component_group].push(component_data);
+
+        return true;
     };
 
     /**
@@ -101,38 +166,65 @@
     /**
      * Get component from Type and ID
      *
-     * @param component_type (widgets, inputs, properties)
-     * @param component_id
-     * @returns {*}
+     * @param   {string} component_group Either "widgets", "inputs", or "properties".
+     * @param   {string} component_id
+     * @returns {?Component}
      */
-    Manager.prototype.get_component = function (component_type, component_id) {
+    Manager.prototype.get_component = function (component_group, component_id) {
         if (!this.isReady) {
             throw new Error('Components must be rendered.');
         }
 
-        if (component_type in this.components) {
-            return this.components[component_type].find(function (component) {
+        if (component_group in this.components) {
+            return this.components[component_group].find(function (component) {
                 return component._id === component_id;
             });
         }
 
-        return undefined;
+        return null;
+    };
+
+    /**
+     * Check if component from Type and ID exists.
+     *
+     * @param   {string} component_group Either "widgets", "inputs", or "properties".
+     * @param   {string} component_id
+     * @returns {boolean}
+     */
+    Manager.prototype.has_component = function (component_group, component_id) {
+        if (component_group in this.components) {
+            return this.components[component_group].some(function (component) {
+                // Compare against an instantiated component
+                if (component._id && component._id === component_id) {
+                    return true;
+                }
+
+                // Compare against component data
+                if (component.id && component.id === component_id) {
+                    return true;
+                }
+
+                return false;
+            });
+        }
+
+        return false;
     };
 
     /**
      * Destroy component and remove from the manager
      *
-     * @param   {string} component_type (widgets, inputs, properties)
+     * @param   {string} component_group Either "widgets", "inputs", or "properties".
      * @param   {string} component_id
      * @returns {void}
      */
-    Manager.prototype.destroy_component = function (component_type, component_id) {
+    Manager.prototype.destroy_component = function (component_group, component_id) {
         if (!this.isReady) {
             throw new Error('Components must be rendered.');
         }
 
-        if (component_type in this.components) {
-            this.components[component_type] = this.components[component_type].filter(function (component) {
+        if (component_group in this.components) {
+            this.components[component_group] = this.components[component_group].filter(function (component) {
                 if (component._id !== component_id) {
                     return true;
                 }
@@ -149,17 +241,17 @@
     /**
      * Remove component from the manager
      *
-     * @param   {string} component_type (widgets, inputs, properties)
+     * @param   {string} component_group Either "widgets", "inputs", or "properties".
      * @param   {string} component_id
      * @returns {void}
      */
-    Manager.prototype.remove_component = function (component_type, component_id) {
+    Manager.prototype.remove_component = function (component_group, component_id) {
         if (!this.isReady) {
             throw new Error('Components must be rendered.');
         }
 
-        if (component_type in this.components) {
-            this.components[component_type] = this.components[component_type].filter(function (component) {
+        if (component_group in this.components) {
+            this.components[component_group] = this.components[component_group].filter(function (component) {
                 return component._id !== component_id;
             });
         }
@@ -190,10 +282,10 @@
             return;
         }
 
-        for (var component_type in this.components) {
+        for (var component_group in this.components) {
             var super_class = Charcoal;
 
-            switch (component_type) {
+            switch (component_group) {
                 case 'widgets':
                     super_class = Charcoal.Admin.Widget;
                     break;
@@ -207,8 +299,8 @@
                     break;
             }
 
-            for (var i = 0, len = this.components[component_type].length; i < len; i++) {
-                var component_data = this.components[component_type][i];
+            for (var i = 0, len = this.components[component_group].length; i < len; i++) {
+                var component_data = this.components[component_group][i];
 
                 // If we are already dealing with a full on component
                 if (component_data instanceof super_class) {
@@ -220,11 +312,11 @@
                 }
 
                 try {
-                    var component = new Charcoal.Admin[component_data.ident](component_data);
-                    this.components[component_type][i] = component;
+                    var component = this.create_component(component_data.ident, component_data);
+                    this.components[component_group][i] = component;
 
                     // Automatic supra class call
-                    switch (component_type) {
+                    switch (component_group) {
                         case 'widgets':
                             // Automatic call on superclass
                             Charcoal.Admin.Widget.call(component, component_data);
@@ -233,7 +325,11 @@
                     }
 
                 } catch (error) {
-                    console.error('Was not able to instantiate ' + component_data.ident);
+                    if (component_data.id) {
+                        console.error('Was not able to instantiate component [Charcoal.Admin.' + component_data.ident + '] (' + component_data.id + ')');
+                    } else {
+                        console.error('Was not able to instantiate component [Charcoal.Admin.' + component_data.ident + ']');
+                    }
                     console.error(error);
                 }
             }
@@ -262,6 +358,31 @@
         $document.trigger(renderedEvent);
 
         return this;
+    };
+
+    /**
+     * Creates a component.
+     *
+     * @param  {string} component_ident - The component object name.
+     * @param  {object} component_data  - The component definition.
+     * @thows  {TypeError} If component definition is invalid
+     *     or component object does not exist.
+     * @return {?Component}
+     */
+    Manager.prototype.create_component = function (component_ident, component_data) {
+        if (!component_ident) {
+            throw new TypeError(
+                'Expected component data to include ident'
+            );
+        }
+
+        if (!Charcoal.Admin[component_ident]) {
+            throw new TypeError(
+                'Expected component [Charcoal.Admin.' + component_ident + '] to exist'
+            );
+        }
+
+        return new Charcoal.Admin[component_data.ident](component_data);
     };
 
     /**

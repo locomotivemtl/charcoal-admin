@@ -52,12 +52,32 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function (response/* ... */) {
+    var successEvent = $.Event('success' + this.EVENT_NAMESPACE, {
+        subtype:   'submission',
+        component: this,
+        response:  response
+    });
+
+    this.$form.trigger(successEvent);
+
+    if (successEvent.isDefaultPrevented()) {
+        return;
+    }
+
+    this.confirmed = false;
+
     if (response.feedbacks && !this.suppress_feedback()) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 
+    if (response.need_confirmation) {
+        this.add_actions_for_confirmation(response.confirmation_label);
+        return;
+    }
+
     if (response.next_url) {
         this.add_action_for_next_url(response.next_url, response.next_url_label);
+        return;
     }
 
     this.enable_form();

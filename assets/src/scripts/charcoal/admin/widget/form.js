@@ -423,37 +423,18 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function (response/* text
 
     this.confirmed = false;
 
-    var $form = this.$form;
-
     if (response.feedbacks) {
         Charcoal.Admin.feedback(response.feedbacks);
     }
 
     if (response.need_confirmation) {
-        Charcoal.Admin.feedback()
-            .add_action({
-                label:    commonL10n.cancel,
-                cssClass: 'btn-danger',
-                callback: function () {
-                    BootstrapDialog.closeAll();
-                }
-            })
-            .add_action({
-                label:    commonL10n.continue,
-                callback: function () {
-                    // TODO THIS IS NOT IDEAL ... In the future,
-                    // receiving an instance of BootstrapDialog would be better,
-                    // unfortunately, this is not the case. Good day sir.
-                    BootstrapDialog.closeAll();
-
-                    this.confirmed = true;
-                    this.request_submit($form[0]);
-                }.bind(this)
-            });
+        this.add_actions_for_confirmation(response.confirmation_label);
+        return;
     }
 
     if (response.next_url) {
         this.add_action_for_next_url(response.next_url, response.next_url_label);
+        return;
     }
 
     if (!this.useDefaultAction && this.is_new_object) {
@@ -473,13 +454,10 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function (response/* text
                 '&obj_id=' + response.obj_id;
         }
     } else {
-        if (this.force_page_reload && !response.need_confirmation) {
+        if (this.force_page_reload) {
             window.location.reload();
-        }
-
-        if (this.allow_reload) {
-            var manager = Charcoal.Admin.manager();
-            var widgets = manager.components.widgets;
+        } else if (this.allow_reload) {
+            var widgets = Charcoal.Admin.manager().get_widgets();
 
             $.each(widgets, function (i, widget) {
                 widget.reload();
@@ -547,13 +525,36 @@ Charcoal.Admin.Widget_Form.prototype.request_complete = function (/* ... */) {
  * @return self
  */
 Charcoal.Admin.Widget_Form.prototype.add_action_for_next_url = function (url, label) {
-    // @todo "dynamise" the label
     Charcoal.Admin.feedback().add_action({
         label:    (label || commonL10n.continue),
         callback: function () {
             Charcoal.Admin.redirect_to_url(url);
         }
     });
+};
+
+/**
+ * @param  string [label] The action label.
+ * @return self
+ */
+Charcoal.Admin.Widget_Form.prototype.add_actions_for_confirmation = function (label) {
+    Charcoal.Admin.feedback()
+        .add_action({
+            label:    commonL10n.cancel,
+            cssClass: 'btn-danger',
+            callback: function (dialog) {
+                dialog.close();
+            }
+        })
+        .add_action({
+            label:    (label || commonL10n.continue),
+            callback: (function (dialog) {
+                dialog.close();
+
+                this.confirmed = true;
+                this.request_submit();
+            }).bind(this)
+        });
 };
 
 Charcoal.Admin.Widget_Form.prototype.disable_form = function () {

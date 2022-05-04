@@ -29,6 +29,13 @@
     @media (min-width: $from-large) {
         top: rem($header-height);
     }
+
+    @media (min-width: $from-small) {
+        .c-form-widget.-sticky-sidebar & {
+            position: sticky;
+            top: 0;
+        }
+    }
 }
 
 // Header

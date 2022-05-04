@@ -384,6 +384,16 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * Determines if any sidebars are defined.
+     *
+     * @return boolean
+     */
+    public function hasSidebars()
+    {
+        return (bool) $this->sidebars;
+    }
+
+    /**
      * Yield the form sidebar(s).
      *
      * @return \Generator
@@ -391,7 +401,7 @@ class FormWidget extends AdminWidget implements
     public function sidebars()
     {
         $sidebars = $this->sidebars;
-        uasort($sidebars, [$this, 'sortSidebarsByPriority']);
+        uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
             if (!$sidebar->active()) {
                 continue;
@@ -485,7 +495,6 @@ class FormWidget extends AdminWidget implements
      */
     public function formProperties()
     {
-
         $sidebars = $this->sidebars;
         if (!is_array($sidebars)) {
             yield null;

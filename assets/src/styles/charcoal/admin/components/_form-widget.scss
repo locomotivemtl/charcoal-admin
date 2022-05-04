@@ -78,7 +78,6 @@
             }
         }
     }
-
 }
 
 .c-form-widget_sidebar {
@@ -88,6 +87,12 @@
 
     @media (min-width: $from-medium) {
         width: $sidebar-width;
+    }
+}
+
+.o-container .c-form-widget.-sticky-sidebar {
+    @media (min-width: $from-small) {
+        margin-right: -#{rem($unit / 2)};
     }
 }
 

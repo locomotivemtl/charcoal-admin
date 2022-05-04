@@ -12,6 +12,8 @@
  */
 
 Charcoal.Admin.Widget_Form = function (opts) {
+    this.EVENT_NAMESPACE = '.charcoal.form';
+
     Charcoal.Admin.Widget.call(this, opts);
 
     // Widget_Form properties
@@ -78,43 +80,43 @@ Charcoal.Admin.Widget_Form.prototype.bind_events = function () {
 
     // Submit the form via ajax
     $form
-        .on('submit.charcoal.form', function (event) {
+        .on('submit' + this.EVENT_NAMESPACE, function (event) {
             event.preventDefault();
             that.request_submit();
         })
         .find(':submit')
-        .on('click.charcoal.form', function () {
+        .on('click' + this.EVENT_NAMESPACE, function () {
             that.submitted_via = this;
         });
 
     var $sidebar = $('.js-sidebar-widget', this.form_selector);
 
     // Any delete button should trigger the delete-object method.
-    $sidebar.on('click.charcoal.form', '.js-obj-delete', function (event) {
+    $sidebar.on('click' + this.EVENT_NAMESPACE, '.js-obj-delete', function (event) {
         event.preventDefault();
         that.delete_object(this);
     });
 
     // Reset button
-    $sidebar.on('click.charcoal.form', '.js-reset-form', function (event) {
+    $sidebar.on('click' + this.EVENT_NAMESPACE, '.js-reset-form', function (event) {
         event.preventDefault();
         $form[0].reset();
     });
 
     // Revision button
-    $sidebar.on('click.charcoal.form', '.js-obj-revision', function (event) {
+    $sidebar.on('click' + this.EVENT_NAMESPACE, '.js-obj-revision', function (event) {
         event.preventDefault();
         that.view_revision(this);
     });
 
     // Back-to-list button
-    $sidebar.on('click.charcoal.form', '.js-obj-list', function (event) {
+    $sidebar.on('click' + this.EVENT_NAMESPACE, '.js-obj-list', function (event) {
         event.preventDefault();
         that.back_to_list(this);
     });
 
     // Language switcher
-    $sidebar.on('click.charcoal.form', '.js-lang-switch button', function (event) {
+    $sidebar.on('click' + this.EVENT_NAMESPACE, '.js-lang-switch button', function (event) {
         event.preventDefault();
 
         var $this = $(this),
@@ -172,7 +174,7 @@ Charcoal.Admin.Widget_Form.prototype.parse_group_conditions = function () {
         }
 
         $.each(conditions, function (index, condition) {
-            $form.on('change.charcoal.form', '#' + condition.input_id, {
+            $form.on('change' + this.EVENT_NAMESPACE, '#' + condition.input_id, {
                 condition_target: target
             }, function (event) {
                 var isValid = that.validate_group_conditions(event.data.condition_target);
@@ -358,6 +360,13 @@ Charcoal.Admin.Widget_Form.prototype.request_submit = function () {
 
     // Calls the `validate` and `save` functions on all components.
     if (Charcoal.Admin.manager().prepare_submit(this) !== true) {
+        var failedEvent = $.Event('failed' + this.EVENT_NAMESPACE, {
+            subtype:   'validation',
+            component: this
+        });
+
+        this.$form.trigger(failedEvent);
+
         this.request_complete();
         return;
     }
@@ -400,6 +409,18 @@ Charcoal.Admin.Widget_Form.prototype.request_done = function (response, textStat
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_success = function (response/* textStatus, jqXHR */) {
+    var successEvent = $.Event('success' + this.EVENT_NAMESPACE, {
+        subtype:   'submission',
+        component: this,
+        response:  response
+    });
+
+    this.$form.trigger(successEvent);
+
+    if (successEvent.isDefaultPrevented()) {
+        return;
+    }
+
     this.confirmed = false;
 
     var $form = this.$form;
@@ -468,6 +489,18 @@ Charcoal.Admin.Widget_Form.prototype.request_success = function (response/* text
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_failed = function (jqXHR, textStatus, errorThrown) {
+    var failedEvent = $.Event('failed' + this.EVENT_NAMESPACE, {
+        subtype:   'submission',
+        component: this,
+        response:  (jqXHR.responseJSON || {})
+    });
+
+    this.$form.trigger(failedEvent);
+
+    if (failedEvent.isDefaultPrevented()) {
+        return;
+    }
+
     if (jqXHR.responseJSON && jqXHR.responseJSON.feedbacks) {
         Charcoal.Admin.feedback(jqXHR.responseJSON.feedbacks);
     } else {
@@ -485,6 +518,17 @@ Charcoal.Admin.Widget_Form.prototype.request_failed = function (jqXHR, textStatu
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_complete = function (/* ... */) {
+    var completeEvent = $.Event('complete' + this.EVENT_NAMESPACE, {
+        subtype:   'submission',
+        component: this
+    });
+
+    this.$form.trigger(completeEvent);
+
+    if (completeEvent.isDefaultPrevented()) {
+        return;
+    }
+
     if (!this.suppress_feedback()) {
         Charcoal.Admin.feedback().dispatch();
         this.enable_form();
@@ -758,9 +802,9 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
 };
 
 Charcoal.Admin.Widget_Form.prototype.destroy = function () {
-    this.$form.off('.charcoal.form');
+    this.$form.off(this.EVENT_NAMESPACE);
 
-    $('.js-sidebar-widget', this.form_selector).off('.charcoal.form');
+    $('.js-sidebar-widget', this.form_selector).off(this.EVENT_NAMESPACE);
 
     window.removeEventListener('popstate', this._on_popstate_tab);
 

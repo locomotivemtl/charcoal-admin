@@ -6,6 +6,8 @@
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
+    this.EVENT_NAMESPACE = '.charcoal.quickform';
+
     Charcoal.Admin.Widget.call(this, opts);
 
     this.save_callback   = opts.save_callback || '';
@@ -38,19 +40,15 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
     var $form = this.$form;
 
     $form
-        .on('submit.charcoal.bs.dialog', function (event) {
+        .on('submit' + this.EVENT_NAMESPACE, function (event) {
             event.preventDefault();
             that.request_submit();
         })
-        .on(
-            'click.charcoal.bs.dialog',
-            '[data-dismiss="dialog"]',
-            function (event) {
-                if ($.isFunction(that.cancel_callback)) {
-                    that.cancel_callback(event);
-                }
+        .on('click' + this.EVENT_NAMESPACE, '[data-dismiss="dialog"]', function (event) {
+            if ($.isFunction(that.cancel_callback)) {
+                that.cancel_callback(event);
             }
-        );
+        });
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function (response/* ... */) {
@@ -68,9 +66,4 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function (response/
     if (typeof this.save_callback === 'function') {
         this.save_callback(response);
     }
-};
-
-Charcoal.Admin.Widget_Quick_Form.prototype.destroy = function () {
-    this.$form.off('.charcoal.bs.dialog');
-    this.$form.off('.charcoal.form.quick');
 };

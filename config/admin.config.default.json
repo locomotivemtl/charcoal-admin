@@ -20,11 +20,11 @@
             "help": {
                 "ident": "charcoal/admin/template/help"
             },
-            "account/lost-password":{
+            "account/lost-password": {
                 "ident": "charcoal/admin/template/account/lost-password"
             },
-            "account/reset-password":{
-                "route":"/account/reset-password[/{token}]",
+            "account/reset-password": {
+                "route": "/account/reset-password[/{token}]",
                 "ident": "charcoal/admin/template/account/reset-password"
             },
             "object/create": {
@@ -55,13 +55,13 @@
             "system/static-website": {
                 "ident": "charcoal/admin/template/system/static-website"
             },
-            "system/users":{
+            "system/users": {
                 "ident": "charcoal/admin/template/system/users"
             },
-            "system/user-roles":{
+            "system/user-roles": {
                 "ident": "charcoal/admin/template/system/user-roles"
             },
-            "system/user-permissions":{
+            "system/user-permissions": {
                 "ident": "charcoal/admin/template/system/user-permissions"
             }
         },
@@ -69,10 +69,10 @@
             "login": {
                 "ident": "charcoal/admin/action/login"
             },
-            "account/lost-password":{
+            "account/lost-password": {
                 "ident": "charcoal/admin/action/account/lost-password"
             },
-            "account/reset-password":{
+            "account/reset-password": {
                 "ident": "charcoal/admin/action/account/reset-password"
             },
             "object/delete": {
@@ -174,19 +174,19 @@
             }
         },
         "scripts": {
-            "notification/minute":{
+            "notification/minute": {
                 "ident": "charcoal/admin/script/notification/process-minute"
             },
-            "notification/hourly":{
+            "notification/hourly": {
                 "ident": "charcoal/admin/script/notification/process-hourly"
             },
-            "notification/daily":{
+            "notification/daily": {
                 "ident": "charcoal/admin/script/notification/process-daily"
             },
-            "notification/weekly":{
+            "notification/weekly": {
                 "ident": "charcoal/admin/script/notification/process-weekly"
             },
-            "notification/monthly":{
+            "notification/monthly": {
                 "ident": "charcoal/admin/script/notification/process-monthly"
             },
             "object/create": {
@@ -281,7 +281,7 @@
     },
 
     "acl": {
-        "permissions":{
+        "permissions": {
             "default": {
                 "allowed": [
                     "action",

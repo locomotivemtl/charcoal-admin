@@ -157,11 +157,11 @@ class LoadAction extends AdminAction
             }
 
             $widgetHtml = $widget->renderTemplate($widget->template());
-            $jsRequirements = $widget->renderTemplate('{{&jsRequirements}}');
-            $js = $widget->renderTemplate('{{&js}}');
+            $sharedJs   = $widget->renderTemplate('{{&jsRequirements}}');
+            $uniqueJs   = $widget->renderTemplate('{{&js}}');
             $widgetId   = $widget->widgetId();
 
-            $this->setWidgetHtml($jsRequirements.$widgetHtml.$js);
+            $this->setWidgetHtml($sharedJs.$widgetHtml.$uniqueJs);
             $this->setWidgetId($widgetId);
 
             if ($withData) {

@@ -22,11 +22,11 @@
         {{> charcoal/admin/l10n/bootstrap-dialog.js }}
     </script>
 
-    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.vendors.js"></script>
+    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.vendors{{^ debug }}.min{{/ debug }}.js"></script>
 
     {{& jsRequirements }}
 
-    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin.js"></script>
+    <script src="{{ baseUrl }}assets/admin/scripts/charcoal.admin{{^ debug }}.min{{/ debug }}.js"></script>
 
     <script>
         Charcoal.Admin.set_data({{& adminDataForJsAsJson }});
@@ -43,7 +43,7 @@
                 event.preventDefault();
 
                 BootstrapDialog.show({
-                    title:    '{{# _t }}File Manager{{/ _t }}',
+                    title:    '{{# _t }}filesystem.library.files{{/ _t }}',
                     size:     BootstrapDialog.SIZE_WIDE,
                     cssClass: '-elfinder',
                     message: $(

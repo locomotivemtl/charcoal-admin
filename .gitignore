@@ -12,8 +12,9 @@ composer.lock
 
 # Caching
 
-/.phplint-cache/
 /cache/
+/.phplint-cache/
+/.phpunit.result.cache
 
 # Testing
 

@@ -3,7 +3,7 @@
  *
  * Main script for RequireJS.
  *
- * Renamed from `main.default.js` to configure elFInder.
+ * Renamed from `main.default.js` to configure elFinder.
  * e.g. `<script data-main="./main.js" src="./require.js"></script>`
  */
 
@@ -116,11 +116,6 @@
                         }
 
                         if (opts.cssAutoLoad) {
-                            // Load elFinder CSS
-                            // elFinder.prototype.loadCss(
-                            //     require.toUrl('css/elfinder.min.css')
-                            // );
-
                             // Convert CSS setting to array
                             if (typeof opts.cssAutoLoad === 'string') {
                                 opts.cssAutoLoad = [ opts.cssAutoLoad ];
@@ -128,7 +123,11 @@
 
                             // Import custom CSS
                             if (Array.isArray(opts.cssAutoLoad)) {
-                                elFinder.prototype.loadCss(opts.cssAutoLoad);
+                                elFinder.prototype.loadCss(
+                                    opts.cssAutoLoad.map(function (uri) {
+                                        return require.toUrl(uri);
+                                    })
+                                );
                             }
 
                             opts.cssAutoLoad = false;

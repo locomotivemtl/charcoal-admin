@@ -321,6 +321,7 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
         size:           BootstrapDialog.SIZE_WIDE,
         cssClass:       '-quick-form',
         widget_type:    'charcoal/admin/widget/quick-form',
+        with_data:      true,
         widget_options: {
             obj_type:  type,
             obj_id:    id,
@@ -345,12 +346,15 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
             Charcoal.Admin.manager().add_widget({
                 id:   response.widget_id,
                 type: 'charcoal/admin/widget/quick-form',
-                data: {
-                    obj_type: type
-                },
+                data: response.widget_data,
                 obj_id: id,
                 save_callback: function (response) {
                     callback(response);
+
+                    if ((this instanceof Charcoal.Admin.Component) && this.id()) {
+                        Charcoal.Admin.manager().destroy_component('widgets', this.id());
+                    }
+
                     dialog.close();
                 }
             });
@@ -405,25 +409,39 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj) {
     this.element().find('.c-attachments_container > .js-grid-container').append(template);
 
     return this;
-
 };
 
 /**
- * [save description]
- * @return {[type]} [description]
+ * Determines if the component is a candidate for saving.
+ *
+ * @param  {Component} [scope] - The parent component that calls for save.
+ * @return {boolean}
+ */
+Charcoal.Admin.Widget_Attachment.prototype.will_save = function (scope) {
+    return (scope && $.contains(scope.element()[0], this.element()[0]));
+};
+
+/**
+ * Prepares the component to be saved.
+ *
+ * This method triggers the update of relationships between
+ * the primary model and its attachment.
+ *
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Attachment.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
 
-    // Create join from current list.
     this.join();
+
+    return true;
 };
 
 Charcoal.Admin.Widget_Attachment.prototype.join = function (cb) {
     if (!$('#' + this.element().attr('id')).length) {
-        return ;
+        return;
     }
     // Scope
     var that = this;

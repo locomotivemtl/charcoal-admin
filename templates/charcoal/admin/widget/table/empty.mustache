@@ -4,30 +4,36 @@
 
     @used-by `charcoal/admin/widget/table`
 --}}
-<aside class="alert alert-danger mb-0 mt-4" role="alert">
+<aside class="alert alert-danger mb-0 mt-4 mb-4" role="alert">
     <div class="alert-body">
         <p>
             <span class="fa fa-exclamation-triangle" aria-hidden="true"></span>
             <span class="sr-only">{{# _t }}Errors:{{/ _t }}</span>
             <span>&nbsp; {{# _t }}No objects have been created yet for "{{ objType }}".{{/ _t }}</span>
         </p>
-        <p class="mb-0">
-            <span class="btn-group" role="group">
-                {{# emptyListActions }}
-                    {{# isSeparator }}
-                        </span>
-                        <span class="btn-group" role="group">
-                    {{/ isSeparator }}
-                    {{^ isSeparator }}
-                        {{> charcoal/admin/widget/actions }}
-                    {{/ isSeparator }}
-                {{/ emptyListActions }}
-                {{^ showEmptyListActions }}
-                    {{# isObjCreatable }}
-                        <a class="btn btn-info" href="{{ objectCreateUrl }}">{{# _t }}Add New Object{{/ _t }}</a>
-                    {{/ isObjCreatable }}
-                {{/ showEmptyListActions }}
-            </span>
-        </p>
+        {{# showEmptyListActions }}
+            <p class="mb-0">
+                <span class="btn-group" role="group">
+                    {{# emptyListActions }}
+                        {{# isSeparator }}
+                            </span>
+                            <span class="btn-group" role="group">
+                        {{/ isSeparator }}
+                        {{^ isSeparator }}
+                            {{> charcoal/admin/widget/actions }}
+                        {{/ isSeparator }}
+                    {{/ emptyListActions }}
+                </span>
+            </p>
+        {{/ showEmptyListActions }}
+        {{^ showEmptyListActions }}
+            {{# isObjCreatable }}
+                <p class="mb-0">
+                    <span class="btn-group" role="group">
+                        <a class="btn btn-primary" href="{{ objectCreateUrl }}">{{# _t }}Add New Object{{/ _t }}</a>
+                    </span>
+                </p>
+            {{/ isObjCreatable }}
+        {{/ showEmptyListActions }}
     </div>
 </aside>

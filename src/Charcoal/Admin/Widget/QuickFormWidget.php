@@ -49,4 +49,12 @@ class QuickFormWidget extends ObjectFormWidget
 
         return parent::submitLabel();
     }
+
+    /**
+     * @return string
+     */
+    public function defaultFormTabsTemplate()
+    {
+        return 'charcoal/admin/template/form/nav-pills';
+    }
 }

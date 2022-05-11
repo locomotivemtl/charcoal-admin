@@ -148,3 +148,50 @@ Charcoal.Admin.Component.prototype.init = function () {
 Charcoal.Admin.Component.prototype.destroy = function () {
     // Do nothing
 };
+
+/**
+ * Stub: Determines if the component is a candidate for validation.
+ *
+ * @param  {Component} [scope] - The parent component that calls for validation.
+ * @return {boolean}
+ */
+// Charcoal.Admin.Component.prototype.will_validate = function (scope) {
+//     return (scope && !$.contains(scope.element()[0], this.element()[0]));
+// };
+
+/**
+ * Stub: Validates the component.
+ *
+ * Each component is expected to add their own feedback if their
+ * value is invalid or errored (via `validate` or `save`).
+ *
+ * @return {boolean} If `false`, the component is invalid.
+ */
+// Charcoal.Admin.Component.prototype.validate = function (scope) {
+//     return true;
+// };
+
+/**
+ * Stub: Determines if the component is a candidate for saving.
+ *
+ * @param  {Component} [scope] - The parent component that calls for save.
+ * @return {boolean}
+ */
+// Charcoal.Admin.Component.prototype.will_save = function (scope) {
+//     return (scope && !$.contains(scope.element()[0], this.element()[0]));
+// };
+
+/**
+ * Stub: Prepares the component to be saved.
+ *
+ * This method can be used to serialize a complex value
+ * or trigger a separate process (such as uploading a file).
+ *
+ * Each component is expected to add their own feedback if their
+ * value is invalid or errored (via `validate` or `save`).
+ *
+ * @return {boolean} If `false`, the component could not save.
+ */
+// Charcoal.Admin.Component.prototype.save = function () {
+//     return true;
+// };

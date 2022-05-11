@@ -28,7 +28,7 @@ class ResetPasswordTemplateTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->obj = new ResetPasswordTemplate([
             'logger' => new NullLogger()

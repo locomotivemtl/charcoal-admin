@@ -131,7 +131,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements
             '#FF00FF',
             '#3CB371',
             '#B8860B',
-            '#30E0E0'
+            '#30E0E0',
         ];
     }
 
@@ -159,23 +159,25 @@ abstract class AbstractGraphWidget extends AdminWidget implements
     public function widgetDataForJs()
     {
         return [
-            'list_actions'     => $this->graphActions(),
-            'colors'  => $this->colors(),
-            'options' => [
-                'xAxis' => empty($this->categories()) ? null : [
+            'list_actions' => $this->graphActions(),
+            'colors'       => $this->colors(),
+            'options'      => [
+                'xAxis' => (empty($this->categories()) ? null : [
                     [
                         'type' => 'category',
-                        'data' => $this->categories()
-                    ]
-                ],
-                'yAxis' => empty($this->categories()) ? null : [
+                        'data' => $this->categories(),
+                    ],
+                ]),
+                'yAxis' => (empty($this->categories()) ? null : [
                     [
                         'type'      => 'value',
-                        'splitArea' => ['show' => true]
-                    ]
-                ],
-                'series' => $this->series()
-            ]
+                        'splitArea' => [
+                            'show' => true,
+                        ],
+                    ],
+                ]),
+                'series' => $this->series(),
+            ],
         ];
     }
 
@@ -198,9 +200,9 @@ abstract class AbstractGraphWidget extends AdminWidget implements
     {
         if ($this->showGraphActions === false) {
             return false;
-        } else {
-            return count($this->graphActions());
         }
+
+        return (count($this->graphActions()) > 0);
     }
 
     /**

@@ -3,9 +3,10 @@
  */
 
 Charcoal.Admin.Property_Input_Image = function (opts) {
-    Charcoal.Admin.Property.call(this, opts);
     this.EVENT_NAMESPACE = '.charcoal.property.image';
     this.input_type = 'charcoal/admin/property/input/image';
+
+    Charcoal.Admin.Property.call(this, opts);
 
     this.data   = opts.data;
     this.dialog = null;

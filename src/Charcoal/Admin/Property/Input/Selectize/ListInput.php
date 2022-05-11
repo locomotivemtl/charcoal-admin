@@ -13,6 +13,14 @@ class ListInput extends SelectizeInput
     /**
      * @return string
      */
+    public function inputType()
+    {
+        return 'charcoal/admin/property/input/selectize';
+    }
+
+    /**
+     * @return string
+     */
     public function inputClass()
     {
         $parentClass = parent::inputClass();

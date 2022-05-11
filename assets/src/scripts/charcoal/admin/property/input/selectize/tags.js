@@ -185,7 +185,7 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
         }
     };
 
-    this.dialog(data, function (response) {
+    var dialog = this.dialog(data, function (response) {
         if (response.success) {
             // Call the quickForm widget js.
             // Really not a good place to do that.
@@ -212,7 +212,8 @@ Charcoal.Admin.Property_Input_Selectize_Tags.prototype.create_tag = function (in
                         color: response.obj.color,
                         class: 'new'
                     });
-                    BootstrapDialog.closeAll();
+
+                    dialog.close();
                 }
             });
         }

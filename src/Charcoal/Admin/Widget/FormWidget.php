@@ -49,6 +49,20 @@ class FormWidget extends AdminWidget implements
     use LayoutAwareTrait;
 
     /**
+     * The form's field groups template path.
+     *
+     * @var string
+     */
+    protected $groupsTemplate;
+
+    /**
+     * The form's group tabs template path.
+     *
+     * @var string
+     */
+    protected $tabsTemplate;
+
+    /**
      * The form's sidebars.
      *
      * @var array
@@ -93,6 +107,20 @@ class FormWidget extends AdminWidget implements
      * @var FactoryInterface
      */
     private $widgetFactory;
+
+    /**
+     * @param  array $data The widget data.
+     * @return FormWidget Chainable
+     */
+    public function setData(array $data)
+    {
+        $this->setDefaultFormGroupsTemplate();
+        $this->setDefaultFormTabsTemplate();
+
+        parent::setData($data);
+
+        return $this;
+    }
 
     /**
      * @param array $data Optional. The form property data to set.
@@ -356,6 +384,16 @@ class FormWidget extends AdminWidget implements
     }
 
     /**
+     * Determines if any sidebars are defined.
+     *
+     * @return boolean
+     */
+    public function hasSidebars()
+    {
+        return (bool) $this->sidebars;
+    }
+
+    /**
      * Yield the form sidebar(s).
      *
      * @return \Generator
@@ -363,7 +401,7 @@ class FormWidget extends AdminWidget implements
     public function sidebars()
     {
         $sidebars = $this->sidebars;
-        uasort($sidebars, [$this, 'sortSidebarsByPriority']);
+        uasort($sidebars, [ $this, 'sortSidebarsByPriority' ]);
         foreach ($sidebars as $sidebarIdent => $sidebar) {
             if (!$sidebar->active()) {
                 continue;
@@ -457,7 +495,6 @@ class FormWidget extends AdminWidget implements
      */
     public function formProperties()
     {
-
         $sidebars = $this->sidebars;
         if (!is_array($sidebars)) {
             yield null;
@@ -635,6 +672,92 @@ class FormWidget extends AdminWidget implements
     public function defaultGroupType()
     {
         return 'charcoal/admin/widget/form-group/generic';
+    }
+
+    /**
+     * Set the form groups partial template path.
+     *
+     * @param  string $partial The partial template to render the form groups within.
+     * @return FormWidget Chainable
+     */
+    public function setGroupsTemplate($partial)
+    {
+        $this->setDynamicTemplate('form_groups_template', $partial);
+        $this->groupsTemplate = $partial;
+        return $this;
+    }
+
+    /**
+     * Retrieve the form groups partial template path.
+     *
+     * @return string
+     */
+    public function groupsTemplate()
+    {
+        if ($this->groupsTemplate === null) {
+            $this->setDefaultFormGroupsTemplate();
+        }
+
+        return $this->groupsTemplate;
+    }
+
+    /**
+     * @return void
+     */
+    public function setDefaultFormGroupsTemplate()
+    {
+        $this->setGroupsTemplate($this->defaultFormGroupsTemplate());
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultFormGroupsTemplate()
+    {
+        return 'charcoal/admin/template/form/groups-wrapper';
+    }
+
+    /**
+     * Set the form tabs partial template path.
+     *
+     * @param  string $partial The partial template to render the form tabs within.
+     * @return FormWidget Chainable
+     */
+    public function setTabsTemplate($partial)
+    {
+        $this->setDynamicTemplate('form_tabs_template', $partial);
+        $this->tabsTemplate = $partial;
+        return $this;
+    }
+
+    /**
+     * Retrieve the form tabs partial template path.
+     *
+     * @return string
+     */
+    public function tabsTemplate()
+    {
+        if ($this->tabsTemplate === null) {
+            $this->setDefaultFormTabsTemplate();
+        }
+
+        return $this->tabsTemplate;
+    }
+
+    /**
+     * @return void
+     */
+    public function setDefaultFormTabsTemplate()
+    {
+        $this->setTabsTemplate($this->defaultFormTabsTemplate());
+    }
+
+    /**
+     * @return string
+     */
+    public function defaultFormTabsTemplate()
+    {
+        return 'charcoal/admin/template/form/nav-tabs';
     }
 
     /**

@@ -260,6 +260,38 @@ class FormGroupWidget extends AbstractUiItem implements
     }
 
     /**
+     * Retrieve the current language.
+     *
+     * @return string
+     */
+    public function lang()
+    {
+        return $this->translator()->getLocale();
+    }
+
+    /**
+     * Retrieve the current language.
+     *
+     * @return string
+     */
+    public function locale()
+    {
+        $lang    = $this->lang();
+        $locales = $this->translator()->locales();
+
+        if (isset($locales[$lang]['locale'])) {
+            $locale = $locales[$lang]['locale'];
+            if (is_array($locale)) {
+                $locale = implode(' ', $locale);
+            }
+        } else {
+            $locale = 'en-US';
+        }
+
+        return $locale;
+    }
+
+    /**
      * @return Translation|string|null
      */
     public function description()

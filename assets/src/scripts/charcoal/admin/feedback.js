@@ -12,7 +12,7 @@
 ;(function ($, Admin) {
     'use strict';
 
-    var lvls, modes, defs, alts, arr = [], reset = function () {
+    var lvls, modes, defs, alts, reset = function () {
         lvls  = DEFAULTS.supported.slice();
         modes = DEFAULTS.displayModes.slice();
         defs  = $.extend({}, DEFAULTS.definitions);
@@ -143,7 +143,7 @@
         var entries = arguments;
 
         if (this.validContext(context)) {
-            entries = arr.slice.call(arguments, 1);
+            entries = Array.prototype.slice.call(arguments, 1);
         } else {
             context = 'global';
         }

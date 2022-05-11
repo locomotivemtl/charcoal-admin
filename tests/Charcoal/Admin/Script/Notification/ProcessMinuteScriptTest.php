@@ -51,7 +51,7 @@ class ProcessMinuteScriptTest extends AbstractTestCase
     /**
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $this->container = $this->getContainer();
 

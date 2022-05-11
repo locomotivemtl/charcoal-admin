@@ -2,7 +2,9 @@
 
 namespace Charcoal\Admin\Action;
 
+use InvalidArgumentException;
 use RuntimeException;
+use UnexpectedValueException;
 
 // From PSR-7
 use Psr\Http\Message\RequestInterface;
@@ -103,13 +105,6 @@ class ElfinderConnectorAction extends AdminAction
      * @var PropertyInterface
      */
     protected $formProperty;
-
-    /**
-     * Store the factory instance for the current class.
-     *
-     * @var FactoryInterface
-     */
-    private $propertyFactory;
 
     /**
      * The related object type.
@@ -402,7 +397,8 @@ class ElfinderConnectorAction extends AdminAction
         $elfConfig  = $this->getFilesystemAdminConfig($ident);
 
         $immutableSettings = [
-            'filesystem'  => $filesystem,
+            'filesystem' => $this->getFilesystem($ident),
+            'volumeName' => $this->getFilesystemName($ident),
         ];
 
         $root = array_replace_recursive(
@@ -558,14 +554,143 @@ class ElfinderConnectorAction extends AdminAction
     }
 
     /**
-     * Trim a file name.
+     * Attempts to localize directory names in results on all commands.
+     *
+     * Expected to be used as a callback on elFinder's connector `bind` setting.
+     *
+     * @todo Move this method to a dedicated plugin class.
+     *
+     * @param  string   $cmd       The command name.
+     * @param  array    $result    The command result.
+     * @param  array    $args      The command arguments from the client.
+     * @param  object   $elfinder  The elFinder instance.
+     * @param  object   $volume    The current volume instance.
+     * @return void|bool|array
+     */
+    public function translateDirectoriesOnAnyCommand($cmd, &$result, $args, $elfinder, $volume)
+    {
+        // To please PHPCS
+        unset($cmd, $args, $volume);
+
+        if (isset($result['cwd'])) {
+            $result['cwd'] = $this->translateDirectoryStat($result['cwd'], $elfinder);
+        }
+
+        $groupings = [ 'files', 'added', 'removed', 'changed' ];
+
+        foreach ($groupings as $grouping) {
+            if (isset($result[$grouping]) && is_array($result[$grouping])) {
+                foreach ($result[$grouping] as $i => $stat) {
+                    if (isset($stat['mime']) && $stat['mime'] === 'directory') {
+                        $result[$grouping][$i] = $this->translateDirectoryStat($stat, $elfinder);
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Attempts to localize the directory name.
+     *
+     * @param  array  $stat     The directory reference.
+     * @param  object $elfinder The elFinder instance or volume instance.
+     * @throws UnexpectedValueException If the related volume is not found.
+     * @return array
+     */
+    protected function translateDirectoryStat(array $stat, object $elfinder): array
+    {
+        if (isset($stat['hash'], $stat['isroot']) && $stat['isroot']) {
+            $stat['i18'] = $this->getVolumeNameFromHash($stat['hash'], $elfinder);
+        }
+
+        return $stat;
+    }
+
+    /**
+     * Attempts to retrieve the volume name by its directory hash.
+     *
+     * The "volumeName" option is defined by {@see self::getNamedRoot()}
+     * and its value is resolved by {@see self::translateVolumeName()}.
+     *
+     * @param  string $hash     The directory hash.
+     * @param  object $elfinder The elFinder instance or volume instance.
+     * @throws InvalidArgumentException If the elFinder client or volume is not provided.
+     * @throws UnexpectedValueException If the related volume is not found.
+     * @return ?string
+     */
+    protected function getVolumeNameFromHash(string $hash, object $elfinder): ?string
+    {
+        if ($elfinder instanceof elFinder) {
+            $volume = $elfinder->getVolume($hash);
+
+            if (!$volume) {
+                throw new UnexpectedValueException(
+                    sprintf('Could not find volume for path [%s]', $hash)
+                );
+            }
+        } elseif ($elfinder instanceof elFinderVolumeDriver) {
+            $volume = $elfinder;
+        } else {
+            throw new InvalidArgumentException(
+                'Expected an instance of elFinder or elFinderVolumeDriver'
+            );
+        }
+
+        return $volume->getOption('volumeName');
+    }
+
+    /**
+     * Attempts to retrieve the filesystem name.
+     *
+     * @param  string $ident The filesystem identifier.
+     * @return ?string
+     */
+    protected function getFilesystemName(string $ident): ?string
+    {
+        $fsConfig = $this->getFilesystemConfig($ident);
+
+        if (isset($fsConfig['label'])) {
+            $name = $this->translator()->translate($fsConfig['label']);
+            if ($name) {
+                return $name;
+            }
+        }
+
+        return $this->translateFilesystemName($ident);
+    }
+
+    /**
+     * Attempts to localize the filesystem identifier.
+     *
+     * @param  string $ident The filesystem identifier.
+     * @return ?string
+     */
+    protected function translateFilesystemName(string $ident): ?string
+    {
+        $key  = 'filesystem.volume.'.$ident;
+        $name = $this->translator()->trans($key);
+        if ($key !== $name) {
+            return $name;
+        }
+
+        return null;
+    }
+
+    /**
+     * Sanitizes a file name on `upload.presave`.
+     *
+     * Based on {@see \elFinderPluginSanitizer::onUpLoadPreSave()}.
+     *
+     * Expected to be used as a callback on elFinder's connector `bind` setting.
+     *
+     * @todo Move this method to a dedicated plugin class.
      *
      * @param  string $path     The target path.
      * @param  string $name     The target name.
      * @param  string $src      The temporary file name.
      * @param  object $elfinder The elFinder instance.
      * @param  object $volume   The current volume instance.
-     * @return true
+     * @return void|bool|array
      */
     public function sanitizeOnUploadPreSave(&$path, &$name, $src, $elfinder, $volume)
     {
@@ -573,24 +698,50 @@ class ElfinderConnectorAction extends AdminAction
         unset($path, $src, $elfinder, $volume);
 
         if (isset($this->elfinderOptions['plugin']['Sanitizer'])) {
-            $opts = $this->elfinderOptions['plugin']['Sanitizer'];
+            $options = $this->elfinderOptions['plugin']['Sanitizer'];
 
-            if (isset($opts['enable']) && $opts['enable']) {
-                $mask = (is_array($opts['replace']) ? implode($opts['replace']) : $opts['replace']);
-                $ext = '.'.pathinfo($name, PATHINFO_EXTENSION);
-
-                // Strip leading and trailing dashes or underscores
-                $name = trim(str_replace($ext, '', $name), $mask);
-
-                // Squeeze multiple delimiters and whitespace with a single separator
-                $name = preg_replace('!['.preg_quote($mask, '!').'\.\s]{2,}!', $opts['replace'], $name);
-
-                // Reassemble the file name
-                $name .= $ext;
+            if (isset($options['enable']) && $options['enable']) {
+                $name = $this->sanitizeFileName($name, $options);
+                return true;
             }
         }
 
-        return true;
+        return false;
+    }
+
+    /**
+     * Sanitize a file name.
+     *
+     * Trims whitespace and squeezes delimeter.
+     *
+     * @param  string $name    The file name to sanitize.
+     * @param  array  $options The elFinder Sanitizer plugin options.
+     * @return string The sanitized filename.
+     */
+    protected function sanitizeFileName(string $name, array $options): string
+    {
+        if (is_array($options['replace'])) {
+            $mask = implode($options['replace']);
+        } else {
+            $mask = $options['replace'];
+        }
+
+        $ext = '.'.pathinfo($name, PATHINFO_EXTENSION);
+
+        // Strip leading and trailing dashes or underscores
+        $name = trim(str_replace($ext, '', $name), $mask);
+
+        // Squeeze multiple delimiters and whitespace with a single separator
+        $name = preg_replace(
+            '!['.preg_quote($mask, '!').'\.\s]{2,}!',
+            $options['replace'],
+            $name
+        );
+
+        // Reassemble the file name
+        $name .= $ext;
+
+        return $name;
     }
 
     /**
@@ -749,7 +900,6 @@ class ElfinderConnectorAction extends AdminAction
         $this->publicPath = $container['config']['public_path'];
 
         $this->setElfinderConfig($container['elfinder/config']);
-        $this->setPropertyFactory($container['property/factory']);
         $this->setCallableResolver($container['callableResolver']);
 
         /** @see \Charcoal\App\ServiceProvide\FilesystemServiceProvider */
@@ -878,35 +1028,5 @@ class ElfinderConnectorAction extends AdminAction
         }
 
         return $this->elfinderConfig;
-    }
-
-    /**
-     * Set a property factory.
-     *
-     * @param FactoryInterface $factory The property factory,
-     *                                  to createable property values.
-     * @return void
-     */
-    protected function setPropertyFactory(FactoryInterface $factory)
-    {
-        $this->propertyFactory = $factory;
-    }
-
-    /**
-     * Retrieve the property factory.
-     *
-     * @throws RuntimeException If the property factory was not previously set.
-     * @return FactoryInterface
-     */
-    public function propertyFactory()
-    {
-        if (!isset($this->propertyFactory)) {
-            throw new RuntimeException(sprintf(
-                'Property Factory is not defined for "%s"',
-                get_class($this)
-            ));
-        }
-
-        return $this->propertyFactory;
     }
 }

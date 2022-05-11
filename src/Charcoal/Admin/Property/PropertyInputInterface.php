@@ -2,69 +2,28 @@
 
 namespace Charcoal\Admin\Property;
 
-use Traversable;
-
-// From 'charcoal-property'
-use Charcoal\Property\PropertyInterface;
+// From 'charcoal-admin'
+use Charcoal\Admin\Property\PropertyInterface as AdminPropertyInterface;
 
 /**
- * Defines a property form control.
+ * Defines a model property form control Admin decorator.
  */
-interface PropertyInputInterface
+interface PropertyInputInterface extends AdminPropertyInterface
 {
     /**
-     * @param array|Traversable $data The object (input) data.
-     * @return Input Chainable
+     * @param  string $inputType The input type.
+     * @return self
      */
-    public function setData(array $data);
-
-    /**
-     * @param string $ident The input identifier.
-     * @return PropertyInputInterface Chainable
-     */
-    public function setIdent($ident);
+    public function setInputType($inputType);
 
     /**
      * @return string
      */
-    public function ident();
+    public function inputType();
 
     /**
-     * @param boolean $readOnly The readonly flag.
-     * @return PropertyInputInterface Chainable
-     */
-    public function setReadOnly($readOnly);
-
-    /**
-     * @return boolean
-     */
-    public function readOnly();
-
-    /**
-     * @param boolean $required The required flag.
-     * @return PropertyInputInterface Chainable
-     */
-    public function setRequired($required);
-
-    /**
-     * @return boolean
-     */
-    public function required();
-
-    /**
-     * @param boolean $disabled The disabled flag.
-     * @return PropertyInputInterface Chainable
-     */
-    public function setDisabled($disabled);
-
-    /**
-     * @return boolean
-     */
-    public function disabled();
-
-    /**
-     * @param string $inputId The input id.
-     * @return Input Chainable
+     * @param  string $inputId The input id.
+     * @return self
      */
     public function setInputId($inputId);
 
@@ -84,29 +43,35 @@ interface PropertyInputInterface
     public function inputVal();
 
     /**
-     * @param string $inputType The input type.
-     * @return PropertyInputInterface Chainable
+     * @param  boolean $readOnly The readonly flag.
+     * @return self
      */
-    public function setInputType($inputType);
+    public function setReadOnly($readOnly);
 
     /**
-     * @return string
+     * @return boolean
      */
-    public function inputType();
+    public function readOnly();
 
     /**
-     * @param PropertyInterface $p The property.
-     * @return PropertyInputInterface Chainable
+     * @param  boolean $required The required flag.
+     * @return self
      */
-    public function setProperty(PropertyInterface $p);
+    public function setRequired($required);
 
     /**
-     * @return PropertyInterface
+     * @return boolean
      */
-    public function property();
+    public function required();
 
     /**
-     * @return PropertyInterface
+     * @param  boolean $disabled The disabled flag.
+     * @return self
      */
-    public function p();
+    public function setDisabled($disabled);
+
+    /**
+     * @return boolean
+     */
+    public function disabled();
 }

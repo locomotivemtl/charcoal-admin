@@ -49,6 +49,13 @@ class ObjectFormWidget extends FormWidget implements
     protected $allowReload = false;
 
     /**
+     * Force the form widget to reload the page after update.
+     *
+     * @var boolean $forcePageReload
+     */
+    protected $forcePageReload = false;
+
+    /**
      * @return string
      */
     public function widgetType()
@@ -71,8 +78,8 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
-     * @param array $data The widget data.
-     * @return ObjectForm Chainable
+     * @param  array $data The widget data.
+     * @return ObjectFormWidget Chainable
      */
     public function setData(array $data)
     {
@@ -173,6 +180,25 @@ class ObjectFormWidget extends FormWidget implements
     public function setAllowReload($allowReload)
     {
         $this->allowReload = $allowReload;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function forcePageReload()
+    {
+        return $this->forcePageReload;
+    }
+
+    /**
+     * @param boolean $forcePageReload ForcePageReload for ObjectFormWidget.
+     * @return self
+     */
+    public function setForcePageReload($forcePageReload)
+    {
+        $this->forcePageReload = $forcePageReload;
 
         return $this;
     }
@@ -344,7 +370,8 @@ class ObjectFormWidget extends FormWidget implements
             'tab'                => $this->isTabbable(),
             'group_display_mode' => $this->groupDisplayMode(),
             'group_conditions'   => $this->groupsConditionalLogic(),
-            'allow_reload'       => $this->allowReload()
+            'allow_reload'       => $this->allowReload(),
+            'force_page_reload'  => $this->forcePageReload(),
         ];
     }
 
@@ -545,15 +572,17 @@ class ObjectFormWidget extends FormWidget implements
      */
     public function hasL10nFormProperties()
     {
-        if ($this->hasObj()) {
+        if ($this->validateObjType()) {
             $locales = count($this->translator()->availableLocales());
             if ($locales > 1) {
+                $model = $this->proto();
+
                 foreach ($this->getFormProperties() as $formProp) {
                     $modelProp = $formProp->property();
                     if ($modelProp['l10n']) {
                         return true;
                     } elseif ($modelProp instanceof ModelStructureProperty) {
-                        $metadata = $this->obj()->property($modelProp['ident'])->getStructureMetadata();
+                        $metadata = $model->property($modelProp['ident'])->getStructureMetadata();
                         foreach ($metadata->properties() as $prop) {
                             if (isset($prop['l10n']) && $prop['l10n']) {
                                 return true;

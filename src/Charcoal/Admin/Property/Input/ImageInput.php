@@ -44,9 +44,9 @@ class ImageInput extends FileInput
     protected function defaultChooseButtonLabel()
     {
         if ($this->property()['multiple']) {
-            return $this->translator()->translation('Choose image…');
-        } else {
             return $this->translator()->translation('Choose images…');
+        } else {
+            return $this->translator()->translation('Choose image…');
         }
     }
 

@@ -13,6 +13,7 @@ use Pimple\Container;
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminAction;
 use Charcoal\Tests\AbstractTestCase;
+use Charcoal\Tests\AssertionsTrait;
 use Charcoal\Tests\ReflectionsTrait;
 use Charcoal\Tests\Admin\ContainerProvider;
 
@@ -21,6 +22,7 @@ use Charcoal\Tests\Admin\ContainerProvider;
  */
 class AdminActionTest extends AbstractTestCase
 {
+    use AssertionsTrait;
     use ReflectionsTrait;
 
     /**
@@ -42,7 +44,7 @@ class AdminActionTest extends AbstractTestCase
      *
      * @return void
      */
-    public function setUp()
+    public function setUp(): void
     {
         $container = $this->container();
 

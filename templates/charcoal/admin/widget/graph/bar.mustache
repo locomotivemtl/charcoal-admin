@@ -1,12 +1,9 @@
 <div id="{{ widgetId }}" style="height:{{ height }}px;"></div>
 
-{{# addJsRequirement }}
-    <script src="{{ baseUrl }}assets/admin/scripts/vendors/echarts/echarts.min.js"></script>
-{{/ addJsRequirement }}
+{{ assets.enqueue.js.echarts_js }}
 
 {{# addJs }}
     <script type="text/javascript">
-
         var myChart = echarts.init(document.getElementById('{{ widgetId }}'));
 
         myChart.showLoading({

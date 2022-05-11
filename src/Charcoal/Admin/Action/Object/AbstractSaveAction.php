@@ -11,7 +11,7 @@ use Psr\Http\Message\ResponseInterface;
 // From 'charcoal-core'
 use Charcoal\Model\ModelInterface;
 use Charcoal\Validator\ValidatableInterface;
-use Charcoal\Validator\ValidatorInterface;
+use Charcoal\Validator\ValidatorResult;
 
 // From 'charcoal-user'
 use Charcoal\User\Authenticator;
@@ -33,7 +33,7 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     /**
      * @return string
      */
-    protected function authorIdent()
+    protected function getAuthorIdent()
     {
         $user = $this->getAuthenticatedUser();
         return (string)$user->id();
@@ -57,6 +57,17 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     }
 
     /**
+     * Determines if object is validatable.
+     *
+     * @param  ModelInterface $obj The object to validate.
+     * @return boolean
+     */
+    public function isValidatable(ModelInterface $obj)
+    {
+        return ($obj instanceof ValidatableInterface);
+    }
+
+    /**
      * Defer object validation.
      *
      * This methos is useful for subclasses.
@@ -66,7 +77,7 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
      */
     public function validate(ModelInterface $obj)
     {
-        if ($obj instanceof ValidatableInterface) {
+        if ($this->isValidatable($obj)) {
             return $obj->validate();
         }
 
@@ -74,26 +85,29 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
     }
 
     /**
-     * Merge the given object's validation results the response feedback.
+     * Add feedback from an object's validation results.
      *
-     * @param  ModelInterface       $obj     The validated object.
+     * Based on {@see \Charcoal\Admin\Ui\FeedbackContainerTrait::addFeedbackFromValidator()}.
+     *
+     * @param  ModelInterface       $obj     The validatable object.
      * @param  string[]|string|null $filters Filter the levels to merge.
      * @throws InvalidArgumentException If the filters are invalid.
-     * @return SaveAction Chainable
+     * @return self
      */
-    public function addFeedbackFromValidation(ModelInterface $obj, $filters = null)
+    public function addFeedbackFromModel(ModelInterface $obj, $filters = null)
     {
-        if (!($obj instanceof ValidatableInterface)) {
+        if (!$this->isValidatable($obj)) {
             return $this;
         }
 
         $validator = $obj->validator();
-        $levels    = [ ValidatorInterface::ERROR, ValidatorInterface::WARNING, ValidatorInterface::NOTICE ];
+
+        $levels = $this->getSupportedValidatorLevelsForFeedback();
 
         if (is_string($filters) && in_array($filters, $levels)) {
             $results = call_user_func([ $validator, $filters.'Results' ]);
             foreach ($results as $result) {
-                $this->addFeedback($result->level(), $result->message());
+                $this->addFeedbackFromModelValidatorResult($result, $obj);
             }
 
             return $this;
@@ -109,12 +123,43 @@ abstract class AbstractSaveAction extends AdminAction implements ObjectContainer
         foreach ($validation as $level => $results) {
             if ($filters === null || in_array($level, $filters)) {
                 foreach ($results as $result) {
-                    $this->addFeedback($result->level(), $result->message());
+                    $this->addFeedbackFromModelValidatorResult($result, $obj);
                 }
             }
         }
 
         return $this;
+    }
+
+    /**
+     * Add feedback from a model validator result.
+     *
+     * @param  ValidatorResult $result The validation result.
+     * @param  ModelInterface  $obj    The related object.
+     * @return string The unique ID assigned to the feedback.
+     */
+    public function addFeedbackFromModelValidatorResult(ValidatorResult $result, ModelInterface $obj)
+    {
+        $resultKey = $result->ident();
+
+        if (is_string($resultKey)) {
+            $parts = explode('.', $resultKey);
+            $prop  = reset($parts);
+            if (is_string($prop) && $obj->hasProperty($prop)) {
+                $propertyLabel = (string)$obj->property($prop)['label'];
+                $resultMessage = $result->message();
+
+                if (strpos($resultMessage, $propertyLabel) === false) {
+                    $resultMessage = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
+                        '{{ errorMessage }}' => $propertyLabel,
+                        '{{ errorThrown }}'  => $resultMessage,
+                    ]);
+                    $result->setMessage($resultMessage);
+                }
+            }
+        }
+
+        return $this->addFeedbackFromValidatorResult($result);
     }
 
     /**

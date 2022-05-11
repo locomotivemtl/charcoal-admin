@@ -1,7 +1,38 @@
 {
+    "labels": {
+        "name": {
+            "en": "Role",
+            "fr": "Rôle"
+        },
+        "singular_name": {
+            "en": "Role",
+            "fr": "Rôle"
+        },
+        "edit_item": {
+            "en": "Edit Role",
+            "fr": "Rôle"
+        },
+        "create_item": {
+            "en": "Create Role",
+            "fr": "Créer un rôle"
+        },
+        "new_item": {
+            "en": "New Role",
+            "fr": "Nouveau rôle"
+        },
+        "all_items": {
+            "en": "All Roles",
+            "fr": "Liste des rôles"
+        },
+        "menu_items": {
+            "en": "Role",
+            "fr": "Rôle"
+        }
+    },
     "properties": {
         "parent": {
-            "obj_type": "charcoal/admin/user/acl-role"
+            "obj_type": "charcoal/admin/user/acl-role",
+            "pattern": "{{name}}"
         }
     },
 
@@ -16,8 +47,8 @@
         "lists": {
             "default": {
                 "title": {
-                    "en":"Administrators",
-                    "fr":"Gestionnaires"
+                    "en": "Administrators",
+                    "fr": "Gestionnaires"
                 },
                 "properties": [
                     "ident",
@@ -34,24 +65,31 @@
                     "info": {
                         "title": "Informations",
                         "properties": [
+                            "name",
                             "ident",
                             "parent",
                             "superuser"
                         ],
-                        "priority": 10
+                        "priority": 10,
+                        "layout": {
+                            "structure": [
+                                { "columns": [ 1, 1 ] },
+                                { "columns": [ 1, 1 ] }
+                            ]
+                        }
                     },
                     "permissions": {
                         "title": "Permissions",
-                        "layout": {
-                            "structure": [
-                                { "columns": [ 1, 1 ] }
-                            ]
-                        },
                         "properties": [
                             "allowed",
                             "denied"
                         ],
-                        "priority": 15
+                        "priority": 15,
+                        "layout": {
+                            "structure": [
+                                { "columns": [ 1, 1 ] }
+                            ]
+                        }
                     },
                     "permissions2": {
                         "title": {
@@ -72,15 +110,6 @@
 
         "dashboards": {
             "admin.edit": {
-                "title": {
-                    "en": "Role",
-                    "fr": "Rôle"
-                },
-                "layout": {
-                    "structure": [
-                        { "columns": [ 1 ] }
-                    ]
-                },
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/object-form",
@@ -92,18 +121,14 @@
                     "widget_options": {
                         "ident": "system"
                     }
-                }
-            },
-            "admin.table": {
-                "title": {
-                    "en": "Roles list",
-                    "fr": "Liste des rôles"
                 },
                 "layout": {
                     "structure": [
                         { "columns": [ 1 ] }
                     ]
-                },
+                }
+            },
+            "admin.table": {
                 "widgets": {
                     "form": {
                         "type": "charcoal/admin/widget/table",
@@ -115,6 +140,11 @@
                     "widget_options": {
                         "ident": "system"
                     }
+                },
+                "layout": {
+                    "structure": [
+                        { "columns": [ 1 ] }
+                    ]
                 }
             }
         },

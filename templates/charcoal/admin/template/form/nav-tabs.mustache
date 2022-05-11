@@ -3,7 +3,6 @@
     ==============
 
     @used-by charcoal/admin/template/object-form
-    @used-by charcoal/admin/template/quick-form
 --}}
 <ul class="c-form-widget_nav nav nav-tabs{{# tabCssClasses }} {{.}}{{/ tabCssClasses }}" role="tablist">
     {{# groups }}
@@ -23,15 +22,13 @@
                 {{/ icon }}
             {{/ showIcon }}
             {{# showTabTitle }}
-            <span class="nav-title">{{& tabTitle }}</span>
+                <span class="nav-title">{{& tabTitle }}</span>
             {{/ showTabTitle }}
         </a>
         {{^ showTabTitle }}
             <div class="tooltip bs-tooltip-bottom" aria-hidden="true">
                 <div class="arrow"></div>
-                <div class="tooltip-inner">
-                    {{& title }}
-                </div>
+                <div class="tooltip-inner">{{& tabTitle }}</div>
             </div>
         {{/ showTabTitle }}
     </li>

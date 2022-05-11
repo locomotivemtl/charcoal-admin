@@ -230,6 +230,11 @@ Charcoal.Admin.Widget_Relation.prototype.create_relation_dialog = function (widg
                 obj_id: dialogOptions.widget_options.id,
                 save_callback: function (response) {
                     callback(response);
+
+                    if ((this instanceof Charcoal.Admin.Component) && this.id()) {
+                        Charcoal.Admin.manager().destroy_component('widgets', this.id());
+                    }
+
                     dialog.close();
                 }
             });
@@ -263,16 +268,31 @@ Charcoal.Admin.Widget_Relation.prototype.add = function (obj) {
 };
 
 /**
- * [save description]
- * @return {[type]} [description]
+ * Determines if the component is a candidate for saving.
+ *
+ * @param  {Component} [scope] - The parent component that calls for save.
+ * @return {boolean}
+ */
+Charcoal.Admin.Widget_Relation.prototype.will_save = function (scope) {
+    return (scope && $.contains(scope.element()[0], this.element()[0]));
+};
+
+/**
+ * Prepares the component to be saved.
+ *
+ * This method triggers the update of relationships between
+ * the primary model and its attachment.
+ *
+ * @return {boolean}
  */
 Charcoal.Admin.Widget_Relation.prototype.save = function () {
     if (this.is_dirty()) {
         return false;
     }
 
-    // Create relations from current list.
     this.create_relation();
+
+    return true;
 };
 
 Charcoal.Admin.Widget_Relation.prototype.create_relation = function (cb) {

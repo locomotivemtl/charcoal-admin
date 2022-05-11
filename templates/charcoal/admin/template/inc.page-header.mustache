@@ -9,16 +9,6 @@
 --}}
 <header class="c-page-header o-header">
     <div class="o-container">
-        {{# title }}
-            <h1 class="c-page-header_title">{{& . }}</h1>
-        {{/ title }}
-        {{# subtitle }}
-            <p>
-                <strong>{{& . }}</strong>
-                {{# description }}
-                    <span class="c-info -dark" data-toggle="tooltip" data-placement="auto" title="{{ . }}">{{# _t }}?{{/ _t }}</span>
-                {{/ description }}
-            </p>
-        {{/ subtitle }}
+        {{> charcoal/admin/template/inc.page-header-inner }}
     </div>
 </header>

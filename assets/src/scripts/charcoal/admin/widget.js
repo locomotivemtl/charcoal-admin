@@ -91,15 +91,6 @@ Charcoal.Admin.Widget.prototype.suppress_feedback = function (flag) {
 };
 
 /**
- * Called upon save by the component manager
- *
- * @return {Boolean} Default action is set to true.
- */
-Charcoal.Admin.Widget.prototype.save = function () {
-    return true;
-};
-
-/**
  * Animate the widget out on reload
  * Use callback to define what to do after the animation.
  *
@@ -170,6 +161,10 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
 
         that.widget_id = wid;
         that.anim_out(function () {
+            that.destroy();
+
+            // Fresh widget view might include its
+            // component manager registration again.
             that.element().replaceWith(response.widget_html);
             that.set_element($('#' + that.id()));
 
@@ -177,6 +172,7 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
             that.element().removeClass('is-loading');
             that.element().hide().fadeIn();
             that.init();
+
             // Callback
             if (typeof callback === 'function') {
                 callback.call(that, response);
@@ -248,8 +244,8 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
 
     dialogOptions.onshown = function (dialog) {
         var xhr,
-            url      = Charcoal.Admin.admin_url() + 'widget/load',
-            data     = dialog_opts;
+            url  = Charcoal.Admin.admin_url() + 'widget/load',
+            data = dialog_opts;
 
         xhr = $.ajax({
             method:   'POST',
@@ -258,22 +254,23 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
             dataType: 'json'
         });
 
-        xhr.then(function (response, textStatus, jqXHR) {
-            if (!response || !response.success) {
-                if (response.feedbacks) {
-                    return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
-                } else {
-                    return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
+        xhr
+            .then(function (response, textStatus, jqXHR) {
+                if (!response || !response.success) {
+                    if (response.feedbacks) {
+                        return $.Deferred().reject(jqXHR, textStatus, response.feedbacks);
+                    } else {
+                        return $.Deferred().reject(jqXHR, textStatus, widgetL10n.loadingFailed);
+                    }
                 }
-            }
 
-            return $.Deferred().resolve(response, textStatus, jqXHR);
-        })
+                return $.Deferred().resolve(response, textStatus, jqXHR);
+            })
             .done(function (response/*, textStatus, jqXHR*/) {
                 dialog.setMessage(response.widget_html);
 
                 if (typeof callback === 'function') {
-                    callback(response);
+                    callback(response, dialog);
                 }
 
                 $('[data-toggle="tooltip"]', dialog.getModalBody()).tooltip();
@@ -356,7 +353,7 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
  * @param  {Object}   [dialog_opts]        - Dialog settings.
  * @param  {Function} [confirmed_callback] - What to do after the dialog is confirmed?
  * @param  {Function} [cancel_callback]    - What to do after the dialog is canceled?
- * @return {void}
+ * @return {BootstrapDialog}
  */
 Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callback, cancel_callback) {
     var defaults = {
@@ -376,5 +373,5 @@ Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callb
 
     var opts = $.extend(defaults, dialog_opts);
 
-    BootstrapDialog.confirm(opts);
+    return BootstrapDialog.confirm(opts);
 };

@@ -2,38 +2,11 @@
 // Base
 // ==========================================================================
 
-// html {
-//     @media (max-width: $to-small) {
-//         font-size: $font-size - 2px;
-//     }
-
-//     @media (min-width: $from-small) and (max-width: $to-medium) {
-//         font-size: $font-size - 4px;
-//     }
-
-//     @media (min-width: $from-medium) and (max-width: $to-large) {
-//         font-size: $font-size - 2px;
-//     }
-
-//     @media (min-width: $from-large) {
-//         font-size: $font-size;
-//     }
-// }
-
 //
-// Simple page-level setup.
-//
-// 1. Force scrollbars to always be visible to prevent awkward ‘jumps’ when
-//    navigating between pages that do/do not have enough content to produce
-//    scrollbars naturally.
-// 2. Ensure the page always fills at least the entire height of the viewport.
-// 3. Set the default `font-size` for the entire project, sourced from our
+// 1. Set the default `font-size` for the entire project, sourced from our
 //    default variables. The `font-size` is calculated to exist in ems.
 //
 html {
-    overflow-y: scroll; /* [1] */
-    min-height: 100%; /* [2] */
-
     @media (max-width: $to-large) {
         font-size: 14px;
     }
@@ -43,8 +16,19 @@ html {
     }
 
     @media (min-width: $from-big) {
-        font-size: em($font-size, 16px); /* [3] */
+        font-size: em($font-size, 16px); /* [1] */
     }
+}
+
+//
+// 1. Force scrollbars to always be visible to prevent awkward ‘jumps’ when
+//    navigating between pages that do/do not have enough content to produce
+//    scrollbars naturally.
+// 2. Ensure the page always fills at least the entire height of the viewport.
+//
+body {
+    overflow-y: scroll; /* [1] */
+    min-height: 100%; /* [2] */
 }
 
 ::selection {

@@ -4,8 +4,9 @@
 
 Charcoal.Admin.Property_Input_File = function (opts) {
     this.EVENT_NAMESPACE = '.charcoal.property.file';
-    Charcoal.Admin.Property.call(this, opts);
     this.input_type = 'charcoal/admin/property/input/file';
+
+    Charcoal.Admin.Property.call(this, opts);
 
     this.data   = opts.data;
     this.dialog = null;

@@ -103,31 +103,6 @@ Charcoal.Admin.Property.prototype.val = function () {
 };
 
 /**
- * Default validate action
- * Validate should return the validation feedback with a
- * success and / or message
- * IdeaS:
- * Use a validation object that has all necessary methods for
- * strings (max_length, min_length, etc)
- *
- * @return Object validation feedback
- */
-Charcoal.Admin.Property.prototype.validate = function () {
-    // Validate the current
-    return {};
-};
-
-/**
- * Default save action
- *
- * @return {this}
- */
-Charcoal.Admin.Property.prototype.save = function () {
-    // Default action = nothing
-    return this;
-};
-
-/**
  * Error handling
  *
  * @param  {*} data - Could be a simple message, an array, wtv.

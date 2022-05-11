@@ -1,45 +1,37 @@
-<div id="{{ widgetId }}" style="height:{{ height }}px;"></div>
+<div id="{{ widgetId }}" style="height: {{ height }};"></div>
 
 {{ assets.enqueue.js.echarts_js }}
 
 {{# addJs }}
-    <script type="text/javascript">
-        var myChart = echarts.init(document.getElementById('{{ widgetId }}'));
-
-        myChart.showLoading({
-            text: '{{# _t }}Loading…{{/ _t }}',
-        });
-        myChart.hideLoading();
-
-        myChart.setOption({
-            color: [
-                {{# colors }}
-                    '{{.}}',
-                {{/ colors }}
-            ],
-            tooltip: {
-                trigger: 'item'
-            },
-            toolbox: {
-                show: true
-            },
-            calculable: false,
-            series: [
-                {
-                    name: 'Serie 1',
-                    type: 'pie',
-                    radius: '50%',
-                    data: [
-                        { value: 335, name: 'PHP' },
-                        { value: 310, name: 'Javascript' },
-                        { value: 234, name: 'JSON' },
-                        { value: 135, name: 'HTML' }
-                    ]
-                }
-            ]
-        });
-        $(window).on('resize', function() {
-            myChart.resize();
-        });
-    </script>
+<script type="text/javascript">
+    Charcoal.Admin.manager().add_widget({
+        id: '{{ widgetId }}',
+        type: 'charcoal/admin/widget/graph',
+        data: {
+            graph_options: {
+                color: {{& colorsJson }},
+                tooltip: {
+                    trigger: 'item'
+                },
+                toolbox: {
+                    show: true
+                },
+                calculable: false,
+                series: [
+                    {
+                        name: 'Serie 1',
+                        type: 'pie',
+                        radius: '50%',
+                        data: [
+                            { value: 335, name: 'PHP' },
+                            { value: 310, name: 'Javascript' },
+                            { value: 234, name: 'JSON' },
+                            { value: 135, name: 'HTML' }
+                        ]
+                    }
+                ]
+            }
+        }
+    });
+</script>
 {{/ addJs }}

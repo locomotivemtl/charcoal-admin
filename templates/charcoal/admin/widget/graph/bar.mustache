@@ -1,45 +1,39 @@
-<div id="{{ widgetId }}" style="height:{{ height }}px;"></div>
+<div id="{{ widgetId }}" style="height: {{ height }};"></div>
 
 {{ assets.enqueue.js.echarts_js }}
 
 {{# addJs }}
-    <script type="text/javascript">
-        var myChart = echarts.init(document.getElementById('{{ widgetId }}'));
-
-        myChart.showLoading({
-            text: '{{# _t }}Loading…{{/ _t }}',
-        });
-        myChart.hideLoading();
-
-        myChart.setOption({
-            color: [
-                {{# colors }}
-                    '{{ . }}',
-                {{/ colors }}
-            ],
-            tooltip: {
-                trigger: 'axis'
-            },
-            toolbox: {
-                show: true
-            },
-            calculable: false,
-            xAxis: [
-                {
-                    type: 'category',
-                    data: {{& categoriesJson }}
-                }
-            ],
-            yAxis: [
-                {
-                    type: 'value',
-                    splitArea: { show: true }
-                }
-            ],
-            series: {{& seriesJson }}
-        });
-        $(window).on('resize', function() {
-            myChart.resize();
-        });
-    </script>
+<script type="text/javascript">
+    Charcoal.Admin.manager().add_widget({
+        id: '{{ widgetId }}',
+        type: 'charcoal/admin/widget/graph',
+        data: {
+            graph_options: {
+                color: {{& colorsJson }},
+                tooltip: {
+                    trigger: 'axis'
+                },
+                toolbox: {
+                    show: true
+                },
+                calculable: false,
+                xAxis: [
+                    {
+                        type: 'category',
+                        data: {{& categoriesJson }}
+                    }
+                ],
+                yAxis: [
+                    {
+                        type: 'value',
+                        splitArea: {
+                            show: true
+                        }
+                    }
+                ],
+                series: {{& seriesJson }}
+            }
+        }
+    });
+</script>
 {{/ addJs }}

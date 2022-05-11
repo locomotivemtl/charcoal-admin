@@ -231,9 +231,9 @@ abstract class AbstractTimeGraphWidget extends AbstractGraphWidget implements Ti
         return $this->dateInterval;
     }
 
-     /**
-      * @return TimeGraphWidgetInterface Chainable
-      */
+    /**
+     * @return TimeGraphWidgetInterface Chainable
+     */
     protected function setGroupingTypeByHour()
     {
         $this->setDateFormat('Y-m-d H:i');

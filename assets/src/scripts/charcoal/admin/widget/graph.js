@@ -1,4 +1,4 @@
-/* globals echarts, widgetL10n */
+/* globals echarts */
 /**
  * Graph widget used to display graphical charts
  * charcoal/admin/widget/graph
@@ -10,44 +10,52 @@
  * @param  {Object}  opts Options for widget
  */
 
-var Graph = function (opts) {
-    Charcoal.Admin.Widget.call(this, opts);
-};
+;(function ($, Admin, window) {
+    'use strict';
 
-Graph.prototype            = Object.create(Charcoal.Admin.Widget.prototype);
-Graph.prototype.contructor = Graph;
-Graph.prototype.parent     = Charcoal.Admin.Widget.prototype;
+    var Graph = function (opts) {
+        this.EVENT_NAMESPACE = '.charcoal.widget.graph';
 
-Graph.prototype.init = function () {
-    // Elements
-    this.$widget = this.element();
+        Charcoal.Admin.Widget.call(this, opts);
 
-    var chart = echarts.init(this.$widget.find('.js-graph-container').get(0));
-
-    chart.showLoading({
-        text: widgetL10n.loading,
-    });
-    chart.hideLoading();
-
-    chart.setOption(this.echartsOptions());
-
-    $(window).on('resize', function () {
-        chart.resize();
-    });
-};
-
-Graph.prototype.echartsOptions = function () {
-    var defaultOpts = {
-        color:   this._opts.data.colors,
-        tooltip: {
-            trigger: 'item'
-        },
-        toolbox: {
-            show: true
-        }
+        this.graph_options = opts.graph_options || opts.data.graph_options || {};
     };
 
-    return $.extend(true, defaultOpts, this._opts.data.options);
-};
+    Graph.prototype            = Object.create(Charcoal.Admin.Widget.prototype);
+    Graph.prototype.contructor = Graph;
+    Graph.prototype.parent     = Charcoal.Admin.Widget.prototype;
 
-Charcoal.Admin.Widget_Graph = Graph;
+    Graph.prototype.init = function () {
+        if (!echarts) {
+            console.error('Could not initialize graph widget:', 'eCharts is missing');
+            return;
+        }
+
+        var chart = echarts.init(this.element()[0]);
+
+        this.chart = chart;
+
+        // TODO: Add support for defered data loading (when data is heavy)
+        // chart.showLoading({
+        //     text: widgetL10n.loading,
+        // });
+        // chart.hideLoading();
+
+        chart.setOption(this.graph_options);
+
+        $(window).on('resize' + this.EVENT_NAMESPACE, function () {
+            chart.resize();
+        });
+    };
+
+    Graph.prototype.destroy = function () {
+        if (this.chart) {
+            this.chart.dispose();
+        }
+
+        $(window).off('resize' + this.EVENT_NAMESPACE);
+    };
+
+    Admin.Widget_Graph = Graph;
+
+}(jQuery, Charcoal.Admin, window));

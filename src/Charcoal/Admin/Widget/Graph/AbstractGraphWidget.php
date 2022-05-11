@@ -56,7 +56,7 @@ abstract class AbstractGraphWidget extends AdminWidget implements
     /**
      * @var mixed $height
      */
-    protected $height = 400;
+    protected $height = '400px';
 
     /**
      * @var array $colors
@@ -69,6 +69,10 @@ abstract class AbstractGraphWidget extends AdminWidget implements
      */
     public function setHeight($height)
     {
+        if (is_numeric($height)) {
+            $height .= 'px';
+        }
+
         $this->height = $height;
 
         return $this;
@@ -136,6 +140,14 @@ abstract class AbstractGraphWidget extends AdminWidget implements
     }
 
     /**
+     * @return string JSONified colors structure.
+     */
+    public function colorsJson()
+    {
+        return json_encode($this->colors());
+    }
+
+    /**
      * @return string JSONified categories structure.
      */
     public function seriesJson()
@@ -159,9 +171,9 @@ abstract class AbstractGraphWidget extends AdminWidget implements
     public function widgetDataForJs()
     {
         return [
-            'list_actions' => $this->graphActions(),
-            'colors'       => $this->colors(),
-            'options'      => [
+            'list_actions'  => $this->graphActions(),
+            'colors'        => $this->colors(),
+            'graph_options' => [
                 'xAxis' => (empty($this->categories()) ? null : [
                     [
                         'type' => 'category',

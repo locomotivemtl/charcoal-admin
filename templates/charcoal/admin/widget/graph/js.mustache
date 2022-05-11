@@ -1,0 +1,11 @@
+{{ assets.enqueue.js.echarts_js }}
+
+{{# addJs }}
+<script type="text/javascript">
+    Charcoal.Admin.manager().add_widget({
+        id: '{{ widgetId }}',
+        type: 'charcoal/admin/widget/graph',
+        data: {{& widgetDataForJsAsJson }}
+    });
+</script>
+{{/ addJs }}

@@ -8,6 +8,8 @@
  * @param  {Object}  opts Options for widget
  */
 Charcoal.Admin.Widget_Search = function (opts) {
+    this.EVENT_NAMESPACE = '.charcoal.widget.search';
+
     Charcoal.Admin.Widget.call(this, opts);
 
     this._elem = undefined;
@@ -40,6 +42,10 @@ Charcoal.Admin.Widget_Search.prototype = Object.create(Charcoal.Admin.Widget.pro
 Charcoal.Admin.Widget_Search.prototype.constructor = Charcoal.Admin.Widget_Search;
 Charcoal.Admin.Widget_Search.prototype.parent = Charcoal.Admin.Widget.prototype;
 
+Charcoal.Admin.Widget_Search.prototype.widget_options = function () {
+    return this.data;
+};
+
 /**
  * Whats the widget that should be refreshed?
  * A list, a table? Definition of a widget includes:
@@ -55,12 +61,12 @@ Charcoal.Admin.Widget_Search.prototype.init = function () {
 
     this.$input = $form.find('[name="query"]');
 
-    $form.on('submit.charcoal.search', function (event) {
+    $form.on('submit' + this.EVENT_NAMESPACE, function (event) {
         event.preventDefault();
         that.submit();
     });
 
-    $form.on('reset.charcoal.search', function (event) {
+    $form.on('reset' + this.EVENT_NAMESPACE, function (event) {
         event.preventDefault();
         that.clear();
     });
@@ -225,4 +231,13 @@ Charcoal.Admin.Widget_Search.prototype.dispatch = function (widget) {
     }
 
     widget.reload(null, true);
+};
+
+/**
+ * @return {void}
+ */
+Charcoal.Admin.Widget_Search.prototype.destroy = function () {
+    var $form = this.element();
+
+    $form.off(this.EVENT_NAMESPACE);
 };

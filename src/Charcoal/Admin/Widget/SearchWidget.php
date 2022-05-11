@@ -30,6 +30,11 @@ class SearchWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function setData(array $data)
     {
+        if (isset($data['obj_type'])) {
+            $this->setObjType($data['obj_type']);
+            unset($data['obj_type']);
+        }
+
         $objData = $this->dataFromObject();
         $data    = array_merge_recursive($objData, $data);
 

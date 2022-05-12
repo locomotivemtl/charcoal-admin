@@ -12,7 +12,7 @@
                 <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Created{{/ _t }}</th>
                 <th scope="col" data-sortable="true">{{# _t }}Timeout{{/ _t }}</th>
                 <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Expiry{{/ _t }}</th>
-                <!-- <th scope="col">{{# _t }}Action{{/ _t }}</th> -->
+                {{!-- <th scope="col">[[# _t ]]Action[[/ _t ]]</th> --}}
             </tr>
         </thead>
         <tbody>
@@ -24,9 +24,11 @@
                 <td>{{ created }}</td>
                 <td>{{ timeout }}</td>
                 <td>{{ expiry }}</td>
-                <!-- <td>
-                    <button class="btn btn-danger" data-clear="cache" data-cache-type="item" data-cache-key="{{ key }}">{{# _t }}Delete{{/ _t }}</button>
-                </td> -->
+                {{!--
+                <td>
+                    <button class="btn btn-danger" data-clear="cache" data-cache-type="item" data-cache-key="[[ key ]]">[[# _t ]]Delete[[/ _t ]]</button>
+                </td>
+                --}}
             </tr>
             {{/ cacheInfo.global_items }}
         </tbody>

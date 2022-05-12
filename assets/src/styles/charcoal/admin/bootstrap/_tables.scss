@@ -163,6 +163,7 @@
          * Apply `.form-control-sm `
          */
         > .search .form-control {
+            height: calc(1.5em + .3rem + 2px);
             padding: .15rem $input-padding-x-sm;
             font-size: $font-size-sm;
             line-height: $input-line-height-sm;
@@ -192,6 +193,11 @@
         > tbody > tr > th,
         > tbody > tr > td {
             padding: $table-cell-padding-sm;
+        }
+
+        > tbody > tr.no-records-found > td {
+            padding: $table-cell-padding;
+            font-size: inherit;
         }
     }
 }

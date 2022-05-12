@@ -1,8 +1,10 @@
 {{# showAsCard }}
     <div class="card">
-        <header class="card-header">
-            <h3 class="card-title mb-0">Graph</h3>
-        </header>
+        {{# showLabel }}
+            <header class="card-header">
+                <h3 class="card-title mb-0">{{ label }}</h3>
+            </header>
+        {{/ showLabel }}
         <div class="card-body">
             <div id="{{ widgetId }}" class="js-graph-container" style="height: {{ height }};"></div>
         </div>

@@ -16,6 +16,11 @@ class GraphWidget extends AdminWidget
     protected $height = '400px';
 
     /**
+     * @var boolean $showAsCard
+     */
+    protected $showAsCard = false;
+
+    /**
      * @var array $graphOptions
      */
     protected $graphOptions;
@@ -41,6 +46,25 @@ class GraphWidget extends AdminWidget
     public function getHeight()
     {
         return $this->height;
+    }
+
+    /**
+     * @param  boolean $show The show as card flag.
+     * @return self
+     */
+    public function setShowAsCard($show)
+    {
+        $this->showAsCard = !!$show;
+
+        return $this;
+    }
+
+    /**
+     * @return boolean
+     */
+    public function getShowAsCard()
+    {
+        return $this->showAsCard;
     }
 
     /**

@@ -6,6 +6,7 @@ use Pimple\Container;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Support\Formatter;
 
 /**
  *
@@ -63,7 +64,7 @@ class StaticWebsiteTemplate extends AdminTemplate
             yield [
                 'file'      => $file,
                 'name'      => dirname(str_replace($this->basePath.'cache/static/', '', $file)),
-                'size'      => $this->formatBytes(filesize($file)),
+                'size'      => Formatter::formatBytes(filesize($file)),
                 'mtime'     => date(DATE_ATOM, filemtime($file)),
                 'generated' => date('Y-m-d H:i:s', filemtime($file)),
                 'type'      => pathinfo($file, PATHINFO_EXTENSION)
@@ -79,24 +80,6 @@ class StaticWebsiteTemplate extends AdminTemplate
     {
         parent::setDependencies($container);
         $this->basePath = $container['config']['base_path'];
-    }
-
-    /**
-     * Human-readable bytes format.
-     *
-     * @param integer $size The number of bytes to format.
-     * @return boolean
-     */
-    private function formatBytes($size)
-    {
-        if ($size === 0) {
-            return 0;
-        }
-        $base = log($size, 1024);
-        $suffixes = [ 'bytes', 'k', 'M', 'G', 'T' ];
-
-        $floor = floor($base);
-        return round(pow(1024, ($base - $floor)), 2).' '.$suffixes[$floor];
     }
 
     /**

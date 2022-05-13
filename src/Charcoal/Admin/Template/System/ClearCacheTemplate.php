@@ -17,6 +17,7 @@ use Pimple\Container;
 
 // From 'charcoal-admin'
 use Charcoal\Admin\AdminTemplate;
+use Charcoal\Admin\Support\Formatter;
 
 /**
  * Cache information.
@@ -271,8 +272,8 @@ class ClearCacheTemplate extends AdminTemplate
         $hitsAvg = $numEntries ? ($hitsTotal / $numEntries) : 0;
         return [
             'num_entries'  => $numEntries,
-            'total_size'   => $this->formatBytes($sizeTotal),
-            'average_size' => $this->formatBytes($sizeAvg),
+            'total_size'   => Formatter::formatBytes($sizeTotal),
+            'average_size' => Formatter::formatBytes($sizeAvg),
             'total_hits'   => $hitsTotal,
             'average_hits' => $hitsAvg,
         ];
@@ -288,7 +289,7 @@ class ClearCacheTemplate extends AdminTemplate
 
         foreach ($iter as $item) {
             $item['ident'] = $this->formatApcCacheKey($item['key']);
-            $item['size']  = $this->formatBytes($item['mem_size']);
+            $item['size']  = Formatter::formatBytes($item['mem_size']);
 
             $item['expiration_time'] = ($item['creation_time'] + $item['ttl']);
 
@@ -402,30 +403,6 @@ class ClearCacheTemplate extends AdminTemplate
         }
 
         return $key;
-    }
-
-    /**
-     * Human-readable bytes format.
-     *
-     * @param  integer $bytes The number of bytes to format.
-     * @return string
-     */
-    private function formatBytes($bytes)
-    {
-        if ($bytes === 0) {
-            return 0;
-        }
-
-        $units = [ 'B', 'KB', 'MB', 'GB', 'TB' ];
-        $base  = log($bytes, 1024);
-        $floor = floor($base);
-        $unit  = $units[$floor];
-        $size  = round(pow(1024, ($base - $floor)), 2);
-
-        $locale = localeconv();
-        $size   = number_format($size, 2, $locale['decimal_point'], $locale['thousands_sep']);
-
-        return rtrim($size, '.0').' '.$unit;
     }
 
     /**

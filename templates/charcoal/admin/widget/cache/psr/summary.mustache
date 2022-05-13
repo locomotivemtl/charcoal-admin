@@ -1,0 +1,24 @@
+<section id="{{ widgetId }}" class="card min-h-100">
+    {{# label }}
+    <header class="card-header">
+        <h3 class="card-title mb-0">{{& . }}</h3>
+    </header>
+    {{/ label }}
+    <div class="card-body">
+        {{& description }}
+        {{# showSummary }}
+            {{# cacheSummary }}
+                {{> charcoal/admin/widget/cache/info }}
+            {{/ cacheSummary }}
+        {{/ showSummary }}
+    </div>
+    {{# clearCacheButtonLabel }}
+    <footer class="card-footer bg-transparent">
+        <button type="button" class="btn btn-primary">
+            <span class="btn-label">{{ . }}</span>
+        </button>
+    </footer>
+    {{/ clearCacheButtonLabel }}
+</section>
+
+{{> charcoal/admin/widget/cache/psr/js }}

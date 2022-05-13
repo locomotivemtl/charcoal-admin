@@ -71,6 +71,7 @@
         {{/ showSecondaryMenu }}
     </div>
 </div>
+
 {{# addJs }}
 <script>
     $(function() {
@@ -78,7 +79,7 @@
 
         $('#btn-clear-cache').on('click.charcoal.cache', function (event) {
             event.preventDefault();
-            event.cacheType = 'global';
+            event.cacheItemKeyGroup = 'pool';
 
             Charcoal.Admin.cache().onClear(event);
         });

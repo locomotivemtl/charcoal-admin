@@ -33,6 +33,9 @@ use Charcoal\Factory\GenericFactory as Factory;
 // From 'charcoal-core'
 use Charcoal\Model\Service\MetadataConfig;
 
+// From 'charcoal-cache'
+use Charcoal\Cache\CacheConfig;
+
 // From 'charcoal-ui'
 use Charcoal\Ui\ServiceProvider\UiServiceProvider;
 

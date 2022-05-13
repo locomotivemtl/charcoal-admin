@@ -47,7 +47,7 @@
                 "controller": "charcoal/admin/template/elfinder"
             },
             "system/cache": {
-                "ident": "charcoal/admin/template/system/clear-cache"
+                "ident": "charcoal/admin/template/system/cache"
             },
             "system/object/info": {
                 "ident": "charcoal/admin/template/system/object/info"
@@ -313,6 +313,58 @@
             "module": {},
             "css": {}
 
+        }
+    },
+
+    "widgets": {
+        "charcoal/admin/cache/psr/pool/summary": {
+            "active": false,
+            "type": "charcoal/admin/widget/cache/psr/summary",
+            "cacheItemPool": "default",
+            "label": "Global Cache",
+            "description": "{{> charcoal/admin/widget/cache/pool-summary.notes }}"
+        },
+        "charcoal/admin/cache/psr/pool/items": {
+            "active": false,
+            "type": "charcoal/admin/widget/cache/psr/table",
+            "cacheItemPool": "default",
+            "label": "Cache Entries"
+        },
+        "charcoal/admin/cache/psr/pages/summary": {
+            "active": false,
+            "type": "charcoal/admin/widget/cache/psr/summary",
+            "cacheItemPool": "default",
+            "cacheItemKeys": [
+                "request",
+                "template"
+            ],
+            "showSummary": {
+                "name": false,
+                "persistent": false,
+                "adapter": false,
+                "notes": false
+            },
+            "clearCacheButtonLabel": "Clear Pages Cache",
+            "label": "Pages Cache",
+            "description": "{{> charcoal/admin/widget/cache/pages-summary.notes }}"
+        },
+        "charcoal/admin/cache/psr/objects/summary": {
+            "active": false,
+            "type": "charcoal/admin/widget/cache/psr/summary",
+            "cacheItemPool": "default",
+            "cacheItemKeys": [
+                "object",
+                "metadata"
+            ],
+            "showSummary": {
+                "name": false,
+                "persistent": false,
+                "adapter": false,
+                "notes": false
+            },
+            "clearCacheButtonLabel": "Clear Objects Cache",
+            "label": "Objects Cache",
+            "description": "{{> charcoal/admin/widget/cache/objects-summary.notes }}"
         }
     },
 

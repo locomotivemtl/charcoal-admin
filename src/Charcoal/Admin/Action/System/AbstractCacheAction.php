@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Charcoal\Admin\Action\System;
 
 // From PSR-6

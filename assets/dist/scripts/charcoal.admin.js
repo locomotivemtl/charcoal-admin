@@ -912,21 +912,23 @@ Charcoal.Admin = (function () {
             CLICK:   'click'   + EVENT_KEY
         },
         Selector = {
-            DATA_ITEM:  '[data-cache-key]',
-            DATA_CACHE: '[data-cache-type]',
-            DATA_CLEAR: '[data-clear="cache"]',
-            DATA_PURGE: '[data-purge="cache"]'
+            DATA_ITEM_GROUP:   '[data-cache-item-group]',
+            DATA_ITEM_KEYS:    '[data-cache-item-keys]',
+            DATA_ITEM_KEY:     '[data-cache-item-key]',
+            DATA_ACTION_CLEAR: '[data-clear="cache"]',
+            DATA_ACTION_PURGE: '[data-purge="cache"]'
         },
         Action = {
             CLEAR: 'clear',
             PURGE: 'purge'
         },
-        lastXhr    = null,
-        lastAction = null,
-        lastCache  = null,
-        lastTarget = null,
-        fromEvent  = false,
-        isFlushing = false;
+        lastXhr               = null,
+        lastCacheAction       = null,
+        lastCacheItemKeyGroup = null,
+        lastCacheItemKeys     = null,
+        lastTarget            = null,
+        fromEvent             = false,
+        isFlushing            = false;
 
     /**
      * Create a new cache manager.
@@ -935,6 +937,9 @@ Charcoal.Admin = (function () {
      */
     var Manager = function () {
         $(this.init.bind(this));
+
+        this.onClear = this.onClear.bind(this);
+        this.onPurge = this.onPurge.bind(this);
 
         return this;
     };
@@ -947,8 +952,8 @@ Charcoal.Admin = (function () {
     Manager.prototype.init = function () {
         $document
             .off(Event.CLICK)
-            .on(Event.CLICK, Selector.DATA_CLEAR, this.onClear.bind(this))
-            .on(Event.CLICK, Selector.DATA_PURGE, this.onPurge.bind(this));
+            .on(Event.CLICK, Selector.DATA_ACTION_CLEAR, this.onClear)
+            .on(Event.CLICK, Selector.DATA_ACTION_PURGE, this.onPurge);
     };
 
     /**
@@ -965,17 +970,26 @@ Charcoal.Admin = (function () {
      *
      * @return {String|null}
      */
-    Manager.prototype.lastAction = function () {
-        return lastAction;
+    Manager.prototype.lastCacheAction = function () {
+        return lastCacheAction;
     };
 
     /**
-     * Retrieve the last cache type to be cleared.
+     * Retrieve the last cache item key group to be cleared.
      *
      * @return {String|null}
      */
-    Manager.prototype.lastCacheType = function () {
-        return lastCache;
+    Manager.prototype.lastCacheItemKeyGroup = function () {
+        return lastCacheItemKeyGroup;
+    };
+
+    /**
+     * Retrieve the last cache item keys to be cleared.
+     *
+     * @return {String[]|null}
+     */
+    Manager.prototype.lastCacheItemKeys = function () {
+        return lastCacheItemKeys;
     };
 
     /**
@@ -997,13 +1011,65 @@ Charcoal.Admin = (function () {
     };
 
     /**
-     * Resolve the cache type from the event target.
+     * Parse the cache item key group.
+     *
+     * @param  {String|String[]} group - The cache item key group.
+     * @return {String[]|Null}
+     */
+    Manager.prototype.parseCacheItemGroup = function (group) {
+        if (typeof group === 'string' && group.length) {
+            return group;
+        }
+
+        return null;
+    };
+
+    /**
+     * Parse the cache item keys.
+     *
+     * @param  {String[]} keys - The cache item keys.
+     * @return {String[]|Null}
+     */
+    Manager.prototype.parseCacheItemKeys = function (keys) {
+        if (typeof keys === 'string') {
+            keys = keys.split(' ');
+        }
+
+        if (Array.isArray(keys) && keys.length) {
+            return keys.map(this.parseCacheItemKey.bind(this)).filter();
+        }
+
+        return null;
+    };
+
+    /**
+     * Parse the cache item key.
+     *
+     * @param  {String} key - The cache item key.
+     * @return {String|Null}
+     */
+    Manager.prototype.parseCacheItemKey = function (key) {
+        return key;
+    };
+
+    /**
+     * Resolve the cache item key group from the event target.
      *
      * @param  {Element} $trigger - The jQuery element.
      * @return {String|Null}
      */
-    Manager.prototype.resolveType = function ($trigger) {
-        return $trigger.data('cacheType') || null;
+    Manager.prototype.resolveCacheItemGroupFromElement = function ($trigger) {
+        return $trigger.data('cacheItemGroup') || null;
+    };
+
+    /**
+     * Resolve the cache item keys from the event target.
+     *
+     * @param  {Element} $trigger - The jQuery element.
+     * @return {String|String[]|Null}
+     */
+    Manager.prototype.resolveCacheItemKeysFromElement = function ($trigger) {
+        return $trigger.data('cacheItemKeys') || null;
     };
 
     /**
@@ -1012,8 +1078,8 @@ Charcoal.Admin = (function () {
      * @param  {Element} $trigger - The jQuery element.
      * @return {String|Null}
      */
-    Manager.prototype.resolveKey = function ($trigger) {
-        return $trigger.data('cacheKey') || null;
+    Manager.prototype.resolveCacheItemKeyFromElement = function ($trigger) {
+        return $trigger.data('cacheItemKey') || null;
     };
 
     /**
@@ -1026,17 +1092,26 @@ Charcoal.Admin = (function () {
     Manager.prototype.onClear = function (event) {
         event.preventDefault();
 
-        var $trigger, type, key;
+        var $trigger, group, keys;
 
         fromEvent  = true;
         lastTarget = event.currentTarget;
         $trigger   = $(event.currentTarget);
 
-        type = event.cacheType || this.resolveType($trigger);
-        key  = event.cacheKey  || this.resolveKey($trigger);
+        group = this.parseCacheItemGroup(
+            event.cacheItemKeyGroup ||
+            this.resolveCacheItemGroupFromElement($trigger)
+        );
 
-        if (type) {
-            this.clear(type, key);
+        keys = this.parseCacheItemKeys(
+            event.cacheItemKeys ||
+            event.cacheItemKey ||
+            this.resolveCacheItemKeysFromElement($trigger) ||
+            this.resolveCacheItemKeyFromElement($trigger)
+        );
+
+        if (group || keys) {
+            this.clear(group, keys);
         }
 
         fromEvent = false;
@@ -1052,17 +1127,26 @@ Charcoal.Admin = (function () {
     Manager.prototype.onPurge = function (event) {
         event.preventDefault();
 
-        var $trigger, type, key;
+        var $trigger, group, keys;
 
         fromEvent  = true;
         lastTarget = event.currentTarget;
         $trigger   = $(event.currentTarget);
 
-        type = event.cacheType || this.resolveType($trigger);
-        key  = event.cacheKey  || this.resolveKey($trigger);
+        group = this.parseCacheItemGroup(
+            event.cacheItemKeyGroup ||
+            this.resolveCacheItemGroupFromElement($trigger)
+        );
 
-        if (type) {
-            this.purge(type, key);
+        keys = this.parseCacheItemKeys(
+            event.cacheItemKeys ||
+            event.cacheItemKey ||
+            this.resolveCacheItemKeysFromElement($trigger) ||
+            this.resolveCacheItemKeyFromElement($trigger)
+        );
+
+        if (group || keys) {
+            this.purge(group, keys);
         }
 
         fromEvent = false;
@@ -1071,31 +1155,31 @@ Charcoal.Admin = (function () {
     /**
      * Empty the entire cache pool of all items.
      *
-     * @param {String} cacheType   - The cache type to flush.
-     * @param {String} cacheKey    - The cache key to delete.
+     * @param {String}          [cacheItemGroup] - The item key group to delete.
+     * @param {String|String[]} [cacheItemKeys]  - The cache key(s) to delete.
      */
-    Manager.prototype.clear = function (cacheType, cacheKey) {
-        this.flush(Action.CLEAR, cacheType, cacheKey);
+    Manager.prototype.clear = function (cacheItemGroup, cacheItemKeys) {
+        this.flush(Action.CLEAR, cacheItemGroup, cacheItemKeys);
     };
 
     /**
      * Purge the cache pool of stale or expired items.
      *
-     * @param {String} cacheType   - The cache type to flush.
-     * @param {String} cacheKey    - The cache key to delete.
+     * @param {String}          [cacheItemGroup] - The item key group to purge.
+     * @param {String|String[]} [cacheItemKeys]  - The cache key(s) to purge.
      */
-    Manager.prototype.purge = function (cacheType, cacheKey) {
-        this.flush(Action.PURGE, cacheType, cacheKey);
+    Manager.prototype.purge = function (cacheItemGroup, cacheItemKeys) {
+        this.flush(Action.PURGE, cacheItemGroup, cacheItemKeys);
     };
 
     /**
      * Flush the cache for given category.
      *
-     * @param {String} cacheAction - Whether to empty all items or purge stale or expired items.
-     * @param {String} cacheType   - The cache type to flush.
-     * @param {String} cacheKey    - The cache key to delete.
+     * @param {String}          cacheAction      - Whether to empty all items or purge stale or expired items.
+     * @param {String}          [cacheItemGroup] - The item key group to delete.
+     * @param {String|String[]} [cacheItemKeys]  - The cache key(s) to delete.
      */
-    Manager.prototype.flush = function (cacheAction, cacheType, cacheKey) {
+    Manager.prototype.flush = function (cacheAction, cacheItemGroup, cacheItemKeys) {
         if (isFlushing === true) {
             return;
         }
@@ -1104,23 +1188,37 @@ Charcoal.Admin = (function () {
             cacheAction = Action.PURGE;
         }
 
-        var flushEvent, settings, data;
+        var flushEvent, eventData, settings, postData;
 
-        isFlushing = true;
-        lastAction = cacheAction;
-        lastCache  = cacheType;
-        lastXhr    = null;
+        isFlushing            = true;
+        lastCacheAction       = cacheAction;
+        lastCacheItemKeyGroup = cacheItemGroup;
+        lastCacheItemKeys     = cacheItemKeys;
+        lastXhr               = null;
 
         if (fromEvent === false) {
             lastTarget = null;
         }
 
-        flushEvent = $.Event(Event.FLUSH, {
+        postData = {};
+
+        eventData = {
+            relatedTarget: lastTarget,
             cacheManager:  this,
             cacheAction:   cacheAction,
-            cacheType:     lastCache,
-            relatedTarget: lastTarget
-        });
+        };
+
+        if (cacheItemGroup) {
+            postData.cache_item_key_group = cacheItemGroup;
+            eventData.cacheItemKeyGroup   = cacheItemGroup;
+        }
+
+        if (cacheItemKeys) {
+            postData.cache_item_keys = cacheItemKeys;
+            eventData.cacheItemKeys  = cacheItemKeys;
+        }
+
+        flushEvent = $.Event(Event.FLUSH, eventData);
 
         $document.trigger(flushEvent);
 
@@ -1128,19 +1226,9 @@ Charcoal.Admin = (function () {
             return;
         }
 
-        data = {};
-
-        if (cacheType) {
-            data.cache_type = cacheType;
-        }
-
-        if (cacheKey) {
-            data.cache_key = cacheKey;
-        }
-
         settings = {
             url:      Admin.admin_url() + 'system/cache/' + cacheAction,
-            data:     data,
+            data:     postData,
             dataType: 'json',
             context:  this
         };
@@ -1183,8 +1271,6 @@ Charcoal.Admin = (function () {
      * @param  {Thenable} jqXHR      The promisable XHR object.
      */
     var done = function (response/* textStatus, jqXHR */) {
-        window.console.debug(response);
-
         var feedback = parseFeedback(response).message;
 
         BootstrapDialog.show({
@@ -1221,12 +1307,21 @@ Charcoal.Admin = (function () {
     var finalize = function () {
         isFlushing = false;
 
-        var flushedEvent = $.Event(Event.FLUSH, {
+        var eventData = {
+            relatedTarget: lastTarget,
             cacheManager:  this,
-            cacheAction:   lastAction,
-            cacheType:     lastCache,
-            relatedTarget: lastTarget
-        });
+            cacheAction:   lastCacheAction,
+        };
+
+        if (lastCacheItemKeyGroup) {
+            eventData.cacheItemKeyGroup = lastCacheItemKeyGroup;
+        }
+
+        if (lastCacheItemKeys) {
+            eventData.cacheItemKeys = lastCacheItemKeys;
+        }
+
+        var flushedEvent = $.Event(Event.FLUSHED, eventData);
 
         $document.trigger(flushedEvent);
     };
@@ -3578,6 +3673,98 @@ Charcoal.Admin.Widget.prototype.confirm = function (dialog_opts, confirmed_callb
     return BootstrapDialog.confirm(opts);
 };
 
+/**
+ * Base Cache Widget
+ */
+
+;(function ($, Admin) {
+    'use strict';
+
+    var $document = $(document);
+
+    var Widget = function (opts) {
+        this.CACHE_ITEM_KEY_GROUP_POOL = 'pool';
+        this.EVENT_NAMESPACE = '.charcoal.widget.cache';
+        this.SELECTOR = {
+            DATA_ACTION_CLEAR: '[data-clear="cache"]',
+            DATA_ACTION_PURGE: '[data-purge="cache"]'
+        };
+
+        Charcoal.Admin.Widget.call(this, opts);
+
+        this.data = opts.data;
+
+        this.on_flushed = this.on_flushed.bind(this);
+    };
+
+    Widget.prototype            = Object.create(Charcoal.Admin.Widget.prototype);
+    Widget.prototype.contructor = Widget;
+    Widget.prototype.parent     = Charcoal.Admin.Widget.prototype;
+
+    Widget.prototype.init = function () {
+        $document.on('flushed.charcoal.cache', this.on_flushed);
+    };
+
+    Widget.prototype.destroy = function () {
+        $document.off('flushed.charcoal.cache', this.on_flushed);
+    };
+
+    Widget.prototype.widget_options = function () {
+        return this.data;
+    };
+
+    /**
+     * Handles cache "flushed" event.
+     *
+     * @see {Charcoal.Admin.Cache}
+     *
+     * @param {Event} event - A cache event.
+     */
+    Widget.prototype.on_flushed = function (event) {
+        if (this.is_event_related(event)) {
+            this.reload();
+            return;
+        }
+    };
+
+    /**
+     * Determines whether the specified event is event related
+     * to this caching widget.
+     *
+     * @param {Event}       event                   - A cache event.
+     * @param {?string}     event.cacheItemKeyGroup - A cache item key group.
+     * @param {?(string[])} event.cacheItemKeys     - A list of cache item keys.
+     */
+    Widget.prototype.is_event_related = function (event) {
+        if (
+            event.cacheItemKeyGroup &&
+            (
+                (
+                    this.CACHE_ITEM_KEY_GROUP_POOL === event.cacheItemKeyGroup
+                ) || (
+                    this.data.cache_item_key_group &&
+                    this.data.cache_item_key_group === event.cacheItemKeyGroup
+                )
+            )
+        ) {
+            return true;
+        }
+
+        if (
+            event.cacheItemKeys &&
+            this.data.cache_item_keys &&
+            this.data.cache_item_keys === event.cacheItemKeys
+        ) {
+            return true;
+        }
+
+        return false;
+    };
+
+    Admin.Widget_Cache = Widget;
+
+}(jQuery, Charcoal.Admin));
+
 /* globals commonL10n,attachmentWidgetL10n */
 
 /**
@@ -4097,6 +4284,56 @@ Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb) {
 Charcoal.Admin.Widget_Attachment.prototype.widget_options = function () {
     return this.opts('widget_options');
 };
+
+/**
+ * Cache Summary Widget
+ */
+
+;(function ($, Admin) {
+    'use strict';
+
+    var Widget = function (opts) {
+        Charcoal.Admin.Widget_Cache.call(this, opts);
+    };
+
+    Widget.prototype            = Object.create(Charcoal.Admin.Widget_Cache.prototype);
+    Widget.prototype.contructor = Widget;
+    Widget.prototype.parent     = Charcoal.Admin.Widget_Cache.prototype;
+
+    Admin.Widget_Cache_Psr_Summary = Widget;
+
+}(jQuery, Charcoal.Admin));
+
+/**
+ * Cache Summary Widget
+ */
+
+;(function ($, Admin) {
+    'use strict';
+
+    var Widget = function (opts) {
+        Charcoal.Admin.Widget_Cache.call(this, opts);
+    };
+
+    Widget.prototype            = Object.create(Charcoal.Admin.Widget_Cache.prototype);
+    Widget.prototype.contructor = Widget;
+    Widget.prototype.parent     = Charcoal.Admin.Widget_Cache.prototype;
+
+    Widget.prototype.init = function () {
+        Charcoal.Admin.Widget_Cache.prototype.init.call(this);
+
+        this.element().find('[data-toggle="table"]').bootstrapTable();
+    };
+
+    Widget.prototype.destroy = function () {
+        Charcoal.Admin.Widget_Cache.prototype.destroy.call(this);
+
+        this.element().find('[data-toggle="table"]').bootstrapTable('destroy');
+    };
+
+    Admin.Widget_Cache_Psr_Table = Widget;
+
+}(jQuery, Charcoal.Admin));
 
 /* globals moment */
 /**

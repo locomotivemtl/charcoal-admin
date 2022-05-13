@@ -1,0 +1,9 @@
+{{# addJs }}
+<script type="text/javascript">
+    Charcoal.Admin.manager().add_widget({
+        id: '{{ widgetId }}',
+        type: '{{ type }}',
+        data: {{& widgetDataForJsAsJson }}
+    });
+</script>
+{{/ addJs }}

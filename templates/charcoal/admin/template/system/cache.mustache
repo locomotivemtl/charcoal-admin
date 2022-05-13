@@ -1,0 +1,63 @@
+{{!--
+
+    Administration Cache Information
+    ================================
+
+--}}
+{{# addCss }}
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.19.1/bootstrap-table.min.css">
+{{/ addCss }}
+{{# addJs }}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-table/1.19.1/bootstrap-table.min.js"></script>
+{{/ addJs }}
+
+{{> charcoal/admin/template/inc.header }}
+
+<main class="c-page-container o-flex_main">
+    {{> charcoal/admin/template/inc.page-header }}
+    <section class="o-container -top -bottom">
+        {{> charcoal/admin/widget/feedbacks }}
+        <div class="dashboard{{# dashboard.ident }} dashboard-{{ . }}{{/ dashboard.ident }}">
+            {{# dashboard }}
+                {{# hasWidgets }}
+                    {{!--
+                       --
+                       -- As of 2022-05-12:
+                       -- The Flexbox layout has been disabled since
+                       --`LayoutTrait` only supports Bootstrap's grid
+                       -- row layout.
+                       --
+                    <div class="c-cache-types row mb-4">
+                        <div class="col-12">
+                            <div class="card-grid">
+                                [[# widgets ]]
+                                    [[ dashboard.layout.start ]]
+                                    [[> $widget_template ]]
+                                    [[ dashboard.layout.end ]]
+                                [[/ widgets ]]
+                            </div>
+                        </div>
+                    </div>
+                    --}}
+                    {{# widgets }}
+
+                        {{# dashboard.layout }}
+                            {{> charcoal/admin/widget/layout.start }}
+                        {{/ dashboard.layout }}
+
+                        <div class="widget{{# ident }} widget-{{ . }}{{/ ident }}{{# dashboard.layout.cellSpanBy12 }} col-md-{{ . }}{{/ dashboard.layout.cellSpanBy12 }}">
+                            {{> $widget_template }}
+                        </div>
+
+                        {{# dashboard.layout }}
+                           {{> charcoal/admin/widget/layout.end }}
+                        {{/ dashboard.layout }}
+
+                    {{/ widgets }}
+                {{/ hasWidgets }}
+            {{/ dashboard }}
+        </div>
+    </section>
+</main>
+
+{{> charcoal/admin/template/inc.footer }}

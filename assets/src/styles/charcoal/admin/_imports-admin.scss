@@ -43,6 +43,7 @@
 @import "bootstrap/card";
 @import "bootstrap/modal";
 @import "bootstrap/alert";
+@import "bootstrap/sizing";
 
 // ==========================================================================
 // Charcoal
@@ -88,12 +89,12 @@
 @import "components/map-maker";
 @import "components/attachments";
 @import "components/dual-select";
-@import "components/clear-cache";
 @import "components/loader";
 
 // Templates
 // ==========================================================================
 @import "templates/dashboard";
+@import "templates/cache";
 
 
 // Bootstrap custom components

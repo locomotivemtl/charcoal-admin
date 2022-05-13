@@ -1,0 +1,42 @@
+<section id="{{ widgetId }}" class="card card-table min-h-100 s-cache-type-global">
+    <header class="card-header">
+        <h3 class="card-title mb-0">{{ label }}{{^ label }}{{# _t }}Cache Entries{{/ _t }}{{/ label }}</h3>
+        <p id="{{ widgetId }}_locked" class="sr-only">{{# _t }}Locked cache entry{{/ _t }}</p>
+    </header>
+    {{& description }}
+    {{# hasAnyCacheItems }}
+        <table class="table table-sm" data-toggle="table" data-search="true" data-pagination="true" data-icon-size="sm" data-page-list="10,25,50,100,All" data-page-size="25">
+            <thead>
+                <tr>
+                    <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Key{{/ _t }}</th>
+                    <th scope="col" data-sortable="true">{{# _t }}Hits{{/ _t }}</th>
+                    <th scope="col" data-sortable="true">{{# _t }}Size{{/ _t }}</th>
+                    <th scope="col" data-sortable="true" data-searchable="true">{{# _t }}Created{{/ _t }}</th>
+                    <th scope="col" data-sortable="true" data-searchable="true"><abbr title="{{# _t }}time.ttl.long{{/ _t }}">{{# _t }}time.ttl.abbr{{/ _t }}</abbr></th>
+                    {{!-- <th scope="col">[[# _t ]]Action[[/ _t ]]</th> --}}
+                </tr>
+            </thead>
+            <tbody>
+                {{# cacheItems }}
+                    <tr>
+                        <td scope="row"><strong>{{ key }}</strong>{{# locked }}<span aria-labelledby="{{ widgetId }}_locked">*</span>{{/ locked }}</td>
+                        <td>{{ num_hits }}</td>
+                        <td><data value="{{ raw_size }}">{{ size }}</data></td>
+                        <td><time datetime="{{ _created }}" title="{{ _created }}">{{ created }}</time></td>
+                        <td><time datetime="{{ _expires }}" title="{{ _expires }}">{{ expires }}</time></td>
+                        {{!--
+                        <td>
+                            <button type="button" class="btn btn-danger" data-clear="cache" data-cache-item-pool="[[ pool ]]" data-cache-item-key="[[ key ]]">[[# _t ]]Delete[[/ _t ]]</button>
+                        </td>
+                        --}}
+                    </tr>
+                {{/ cacheItems }}
+            </tbody>
+        </table>
+    {{/ hasAnyCacheItems }}
+    {{^ hasAnyCacheItems }}
+        <div class="card-body text-center">{{# _t }}No records found{{/ _t }}</div>
+    {{/ hasAnyCacheItems }}
+</section>
+
+{{> charcoal/admin/widget/cache/psr/js }}

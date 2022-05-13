@@ -15,6 +15,7 @@ module.exports = {
             '<%= paths.js.src %>/charcoal/admin/component.js',
             '<%= paths.js.src %>/charcoal/admin/mixin/*.js',
             '<%= paths.js.src %>/charcoal/admin/widget.js',
+            '<%= paths.js.src %>/charcoal/admin/widget/cache.js',
             '<%= paths.js.src %>/charcoal/admin/widget/*.js',
             '<%= paths.js.src %>/charcoal/admin/property.js',
             '<%= paths.js.src %>/charcoal/admin/property/*.js',

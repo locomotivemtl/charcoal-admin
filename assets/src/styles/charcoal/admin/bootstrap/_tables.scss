@@ -190,10 +190,10 @@
     .table {
         margin-top: 0;
 
-        > tbody > tr > th,
-        > tbody > tr > td {
-            padding: $table-cell-padding-sm;
-        }
+        // > tbody > tr > th,
+        // > tbody > tr > td {
+        //     padding: $table-cell-padding-sm;
+        // }
 
         > tbody > tr.no-records-found > td {
             padding: $table-cell-padding;

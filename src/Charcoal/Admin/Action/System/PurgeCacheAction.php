@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 namespace Charcoal\Admin\Action\System;
 
 // From PSR-7
@@ -27,9 +29,9 @@ class PurgeCacheAction extends AbstractCacheAction
         $result = $cache->purge();
 
         if ($result) {
-            $message = $this->translator()->translate('Cache purged successfully.');
+            $message = $this->translator()->trans('Cache purged successfully.');
         } else {
-            $message = $this->translator()->translate('Failed to purge cache.');
+            $message = $this->translator()->trans('Failed to purge cache.');
         }
 
         $this->setSuccess($result);

@@ -28,6 +28,7 @@ use Charcoal\Config\GenericConfig as Config;
 
 // From 'charcoal-factory'
 use Charcoal\Factory\FactoryInterface;
+use Charcoal\Factory\GenericFactory as Factory;
 
 // From 'charcoal-core'
 use Charcoal\Model\Service\MetadataConfig;
@@ -37,9 +38,6 @@ use Charcoal\Ui\ServiceProvider\UiServiceProvider;
 
 // From 'charcoal-email'
 use Charcoal\Email\ServiceProvider\EmailServiceProvider;
-
-// From 'charcoal-factory'
-use Charcoal\Factory\GenericFactory as Factory;
 
 // From 'charcoal-user'
 use Charcoal\User\Authenticator;
@@ -193,33 +191,32 @@ class AdminServiceProvider implements ServiceProviderInterface
     {
         if (!isset($container['metadata/config'])) {
             /**
+             * Creates a fallback metadata configset.
+             *
              * @return MetadataConfig
              */
             $container['metadata/config'] = function () {
-                $settings   = $container['admin/config']['metadata'];
-                $metaConfig = new MetadataConfig($settings);
-
-                return $metaConfig;
+                return new MetadataConfig($settings);
             };
-        } else {
-            /**
-             * Alters the application's metadata configset.
-             *
-             * This extension will merge any Admin-only metadata settings.
-             *
-             * @param  MetadataConfig $metaConfig The metadata configset.
-             * @param  Container      $container  The Pimple DI container.
-             * @return MetadataConfig
-             */
-            $container->extend('metadata/config', function (MetadataConfig $metaConfig, Container $container) {
-                $settings = $container['admin/config']['metadata'];
-                if (is_array($settings) && !empty($settings)) {
-                    $metaConfig->merge($settings);
-                }
-
-                return $metaConfig;
-            });
         }
+
+        /**
+         * Alters the application's metadata configset.
+         *
+         * This extension will merge any Admin-only metadata settings.
+         *
+         * @param  MetadataConfig $metaConfig The metadata configset.
+         * @param  Container      $container  The Pimple DI container.
+         * @return MetadataConfig
+         */
+        $container->extend('metadata/config', function (MetadataConfig $metaConfig, Container $container) {
+            $settings = $container['admin/config']['metadata'];
+            if (is_array($settings) && !empty($settings)) {
+                $metaConfig->merge($settings);
+            }
+
+            return $metaConfig;
+        });
 
         /**
          * Alters the application's metadata configset.

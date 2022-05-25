@@ -38,7 +38,7 @@ $ composer require locomotivemtl/charcoal-admin
 
 Which, in turn, require:
 
--	`PHP 7.1+`
+-	`PHP 7.3+`
 	+	`ext-fileinfo` File / MIME identification.
 	+	`ext-mbstring` Multi-bytes string support.
     +	`ext-pdo` PDO Database driver.

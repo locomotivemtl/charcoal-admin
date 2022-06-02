@@ -7,7 +7,7 @@
     Expects JS initialization of this component to be handled by the dialog manager.
 --}}
 <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
-    <div class="o-flex c-form-widget -quick-form{{# isTabbable }} -tabbed{{/ isTabbable }}">
+    <div class="o-flex c-form-widget -quick-form{{# isTabbable }} -tabbed{{/ isTabbable }}{{# isDisplayModeLang }} -lang{{/ isDisplayModeLang }}">
         <div class="o-flex_main c-form-widget_form">
             {{# isTabbable }}
                 {{> $form_tabs_template }}
@@ -55,7 +55,7 @@
 .bootstrap-dialog.-quick-form .modal-body {
     background-color: #e1e1e1;
 }
-.modal .form-field.-l10n[data-lang]::before {
+.modal .-lang .form-field.-l10n[data-lang]::before {
     font-size:      10px;
     content:        attr(data-custom-modal-lang);
     position:       absolute;

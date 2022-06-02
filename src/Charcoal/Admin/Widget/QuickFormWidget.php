@@ -160,7 +160,7 @@ class QuickFormWidget extends ObjectFormWidget
             self::DISPLAY_MODE_TAB,
             self::DISPLAY_MODE_LANG
         ];
-        return in_array($this->groupDisplayMode(), $tabbableDisplayModes) ? true : false;
+        return in_array($this->groupDisplayMode(), $tabbableDisplayModes);
     }
 
     /**

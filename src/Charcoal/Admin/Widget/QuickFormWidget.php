@@ -16,6 +16,7 @@ class QuickFormWidget extends ObjectFormWidget
      * @const string
      */
     const DISPLAY_MODE_TAB = 'tab';
+
     /**
      * Ident for lang tab display.
      *

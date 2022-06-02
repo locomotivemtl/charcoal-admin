@@ -632,12 +632,12 @@ class SecondaryMenuWidget extends AdminWidget implements
             $this->addGroup($groupIdent, $group);
         }
 
-        uasort($this->groups, [ $this, 'sortGroupsByPriority' ]);
+        uasort($this->groups, [ 'Charcoal\Admin\Support\Sorter', 'sortByPriority' ]);
 
-        // Remove items that are not active.
-        $this->groups = array_filter($this->groups, function($item) {
+        // Remove items that are not active and reset keys.
+        $this->groups = array_values(array_filter($this->groups, function($item) {
             return ($item->active());
-        });
+        }));
 
         return $this;
     }
@@ -1026,26 +1026,6 @@ class SecondaryMenuWidget extends AdminWidget implements
         }
 
         return $this->defaultSecondaryMenuActions;
-    }
-
-    /**
-     * To be called with {@see uasort()}.
-     *
-     * @param  SecondaryMenuGroupInterface $a Sortable entity A.
-     * @param  SecondaryMenuGroupInterface $b Sortable entity B.
-     * @return integer Sorting value: -1, 0, or 1
-     */
-    protected function sortGroupsByPriority(
-        SecondaryMenuGroupInterface $a,
-        SecondaryMenuGroupInterface $b
-    ) {
-        $a = $a->priority();
-        $b = $b->priority();
-
-        if ($a === $b) {
-            return 0;
-        }
-        return ($a < $b) ? (-1) : 1;
     }
 
     /**

@@ -1245,7 +1245,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
             }
         }
 
-        usort($listActions, [ $this, 'sortActionsByPriority' ]);
+        usort($listActions, [ 'Charcoal\Admin\Support\Sorter', 'sortByPriority' ]);
 
         while (($first = reset($listActions)) && $first['isSeparator']) {
             array_shift($listActions);

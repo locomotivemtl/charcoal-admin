@@ -460,7 +460,7 @@ class FormSidebarWidget extends AdminWidget implements
             }
         }
 
-        usort($sidebarActions, [ $this, 'sortActionsByPriority' ]);
+        usort($sidebarActions, [ 'Charcoal\Admin\Support\Sorter', 'sortByPriority' ]);
 
         while (($first = reset($sidebarActions)) && $first['isSeparator']) {
             array_shift($sidebarActions);

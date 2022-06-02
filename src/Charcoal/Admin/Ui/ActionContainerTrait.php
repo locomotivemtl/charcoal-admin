@@ -67,7 +67,7 @@ trait ActionContainerTrait
             }
         }
 
-        usort($parsedActions, [ $this, 'sortActionsByPriority' ]);
+        usort($parsedActions, [ 'Charcoal\Admin\Support\Sorter', 'sortByPriority' ]);
 
         while (($first = reset($parsedActions)) && $first['isSeparator']) {
             array_shift($parsedActions);
@@ -527,23 +527,6 @@ trait ActionContainerTrait
         return defined('static::DEFAULT_ACTION_PRIORITY') ? static::DEFAULT_ACTION_PRIORITY : 10;
     }
 
-    /**
-     * To be called with {@see uasort()}.
-     *
-     * @param  array $a Sortable action A.
-     * @param  array $b Sortable action B.
-     * @return integer
-     */
-    protected function sortActionsByPriority(array $a, array $b)
-    {
-        $a = isset($a['priority']) ? $a['priority'] : 0;
-        $b = isset($b['priority']) ? $b['priority'] : 0;
-
-        if ($a === $b) {
-            return 0;
-        }
-        return ($a < $b) ? (-1) : 1;
-    }
 
     /**
      * To be called when merging actions.

@@ -837,7 +837,7 @@ class FormSidebarWidget extends AdminWidget implements
                 $label = $this->translator()->translation($localeStruct['name']);
             } else {
                 $trans = 'locale.'.$locale;
-                if ($trans === $this->translator()->translate($trans)) {
+                if ($trans === $this->translator()->trans($trans)) {
                     $label = strtoupper($locale);
                 } else {
                     $label = $this->translator()->translation($trans);

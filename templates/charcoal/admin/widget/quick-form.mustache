@@ -46,3 +46,23 @@
 
 {{& jsRequirements }}
 {{& js }}
+
+{{# isDisplayModeLang }}
+<script rel="l10n">
+    {{> charcoal/admin/l10n/quick-form-languages.js }}
+</script>
+<style>
+.bootstrap-dialog.-quick-form .modal-body {
+    background-color: #e1e1e1;
+}
+.modal .form-field.-l10n[data-lang]::before {
+    font-size:      10px;
+    content:        attr(data-custom-modal-lang);
+    position:       absolute;
+    left:           -50px;
+    display:        contents;
+    width:          30px;
+    text-transform: uppercase;
+}
+</style>
+{{/ isDisplayModeLang }}

@@ -1,0 +1,22 @@
+{{# showLanguageSwitch }}
+$('.nav-link.js-group-tabs').on('click', function() {
+    const currentLangTab = $(this).attr('data-tab-ident');
+    triggerLangTab(currentLangTab)
+});
+$(`.nav-link.js-group-tabs[data-tab-ident="${Charcoal.Admin.lang()}"]`).trigger('click')
+
+function triggerLangTab(currentLangTab) {
+    $('.modal .form-field').each(function() {
+        const dataLang = $(this).attr('data-lang');
+        if (!dataLang) {
+            return;
+        }
+
+        if (currentLangTab !== dataLang) {
+            this.style.setProperty('display', 'none', 'important');
+        } else {
+            this.style.setProperty('display', 'block', 'important');
+        }
+    });
+}
+{{/ showLanguageSwitch }}

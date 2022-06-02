@@ -5,6 +5,9 @@ namespace Charcoal\Admin\Widget;
 // From 'charcoal-admin'
 use Charcoal\Admin\Widget\ObjectFormWidget;
 
+// From 'charcoal-property'
+use Charcoal\Property\ModelStructureProperty;
+
 /**
  * The quick form widget for editing objects on the go.
  */

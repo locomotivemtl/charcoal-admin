@@ -8,11 +8,18 @@ use Charcoal\Admin\Widget\ObjectFormWidget;
 // From 'charcoal-property'
 use Charcoal\Property\ModelStructureProperty;
 
+// From 'charcoal-ui'
+use Charcoal\Admin\Ui\HasLanguageSwitcherInterface;
+use Charcoal\Admin\Ui\HasLanguageSwitcherTrait;
+
 /**
  * The quick form widget for editing objects on the go.
  */
-class QuickFormWidget extends ObjectFormWidget
+class QuickFormWidget extends ObjectFormWidget implements
+    HasLanguageSwitcherInterface
 {
+    use HasLanguageSwitcherTrait;
+
     /**
      * Ident for tab display.
      *
@@ -26,13 +33,6 @@ class QuickFormWidget extends ObjectFormWidget
      * @const string
      */
     const DISPLAY_MODE_LANG = 'lang';
-
-    /**
-     * Whether to display the language switcher.
-     *
-     * @var boolean|null
-     */
-    protected $showLanguageSwitch;
 
     /**
      * @param  array $data The widget data.
@@ -132,14 +132,12 @@ class QuickFormWidget extends ObjectFormWidget
     }
 
     /**
+     * @see    HasLanguageSwitcherTrait::showLanguageSwitch()
      * @return boolean
      */
-    public function showLanguageSwitch()
+    protected function resolveShowLanguageSwitch()
     {
-        if ($this->showLanguageSwitch === null) {
-            $this->showLanguageSwitch = $this->hasL10nFormProperties();
-        }
-        return $this->showLanguageSwitch;
+        return $this->hasL10nFormProperties();
     }
 
     /**
@@ -167,43 +165,6 @@ class QuickFormWidget extends ObjectFormWidget
     }
 
     /**
-     * @return array
-     */
-    public function availableLanguages()
-    {
-        $currentLocale = $this->translator()->getLocale();
-        $locales = $this->translator()->locales();
-        $languages = [];
-
-        uasort($locales, [ $this, 'sortLanguagesByPriority' ]);
-
-        foreach ($locales as $locale => $localeStruct) {
-            /**
-             * @see \Charcoal\Admin\Widget\FormGroupWidget::languages()
-             * @see \Charcoal\Property\LangProperty::localeChoices()
-             */
-            if (isset($localeStruct['name'])) {
-                $label = $this->translator()->translation($localeStruct['name']);
-            } else {
-                $trans = 'locale.'.$locale;
-                if ($trans === $this->translator()->trans($trans)) {
-                    $label = strtoupper($locale);
-                } else {
-                    $label = $this->translator()->translation($trans);
-                }
-            }
-
-            $isCurrent = ($locale === $currentLocale);
-            $languages[] = [
-                'ident'      => $locale,
-                'name'       => $label,
-            ];
-        }
-
-        return $languages;
-    }
-
-    /**
      * @return string
      */
     public function availableLanguagesAsJson()
@@ -214,25 +175,7 @@ class QuickFormWidget extends ObjectFormWidget
             $options = ($options | JSON_PRETTY_PRINT);
         }
 
-        return json_encode($this->availableLanguages(), $options);
-    }
-
-    /**
-     * To be called with {@see uasort()}.
-     *
-     * @param  array $a Sortable action A.
-     * @param  array $b Sortable action B.
-     * @return integer
-     */
-    protected function sortLanguagesByPriority(array $a, array $b)
-    {
-        $a = isset($a['priority']) ? $a['priority'] : 0;
-        $b = isset($b['priority']) ? $b['priority'] : 0;
-
-        if ($a === $b) {
-            return 0;
-        }
-        return ($a < $b) ? (-1) : 1;
+        return json_encode($this->languages(), $options);
     }
 
     /**

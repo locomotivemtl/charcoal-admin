@@ -146,7 +146,7 @@ class QuickFormWidget extends ObjectFormWidget
      */
     public function isDisplayModeLang()
     {
-        return ($this->groupDisplayMode() === self::DISPLAY_MODE_LANG) ? true : false;
+        return ($this->groupDisplayMode() === self::DISPLAY_MODE_LANG);
     }
 
     /**

@@ -109,3 +109,17 @@
         background-color: $charcoal-gray-5;
     }
 }
+
+.bootstrap-dialog.-quick-form .modal-body {
+    background-color: #e1e1e1;
+}
+
+.bootstrap-dialog.-quick-form .modal-body .-lang .form-field.-l10n[data-lang]::before {
+    font-size:      10px;
+    content:        attr(data-custom-modal-lang);
+    position:       absolute;
+    left:           -50px;
+    display:        contents;
+    width:          30px;
+    text-transform: uppercase;
+}

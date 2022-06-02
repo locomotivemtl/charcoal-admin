@@ -205,7 +205,13 @@ class QuickFormWidget extends ObjectFormWidget
      */
     public function availableLanguagesAsJson()
     {
-        return json_encode($this->availableLanguages());
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->availableLanguages(), $options);
     }
 
     /**

@@ -33,7 +33,7 @@ class QuickFormWidget extends ObjectFormWidget
 
     /**
      * @param  array $data The widget data.
-     * @return FormWidget Chainable
+     * @return self
      */
     public function setData(array $data)
     {

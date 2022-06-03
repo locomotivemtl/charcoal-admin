@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Support;
 
 /**
- * A collections of static sorter functions.
+ * A collection of static sorter functions.
  */
 class Sorter
 {

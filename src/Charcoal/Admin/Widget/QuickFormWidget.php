@@ -90,48 +90,6 @@ class QuickFormWidget extends ObjectFormWidget implements
     }
 
     /**
-     * Determine if the form has any multilingual properties.
-     *
-     * @return boolean
-     */
-    public function hasL10nFormProperties()
-    {
-        if ($this->validateObjType()) {
-            $locales = count($this->translator()->availableLocales());
-            if ($locales > 1) {
-                $obj = $this->obj();
-
-                $props = [];
-
-                foreach ($this->groups as $group) {
-                    array_push($props, ...($group->groupProperties()));
-                }
-
-                $props = array_values(array_unique($props));
-
-                foreach ($props as $prop) {
-                    $modelProp = $obj->property($prop);
-
-                    if ($modelProp['l10n']) {
-                        return true;
-                    } elseif ($modelProp instanceof ModelStructureProperty) {
-                        $metadata = $modelProp->getStructureMetadata();
-                        foreach ($metadata->properties() as $prop) {
-                            if (isset($prop['l10n']) && $prop['l10n']) {
-                                return true;
-                            }
-                        }
-                    }
-                }
-            }
-
-            return false;
-        }
-
-        return parent::hasL10nFormProperties();
-    }
-
-    /**
      * @see    HasLanguageSwitcherTrait::showLanguageSwitch()
      * @return boolean
      */

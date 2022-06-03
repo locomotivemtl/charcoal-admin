@@ -33,6 +33,7 @@ Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.protot
 Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
     this.bind_events();
     this.parse_group_conditions();
+    $('.nav-link.nav-lang[data-tab-ident="' + Charcoal.Admin.lang() + '"]').trigger('click')
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
@@ -48,6 +49,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
             if ($.isFunction(that.cancel_callback)) {
                 that.cancel_callback(event);
             }
+        })
+        .on('click.nav-link.nav-lang', 'a.nav-link.nav-lang', function (event) {
+            event.preventDefault();
+            that.trigger_lang_tab($(this).attr('data-tab-ident'))
         });
 };
 
@@ -86,4 +91,19 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function (response/
     if (typeof this.save_callback === 'function') {
         this.save_callback(response);
     }
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.trigger_lang_tab = function (currentLangTab) {
+    $('.modal .form-field').each(function () {
+        var dataLang = $(this).attr('data-lang');
+        if (!dataLang) {
+            return;
+        }
+
+        if (currentLangTab !== dataLang) {
+            this.style.setProperty('display', 'none', 'important');
+        } else {
+            this.style.setProperty('display', 'block', 'important');
+        }
+    });
 };

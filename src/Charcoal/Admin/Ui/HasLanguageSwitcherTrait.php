@@ -66,9 +66,5 @@ trait HasLanguageSwitcherTrait
 
         return $languages;
     }
-
-
-
-
     abstract protected function resolveShowLanguageSwitch();
 }

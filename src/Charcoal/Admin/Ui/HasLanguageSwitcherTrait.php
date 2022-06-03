@@ -66,5 +66,10 @@ trait HasLanguageSwitcherTrait
 
         return $languages;
     }
+    /**
+     * Resolves whether to display the language switcher or not.
+     *
+     * @var boolean
+     */
     abstract protected function resolveShowLanguageSwitch();
 }

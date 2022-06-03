@@ -115,11 +115,18 @@ class QuickFormWidget extends ObjectFormWidget implements
      */
     public function isTabbable()
     {
-        $tabbableDisplayModes = [
+        return in_array($this->groupDisplayMode(), $this->getTabbableDisplayModes());
+    }
+
+    /**
+     * @return array
+     */
+    public function getTabbableDisplayModes()
+    {
+        return [
             self::DISPLAY_MODE_TAB,
             self::DISPLAY_MODE_LANG
         ];
-        return in_array($this->groupDisplayMode(), $tabbableDisplayModes);
     }
 
     /**

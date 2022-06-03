@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Ui;
 
 /**
- *
+ * Language switcher awareness
  */
 interface HasLanguageSwitcherInterface
 {

@@ -10,7 +10,7 @@ trait HasLanguageSwitcherTrait
     /**
      * Whether to display the language switcher.
      *
-     * @var boolean
+     * @var boolean|null
      */
     protected $showLanguageSwitch;
 

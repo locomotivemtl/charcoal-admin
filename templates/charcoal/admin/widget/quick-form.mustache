@@ -7,7 +7,7 @@
     Expects JS initialization of this component to be handled by the dialog manager.
 --}}
 <form id="{{ widgetId }}" method="{{ method }}" action="{{ adminUrl }}{{ action }}" enctype="multipart/form-data">
-    <div class="o-flex c-form-widget -quick-form{{# isTabbable }} -tabbed{{/ isTabbable }}{{# isDisplayModeLang }} -lang{{/ isDisplayModeLang }}">
+    <div class="o-flex c-form-widget -quick-form{{# isTabbable }} -tabbed{{/ isTabbable }}{{# isDisplayModeLang }} -tabbed-by-lang{{/ isDisplayModeLang }}">
         <div class="o-flex_main c-form-widget_form">
             {{# isTabbable }}
                 {{> $form_tabs_template }}

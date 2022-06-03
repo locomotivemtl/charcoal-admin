@@ -8,10 +8,14 @@ namespace Charcoal\Admin\Support;
 class Sorter
 {
     /**
+     * Compares the priority attribute of two array-accessible variables
+     * to determine if the first variable is considered to be respectively
+     * less than, equal to, or greater than the second. 
+     *
      * To be called with {@see uasort()}.
      *
-     * @param  $a Sortable action A.
-     * @param  $b Sortable action B.
+     * @param  array|ArrayAccess $a
+     * @param  array|ArrayAccess $b
      * @return integer
      */
     public static function sortByPriority($a, $b)

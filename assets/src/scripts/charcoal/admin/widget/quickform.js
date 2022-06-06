@@ -55,10 +55,13 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
                 that.cancel_callback(event);
             }
         })
-        .on('click.nav-link.nav-lang', 'a.nav-link.nav-lang', function (event) {
+
+    if (this.show_language_switch) {
+        $form.on('click.nav-link.nav-lang', 'a.nav-link.nav-lang', function (event) {
             event.preventDefault();
             that.trigger_lang_tab($(this).attr('data-tab-ident'))
         });
+    }
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function (response/* ... */) {

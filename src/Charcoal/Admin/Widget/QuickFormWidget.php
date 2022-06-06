@@ -75,6 +75,22 @@ class QuickFormWidget extends ObjectFormWidget implements
     }
 
     /**
+     * Retrieve the widget's data options for JavaScript components.
+     *
+     * @return array
+     */
+    public function widgetDataForJs()
+    {
+        return array_merge_recursive(
+            parent::widgetDataForJs(),
+            [
+                'is_display_mode_lang' => $this->isDisplayModeLang(),
+                'show_language_switch' => $this->showLanguageSwitch(),
+            ]
+        );
+    }
+
+    /**
      * Retrieve the label for the form submission button.
      *
      * @return \Charcoal\Translator\Translation|string|null

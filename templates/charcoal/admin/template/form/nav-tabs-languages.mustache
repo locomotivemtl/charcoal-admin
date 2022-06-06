@@ -1,0 +1,19 @@
+{{# showLanguageSwitch }}
+<ul class="c-form-widget_nav nav nav-tabs available-languages" role="tablist">
+    {{# languages }}
+    <li class="nav-item">
+        <a class="nav-link nav-lang{{# isSelected }} active{{/ isSelected }} js-group-tabs"
+           id="{{ widgetId }}_tab_{{ ident }}"
+           href="#{{ widgetId }}"
+           role="tab"
+           data-toggle="tab"
+           data-tab-ident="{{ ident }}"
+           data-show-title="{{# showTitle }}true{{/ showTitle }}{{^ showTitle }}false{{/ showTitle }}"
+           aria-controls="{{ widgetId }}"
+           aria-selected="{{# isSelected }}true{{/ isSelected }}{{^ isSelected }}false{{/ isSelected }}">
+            <span class="nav-title">{{ name }}</span>
+        </a>
+    </li>
+    {{/ languages }}
+</ul>
+{{/ showLanguageSwitch }}

@@ -5459,6 +5459,8 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.extra_form_data = opts.extra_form_data || {};
 
     this.group_conditions = opts.data.group_conditions;
+    this.group_display_mode = opts.data.group_display_mode || '';
+    this.show_language_switch = opts.data.show_language_switch || false;
     this.form_working = false;
     this.is_new_object = false;
     this.xhr = null;
@@ -5471,6 +5473,10 @@ Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.protot
 Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
     this.bind_events();
     this.parse_group_conditions();
+
+    if (this.show_language_switch) {
+        $('.nav-link.nav-lang[data-tab-ident="' + Charcoal.Admin.lang() + '"]').trigger('click')
+    }
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
@@ -5486,7 +5492,14 @@ Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {
             if ($.isFunction(that.cancel_callback)) {
                 that.cancel_callback(event);
             }
+        })
+
+    if (this.show_language_switch) {
+        $form.on('click.nav-link.nav-lang', 'a.nav-link.nav-lang', function (event) {
+            event.preventDefault();
+            that.trigger_lang_tab($(this).attr('data-tab-ident'))
         });
+    }
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function (response/* ... */) {
@@ -5524,6 +5537,21 @@ Charcoal.Admin.Widget_Quick_Form.prototype.request_success = function (response/
     if (typeof this.save_callback === 'function') {
         this.save_callback(response);
     }
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.trigger_lang_tab = function (currentLangTab) {
+    $('.modal .form-field').each(function () {
+        var dataLang = $(this).attr('data-lang');
+        if (!dataLang) {
+            return;
+        }
+
+        if (currentLangTab !== dataLang) {
+            this.style.setProperty('display', 'none', 'important');
+        } else {
+            this.style.setProperty('display', 'block', 'important');
+        }
+    });
 };
 
 /* globals commonL10n,relationWidgetL10n */

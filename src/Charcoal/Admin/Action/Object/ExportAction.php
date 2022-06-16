@@ -52,6 +52,8 @@ class ExportAction extends AdminAction
      */
     public function run(RequestInterface $request, ResponseInterface $response)
     {
+        set_time_limit(0);
+
         $failMessage = $this->translator()->translation('Failed to export object(s)');
         $errorThrown = strtr($this->translator()->translation('{{ errorMessage }}: {{ errorThrown }}'), [
             '{{ errorMessage }}' => $failMessage

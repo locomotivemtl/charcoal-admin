@@ -1,8 +1,9 @@
 /* globals commonL10n,attachmentWidgetL10n */
 
 /**
- * Keep track of XHR by group
- * @type {{}}
+ * Keep track of XHR requests by group.
+ *
+ * @type object<string, jqXHR>
  */
 var globalXHR = {};
 
@@ -14,6 +15,8 @@ var globalXHR = {};
  * @see widget.js (Charcoal.Admin.Widget
  */
 Charcoal.Admin.Widget_Attachment = function (opts) {
+    this.EVENT_NAMESPACE = '.charcoal.attachments';
+
     Charcoal.Admin.Widget.call(this, opts);
 
     this.glyphs = {
@@ -112,8 +115,8 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function () {
 
     // Prevent multiple binds
     this.element()
-        .off('click')
-        .on('click.charcoal.attachments', '.js-attachments-collapse', function () {
+        .off(this.EVENT_NAMESPACE)
+        .on('click' + this.EVENT_NAMESPACE, '.js-attachments-collapse', function () {
             var $attachments = $container.children('.js-attachment');
 
             if ($container.hasClass('js-attachment-preview-only')) {
@@ -122,7 +125,7 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function () {
 
             $attachments.find('.collapse.show').collapse('hide');
         })
-        .on('click.charcoal.attachments', '.js-attachments-expand', function () {
+        .on('click' + this.EVENT_NAMESPACE, '.js-attachments-expand', function () {
             var $attachments = $container.children('.js-attachment');
 
             if ($container.hasClass('js-attachment-preview-only')) {
@@ -131,8 +134,8 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function () {
 
             $attachments.find('.collapse:not(.show)').collapse('show');
         })
-        .on('click.charcoal.attachments', '.js-add-attachment', function (e) {
-            e.preventDefault();
+        .on('click' + this.EVENT_NAMESPACE, '.js-add-attachment', function (event) {
+            event.preventDefault();
 
             var _this = $(this);
 
@@ -168,13 +171,13 @@ Charcoal.Admin.Widget_Attachment.prototype.listeners = function () {
                 });
             }
         })
-        .on('click.charcoal.attachments', '.js-attachment-actions a', function (e) {
+        .on('click' + this.EVENT_NAMESPACE, '.js-attachment-actions a', function (event) {
             var _this = $(this);
             if (!_this.data('action')) {
                 return ;
             }
 
-            e.preventDefault();
+            event.preventDefault();
             var action = _this.data('action');
             switch (action) {
                 case 'edit':
@@ -310,7 +313,10 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
             if (response.feedbacks) {
                 Charcoal.Admin.feedback(response.feedbacks).dispatch();
             }
-            callback(response);
+
+            if (typeof callback === 'function') {
+                callback(response);
+            }
         });
 
         Charcoal.Admin.manager().render();
@@ -349,7 +355,9 @@ Charcoal.Admin.Widget_Attachment.prototype.create_attachment = function (type, i
                 data: response.widget_data,
                 obj_id: id,
                 save_callback: function (response) {
-                    callback(response);
+                    if (typeof callback === 'function') {
+                        callback(response);
+                    }
 
                     if ((this instanceof Charcoal.Admin.Component) && this.id()) {
                         Charcoal.Admin.manager().destroy_component('widgets', this.id());
@@ -439,7 +447,7 @@ Charcoal.Admin.Widget_Attachment.prototype.save = function () {
     return true;
 };
 
-Charcoal.Admin.Widget_Attachment.prototype.join = function (cb) {
+Charcoal.Admin.Widget_Attachment.prototype.join = function (callback) {
     if (!$('#' + this.element().attr('id')).length) {
         return;
     }
@@ -472,20 +480,22 @@ Charcoal.Admin.Widget_Attachment.prototype.join = function (cb) {
     }
 
     globalXHR[opts.data.group] = $.post('join', data, function () {
-        if (typeof cb === 'function') {
-            cb();
-        }
-        that.set_dirty_state(false);
         delete globalXHR[opts.data.group];
+
+        that.set_dirty_state(false);
+
+        if (typeof callback === 'function') {
+            callback();
+        }
     }, 'json');
 };
 
 /**
- * [remove_join description]
- * @param  {Function} cb [description]
- * @return {[type]}      [description]
+ * @param  {string|number} id
+ * @param  {function}      callback
+ * @return {boolean}
  */
-Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb) {
+Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, callback) {
     if (!id) {
         // How could this possibly be!
         return false;
@@ -503,10 +513,11 @@ Charcoal.Admin.Widget_Attachment.prototype.remove_join = function (id, cb) {
     };
 
     $.post('remove-join', data, function () {
-        if (typeof cb === 'function') {
-            cb();
-        }
         that.set_dirty_state(false);
+
+        if (typeof callback === 'function') {
+            callback();
+        }
     }, 'json');
 };
 

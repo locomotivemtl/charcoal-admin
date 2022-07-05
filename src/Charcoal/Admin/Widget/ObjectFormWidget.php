@@ -8,6 +8,9 @@ use InvalidArgumentException;
 // From Pimple
 use Pimple\Container;
 
+// From 'charcoal-core'
+use Charcoal\Model\ModelInterface;
+
 // From 'charcoal-property'
 use Charcoal\Property\ModelStructureProperty;
 
@@ -19,6 +22,7 @@ use Charcoal\Ui\Form\FormInterface;
 use Charcoal\Admin\Widget\FormWidget;
 use Charcoal\Admin\Widget\FormPropertyWidget;
 
+use Charcoal\Admin\Ui\FormGroupInterface as AdminFormGroupInterface;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
 
@@ -576,22 +580,11 @@ class ObjectFormWidget extends FormWidget implements
             $locales = count($this->translator()->availableLocales());
             if ($locales > 1) {
                 $model = $this->obj();
-                $props = [];
 
                 foreach ($this->groups as $group) {
-                    array_push($props, ...($group->groupProperties()));
-                }
-
-                $props = array_values(array_unique($props));
-
-                foreach ($props as $prop) {
-                    $modelProp = $model->property($prop);
-                    if ($modelProp['l10n']) {
-                        return true;
-                    } elseif ($modelProp instanceof ModelStructureProperty) {
-                        $metadata = $modelProp->getStructureMetadata();
-                        foreach ($metadata->properties() as $prop) {
-                            if (isset($prop['l10n']) && $prop['l10n']) {
+                    if ($group instanceof AdminFormGroupInterface) {
+                        foreach ($group->groupProperties() as $prop) {
+                            if ($this->isL10nModelProperty($model, $prop)) {
                                 return true;
                             }
                         }
@@ -603,6 +596,32 @@ class ObjectFormWidget extends FormWidget implements
         }
 
         return parent::hasL10nFormProperties();
+    }
+
+    /**
+     * Determine if the model property is multilingual.
+     *
+     * @param  ModelInterface $model
+     * @param  string         $propertyIdent
+     * @return ?bool
+     */
+    protected function isL10nModelProperty(ModelInterface $model, string $propertyIdent): ?bool
+    {
+        $modelProperty = $model->property($propertyIdent);
+        if ($modelProperty['l10n']) {
+            return true;
+        }
+
+        if ($modelProperty instanceof ModelStructureProperty) {
+            $metadata = $modelProperty->getStructureMetadata();
+            foreach ($metadata->properties() as $prop) {
+                if (isset($prop['l10n']) && $prop['l10n']) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

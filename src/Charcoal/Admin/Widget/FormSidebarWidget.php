@@ -21,6 +21,7 @@ use Charcoal\Translator\Translation;
 use Charcoal\Admin\AdminWidget;
 use Charcoal\Admin\Ui\ActionContainerTrait;
 use Charcoal\Admin\Ui\FormSidebarInterface;
+use Charcoal\Admin\Widget\FormWidget;
 
 /**
  * Form Sidebar Widget
@@ -800,7 +801,9 @@ class FormSidebarWidget extends AdminWidget implements
     {
         $form = $this->form();
         if ($form) {
-            return $form->hasL10nFormProperties();
+            if ($form instanceof FormWidget) {
+                return $form->hasL10nFormProperties();
+            }
         }
 
         return false;

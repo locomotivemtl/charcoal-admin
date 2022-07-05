@@ -60,12 +60,13 @@ trait HasLanguageSwitcherTrait
                 'cssClasses' => ($isCurrent) ? 'btn-primary' : 'btn-outline-primary',
                 'ident'      => $locale,
                 'name'       => $label,
-                'current'    => $isCurrent
+                'current'    => $isCurrent,
             ];
         }
 
         return $languages;
     }
+
     /**
      * Resolves whether to display the language switcher or not.
      *

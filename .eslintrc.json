@@ -1,25 +1,30 @@
 {
     "root": true,
     "env": {
-        "browser": true,
-        "amd": true
+        "amd": true,
+        "browser": true
     },
     "globals": {
-        "Charcoal": true,
         "$": true,
-        "jQuery": true,
         "BootstrapDialog": true,
+        "Charcoal": true,
+        "console": true,
+        "jQuery": true,
         "module": true,
-        "require": true,
-        "console": true
+        "require": true
     },
     "rules": {
         "curly": [
             2,
             "all"
         ],
-        "eqeqeq": 2,
-        "no-eq-null": 2,
+        "eqeqeq": [
+            "error",
+            "always",
+            {
+                "null": "ignore"
+            }
+        ],
         "no-undef": 2,
         "no-unused-vars": 2,
         "no-empty": [

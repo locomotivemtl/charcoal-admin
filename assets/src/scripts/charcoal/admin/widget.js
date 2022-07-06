@@ -36,6 +36,8 @@ Charcoal.Admin.Widget = function (opts) {
     this._widget_id;
     this._widget_type;
     /* jshint ignore:end */
+
+    this._is_reloading = false;
     this._suppress_feedback = false;
 
     if (opts.widget_id) {
@@ -106,11 +108,32 @@ Charcoal.Admin.Widget.prototype.anim_out = function (callback) {
 };
 
 /**
+ * @return {Boolean} Whether the widget is busy reloading (TRUE) or not (FALSE).
+ */
+Charcoal.Admin.Widget.prototype.is_reloading = function () {
+    return this._is_reloading;
+};
+
+/**
+ * @return {this}
+ */
+Charcoal.Admin.Widget.prototype.try_reload = function () {
+    if (!this.is_reloading()) {
+        this.reload.apply(this, arguments);
+    }
+
+    return this;
+
+};
+
+/**
  * @param  {Function} [callback]  - What to do after the reload?
  * @param  {*}        [with_data] - Additional data to passthrough.
  * @return {this}
  */
 Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
+    this._is_reloading = true;
+
     var that = this;
 
     var url  = Charcoal.Admin.admin_url() + 'widget/load' + window.location.search;
@@ -192,6 +215,8 @@ Charcoal.Admin.Widget.prototype.reload = function (callback, with_data) {
     };
 
     complete = function () {
+        that._is_reloading = false;
+
         if (!that.suppress_feedback()) {
             Charcoal.Admin.feedback().dispatch();
         }

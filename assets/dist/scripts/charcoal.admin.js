@@ -5232,9 +5232,23 @@ Charcoal.Admin.Widget_Form.prototype.reload = function (callback) {
  * Switch languages for all l10n elements in the form
  */
 Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
-    var currentLang = Charcoal.Admin.lang();
-    if (currentLang !== lang) {
+    var originalLanguage = Charcoal.Admin.lang();
+    if (originalLanguage !== lang) {
+        var beforeSwitchEvent = $.Event('beforelanguageswitch' + this.EVENT_NAMESPACE, {
+            language: lang,
+            originalLanguage: originalLanguage,
+            relatedTarget: this.$form[0],
+            relatedComponent: this
+        });
+
+        $(document).triggerHandler(beforeSwitchEvent);
+
+        if (beforeSwitchEvent.isDefaultPrevented()) {
+            return;
+        }
+
         Charcoal.Admin.setLang(lang);
+
         $('[data-lang][data-lang!=' + lang + ']').addClass('d-none');
         $('[data-lang][data-lang=' + lang + ']').removeClass('d-none');
 
@@ -5246,9 +5260,19 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
             .removeClass('btn-outline-primary')
             .addClass('btn-primary');
 
+        /** @deprecated in favour of custom events 'beforelanguageswitch' and 'languageswitch' */
         $(document).triggerHandler({
             type: 'switch_language.charcoal'
         });
+
+        var afterSwitchEvent = $.Event('languageswitch' + this.EVENT_NAMESPACE, {
+            language: lang,
+            originalLanguage: originalLanguage,
+            relatedTarget: this.$form[0],
+            relatedComponent: this
+        });
+
+        $(document).triggerHandler(afterSwitchEvent);
     }
 };
 

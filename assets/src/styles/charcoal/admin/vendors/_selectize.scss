@@ -20,7 +20,7 @@ $selectize-color-item-active-border: rgba(0,0,0,0.5);
 $selectize-width-item-buttons: 40px;
 
 // Base styles imported after variable declarations
-@import "../../../../../../node_modules/selectize-bootstrap-4/src/selectize/selectize.bootstrap4";
+@import "bootstrap-selectize/selectize.bootstrap4";
 
 .selectize-dropdown {
     .option > .caption {

@@ -268,18 +268,17 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
     var alertTemplate = '<div class="alert alert-{type}" role="alert">{text}</div>';
 
     dialogOptions.onshown = function (dialog) {
-        var xhr,
-            url  = Charcoal.Admin.admin_url() + 'widget/load',
+        var url  = Charcoal.Admin.admin_url() + 'widget/load',
             data = dialog_opts;
 
-        xhr = $.ajax({
+        dialog.xhr = $.ajax({
             method:   'POST',
             url:      url,
             data:     data,
             dataType: 'json'
         });
 
-        xhr
+        dialog.xhr
             .then(function (response, textStatus, jqXHR) {
                 if (!response || !response.success) {
                     if (response.feedbacks) {

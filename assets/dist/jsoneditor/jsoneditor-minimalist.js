@@ -24,8 +24,8 @@
  * Copyright (c) 2011-2022 Jos de Jong, http://jsoneditoronline.org
  *
  * @author  Jos de Jong, <wjosdejong@gmail.com>
- * @version 9.7.4
- * @date    2022-03-15
+ * @version 9.9.0
+ * @date    2022-06-13
  */
 
 (function webpackUniversalModuleDefinition(root, factory) {
@@ -929,7 +929,7 @@ var VanillaPicker = __webpack_require__(37); // may be undefined in case of mini
 var _require = __webpack_require__(38),
     treeModeMixins = _require.treeModeMixins;
 
-var _require2 = __webpack_require__(956),
+var _require2 = __webpack_require__(458),
     textModeMixins = _require2.textModeMixins;
 
 var _require3 = __webpack_require__(341),
@@ -1115,7 +1115,7 @@ function JSONEditor(container, options, json) {
 JSONEditor.modes = {}; // debounce interval for JSON schema validation in milliseconds
 
 JSONEditor.prototype.DEBOUNCE_INTERVAL = 150;
-JSONEditor.VALID_OPTIONS = ['ajv', 'schema', 'schemaRefs', 'templates', 'ace', 'theme', 'autocomplete', 'onChange', 'onChangeJSON', 'onChangeText', 'onEditable', 'onError', 'onEvent', 'onModeChange', 'onNodeName', 'onValidate', 'onCreateMenu', 'onSelectionChange', 'onTextSelectionChange', 'onClassName', 'onFocus', 'onBlur', 'colorPicker', 'onColorPicker', 'timestampTag', 'timestampFormat', 'escapeUnicode', 'history', 'search', 'mode', 'modes', 'name', 'indentation', 'sortObjectKeys', 'navigationBar', 'statusBar', 'mainMenuBar', 'languages', 'language', 'enableSort', 'enableTransform', 'limitDragging', 'maxVisibleChilds', 'onValidationError', 'modalAnchor', 'popupAnchor', 'createQuery', 'executeQuery', 'queryDescription'];
+JSONEditor.VALID_OPTIONS = ['ajv', 'schema', 'schemaRefs', 'templates', 'ace', 'theme', 'autocomplete', 'onChange', 'onChangeJSON', 'onChangeText', 'onExpand', 'onEditable', 'onError', 'onEvent', 'onModeChange', 'onNodeName', 'onValidate', 'onCreateMenu', 'onSelectionChange', 'onTextSelectionChange', 'onClassName', 'onFocus', 'onBlur', 'colorPicker', 'onColorPicker', 'timestampTag', 'timestampFormat', 'escapeUnicode', 'history', 'search', 'mode', 'modes', 'name', 'indentation', 'sortObjectKeys', 'navigationBar', 'statusBar', 'mainMenuBar', 'languages', 'language', 'enableSort', 'enableTransform', 'limitDragging', 'maxVisibleChilds', 'onValidationError', 'modalAnchor', 'popupAnchor', 'createQuery', 'executeQuery', 'queryDescription', 'allowSchemaSuggestions'];
 /**
  * Create the JSONEditor
  * @param {Element} container    Container element
@@ -1212,8 +1212,6 @@ JSONEditor.prototype.setMode = function (mode) {
   var container = this.container;
   var options = extend({}, this.options);
   var oldMode = options.mode;
-  var data;
-  var name;
   options.mode = mode;
   var config = JSONEditor.modes[mode];
 
@@ -1222,8 +1220,8 @@ JSONEditor.prototype.setMode = function (mode) {
   }
 
   var asText = config.data === 'text';
-  name = this.getName();
-  data = this[asText ? 'getText' : 'get'](); // get text or json
+  var name = this.getName();
+  var data = this[asText ? 'getText' : 'get'](); // get text or json
 
   this.destroy();
   clear(this);
@@ -1270,7 +1268,7 @@ JSONEditor.prototype._onError = function (err) {
   if (this.options && typeof this.options.onError === 'function') {
     this.options.onError(err);
   } else {
-    alert(err.toString());
+    window.alert(err.toString());
   }
 };
 /**
@@ -1337,6 +1335,10 @@ JSONEditor.prototype.setSchema = function (schema, schemaRefs) {
     this.validate(); // to clear current error messages
 
     this.refresh(); // update DOM
+  }
+
+  if (typeof this._onSchemaChange === 'function') {
+    this._onSchemaChange(schema, schemaRefs);
   }
 };
 /**
@@ -1599,7 +1601,9 @@ if (window.ace) {
 
     __webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module 'ace-builds/src-noconflict/mode-json'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
 
-    __webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module 'ace-builds/src-noconflict/ext-searchbox'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())); // embed Ace json worker
+    __webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module 'ace-builds/src-noconflict/ext-searchbox'"); e.code = 'MODULE_NOT_FOUND'; throw e; }()));
+
+    __webpack_require__(Object(function webpackMissingModule() { var e = new Error("Cannot find module 'ace-builds/src-noconflict/ext-language_tools'"); e.code = 'MODULE_NOT_FOUND'; throw e; }())); // embed Ace json worker
     // https://github.com/ajaxorg/ace/issues/3913
 
 
@@ -5866,8 +5870,8 @@ var ModeSwitcher = __webpack_require__(617);
 var showSortModal = __webpack_require__(210);
 // EXTERNAL MODULE: ./src/js/showTransformModal.js + 1 modules
 var showTransformModal = __webpack_require__(558);
-// EXTERNAL MODULE: ./src/js/textmode.js + 1 modules
-var textmode = __webpack_require__(956);
+// EXTERNAL MODULE: ./src/js/textmode.js + 2 modules
+var textmode = __webpack_require__(458);
 // EXTERNAL MODULE: ./src/js/util.js
 var util = __webpack_require__(791);
 ;// CONCATENATED MODULE: ./src/js/previewmode.js
@@ -7128,7 +7132,7 @@ function showTransformModal(_ref) {
 
 /***/ }),
 
-/***/ 956:
+/***/ 458:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -7164,8 +7168,316 @@ var showSortModal = __webpack_require__(210);
 var showTransformModal = __webpack_require__(558);
 // EXTERNAL MODULE: ./src/js/tryRequireThemeJsonEditor.js
 var tryRequireThemeJsonEditor = __webpack_require__(49);
+// EXTERNAL MODULE: ./node_modules/json-source-map/index.js
+var json_source_map = __webpack_require__(26);
 // EXTERNAL MODULE: ./src/js/util.js
 var util = __webpack_require__(791);
+;// CONCATENATED MODULE: ./src/js/SchemaTextCompleter.js
+
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } }
+
+function _createClass(Constructor, protoProps, staticProps) { if (protoProps) _defineProperties(Constructor.prototype, protoProps); if (staticProps) _defineProperties(Constructor, staticProps); Object.defineProperty(Constructor, "prototype", { writable: false }); return Constructor; }
+
+
+
+/**
+ * SchemaTextCompleter class implements the ace ext-language_tools completer API,
+ * and suggests completions for the text editor that are relative
+ * to the cursor position and the json schema
+ */
+
+var SchemaTextCompleter = /*#__PURE__*/function () {
+  function SchemaTextCompleter(schema, schemaRefs) {
+    _classCallCheck(this, SchemaTextCompleter);
+
+    this.schema = schema;
+    this.schemaRefs = schemaRefs || {};
+    this.suggestions = {};
+    this.suggestionsRefs = {};
+
+    this._buildSuggestions();
+  }
+
+  _createClass(SchemaTextCompleter, [{
+    key: "_buildSuggestions",
+    value: function _buildSuggestions() {
+      this._handleSchemaEntry('', this.schema, this.suggestions);
+
+      for (var refName in this.schemaRefs) {
+        this.suggestionsRefs[refName] = {};
+
+        this._handleSchemaEntry('', this.schemaRefs[refName], this.suggestionsRefs[refName]);
+      }
+    }
+  }, {
+    key: "_handleRef",
+    value: function _handleRef(currectPath, refName, suggestionsObj) {
+      suggestionsObj[currectPath] = suggestionsObj[currectPath] || {};
+      suggestionsObj[currectPath].refs = suggestionsObj[currectPath].refs || [];
+      suggestionsObj[currectPath].refs = (0,util.uniqueMergeArrays)(suggestionsObj[currectPath].refs, [refName]);
+    }
+  }, {
+    key: "_handleSchemaEntry",
+    value: function _handleSchemaEntry(currectPath, schemaNode, suggestionsObj) {
+      if (!schemaNode) {
+        console.error('SchemaTextCompleter: schema node is missing for path', currectPath);
+        return;
+      }
+
+      if (schemaNode.$ref) {
+        this._handleRef(currectPath, schemaNode.$ref, suggestionsObj);
+
+        return;
+      }
+
+      var ofConditionEntry = this._checkOfConditon(schemaNode);
+
+      if (ofConditionEntry) {
+        this._handleOfCondition(currectPath, schemaNode[ofConditionEntry], suggestionsObj);
+
+        return;
+      }
+
+      switch (schemaNode.type) {
+        case 'object':
+          this._handleObject(currectPath, schemaNode, suggestionsObj);
+
+          break;
+
+        case 'string':
+        case 'number':
+        case 'integer':
+          this._handlePrimitive(currectPath, schemaNode, suggestionsObj);
+
+          break;
+
+        case 'boolean':
+          this._handleBoolean(currectPath, schemaNode, suggestionsObj);
+
+          break;
+
+        case 'array':
+          this._handleArray(currectPath, schemaNode, suggestionsObj);
+
+      }
+    }
+  }, {
+    key: "_handleObject",
+    value: function _handleObject(currectPath, schemaNode, suggestionsObj) {
+      var _this = this;
+
+      if ((0,util.isObject)(schemaNode.properties)) {
+        var props = Object.keys(schemaNode.properties);
+        suggestionsObj[currectPath] = suggestionsObj[currectPath] || {};
+        suggestionsObj[currectPath].props = suggestionsObj[currectPath].props || [];
+        suggestionsObj[currectPath].props = (0,util.uniqueMergeArrays)(suggestionsObj[currectPath].props, props);
+        props.forEach(function (prop) {
+          (0,util.asyncExec)(function () {
+            _this._handleSchemaEntry("".concat(currectPath, "/").concat(prop), schemaNode.properties[prop], suggestionsObj);
+          });
+        });
+      }
+    }
+  }, {
+    key: "_handlePrimitive",
+    value: function _handlePrimitive(currectPath, schemaNode, suggestionsObj) {
+      suggestionsObj[currectPath] = suggestionsObj[currectPath] || {};
+
+      if ((0,util.isArray)(schemaNode.examples)) {
+        suggestionsObj[currectPath].examples = suggestionsObj[currectPath].examples || [];
+        suggestionsObj[currectPath].examples = (0,util.uniqueMergeArrays)(suggestionsObj[currectPath].examples, schemaNode.examples);
+      }
+
+      if ((0,util.isArray)(schemaNode["enum"])) {
+        suggestionsObj[currectPath]["enum"] = suggestionsObj[currectPath]["enum"] || [];
+        suggestionsObj[currectPath]["enum"] = (0,util.uniqueMergeArrays)(suggestionsObj[currectPath]["enum"], schemaNode["enum"]);
+      }
+    }
+  }, {
+    key: "_handleBoolean",
+    value: function _handleBoolean(currectPath, schemaNode, suggestionsObj) {
+      if (!suggestionsObj[currectPath]) {
+        suggestionsObj[currectPath] = {
+          bool: [true, false]
+        };
+      }
+    }
+  }, {
+    key: "_handleArray",
+    value: function _handleArray(currectPath, schemaNode, suggestionsObj) {
+      var _this2 = this;
+
+      if (schemaNode.items) {
+        (0,util.asyncExec)(function () {
+          _this2._handleSchemaEntry("".concat(currectPath, "/\\d+"), schemaNode.items, suggestionsObj);
+        });
+      }
+    }
+  }, {
+    key: "_handleOfCondition",
+    value: function _handleOfCondition(currectPath, schemaNode, suggestionsObj) {
+      var _this3 = this;
+
+      if (schemaNode && schemaNode.length) {
+        schemaNode.forEach(function (schemaEntry) {
+          (0,util.asyncExec)(function () {
+            _this3._handleSchemaEntry(currectPath, schemaEntry, suggestionsObj);
+          });
+        });
+      }
+    }
+  }, {
+    key: "_checkOfConditon",
+    value: function _checkOfConditon(entry) {
+      if (!entry) {
+        return;
+      }
+
+      if (entry.oneOf) {
+        return 'oneOf';
+      }
+
+      if (entry.anyOf) {
+        return 'anyOf';
+      }
+
+      if (entry.allOf) {
+        return 'allOf';
+      }
+    }
+  }, {
+    key: "getCompletions",
+    value: function getCompletions(editor, session, pos, prefix, callback) {
+      var _this4 = this;
+
+      try {
+        var map = json_source_map.parse(session.getValue());
+        var pointers = map.pointers || {};
+
+        var processCompletionsCallback = function processCompletionsCallback(suggestions) {
+          var completions = [];
+          var score = 0;
+
+          var appendSuggesions = function appendSuggesions(type) {
+            var _suggestions$type;
+
+            var typeTitle = {
+              props: 'property',
+              "enum": 'enum',
+              bool: 'boolean',
+              examples: 'examples'
+            };
+
+            if (suggestions && (_suggestions$type = suggestions[type]) !== null && _suggestions$type !== void 0 && _suggestions$type.length) {
+              completions = completions.concat(suggestions[type].map(function (term) {
+                return {
+                  caption: term + '',
+                  meta: "schema [".concat(typeTitle[type], "]"),
+                  score: score++,
+                  value: term + ''
+                };
+              }));
+            }
+          };
+
+          appendSuggesions('props');
+          appendSuggesions('enum');
+          appendSuggesions('bool');
+          appendSuggesions('examples');
+
+          if (completions.length) {
+            callback(null, completions);
+          }
+        };
+
+        Object.keys(pointers).forEach(function (ptr) {
+          (0,util.asyncExec)(function () {
+            var _pointers$ptr$key, _pointers$ptr$value, _pointers$ptr$value2, _pointers$ptr$valueEn;
+
+            var matchPointersToPath = function matchPointersToPath(pointer, currentSuggestions, path) {
+              var option = Object.keys(currentSuggestions).reduce(function (last, key) {
+                if (new RegExp("^".concat(path).concat(key)).test(pointer)) {
+                  if (!last || last.length < key.length) {
+                    return key;
+                  }
+                }
+
+                return last;
+              });
+
+              if (typeof option === 'string') {
+                var _currentSuggestions$o, _currentSuggestions$o2;
+
+                if ((_currentSuggestions$o = currentSuggestions[option]) !== null && _currentSuggestions$o !== void 0 && (_currentSuggestions$o2 = _currentSuggestions$o.refs) !== null && _currentSuggestions$o2 !== void 0 && _currentSuggestions$o2.length) {
+                  var mergedSuggestions = {};
+
+                  for (var idx in currentSuggestions[option].refs) {
+                    var refName = currentSuggestions[option].refs[idx];
+
+                    if (_this4.suggestionsRefs[refName]) {
+                      var refSuggestion = matchPointersToPath(pointer, _this4.suggestionsRefs[refName], "".concat(path).concat(option));
+
+                      if (refSuggestion !== null && refSuggestion !== void 0 && refSuggestion["enum"]) {
+                        mergedSuggestions["enum"] = (0,util.uniqueMergeArrays)(mergedSuggestions["enum"], refSuggestion["enum"]);
+                      }
+
+                      if (refSuggestion !== null && refSuggestion !== void 0 && refSuggestion.examples) {
+                        mergedSuggestions.examples = (0,util.uniqueMergeArrays)(mergedSuggestions.examples, refSuggestion.examples);
+                      }
+
+                      if (refSuggestion !== null && refSuggestion !== void 0 && refSuggestion.bool) {
+                        mergedSuggestions.bool = (0,util.uniqueMergeArrays)(mergedSuggestions.bool, refSuggestion.bool);
+                      }
+
+                      if (refSuggestion !== null && refSuggestion !== void 0 && refSuggestion.props) {
+                        mergedSuggestions.props = (0,util.uniqueMergeArrays)(mergedSuggestions.props, refSuggestion.props);
+                      }
+                    }
+                  }
+
+                  return mergedSuggestions;
+                } else if (new RegExp("^".concat(path).concat(option, "$")).test(pointer)) {
+                  console.log('SchemaTextCompleter: Text suggestion match', {
+                    path: pointer,
+                    schemaPath: "".concat(path).concat(option),
+                    suggestions: currentSuggestions[option]
+                  });
+                  return currentSuggestions[option];
+                }
+              }
+            };
+
+            var selectedPtr;
+
+            if (((_pointers$ptr$key = pointers[ptr].key) === null || _pointers$ptr$key === void 0 ? void 0 : _pointers$ptr$key.line) === pos.row) {
+              if (pos.column >= pointers[ptr].key.column && pos.column <= pointers[ptr].keyEnd.column) {
+                selectedPtr = ptr.slice(0, ptr.lastIndexOf('/'));
+              }
+            }
+
+            if (((_pointers$ptr$value = pointers[ptr].value) === null || _pointers$ptr$value === void 0 ? void 0 : _pointers$ptr$value.line) === pos.row && ((_pointers$ptr$value2 = pointers[ptr].value) === null || _pointers$ptr$value2 === void 0 ? void 0 : _pointers$ptr$value2.line) === ((_pointers$ptr$valueEn = pointers[ptr].valueEnd) === null || _pointers$ptr$valueEn === void 0 ? void 0 : _pointers$ptr$valueEn.line)) {
+              // multiline values are objects
+              if (pos.column >= pointers[ptr].value.column && pos.column <= pointers[ptr].valueEnd.column) {
+                selectedPtr = ptr;
+              }
+            }
+
+            if (selectedPtr) {
+              var chosenCompletions = matchPointersToPath(selectedPtr, _this4.suggestions, '');
+              processCompletionsCallback(chosenCompletions);
+            }
+          });
+        });
+      } catch (e) {// probably not valid json, ignore.
+      }
+    }
+  }]);
+
+  return SchemaTextCompleter;
+}();
 ;// CONCATENATED MODULE: ./src/js/validationUtils.js
 
 /**
@@ -7213,6 +7525,7 @@ function validateCustom(json, onValidate) {
 
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
+
 
 
 
@@ -7610,6 +7923,20 @@ textmode.create = function (container) {
   }
 
   this.setSchema(this.options.schema, this.options.schemaRefs);
+};
+
+textmode._onSchemaChange = function (schema, schemaRefs) {
+  if (!this.aceEditor) {
+    return;
+  }
+
+  if (this.options.allowSchemaSuggestions && schema) {
+    this.aceEditor.setOption('enableBasicAutocompletion', [new SchemaTextCompleter(schema, schemaRefs)]);
+    this.aceEditor.setOption('enableLiveAutocompletion', true);
+  } else {
+    this.aceEditor.setOption('enableBasicAutocompletion', undefined);
+    this.aceEditor.setOption('enableLiveAutocompletion', false);
+  }
 };
 /**
  * Handle a change:
@@ -12779,6 +13106,14 @@ var Node = /*#__PURE__*/function () {
         frame.appendChild(table);
         frame.scrollTop = scrollTop;
       }
+
+      if (typeof this.editor.options.onExpand === 'function') {
+        this.editor.options.onExpand({
+          path: this.getPath(),
+          isExpand: this.expanded,
+          recursive: recurse
+        });
+      }
     }
     /**
      * Open a color picker to select a new color
@@ -15914,6 +16249,26 @@ treemode.collapseAll = function () {
   }
 };
 /**
+ * Expand/collapse a given JSON node.
+ * @param {Object} [options] Available parameters:
+ *                         {Array<String>} [path] Path for the node to expand/collapse.
+ *                         {Boolean} [isExpand]  Whether to expand the node (else collapse).
+ *                         {Boolean} [recursive]  Whether to expand/collapse child nodes recursively.
+ */
+
+
+treemode.expand = function (options) {
+  if (!options) return;
+  var node = this.node ? this.node.findNodeByPath(options.path) : null;
+  if (!node) return;
+
+  if (options.isExpand) {
+    node.expand(options.recursive);
+  } else {
+    node.collapse(options.recursive);
+  }
+};
+/**
  * The method onChange is called whenever a field or value is changed, created,
  * deleted, duplicated, etc.
  * @param {String} action  Change action. Available values: "editField",
@@ -16388,6 +16743,8 @@ treemode.scrollTo = function (top, animateCallback) {
 
 
 treemode._createFrame = function () {
+  var _this3 = this;
+
   // create the frame
   this.frame = document.createElement('div');
   this.frame.className = 'jsoneditor jsoneditor-mode-' + this.options.mode; // this.frame.setAttribute("tabindex","0");
@@ -16458,6 +16815,14 @@ treemode._createFrame = function () {
 
     expandAll.onclick = function () {
       editor.expandAll();
+
+      if (typeof _this3.options.onExpand === 'function') {
+        _this3.options.onExpand({
+          path: [],
+          isExpand: true,
+          recursive: true
+        });
+      }
     };
 
     this.menu.appendChild(expandAll); // create collapse all button
@@ -16469,6 +16834,14 @@ treemode._createFrame = function () {
 
     collapseAll.onclick = function () {
       editor.collapseAll();
+
+      if (typeof _this3.options.onExpand === 'function') {
+        _this3.options.onExpand({
+          path: [],
+          isExpand: false,
+          recursive: true
+        });
+      }
     };
 
     this.menu.appendChild(collapseAll); // create sort button
@@ -17395,6 +17768,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "addClassName": function() { return /* binding */ addClassName; },
 /* harmony export */   "addEventListener": function() { return /* binding */ addEventListener; },
+/* harmony export */   "asyncExec": function() { return /* binding */ asyncExec; },
 /* harmony export */   "clear": function() { return /* binding */ clear; },
 /* harmony export */   "compileJSONPointer": function() { return /* binding */ compileJSONPointer; },
 /* harmony export */   "contains": function() { return /* binding */ contains; },
@@ -17449,6 +17823,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "stripFormatting": function() { return /* binding */ stripFormatting; },
 /* harmony export */   "textDiff": function() { return /* binding */ textDiff; },
 /* harmony export */   "tryJsonRepair": function() { return /* binding */ tryJsonRepair; },
+/* harmony export */   "uniqueMergeArrays": function() { return /* binding */ uniqueMergeArrays; },
 /* harmony export */   "validate": function() { return /* binding */ validate; }
 /* harmony export */ });
 /* harmony import */ var _polyfills__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(987);
@@ -17461,6 +17836,18 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var json_source_map__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(26);
 /* harmony import */ var _i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(907);
 
+
+function _toConsumableArray(arr) { return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _unsupportedIterableToArray(arr) || _nonIterableSpread(); }
+
+function _nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
+
+function _iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function _arrayWithoutHoles(arr) { if (Array.isArray(arr)) return _arrayLikeToArray(arr); }
+
+function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function _typeof(obj) { "@babel/helpers - typeof"; return _typeof = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function (obj) { return typeof obj; } : function (obj) { return obj && "function" == typeof Symbol && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }, _typeof(obj); }
 
@@ -18777,6 +19164,21 @@ function isValidationErrorChanged(currErr, prevErr) {
   }
 
   return false;
+}
+/**
+ * Uniquely merge array of elements
+ * @param {Array<string|number>} inputArray1
+ * @param {Array<string|number?} inputArray2
+ * @returns {Array<string|number>} an array with unique merged elements
+ */
+
+function uniqueMergeArrays(inputArray1, inputArray2) {
+  var arr1 = inputArray1 !== null && inputArray1 !== void 0 && inputArray1.length ? inputArray1 : [];
+  var arr2 = inputArray2 !== null && inputArray2 !== void 0 && inputArray2.length ? inputArray2 : [];
+  return _toConsumableArray(new Set(arr1.concat(arr2)));
+}
+function asyncExec(callback) {
+  setTimeout(callback);
 }
 
 function hasOwnProperty(object, key) {

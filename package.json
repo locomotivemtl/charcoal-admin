@@ -25,7 +25,6 @@
         "multiselect-two-sides": "^2.5.7",
         "recorderjs": "git+https://github.com/mattdiamond/Recorderjs.git",
         "selectize": "~0.12.6",
-        "selectize-bootstrap-4": "https://github.com/papakay/selectize-bootstrap-4-style",
         "tempusdominus-bootstrap-4": "^5.39.2",
         "timeago": "^1.6.5",
         "tinymce": "^5.10.4",

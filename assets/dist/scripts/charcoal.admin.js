@@ -4781,8 +4781,6 @@ Charcoal.Admin.Widget_Form = function (opts) {
 
     this._on_popstate_tab = this._on_popstate_tab.bind(this);
     this._on_shown_tab    = this._on_shown_tab.bind(this);
-
-    this.set_properties(opts);
 };
 
 Charcoal.Admin.Widget_Form.EVENT_NAMESPACE = '.charcoal.form';
@@ -4792,6 +4790,8 @@ Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
 Charcoal.Admin.Widget_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Form.prototype.init = function () {
+    this.set_properties(this.opts());
+
     this.update_tab_ident();
 
     this.bind_events();
@@ -5606,14 +5606,14 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
 };
 
 Charcoal.Admin.Widget_Form.prototype.destroy = function () {
-    this.$form.off(this.EVENT_NAMESPACE);
+    $(this.form_selector).off(this.EVENT_NAMESPACE);
 
     $('.js-sidebar-widget', this.form_selector).off(this.EVENT_NAMESPACE);
 
     window.removeEventListener('popstate', this._on_popstate_tab);
 
     if (this.isTab) {
-        this.$form.off('shown.bs.tab', '.js-group-tabs', this._shown_tab_handler);
+        $(this.form_selector).off('shown.bs.tab', '.js-group-tabs', this._shown_tab_handler);
     }
 };
 
@@ -5937,7 +5937,6 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.cancel_callback = opts.cancel_callback || '';
 
     this.form_selector = opts.data.form_selector;
-    this.$form         = $(this.form_selector);
 
     this.save_action     = opts.save_action || 'object/save';
     this.update_action   = opts.update_action || 'object/update';
@@ -5959,12 +5958,17 @@ Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Q
 Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
+    this.set_properties(this.opts());
     this.bind_events();
     this.parse_group_conditions();
 
     if (this.show_language_switch) {
         $('.nav-link.nav-lang[data-tab-ident="' + Charcoal.Admin.lang() + '"]').trigger('click')
     }
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.set_properties = function () {
+    this.$form = $(this.form_selector);
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {

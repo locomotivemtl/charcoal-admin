@@ -40,8 +40,6 @@ Charcoal.Admin.Widget_Form = function (opts) {
 
     this._on_popstate_tab = this._on_popstate_tab.bind(this);
     this._on_shown_tab    = this._on_shown_tab.bind(this);
-
-    this.set_properties(opts);
 };
 
 Charcoal.Admin.Widget_Form.EVENT_NAMESPACE = '.charcoal.form';
@@ -51,6 +49,8 @@ Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
 Charcoal.Admin.Widget_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Form.prototype.init = function () {
+    this.set_properties(this.opts());
+
     this.update_tab_ident();
 
     this.bind_events();
@@ -865,13 +865,13 @@ Charcoal.Admin.Widget_Form.prototype.switch_language = function (lang) {
 };
 
 Charcoal.Admin.Widget_Form.prototype.destroy = function () {
-    this.$form.off(this.EVENT_NAMESPACE);
+    $(this.form_selector).off(this.EVENT_NAMESPACE);
 
     $('.js-sidebar-widget', this.form_selector).off(this.EVENT_NAMESPACE);
 
     window.removeEventListener('popstate', this._on_popstate_tab);
 
     if (this.isTab) {
-        this.$form.off('shown.bs.tab', '.js-group-tabs', this._shown_tab_handler);
+        $(this.form_selector).off('shown.bs.tab', '.js-group-tabs', this._shown_tab_handler);
     }
 };

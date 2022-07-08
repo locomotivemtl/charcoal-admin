@@ -14,7 +14,6 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.cancel_callback = opts.cancel_callback || '';
 
     this.form_selector = opts.data.form_selector;
-    this.$form         = $(this.form_selector);
 
     this.save_action     = opts.save_action || 'object/save';
     this.update_action   = opts.update_action || 'object/update';
@@ -36,12 +35,17 @@ Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Q
 Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
 
 Charcoal.Admin.Widget_Quick_Form.prototype.init = function () {
+    this.set_properties(this.opts());
     this.bind_events();
     this.parse_group_conditions();
 
     if (this.show_language_switch) {
         $('.nav-link.nav-lang[data-tab-ident="' + Charcoal.Admin.lang() + '"]').trigger('click')
     }
+};
+
+Charcoal.Admin.Widget_Quick_Form.prototype.set_properties = function () {
+    this.$form = $(this.form_selector);
 };
 
 Charcoal.Admin.Widget_Quick_Form.prototype.bind_events = function () {

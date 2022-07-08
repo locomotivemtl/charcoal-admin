@@ -194,6 +194,8 @@
         this.init();
     }
 
+    PropertyInput.EVENT_NAMESPACE = EVENT_KEY;
+
     PropertyInput.prototype = Object.create(Admin.Property.prototype);
     PropertyInput.prototype.constructor = PropertyInput;
     PropertyInput.prototype.parent = Admin.Property.prototype;

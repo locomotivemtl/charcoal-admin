@@ -4,7 +4,7 @@
  */
 
 Charcoal.Admin.Property_Input_Video = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.video';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Video.EVENT_NAMESPACE;
     this.input_type = 'charcoal/admin/property/input/video';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -14,6 +14,8 @@ Charcoal.Admin.Property_Input_Video = function (opts) {
 
     this.set_input_id(opts.id).init();
 };
+
+Charcoal.Admin.Property_Input_Video.EVENT_NAMESPACE = '.charcoal.property.video';
 
 Charcoal.Admin.Property_Input_Video.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
 Charcoal.Admin.Property_Input_Video.prototype.constructor = Charcoal.Admin.Property_Input_Video;

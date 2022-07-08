@@ -22,9 +22,9 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     // Never send multiple true to BB gmap
     this._map_options.multiple = false;
 
-    var EVENT_NAMESPACE = 'geolocation';
+    var EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Geometry_Widget.EVENT_NAMESPACE;
     var EVENT = {
-        GOOGLE_MAP_LOADED: 'google-map-loaded.' + EVENT_NAMESPACE
+        GOOGLE_MAP_LOADED: 'google-map-loaded' + EVENT_NAMESPACE
     };
 
     if (typeof google === 'undefined') {
@@ -48,6 +48,8 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     }
 
 };
+
+Charcoal.Admin.Property_Input_Geometry_Widget.EVENT_NAMESPACE = '.geolocation';
 
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Geometry_Widget;

@@ -3,7 +3,7 @@
  */
 
 Charcoal.Admin.Property_Input_File = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.file';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_File.EVENT_NAMESPACE;
     this.input_type = 'charcoal/admin/property/input/file';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -13,6 +13,8 @@ Charcoal.Admin.Property_Input_File = function (opts) {
 
     this.set_input_id(opts.id).init();
 };
+
+Charcoal.Admin.Property_Input_File.EVENT_NAMESPACE = '.charcoal.property.file';
 
 Charcoal.Admin.Property_Input_File.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_File.prototype.constructor = Charcoal.Admin.Property_Input_File;

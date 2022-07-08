@@ -3,7 +3,7 @@
  */
 
 Charcoal.Admin.Property_Input_Range = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.range';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Range.EVENT_NAMESPACE;
 
     Charcoal.Admin.Property.call(this, opts);
 
@@ -17,6 +17,8 @@ Charcoal.Admin.Property_Input_Range = function (opts) {
 
     this.init();
 };
+
+Charcoal.Admin.Property_Input_Range.EVENT_NAMESPACE = '.charcoal.property.range';
 
 Charcoal.Admin.Property_Input_Range.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Range.prototype.constructor = Charcoal.Admin.Property_Input_Range;

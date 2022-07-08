@@ -3690,7 +3690,7 @@ var globalXHR = {};
  * @see widget.js (Charcoal.Admin.Widget
  */
 Charcoal.Admin.Widget_Attachment = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.attachments';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Attachment.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -3727,6 +3727,8 @@ Charcoal.Admin.Widget_Attachment = function (opts) {
 
     return this;
 };
+
+Charcoal.Admin.Widget_Attachment.EVENT_NAMESPACE = '.charcoal.attachments';
 
 Charcoal.Admin.Widget_Attachment.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Attachment.prototype.constructor = Charcoal.Admin.Widget_Attachment;
@@ -4751,7 +4753,7 @@ Charcoal.Admin.Widget_Card_Collection.prototype.widget_options = function () {
  */
 
 Charcoal.Admin.Widget_Form = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.form';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Form.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -4782,6 +4784,9 @@ Charcoal.Admin.Widget_Form = function (opts) {
 
     this.set_properties(opts);
 };
+
+Charcoal.Admin.Widget_Form.EVENT_NAMESPACE = '.charcoal.form';
+
 Charcoal.Admin.Widget_Form.prototype             = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
 Charcoal.Admin.Widget_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;
@@ -5628,12 +5633,14 @@ Charcoal.Admin.Widget_Form.prototype.destroy = function () {
     'use strict';
 
     var Graph = function (opts) {
-        this.EVENT_NAMESPACE = '.charcoal.widget.graph';
+        this.EVENT_NAMESPACE = Graph.EVENT_NAMESPACE;
 
         Charcoal.Admin.Widget.call(this, opts);
 
         this.graph_options = opts.graph_options || opts.data.graph_options || {};
     };
+
+    Graph.EVENT_NAMESPACE = '.charcoal.widget.graph';
 
     Graph.prototype            = Object.create(Charcoal.Admin.Widget.prototype);
     Graph.prototype.contructor = Graph;
@@ -5922,7 +5929,7 @@ Charcoal.Admin.Widget_Object_Revisions.prototype.request_success = function ($fo
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.quickform';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Quick_Form.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -5944,6 +5951,9 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.xhr = null;
     this.obj_id = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 };
+
+Charcoal.Admin.Widget_Quick_Form.EVENT_NAMESPACE = '.charcoal.quickform';
+
 Charcoal.Admin.Widget_Quick_Form.prototype = Object.create(Charcoal.Admin.Widget_Form.prototype);
 Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Quick_Form;
 Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;
@@ -6403,7 +6413,7 @@ Charcoal.Admin.Widget_Relation.prototype.widget_options = function () {
  * @param  {Object}  opts Options for widget
  */
 Charcoal.Admin.Widget_Search = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.widget.search';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Search.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -6432,6 +6442,8 @@ Charcoal.Admin.Widget_Search = function (opts) {
 
     return this;
 };
+
+Charcoal.Admin.Widget_Search.EVENT_NAMESPACE = '.charcoal.widget.search';
 
 Charcoal.Admin.Widget_Search.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Search.prototype.constructor = Charcoal.Admin.Widget_Search;
@@ -6953,7 +6965,7 @@ Charcoal.Admin.Property.prototype.error = function (data) {
  */
 
 Charcoal.Admin.Property_Input_File = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.file';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_File.EVENT_NAMESPACE;
     this.input_type = 'charcoal/admin/property/input/file';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -6963,6 +6975,8 @@ Charcoal.Admin.Property_Input_File = function (opts) {
 
     this.set_input_id(opts.id).init();
 };
+
+Charcoal.Admin.Property_Input_File.EVENT_NAMESPACE = '.charcoal.property.file';
 
 Charcoal.Admin.Property_Input_File.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_File.prototype.constructor = Charcoal.Admin.Property_Input_File;
@@ -7303,6 +7317,8 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function () {
 
         this.init();
     }
+
+    PropertyInput.EVENT_NAMESPACE = EVENT_KEY;
 
     PropertyInput.prototype = Object.create(Admin.Property.prototype);
     PropertyInput.prototype.constructor = PropertyInput;
@@ -9425,7 +9441,7 @@ Charcoal.Admin.Property_Input_File.prototype.destroy = function () {
  * @param Object opts
  */
 Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.audio.widget';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Audio_Widget.EVENT_NAMESPACE;
 
     Charcoal.Admin.Property.call(this, opts);
 
@@ -9434,6 +9450,8 @@ Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
 
     this.init();
 };
+
+Charcoal.Admin.Property_Input_Audio_Widget.EVENT_NAMESPACE = '.charcoal.property.audio.widget';
 
 Charcoal.Admin.Property_Input_Audio_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Audio_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Audio_Widget;
@@ -9663,7 +9681,7 @@ Charcoal.Admin.Property_Input_Audio_Widget.prototype.destroy = function () {
  */
 
 Charcoal.Admin.Property_Input_Audio = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.audio';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Audio.EVENT_NAMESPACE;
     this.input_type = 'charcoal/admin/property/input/audio';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -9673,6 +9691,8 @@ Charcoal.Admin.Property_Input_Audio = function (opts) {
 
     this.set_input_id(opts.id).init();
 };
+
+Charcoal.Admin.Property_Input_Audio.EVENT_NAMESPACE = '.charcoal.property.audio';
 
 Charcoal.Admin.Property_Input_Audio.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
 Charcoal.Admin.Property_Input_Audio.prototype.constructor = Charcoal.Admin.Property_Input_Audio;
@@ -9949,9 +9969,9 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     // Never send multiple true to BB gmap
     this._map_options.multiple = false;
 
-    var EVENT_NAMESPACE = 'geolocation';
+    var EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Geometry_Widget.EVENT_NAMESPACE;
     var EVENT = {
-        GOOGLE_MAP_LOADED: 'google-map-loaded.' + EVENT_NAMESPACE
+        GOOGLE_MAP_LOADED: 'google-map-loaded' + EVENT_NAMESPACE
     };
 
     if (typeof google === 'undefined') {
@@ -9975,6 +9995,8 @@ Charcoal.Admin.Property_Input_Geometry_Widget = function (data) {
     }
 
 };
+
+Charcoal.Admin.Property_Input_Geometry_Widget.EVENT_NAMESPACE = '.geolocation';
 
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Geometry_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Geometry_Widget;
@@ -10315,7 +10337,7 @@ Charcoal.Admin.Property_Input_Geometry_Widget.prototype.save = function () {
  */
 
 Charcoal.Admin.Property_Input_Image = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.image';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Image.EVENT_NAMESPACE;
     this.input_type = 'charcoal/admin/property/input/image';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -10325,6 +10347,8 @@ Charcoal.Admin.Property_Input_Image = function (opts) {
 
     this.set_input_id(opts.id).init();
 };
+
+Charcoal.Admin.Property_Input_Image.EVENT_NAMESPACE = '.charcoal.property.image';
 
 Charcoal.Admin.Property_Input_Image.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
 Charcoal.Admin.Property_Input_Image.prototype.constructor = Charcoal.Admin.Property_Input_Image;
@@ -10652,7 +10676,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.save = function () {
  */
 
 Charcoal.Admin.Property_Input_Range = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.range';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Range.EVENT_NAMESPACE;
 
     Charcoal.Admin.Property.call(this, opts);
 
@@ -10666,6 +10690,8 @@ Charcoal.Admin.Property_Input_Range = function (opts) {
 
     this.init();
 };
+
+Charcoal.Admin.Property_Input_Range.EVENT_NAMESPACE = '.charcoal.property.range';
 
 Charcoal.Admin.Property_Input_Range.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Range.prototype.constructor = Charcoal.Admin.Property_Input_Range;
@@ -13104,7 +13130,7 @@ Charcoal.Admin.Property_Input_Tinymce.prototype.destroy = function () {
  */
 
 Charcoal.Admin.Property_Input_Video = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.video';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Video.EVENT_NAMESPACE;
     this.input_type = 'charcoal/admin/property/input/video';
 
     Charcoal.Admin.Property.call(this, opts);
@@ -13114,6 +13140,8 @@ Charcoal.Admin.Property_Input_Video = function (opts) {
 
     this.set_input_id(opts.id).init();
 };
+
+Charcoal.Admin.Property_Input_Video.EVENT_NAMESPACE = '.charcoal.property.video';
 
 Charcoal.Admin.Property_Input_Video.prototype = Object.create(Charcoal.Admin.Property_Input_File.prototype);
 Charcoal.Admin.Property_Input_Video.prototype.constructor = Charcoal.Admin.Property_Input_Video;

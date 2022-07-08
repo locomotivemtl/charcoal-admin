@@ -6,7 +6,7 @@
  * @return {thisArg}
  */
 Charcoal.Admin.Widget_Quick_Form = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.quickform';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Quick_Form.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -28,6 +28,9 @@ Charcoal.Admin.Widget_Quick_Form = function (opts) {
     this.xhr = null;
     this.obj_id = Charcoal.Admin.parseNumber(opts.obj_id) || 0;
 };
+
+Charcoal.Admin.Widget_Quick_Form.EVENT_NAMESPACE = '.charcoal.quickform';
+
 Charcoal.Admin.Widget_Quick_Form.prototype = Object.create(Charcoal.Admin.Widget_Form.prototype);
 Charcoal.Admin.Widget_Quick_Form.prototype.constructor = Charcoal.Admin.Widget_Quick_Form;
 Charcoal.Admin.Widget_Quick_Form.prototype.parent = Charcoal.Admin.Widget.prototype;

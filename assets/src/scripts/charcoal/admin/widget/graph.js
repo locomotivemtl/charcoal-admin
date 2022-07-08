@@ -14,12 +14,14 @@
     'use strict';
 
     var Graph = function (opts) {
-        this.EVENT_NAMESPACE = '.charcoal.widget.graph';
+        this.EVENT_NAMESPACE = Graph.EVENT_NAMESPACE;
 
         Charcoal.Admin.Widget.call(this, opts);
 
         this.graph_options = opts.graph_options || opts.data.graph_options || {};
     };
+
+    Graph.EVENT_NAMESPACE = '.charcoal.widget.graph';
 
     Graph.prototype            = Object.create(Charcoal.Admin.Widget.prototype);
     Graph.prototype.contructor = Graph;

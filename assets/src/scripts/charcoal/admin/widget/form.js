@@ -12,7 +12,7 @@
  */
 
 Charcoal.Admin.Widget_Form = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.form';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Form.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -43,6 +43,9 @@ Charcoal.Admin.Widget_Form = function (opts) {
 
     this.set_properties(opts);
 };
+
+Charcoal.Admin.Widget_Form.EVENT_NAMESPACE = '.charcoal.form';
+
 Charcoal.Admin.Widget_Form.prototype             = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Form.prototype.constructor = Charcoal.Admin.Widget_Form;
 Charcoal.Admin.Widget_Form.prototype.parent      = Charcoal.Admin.Widget.prototype;

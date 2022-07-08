@@ -7,7 +7,7 @@
  * @param Object opts
  */
 Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.property.audio.widget';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Property_Input_Audio_Widget.EVENT_NAMESPACE;
 
     Charcoal.Admin.Property.call(this, opts);
 
@@ -16,6 +16,8 @@ Charcoal.Admin.Property_Input_Audio_Widget = function (opts) {
 
     this.init();
 };
+
+Charcoal.Admin.Property_Input_Audio_Widget.EVENT_NAMESPACE = '.charcoal.property.audio.widget';
 
 Charcoal.Admin.Property_Input_Audio_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
 Charcoal.Admin.Property_Input_Audio_Widget.prototype.constructor = Charcoal.Admin.Property_Input_Audio_Widget;

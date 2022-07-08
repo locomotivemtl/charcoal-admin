@@ -15,7 +15,7 @@ var globalXHR = {};
  * @see widget.js (Charcoal.Admin.Widget
  */
 Charcoal.Admin.Widget_Attachment = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.attachments';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Attachment.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -52,6 +52,8 @@ Charcoal.Admin.Widget_Attachment = function (opts) {
 
     return this;
 };
+
+Charcoal.Admin.Widget_Attachment.EVENT_NAMESPACE = '.charcoal.attachments';
 
 Charcoal.Admin.Widget_Attachment.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Attachment.prototype.constructor = Charcoal.Admin.Widget_Attachment;

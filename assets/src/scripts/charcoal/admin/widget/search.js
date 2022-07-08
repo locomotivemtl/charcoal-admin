@@ -8,7 +8,7 @@
  * @param  {Object}  opts Options for widget
  */
 Charcoal.Admin.Widget_Search = function (opts) {
-    this.EVENT_NAMESPACE = '.charcoal.widget.search';
+    this.EVENT_NAMESPACE = Charcoal.Admin.Widget_Search.EVENT_NAMESPACE;
 
     Charcoal.Admin.Widget.call(this, opts);
 
@@ -37,6 +37,8 @@ Charcoal.Admin.Widget_Search = function (opts) {
 
     return this;
 };
+
+Charcoal.Admin.Widget_Search.EVENT_NAMESPACE = '.charcoal.widget.search';
 
 Charcoal.Admin.Widget_Search.prototype = Object.create(Charcoal.Admin.Widget.prototype);
 Charcoal.Admin.Widget_Search.prototype.constructor = Charcoal.Admin.Widget_Search;

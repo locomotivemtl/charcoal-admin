@@ -74,16 +74,20 @@
      */
     Manager.prototype.add_component = function (component_group, component_data) {
         if (!component_data.type) {
-            console.error('Was not able to store component: missing type');
+            console.error('Unable to store component:', 'missing type');
             return false;
         }
 
         // Figure out which component to instanciate
         var component_class_name = Charcoal.Admin.get_object_name(component_data.type);
+        var component_class_path = 'Charcoal.Admin.' + component_class_name;
 
         // Make sure component class exists first
         if (typeof Charcoal.Admin[component_class_name] !== 'function') {
-            console.error('Was not able to store component [Charcoal.Admin.' + component_class_name + ']: missing class');
+            console.error(
+                'Unable to store component [' + component_class_path + ']:',
+                'missing class'
+            );
             return false;
         }
 
@@ -101,8 +105,8 @@
                 });
 
                 if (component) {
-                    var message = 'Was not able to store component [Charcoal.Admin.' + component_class_name + ']: ' +
-                                component_data.id + ' already registered';
+                    var message = 'Unable to store component [' + component_class_path + ']:';
+                    var reason  = component_data.id + ' already registered';
 
                     if (
                         // Compare against an instantiated component
@@ -111,10 +115,10 @@
                         (component.type && component.type === component_data.type)
                     ) {
                         // Assume its a reloaded component
-                        console.warn(message);
+                        console.warn(message, reason);
                     } else {
                         // Something is not right
-                        console.error(message);
+                        console.error(message, reason);
                     }
 
                     return false;
@@ -325,10 +329,11 @@
                     }
 
                 } catch (error) {
+                    var component_class_path = 'Charcoal.Admin.' + component_data.ident;
                     if (component_data.id) {
-                        console.error('Was not able to instantiate component [Charcoal.Admin.' + component_data.ident + '] (' + component_data.id + ')');
+                        console.error('Was not able to instantiate component [' + component_class_path + '] (' + component_data.id + ')');
                     } else {
-                        console.error('Was not able to instantiate component [Charcoal.Admin.' + component_data.ident + ']');
+                        console.error('Was not able to instantiate component [' + component_class_path + ']');
                     }
                     console.error(error);
                 }

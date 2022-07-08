@@ -12,6 +12,18 @@
 ;(function ($, Admin) {
     'use strict';
 
+    /**
+     * @typedef {Level} string
+     */
+
+    /**
+     * @typedef {DisplayMode} ?string
+     */
+
+    /**
+     * @type {Level[]}       lvls
+     * @type {DisplayMode[]} modes
+     */
     var lvls, modes, defs, alts, reset = function () {
         lvls  = DEFAULTS.supported.slice();
         modes = DEFAULTS.displayModes.slice();
@@ -49,7 +61,8 @@
         aliases: {
             info: 'notice',
             danger: 'error'
-        }
+        },
+        delay: 3200
     };
 
     /**
@@ -95,12 +108,7 @@
      * @return {this}
      */
     Manager.prototype.resolveAliases = function (level) {
-        if ($.inArray(level, lvls) === -1) {
-            throw new TypeError(
-                'Unsupported feedback level, received "' + level +
-                '". Must be one of: ' + lvls.join(', ')
-            );
-        }
+        this.assertValidLevel(level);
 
         var key = level;
         level = defs[level];
@@ -171,7 +179,7 @@
     /**
      * Get Messages
      *
-     * @return {array}  Messages to show.
+     * @return {Entry[]}  Messages to show.
      */
     Manager.prototype.getMessages = function () {
         return this.storage;
@@ -180,7 +188,7 @@
     /**
      * Count Messages
      *
-     * @return {integer} The number of messages.
+     * @return {number} The number of messages.
      */
     Manager.prototype.countMessages = function () {
         return this.storage.length;
@@ -195,23 +203,51 @@
         return this.countMessages() > 0;
     };
 
+    Manager.prototype.validMessage = function (message) {
+        return ($.type(message) === 'string');
+    };
+
     /**
      * Get all messages grouped by level
+     *
+     * @deprecated in faovur of {@see this#getMessagesMaoByLevel()}
+     *
+     * @return {object<Level, Entry[]>}
+     */
+    Manager.prototype.getMessagesMap = function () {
+        return this.getMessagesMapByLevel();
+    };
+
+    /**
+     * Get all messages grouped by level
+     *
+     * @return {object<Level, Entry[]>}
+     */
+    Manager.prototype.getMessagesMapByLevel = function () {
+        if (!this.hasMessages()) {
+            return {};
+        }
+
+        return this.groupMessagesByLevel(this.getMessages());
+    };
+
+    /**
+     * Group messages by level
      *
      * @example
      * {
      *     '<level>': [ <messages> ]
      * }
      *
-     * @return {object} Messages to show.
+     * @param  {Entry[]} entries
+     * @return {object<Level, Entry[]>}
      */
-    Manager.prototype.getMessagesMap = function () {
-        if (!this.hasMessages()) {
+    Manager.prototype.groupMessagesByLevel = function (entries) {
+        if (!entries.length) {
             return {};
         }
 
         var key, entry;
-        var entries = this.getMessages();
         var grouped = {};
         for (var i = 0; i < entries.length; i++) {
             entry = entries[i];
@@ -319,6 +355,25 @@
     };
 
     /**
+     * Determines if level is valid.
+     */
+    Manager.prototype.assertValidLevel = function (level) {
+        if (!this.isValidLevel(level)) {
+            throw new TypeError(
+                'Unsupported feedback level, received "' + level +
+                '". Must be one of: ' + lvls.join(', ')
+            );
+        }
+    };
+
+    /**
+     * Determines if level is valid.
+     */
+    Manager.prototype.isValidLevel = function (level) {
+        return ($.type(level) === 'string' && $.inArray(level, lvls) > -1);
+    };
+
+    /**
      * Get display mode override
      */
     Manager.prototype.getDisplay = function () {
@@ -329,15 +384,29 @@
      * Set display mode override
      */
     Manager.prototype.setDisplay = function (mode) {
-        if ($.inArray(mode, modes) === -1 && mode !== null) {
+        this.assertValidDisplay(mode);
+
+        this.display = mode;
+        return this;
+    };
+
+    /**
+     * Determines if display mode is valid.
+     */
+    Manager.prototype.assertValidDisplay = function (mode) {
+        if (!this.isValidDisplay(mode)) {
             throw new TypeError(
                 'Unsupported display mode, received "' + mode +
                 '". Must be one of: null, ' + modes.join(', ')
             );
         }
+    };
 
-        this.display = mode;
-        return this;
+    /**
+     * Determines if display mode is valid.
+     */
+    Manager.prototype.isValidDisplay = function (mode) {
+        return (mode !== null && $.inArray(mode, modes) > -1);
     };
 
     /**
@@ -485,12 +554,7 @@
                 throw new TypeError('Feedback level must be a string, received ' + vartype);
             }
 
-            if ($.inArray(level, lvls) === -1) {
-                throw new TypeError(
-                    'Unsupported feedback level, received "' + level +
-                    '". Must be one of: ' + lvls.join(', ')
-                );
-            }
+            Manager.prototype.assertValidLevel(level);
 
             if (level in alts) {
                 level = alts[level];
@@ -502,7 +566,7 @@
         },
 
         validLevel: function (level) {
-            return ($.type(level) === 'string' && $.inArray(level, lvls) > -1);
+            return Manager.prototype.isValidLevel(level);
         },
 
         message: function () {
@@ -521,7 +585,7 @@
         },
 
         validMessage: function (message) {
-            return ($.type(message) === 'string');
+            return Manager.prototype.validMessage(message);
         }
     };
 
@@ -540,7 +604,7 @@
 
         this.config = $.extend({}, {
             id:    BootstrapDialog.newGuid(),
-            delay: 3200
+            delay: DEFAULTS.delay
         }, config);
 
         this.$elem = $('<article class="c-notifications_item alert fade show" role="alert"></article>');

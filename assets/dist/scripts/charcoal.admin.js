@@ -816,7 +816,7 @@ Charcoal.Admin = (function () {
         jqxhr = jqxhr.then(this.resolveJqXhrFalsePositive);
 
         if (typeof success === 'function') {
-            jqxhr.done(function (response, status, jqxhr) {
+            jqxhr = jqxhr.done(function (response, status, jqxhr) {
                 response = $.extend({ success: true, feedbacks: [] }, response);
 
                 if (response.feedbacks.length === 0 && response.message) {
@@ -838,7 +838,7 @@ Charcoal.Admin = (function () {
         }
 
         if (typeof failure === 'function') {
-            jqxhr.fail(function (jqxhr, status, error) {
+            jqxhr = jqxhr.fail(function (jqxhr, status, error) {
                 var response = { success: false, feedbacks: [] };
 
                 if (jqxhr.responseJSON) {
@@ -872,7 +872,7 @@ Charcoal.Admin = (function () {
         }
 
         if (typeof complete === 'function') {
-            jqxhr.always(function () {
+            jqxhr = jqxhr.always(function () {
                 /**
                  * Fires when the request finishes.
                  *

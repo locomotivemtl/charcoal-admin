@@ -4097,12 +4097,16 @@ Charcoal.Admin.Widget_Attachment.prototype.add = function (obj) {
 /**
  * Determines if the component is a candidate for saving.
  *
+ * @todo Disabled the function to revert to initial behaviour of always saving
+ *     no matter the context. The reason for this is that this widget is often
+ *     integrated as adjacent to the form instead of nested.
+ *
  * @param  {Component} [scope] - The parent component that calls for save.
  * @return {boolean}
  */
-Charcoal.Admin.Widget_Attachment.prototype.will_save = function (scope) {
-    return (scope && $.contains(scope.element()[0], this.element()[0]));
-};
+// Charcoal.Admin.Widget_Attachment.prototype.will_save = function (scope) {
+//     return (scope && $.contains(scope.element()[0], this.element()[0]));
+// };
 
 /**
  * Prepares the component to be saved.

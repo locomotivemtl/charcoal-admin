@@ -461,7 +461,7 @@
             }
 
             if (typeof component.validate === 'function') {
-                result = component.validate();
+                result = component.validate(scope);
                 if (result === false) {
                     return result;
                 }
@@ -478,7 +478,7 @@
             }
 
             if (typeof component.save === 'function') {
-                result = component.save();
+                result = component.save(scope);
                 if (result === false) {
                     return result;
                 }

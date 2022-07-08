@@ -165,6 +165,7 @@ Charcoal.Admin.Component.prototype.destroy = function () {
  * Each component is expected to add their own feedback if their
  * value is invalid or errored (via `validate` or `save`).
  *
+ * @param  {Component} [scope] - The parent component that calls for validation.
  * @return {boolean} If `false`, the component is invalid.
  */
 // Charcoal.Admin.Component.prototype.validate = function (scope) {
@@ -190,8 +191,9 @@ Charcoal.Admin.Component.prototype.destroy = function () {
  * Each component is expected to add their own feedback if their
  * value is invalid or errored (via `validate` or `save`).
  *
+ * @param  {Component} [scope] - The parent component that calls for save.
  * @return {boolean} If `false`, the component could not save.
  */
-// Charcoal.Admin.Component.prototype.save = function () {
+// Charcoal.Admin.Component.prototype.save = function (scope) {
 //     return true;
 // };

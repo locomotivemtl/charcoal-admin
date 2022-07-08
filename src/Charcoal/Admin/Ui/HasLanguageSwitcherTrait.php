@@ -3,7 +3,7 @@
 namespace Charcoal\Admin\Ui;
 
 /**
- * Implements Charcoal\Admin\Ui\HasLanguageSwitcherInterface
+ * Implements {@see \Charcoal\Admin\Ui\HasLanguageSwitcherInterfacelanguage switcher handler}
  */
 trait HasLanguageSwitcherTrait
 {

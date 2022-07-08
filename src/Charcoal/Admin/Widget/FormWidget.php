@@ -30,6 +30,7 @@ use Charcoal\Admin\AdminWidget;
 use Charcoal\Admin\Property\HierarchicalObjectProperty;
 use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\FormSidebarInterface;
+use Charcoal\Admin\Ui\LanguageSwitcherAwareInterface;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Widget\FormPropertyWidget;
 
@@ -42,6 +43,7 @@ use Charcoal\Admin\Widget\FormPropertyWidget;
  */
 class FormWidget extends AdminWidget implements
     FormInterface,
+    LanguageSwitcherAwareInterface,
     LayoutAwareInterface
 {
     use FormTrait;
@@ -610,6 +612,16 @@ class FormWidget extends AdminWidget implements
 
             yield $formProperty->propertyIdent() => $formProperty;
         }
+    }
+
+    /**
+     * Whether a language switcher could be displayed.
+     *
+     * @return bool
+     */
+    public function supportsLanguageSwitch(): bool
+    {
+        return $this->hasL10nFormProperties();
     }
 
     /**

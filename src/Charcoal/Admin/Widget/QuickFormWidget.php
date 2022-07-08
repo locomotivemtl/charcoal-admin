@@ -111,7 +111,7 @@ class QuickFormWidget extends ObjectFormWidget implements
      */
     protected function resolveShowLanguageSwitch()
     {
-        return $this->hasL10nFormProperties();
+        return $this->supportsLanguageSwitch();
     }
 
     /**

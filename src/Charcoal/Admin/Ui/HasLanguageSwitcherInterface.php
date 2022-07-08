@@ -3,7 +3,11 @@
 namespace Charcoal\Admin\Ui;
 
 /**
- * Language switcher awareness
+ * Defines a language switcher handler.
+ *
+ * Classes that implement this interface are in charge
+ * of displaying or hiding the switcher as well as
+ * deciding of that state,
  */
 interface HasLanguageSwitcherInterface
 {

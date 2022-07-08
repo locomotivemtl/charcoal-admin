@@ -23,6 +23,7 @@ use Charcoal\Admin\Widget\FormWidget;
 use Charcoal\Admin\Widget\FormPropertyWidget;
 
 use Charcoal\Admin\Ui\FormGroupInterface as AdminFormGroupInterface;
+use Charcoal\Admin\Ui\LanguageSwitcherAwareInterface;
 use Charcoal\Admin\Ui\ObjectContainerInterface;
 use Charcoal\Admin\Ui\ObjectContainerTrait;
 
@@ -570,6 +571,33 @@ class ObjectFormWidget extends FormWidget implements
     }
 
     /**
+     * Whether a language switcher could be displayed.
+     *
+     * @return bool
+     */
+    public function supportsLanguageSwitch(): bool
+    {
+        if ($this->validateObjType()) {
+            $locales = count($this->translator()->availableLocales());
+            if ($locales > 1) {
+                foreach ($this->groups as $group) {
+                    if ($group instanceof LanguageSwitcherAwareInterface) {
+                        return $group->supportsLanguageSwitch();
+                    }
+
+                    if ($this->hasL10nGroupProperties($group)) {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
+        }
+
+        return parent::supportsLanguageSwitch();
+    }
+
+    /**
      * Determine if the form has any multilingual properties.
      *
      * @return boolean
@@ -579,15 +607,9 @@ class ObjectFormWidget extends FormWidget implements
         if ($this->validateObjType()) {
             $locales = count($this->translator()->availableLocales());
             if ($locales > 1) {
-                $model = $this->obj();
-
                 foreach ($this->groups as $group) {
-                    if ($group instanceof AdminFormGroupInterface) {
-                        foreach ($group->groupProperties() as $prop) {
-                            if ($this->isL10nModelProperty($model, $prop)) {
-                                return true;
-                            }
-                        }
+                    if ($this->hasL10nGroupProperties($group)) {
+                        return true;
                     }
                 }
             }
@@ -596,6 +618,25 @@ class ObjectFormWidget extends FormWidget implements
         }
 
         return parent::hasL10nFormProperties();
+    }
+
+    /**
+     * Determine if the group has any multilingual properties.
+     *
+     * @param  FormGroupInterface $group
+     * @return bool
+     */
+    protected function hasL10nGroupProperties(FormGroupInterface $group)
+    {
+        if ($group instanceof AdminFormGroupInterface) {
+            foreach ($group->groupProperties() as $prop) {
+                if ($this->isL10nModelProperty($this->obj(), $prop)) {
+                    return true;
+                }
+            }
+        }
+
+        return false;
     }
 
     /**

@@ -13,6 +13,7 @@ use Pimple\Container;
 use Charcoal\Ui\Form\FormInterface;
 use Charcoal\Admin\Ui\HasLanguageSwitcherInterface;
 use Charcoal\Admin\Ui\HasLanguageSwitcherTrait;
+use Charcoal\Admin\Ui\LanguageSwitcherAwareInterface;
 
 // From 'charcoal-translator'
 use Charcoal\Translator\Translation;
@@ -801,8 +802,8 @@ class FormSidebarWidget extends AdminWidget implements
     {
         $form = $this->form();
         if ($form) {
-            if ($form instanceof FormWidget) {
-                return $form->hasL10nFormProperties();
+            if ($form instanceof LanguageSwitcherAwareInterface) {
+                return $form->supportsLanguageSwitch();
             }
         }
 

@@ -4440,6 +4440,8 @@ Charcoal.Admin.Widget_Form = function (opts) {
     this.extra_form_data   = opts.extra_form_data || {};
     this.form_selector     = null;
     this.form_working      = false;
+    this.attempts          = 0;
+    this.max_attempts      = 5;
     this.submitted_via     = null;
     this.is_new_object     = false;
     this.xhr               = null;
@@ -4765,7 +4767,28 @@ Charcoal.Admin.Widget_Form.prototype.get_form_data = function () {
  * @return {void}
  */
 Charcoal.Admin.Widget_Form.prototype.request_submit = function () {
+    this.attempts++;
+
     if (this.form_working) {
+        var message;
+
+        if (this.attempts >= this.max_attempts) {
+            message = commonL10n.errorTemplate.replaceMap({
+                '[[ errorMessage ]]': formWidgetL10n.isBlocked,
+                '[[ errorThrown ]]':  commonL10n.tryAgainLater
+            });
+        } else {
+            message = commonL10n.errorTemplate.replaceMap({
+                '[[ errorMessage ]]': formWidgetL10n.isProcessing,
+                '[[ errorThrown ]]':  commonL10n.pleaseWait
+            });
+        }
+
+        Charcoal.Admin.feedback([ {
+            level:   'warning',
+            display: 'toast',
+            message: message
+        } ]);
         return;
     }
 
@@ -4824,6 +4847,8 @@ Charcoal.Admin.Widget_Form.prototype.request_done = function (response, textStat
 };
 
 Charcoal.Admin.Widget_Form.prototype.request_success = function (response/* textStatus, jqXHR */) {
+    this.attempts = 0;
+
     var successEvent = $.Event('success' + this.EVENT_NAMESPACE, {
         subtype:   'submission',
         component: this,
@@ -4923,6 +4948,16 @@ Charcoal.Admin.Widget_Form.prototype.request_complete = function (/* ... */) {
     }
 
     if (!this.suppress_feedback()) {
+        if (this.attempts >= this.max_attempts) {
+            Charcoal.Admin.feedback([ {
+                level:   'error',
+                message: commonL10n.errorTemplate.replaceMap({
+                    '[[ errorMessage ]]': formWidgetL10n.isBlocked,
+                    '[[ errorThrown ]]':  commonL10n.tryAgainLater
+                })
+            } ]);
+        }
+
         Charcoal.Admin.feedback().dispatch();
         this.enable_form();
     }

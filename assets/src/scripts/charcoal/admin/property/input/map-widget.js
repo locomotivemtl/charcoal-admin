@@ -9,28 +9,10 @@ Charcoal.Admin.Property_Input_Map_Widget = function (data) {
 
     Charcoal.Admin.Property.call(this, data);
 
-    // Scope
-    var that = this;
-
     // Controller
-    this._controller = undefined;
+    this._controller;
     // Create uniq ident for every entities on the map
     this._object_inc = 0;
-
-    if (typeof google === 'undefined') {
-        // If google is undefined,
-        window._tmp_google_onload_function = function () {
-            that.init();
-        };
-
-        $.getScript(
-            'https://maps.googleapis.com/maps/api/js?sensor=false' +
-            '&callback=_tmp_google_onload_function&key=' + data.data.api_key,
-            function () {}
-        );
-    } else {
-        that.init();
-    }
 };
 
 Charcoal.Admin.Property_Input_Map_Widget.prototype = Object.create(Charcoal.Admin.Property.prototype);
@@ -38,9 +20,12 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.constructor = Charcoal.Admin.
 Charcoal.Admin.Property_Input_Map_Widget.prototype.parent = Charcoal.Admin.Property.prototype;
 
 Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
-    if (typeof window._tmp_google_onload_function !== 'undefined') {
-        delete window._tmp_google_onload_function;
-    }
+    Charcoal.Admin.maps.whenMapsApiReady(this.init_map.bind(this));
+
+    return this;
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.init_map = function () {
     if (typeof BB === 'undefined' || typeof google === 'undefined') {
         // We don't have what we need
         console.error('Plugins not loaded');
@@ -54,40 +39,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
         console.error('Missing ID');
     }
 
-    var default_styles = {
-        strokeColor: '#000000',
-        strokeOpacity: 0.8,
-        strokeWeight: 3,
-        fillColor: '#ffffff',
-        fillOpacity: 0.35,
-        hover: {
-            strokeColor: '#000000',
-            strokeOpacity: 1,
-            strokeWeight: 2,
-            fillColor: '#ffffff',
-            fillOpacity: 0.5
-        },
-        focused: {
-            fillOpacity: 0.8
-        }
-    };
-
-    var map_options = {
-        default_styles: default_styles,
-        use_clusterer: false,
-        map: {
-            center: {
-                x: 45.3712923,
-                y: -73.9820994
-            },
-            zoom: 14,
-            mapType: 'roadmap',
-            coordsType: 'inpage', // array, json? (vs ul li)
-            map_mode: 'default'
-        }
-    };
-
-    map_options = $.extend(true, map_options, _data.data);
+    var controller_options = $.extend(true, this.get_controller_options(), _data.data);
 
     // Get current map state from DB
     // This is located in the hidden input
@@ -107,7 +59,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
         }
 
         if (merged_places) {
-            map_options.places = merged_places;
+            controller_options.places = merged_places;
         }
 
         if (index) {
@@ -120,7 +72,7 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
     // Create new map instance
     this._controller = new window.BB.gmap.controller(
         this.element().find('.js-map-maker-map').get(0),
-        map_options
+        controller_options
     );
 
     // Init new map instance
@@ -215,6 +167,45 @@ Charcoal.Admin.Property_Input_Map_Widget.prototype.init = function () {
  */
 Charcoal.Admin.Property_Input_Map_Widget.prototype.controller = function () {
     return this._controller;
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.get_controller_options = function () {
+    return {
+        use_clusterer:  false,
+        map:            this.get_map_options(),
+        places:         this.get_places(),
+        default_styles: this.get_default_styles()
+    };
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.get_map_options = function () {
+    return {
+        center: {
+            lat: 45.3712923,,
+            lng: -73.9820994
+        },
+        zoom: 14
+    };
+};
+
+Charcoal.Admin.Property_Input_Map_Widget.prototype.get_default_styles = function () {
+    return {
+        strokeColor: '#000000',
+        strokeOpacity: 0.8,
+        strokeWeight: 3,
+        fillColor: '#ffffff',
+        fillOpacity: 0.35,
+        hover: {
+            strokeColor: '#000000',
+            strokeOpacity: 1,
+            strokeWeight: 2,
+            fillColor: '#ffffff',
+            fillOpacity: 0.5
+        },
+        focused: {
+            fillOpacity: 0.8
+        }
+    };
 };
 
 /**

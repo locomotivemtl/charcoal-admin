@@ -1,17 +1,17 @@
- {{!--
-    Map sidebar
+{{!--
+    Map Widget
 --}}
 
-<div class="card" id="{{ widgetId }}">
-    <div class="card-body" id="{{ widgetId }}">
-        <div class="js-map-maker-map" style="height: 400px; width: 100%;"></div>
+<div id="{{ widgetId }}" class="card">
+    <div class="card-body">
+        <div id="{{ widgetId }}_map" class="js-map-div" style="height: 400px; width: 100%;"></div>
     </div>
 </div>
 
 {{# addJs }}
     <script>
     Charcoal.Admin.manager().add_widget({
-        id: '{{ widgetId }}',
+        id:   '{{ widgetId }}',
         type: 'charcoal/admin/widget/map',
         data: {{& widgetDataForJsAsJson }}
     });

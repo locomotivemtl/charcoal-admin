@@ -128,13 +128,29 @@ class TinymceInput extends TextareaInput
     }
 
     /**
-     * Retrieve the editor's options as a JSON string.
+     * Retrieve the editor's {@see self::editorOptions() options} as a JSON string.
      *
      * @return string Returns data serialized with {@see json_encode()}.
      */
     public function editorOptionsAsJson()
     {
-        return json_encode($this->editorOptions());
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->editorOptions(), $options);
+    }
+
+    /**
+     * Retrieve the editor's {@see self::editorOptions() options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    public function escapedEditorOptionsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->editorOptionsAsJson().'<%={{ }}=%>';
     }
 
     /**

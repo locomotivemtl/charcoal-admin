@@ -94,6 +94,10 @@
             controls_name: 'map_toolbox_{{ inputId }}'
         };
 
-        Charcoal.Admin.manager().add_property_input(inputOptions);
+        Charcoal.Admin.manager().add_property_input({
+            id:   '{{ inputId }}',
+            type: 'charcoal/admin/property/input/map-widget',
+            data: {{& controlDataForJsAsJson }}
+        });
     </script>
 {{/ addJs }}

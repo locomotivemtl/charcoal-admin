@@ -5,12 +5,14 @@ Collection Map Widget
 `charcoal/admin/widget/alert/collection-map`
 --}}
 
-<div class="card mt-4">
-    <div id="{{ widget_id }}" style="width:100%;height:50em;"></div>
+<div id="{{ widget_id }}" class="card mt-4">
+    <div class="card-body">
+        <div id="{{ widget_id }}_map" class="js-map-div" style="height: 50em; width: 100%;"></div>
+    </div>
 </div>
 
 {{# show_infobox }}
-    <div style="display:none;">
+    <div style="display: none;">
         {{# map_objects }}
             <div id="{{ widget_id }}_infowindow_{{ id }}">
                 {{> $widget_template }}
@@ -46,8 +48,8 @@ function load_collection_map() {
         use_clusterer: true,
         map: {
             center: {
-                x: 45.3752754,
-                y: -73.5884044
+                lat: 45.3752754,
+                lng: -73.5884044
             },
             zoom: 13,
             mapType: 'roadmap',
@@ -56,74 +58,72 @@ function load_collection_map() {
         },
         places: {
         {{#map_objects}}
-        {{#mapShowMarker}}
-            "marker_{{id}}": {
-                type: 'marker',
-                coords: [{{mapLat}}, {{mapLon}}],
-                {{#show_infobox}}
-                onclick: function(){
-                    BootstrapDialog.show({
-                        nl2br: false,
-                        message: $('#{{widget_id}}_infowindow_{{id}}').html(),
-                        buttons: [{
-                            label: '{{# _t }}Modify{{/ _t }}',
-                            action: function(dialog) {
-                                window.location.href = '{{baseUrl}}/admin/object/edit?{{#main_menu}}main_menu={{.}}&{{/main_menu}}obj_type={{obj_type}}&obj_id={{id}}'
-                            }
-                        }]
-                    });
-                }
-                {{/show_infobox}}
-            },
-        {{/mapShowMarker}}
-        {{#mapShowPolygon}}
-            "polygon_{{id}}": {
-                type: 'polygon',
-                paths: {{mapPolygon}},
-                {{#show_infobox}}
-                onclick: function(){
-                    BootstrapDialog.show({
-                        nl2br: false,
-                        message: $('#{{widget_id}}_infowindow_{{id}}').html(),
-                        buttons: [{
-                            label: '{{# _t }}Modify{{/ _t }}',
-                            action: function(dialog) {
-                                window.location.href = '{{baseUrl}}/admin/object/edit?obj_type={{obj_type}}&obj_id={{id}}'
-                            }
-                        }]
-                    });
-                }
-                {{/show_infobox}}
-
-            },
-        {{/mapShowPolygon}}
-        {{#mapShowPath}}
-            "line_{{id}}": {
-                type: 'line',
-                paths: {{mapPath}},
-                {{#show_infobox}}
-                onclick: function(){
-                    BootstrapDialog.show({
-                        nl2br: false,
-                        message: $('#{{widget_id}}_infowindow_{{id}}').html(),
-                        buttons: [{
-                            label: '{{# _t }}Modify{{/ _t }}',
-                            action: function(dialog) {
-                                window.location.href = '{{baseUrl}}/admin/object/edit?{{#main_menu}}main_menu={{.}}&{{/main_menu}}obj_type={{obj_type}}&obj_id={{id}}'
-                            }
-                        }]
-                    });
-                }
-                {{/show_infobox}}
-
-            },
-        {{/mapShowPath}}
+            {{#mapShowMarker}}
+                "marker_{{id}}": {
+                    type: 'marker',
+                    coords: [{{mapLat}}, {{mapLon}}],
+                    {{#show_infobox}}
+                    onclick: function(){
+                        BootstrapDialog.show({
+                            nl2br: false,
+                            message: $('#{{widget_id}}_infowindow_{{id}}').html(),
+                            buttons: [{
+                                label: '{{# _t }}Modify{{/ _t }}',
+                                action: function(dialog) {
+                                    window.location.href = '{{baseUrl}}/admin/object/edit?{{#main_menu}}main_menu={{.}}&{{/main_menu}}obj_type={{obj_type}}&obj_id={{id}}'
+                                }
+                            }]
+                        });
+                    }
+                    {{/show_infobox}}
+                },
+            {{/mapShowMarker}}
+            {{#mapShowPolygon}}
+                "polygon_{{id}}": {
+                    type: 'polygon',
+                    paths: {{mapPolygon}},
+                    {{#show_infobox}}
+                    onclick: function(){
+                        BootstrapDialog.show({
+                            nl2br: false,
+                            message: $('#{{widget_id}}_infowindow_{{id}}').html(),
+                            buttons: [{
+                                label: '{{# _t }}Modify{{/ _t }}',
+                                action: function(dialog) {
+                                    window.location.href = '{{baseUrl}}/admin/object/edit?obj_type={{obj_type}}&obj_id={{id}}'
+                                }
+                            }]
+                        });
+                    }
+                    {{/show_infobox}}
+                },
+            {{/mapShowPolygon}}
+            {{#mapShowPath}}
+                "line_{{id}}": {
+                    type: 'line',
+                    paths: {{mapPath}},
+                    {{#show_infobox}}
+                    onclick: function(){
+                        BootstrapDialog.show({
+                            nl2br: false,
+                            message: $('#{{widget_id}}_infowindow_{{id}}').html(),
+                            buttons: [{
+                                label: '{{# _t }}Modify{{/ _t }}',
+                                action: function(dialog) {
+                                    window.location.href = '{{baseUrl}}/admin/object/edit?{{#main_menu}}main_menu={{.}}&{{/main_menu}}obj_type={{obj_type}}&obj_id={{id}}'
+                                }
+                            }]
+                        });
+                    }
+                    {{/show_infobox}}
+                },
+            {{/mapShowPath}}
         {{/map_objects}}
         }
     };
 
-    MapController =  new window.BB.gmap.controller(
-        document.getElementById('{{widget_id}}'),
+    MapController = new window.BB.gmap.controller(
+        document.getElementById('{{ widget_id }}_map'),
         map_options
     );
 
@@ -136,19 +136,8 @@ function load_collection_map() {
 
 var map_controller;
 
-if (typeof google === 'undefined') {
-    // If google is undefined,
-    window._tmp_google_onload_function = function () {
-        map_controller = load_collection_map();
-    };
-
-    $.getScript(
-        'https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false' +
-        '&key={{apiKey}}&callback=_tmp_google_onload_function',
-        function () {}
-    );
-} else {
+Charcoal.Admin.maps.whenMapsApiReady(function () {
     map_controller = load_collection_map();
-}
+});
 </script>
 {{/ addJs }}

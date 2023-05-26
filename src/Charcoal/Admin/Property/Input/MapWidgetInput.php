@@ -30,6 +30,52 @@ class MapWidgetInput extends AbstractPropertyInput
     private $mapOptions;
 
     /**
+     * Retrieve the {@see self::propertyVal() value} serialized for an input field.
+     *
+     * The {@see \Charcoal\Property\StructureProperty::inputVal()} and
+     * {@see \Charcoal\Property\AbstractProperty::inputVal()} methods
+     * pretty-print the serialized object which works for `<textarea>`
+     * elements but does not work well for `<input>` elements.
+     *
+     * @return string
+     */
+    public function inputVal()
+    {
+        $value = $this->propertyVal();
+        if (!is_scalar($value)) {
+            return json_encode($value);
+        }
+
+        return parent::inputVal();
+    }
+
+    /**
+     * Retrieve the {@see self::propertyVal() value} as a JSON string.
+     *
+     * @return string Returns data serialized with {@see json_encode()}.
+     */
+    public function jsonVal()
+    {
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->propertyVal(), $options);
+    }
+
+    /**
+     * Retrieve the {@see self::propertyVal() value} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    public function escapedJsonVal()
+    {
+        return '{{=<% %>=}}'.$this->jsonVal().'<%={{ }}=%>';
+    }
+
+    /**
      * Sets the API key for the mapping service.
      *
      * @param  string $key An API key.
@@ -142,17 +188,35 @@ class MapWidgetInput extends AbstractPropertyInput
      */
     public function defaultMapOptions()
     {
-        return [ 'api_key' => $this->apiKey() ];
+        return [
+            'api_key' => $this->apiKey(),
+        ];
     }
 
     /**
-     * Retrieve the map widget's options as a JSON string.
+     * Retrieve the map widget's {@see self::mapOptions() options} as a JSON string.
      *
      * @return string Returns data serialized with {@see json_encode()}.
      */
     public function mapOptionsAsJson()
     {
-        return json_encode($this->mapOptions());
+        $options = (JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE);
+
+        if ($this->debug()) {
+            $options = ($options | JSON_PRETTY_PRINT);
+        }
+
+        return json_encode($this->mapOptions(), $options);
+    }
+
+    /**
+     * Retrieve the map widget's {@see self::mapOptions() options} as a JSON string, protected from Mustache.
+     *
+     * @return string Returns a stringified JSON object, protected from Mustache rendering.
+     */
+    public function escapedMapOptionsAsJson()
+    {
+        return '{{=<% %>=}}'.$this->mapOptionsAsJson().'<%={{ }}=%>';
     }
 
     /**

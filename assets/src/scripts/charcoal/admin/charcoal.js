@@ -312,16 +312,22 @@ Charcoal.Admin = (function () {
      * @return {mixed}    Returns the stored value.
      */
     Admin.store = function (key, value, callback) {
-        if (!store[key]) {
+        if (!(key in store)) {
             if (typeof value === 'function') {
                 store[key] = $.Deferred(function (defer) {
                     value(defer);
                 }).promise();
+            } else {
+                store[key] = value;
             }
         }
 
-        if (typeof store[key] === 'function') {
-            return store[key].done(callback);
+        if (
+            typeof callback === 'function' &&
+            typeof store[key] === 'object' &&
+            typeof store[key].then === 'function'
+        ) {
+            return store[key].then(callback);
         }
 
         return store[key];
@@ -364,7 +370,85 @@ Charcoal.Admin = (function () {
             str += HEX[Math.random() * 36 | 0];
         }
         return str;
-    }
+    };
+
+    /**
+     * Resolve an object key path into a closure.
+     *
+     * @param  {string} path  - The string representation of an object accessor to resolve.
+     * @param  {object} scope - The scope from which to resolve the path.
+     *     Defaults to {@see Window window}.
+     * @throws {ReferenceError} If the path is invalid.
+     * @return {function}
+     */
+    Admin.resolveCallableFromDotNotation = function (path, scope) {
+        if (scope) {
+            if (typeof scope !== 'object') {
+                throw new TypeError('Admin.resolveCallableFromDotNotation expects scope argument to be an object');
+            }
+        } else {
+            scope = window;
+        }
+
+        for (
+            var props = path.split('.'),
+                parent = scope,
+                node = scope,
+                i = 0;
+            i < props.length;
+            i++
+        ) {
+            if (
+                parent = node,
+                node = node[props[i]],
+                !node
+            ) {
+                throw new ReferenceError(path + ' is not a function');
+            }
+        }
+
+        return function () {
+            node.apply(parent);
+        };
+    };
+
+    /**
+     * Resolve an object key path into a value.
+     *
+     * @param  {string} path  - The string representation of an object accessor to resolve.
+     * @param  {object} scope - The scope from which to resolve the path.
+     *     Defaults to {@see Window window}.
+     * @throws {ReferenceError} If the path is invalid.
+     * @return {*}
+     */
+    Admin.resolveValueFromDotNotation = function (path, scope) {
+        if (scope) {
+            if (typeof scope !== 'object') {
+                throw new TypeError('Admin.resolveValueFromDotNotation expects scope argument to be an object');
+            }
+        } else {
+            scope = window;
+        }
+
+        for (
+            var props = path.split('.'),
+                parent = scope,
+                node = scope,
+                i = 0;
+            i < props.length;
+            i++
+        ) {
+            if (
+                parent = node,
+                node = node[props[i]],
+                node === undefined
+            ) {
+                throw new ReferenceError(path + ' is not accessible');
+            }
+        }
+
+        return node;
+    };
 
     /**
      * Resolves the context of parameters for the "complete" callback option.

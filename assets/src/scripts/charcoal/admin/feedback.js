@@ -264,6 +264,77 @@
     };
 
     /**
+     * Group messages by display mode
+     *
+     * @example
+     * {
+     *     '<displayMode>': [ <messages> ]
+     * }
+     *
+     * @param  {Entry[]} entries
+     * @return {object<DisplayMode, Entry[]>}
+     */
+    Manager.prototype.groupMessagesByDisplay = function (entries) {
+        if (!entries.length) {
+            return {};
+        }
+
+        var mode, entry;
+        var grouped = {};
+        for (var i = 0; i < entries.length; i++) {
+            entry = entries[i];
+            mode  = entry.display() || this.level(entry.level()).display;
+
+            if (!(mode in grouped)) {
+                grouped[mode] = [];
+            }
+
+            grouped[mode].push(entry);
+        }
+
+        return grouped;
+    };
+
+    /**
+     * Group messages by display mode and level
+     *
+     * @example
+     * {
+     *     '<displayMode>': {
+     *         '<level>': [ <messages> ]
+     *     }
+     * }
+     *
+     * @param  {Entry[]} entries
+     * @return {object<DisplayMode, object<Level, Entry[]>>}
+     */
+    Manager.prototype.groupMessagesByDisplayAndLevel = function (entries) {
+        if (!entries.length) {
+            return {};
+        }
+
+        var mode, level, entry;
+        var grouped = {};
+        for (var i = 0; i < entries.length; i++) {
+            entry = entries[i];
+            level = entry.level();
+            mode  = entry.display() || this.level(level).display;
+
+            if (!(mode in grouped)) {
+                grouped[mode] = {};
+            }
+
+            if (!(level in grouped[mode])) {
+                grouped[mode][level] = [];
+            }
+
+            grouped[mode][level].push(entry);
+        }
+
+        return grouped;
+    };
+
+    /**
      * Retrieve the list of supported feedback levels.
      *
      * @return {array}
@@ -435,55 +506,102 @@
             return this;
         }
 
-        var key, level, buttons;
-        var grouped = this.getMessagesMap();
+        var display,
+            displayOverride = this.getDisplay(),
+            buttons,
+            config,
+            dialogQueue = 0,
+            group,
+            groupingDisplay,
+            groupingLevel,
+            groupsByDisplay = this.groupMessagesByDisplayAndLevel(this.getMessages()),
+            groupsByLevel,
+            hasMixedDisplayModes = (Object.keys(groupsByDisplay) > 1),
+            level,
+            queueId = Charcoal.Admin.uid();
 
-        for (key in grouped) {
-            level   = this.level(key);
-            buttons = [];
-            if (this.actions.length) {
-                for (var action, k = 0; k < this.actions.length; k++) {
-                    action = this.actions[k];
-                    action = $.extend(action, {
-                        label:  action.label,
-                        action: action.callback
-                    });
-                    buttons.push(action);
+        for (groupingDisplay in groupsByDisplay) {
+            groupsByLevel = groupsByDisplay[groupingDisplay];
+
+            for (groupingLevel in groupsByLevel) {
+                group = groupsByLevel[groupingLevel];
+
+                level   = this.level(groupingLevel);
+                buttons = [];
+                if (this.actions.length) {
+                    for (var action, k = 0; k < this.actions.length; k++) {
+                        action = this.actions[k];
+                        action = $.extend(action, {
+                            label:  action.label,
+                            action: action.callback
+                        });
+                        buttons.push(action);
+                    }
                 }
-            }
 
-            var config = {
-                title:   level.title,
-                message: '<p class="mb-0">' + grouped[key].join('</p><p class="mb-0 mt-3">') + '</p>',
-                level:   key,
-                type:    level.type,
-                buttons: buttons
-            };
+                config = {
+                    queueId: queueId,
+                    title:   level.title,
+                    message: '<p class="mb-0">' + group.join('</p><p class="mb-0 mt-3">') + '</p>',
+                    level:   groupingLevel,
+                    type:    level.type,
+                    buttons: buttons
+                };
 
-            var override = this.getDisplay(),
-                display  = null;
+                display = groupingDisplay;
 
-            switch (override) {
-                case 'dialog':
-                case 'toast':
-                    display = override;
-                    break;
-                default:
-                    display = level.display;
-                    break;
-            }
+                if (displayOverride) {
+                    switch (displayOverride) {
+                        case 'dialog':
+                        case 'toast':
+                            display = displayOverride;
+                            break;
+                    }
+                } else if (hasMixedDisplayModes) {
+                    switch (display) {
+                        case 'toast':
+                            config.delay = 0;
+                            break;
 
-            switch (display) {
-                case 'toast':
-                    config.dismissible = buttons.length === 0;
-                    new Notification(config);
-                    break;
+                        case 'dialog':
+                            /* falls through */
+                        default:
+                            // Make Feedback Toasts wait until Feedback Dialogs are closed.
+                            dialogQueue++;
 
-                case 'dialog':
-                    /* falls through */
-                default:
-                    BootstrapDialog.show(config);
-                    break;
+                            config.onhidden = function () {
+                                $.each(BootstrapDialog.dialogs, function (id, dialog) {
+                                    if (dialog.options.queueId && dialog.options.queueId === queueId) {
+                                        dialogQueue--;
+                                    }
+                                });
+
+                                if (dialogQueue <= 0) {
+                                    var i = 0;
+                                    $.each(Notification.notifications, function (id, notification) {
+                                        if (notification.config.queueId && notification.config.queueId === queueId) {
+                                            notification.close(DEFAULTS.delay + (i++ * 1000));
+                                        }
+                                    });
+                                }
+                            };
+                            break;
+                    }
+                }
+
+                switch (display) {
+                    case 'toast':
+                        config.dismissible = (buttons.length === 0);
+                        config.delay = (hasMixedDisplayModes ? 0 : DEFAULTS.delay);
+                        (new Notification(config)).show();
+                        break;
+
+                    case 'dialog':
+                        /* falls through */
+                    default:
+                        BootstrapDialog.show(config);
+                        break;
+                }
             }
         }
 
@@ -508,8 +626,9 @@
      *
      * @param {String} [level]   - The feedback level.
      * @param {String} [message] - The feedback message.
+     * @param {String} [display] - The feedback display style.
      */
-    var Entry = function (level, message) {
+    var Entry = function (level, message, display) {
         // Initialize the feedback manager
         Admin.feedback();
 
@@ -525,18 +644,23 @@
             this.setMessage(message);
         }
 
+        if (this.validDisplay(display)) {
+            this.setDisplay(display);
+        }
+
         return this;
     };
 
     Entry.createFromObject = function (obj) {
         var level   = obj.level || null;
+        var display = obj.display || null;
         var message = obj.message || null;
 
         if (!level && !message) {
             return null;
         }
 
-        return new Entry(level, message);
+        return new Entry(level, message, display);
     };
 
     Entry.prototype = {
@@ -569,6 +693,27 @@
             return Manager.prototype.isValidLevel(level);
         },
 
+        display: function () {
+            return this._display || null;
+        },
+
+        setDisplay: function (mode) {
+            var vartype = $.type(mode);
+            if (vartype !== 'string' && vartype !== 'null') {
+                throw new TypeError('Feedback display mode must be a string or null, received ' + vartype);
+            }
+
+            Manager.prototype.assertValidDisplay(mode);
+
+            this._display = mode;
+
+            return this;
+        },
+
+        validDisplay: function (mode) {
+            return Manager.prototype.isValidDisplay(mode);
+        },
+
         message: function () {
             return this._message || null;
         },
@@ -598,12 +743,9 @@
             throw new TypeError('Notification config must be an associative array, received ' + vartype);
         }
 
-        if (this.validMessage(config.message)) {
-            this.setMessage(config.message);
-        }
-
+        this.shown  = false;
         this.config = $.extend({}, {
-            id:    BootstrapDialog.newGuid(),
+            id:    Charcoal.Admin.uid(),
             delay: DEFAULTS.delay
         }, config);
 
@@ -624,50 +766,116 @@
             this.$elem.append($content);
         }
 
-        this.$elem.appendTo('.c-notifications').addClass('show');
-
-        this.$elem.on('closed.bs.alert', { notification: this }, function (event) {
-            var notification = event.data.notification;
-            notification.$elem.off('.charcoal.feedback');
-            if (notification.closeTimer) {
-                window.clearTimeout(notification.closeTimer);
-            }
-        });
-
-        if (typeof this.config.delay === 'number' && this.config.delay > 0) {
-            this.$elem.on('mouseover.charcoal.feedback', { notification: this }, function (event) {
-                var notification = event.data.notification;
-                if (notification.closeTimer) {
-                    window.clearTimeout(notification.closeTimer);
-                }
-            });
-
-            this.$elem.on('mouseout.charcoal.feedback', { notification: this }, function (event) {
-                var notification = event.data.notification;
-                notification.closeTimer = window.setTimeout(function () {
-                    notification.$elem.alert('close');
-                }, notification.config.delay);
-            });
-
-            this.closeTimer = window.setTimeout(
-                $.proxy(
-                    function () {
-                        this.$elem.alert('close');
-                    },
-                    this
-                ),
-                this.config.delay
-            );
-        }
-
         return this;
     };
 
-    Notification.prototype = Object.create(Entry.prototype);
-    Notification.prototype.constructor = Notification;
-    Notification.prototype.parent = Entry.prototype;
+    Notification.prototype = {
+        getId: function () {
+            return this.config.id;
+        },
+        show: function () {
+            if (this.shown) {
+                return;
+            }
 
-    // Notification.prototype = {};
+            this.shown = true;
+
+            this.$elem.appendTo('.c-notifications').addClass('show');
+
+            this.$elem.on('closed.bs.alert', { notification: this }, function (event) {
+                var notification = event.data.notification;
+                notification.$elem.off('.charcoal.feedback');
+                notification.cancelDelayedClose();
+            });
+
+            if (typeof this.config.delay === 'number' && this.config.delay > 0) {
+                this.$elem.on('mouseover.charcoal.feedback', { notification: this }, function (event) {
+                    var notification = event.data.notification;
+                    notification.cancelDelayedClose();
+                });
+
+                this.$elem.on('mouseout.charcoal.feedback', { notification: this }, function (event) {
+                    var notification = event.data.notification;
+                    notification.close();
+                });
+
+                this.close();
+            }
+        },
+        close: function (delay) {
+            this.cancelDelayedClose();
+
+            if (delay == null) {
+                delay = this.config.delay;
+            }
+
+            if (typeof delay === 'number' && delay > 0) {
+                this.closeTimer = window.setTimeout(
+                    $.proxy(function () {
+                        this.$elem.alert('close');
+                    }, this),
+                    this.config.delay
+                );
+            } else {
+                this.$elem.alert('close');
+            }
+        },
+        cancelDelayedClose: function () {
+            if (this.closeTimer) {
+                window.clearTimeout(this.closeTimer);
+            }
+        }
+    };
+
+    /**
+     * Show / Close all created notifications all at once.
+     */
+    Notification.notifications = {};
+    Notification.showAll = function () {
+        $.each(Notification.notifications, function (id, notification) {
+            notification.show();
+        });
+    };
+    Notification.closeAll = function (delay) {
+        $.each(Notification.notifications, function (id, notification) {
+            notification.close(delay);
+        });
+    };
+
+    /**
+     * Get notification instance by given ID.
+     *
+     * @return {?Notification}
+     */
+    Notification.getNotification = function (id) {
+        var notification = null;
+        if (typeof Notification.notifications[id] !== 'undefined') {
+            notification = Notification.notifications[id];
+        }
+
+        return notification;
+    };
+
+    /**
+     * Set a notification.
+     *
+     * @return {Notification}
+     */
+    Notification.setNotification = function (notification) {
+        Notification.notifications[notification.getId()] = notification;
+
+        return notification;
+    };
+
+    /**
+     * Alias of {@see Notification.setNotification}
+     *
+     * @param  {Notification} notification
+     * @return {Notification}
+     */
+    Notification.addNotification = function (notification) {
+        return Notification.setNotification(notification);
+    };
 
     reset();
 

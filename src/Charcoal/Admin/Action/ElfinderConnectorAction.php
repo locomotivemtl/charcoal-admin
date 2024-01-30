@@ -560,12 +560,12 @@ class ElfinderConnectorAction extends AdminAction
      *
      * @todo Move this method to a dedicated plugin class.
      *
-     * @param  string   $cmd       The command name.
-     * @param  array    $result    The command result.
-     * @param  array    $args      The command arguments from the client.
-     * @param  object   $elfinder  The elFinder instance.
-     * @param  object   $volume    The current volume instance.
-     * @return void|bool|array
+     * @param  string $cmd      The command name.
+     * @param  mixed  $result   The command result.
+     * @param  mixed  $args     The command arguments from the client.
+     * @param  object $elfinder The elFinder instance.
+     * @param  object $volume   The current volume instance.
+     * @return void|boolean|array
      */
     public function translateDirectoriesOnAnyCommand($cmd, &$result, $args, $elfinder, $volume)
     {
@@ -690,7 +690,7 @@ class ElfinderConnectorAction extends AdminAction
      * @param  string $src      The temporary file name.
      * @param  object $elfinder The elFinder instance.
      * @param  object $volume   The current volume instance.
-     * @return void|bool|array
+     * @return void|boolean|array
      */
     public function sanitizeOnUploadPreSave(&$path, &$name, $src, $elfinder, $volume)
     {

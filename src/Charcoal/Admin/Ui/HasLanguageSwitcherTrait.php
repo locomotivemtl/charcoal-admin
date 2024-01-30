@@ -70,7 +70,7 @@ trait HasLanguageSwitcherTrait
     /**
      * Resolves whether to display the language switcher or not.
      *
-     * @var boolean
+     * @return boolean
      */
     abstract protected function resolveShowLanguageSwitch();
 }

@@ -6,7 +6,7 @@
 
     <config name="show_progress" value="1" />
     <config name="ignore_warnings_on_exit" value="1" />
-    <config name="php_version" value="50630" />
+    <config name="php_version" value="70300" />
 
     <rule ref="PSR2" />
 
@@ -38,8 +38,6 @@
 
     <!-- Code Analysis Sniffs -->
 
-    <!-- Do not allow empty if, else or case -->
-    <rule ref="Generic.CodeAnalysis.EmptyStatement" />
     <!-- Simple for loops (for(;true;){}) should be while -->
     <rule ref="Generic.CodeAnalysis.ForLoopShouldBeWhileLoop" />
     <!-- Do not allow function in for(...) loops. Use a temporary variable to store the result instead -->
@@ -56,6 +54,10 @@
     <rule ref="Generic.CodeAnalysis.UselessOverridingMethod" />
     <!-- This sniff class detects empty statement. -->
     <rule ref="Generic.CodeAnalysis.EmptyStatement" />
+    <!-- Ignore empty CATCH statement -->
+    <rule ref="Generic.CodeAnalysis.EmptyStatement.DetectedCatch">
+        <severity>0</severity>
+    </rule>
 
     <!-- Commenting Sniffs -->
 
@@ -82,9 +84,17 @@
     <!--<rule ref="Squiz.Commenting.FileComment" />-->
     <!-- Function comment blocks -->
     <rule ref="Squiz.Commenting.FunctionComment" />
+    <!-- Ignore missing parameter comment -->
+    <rule ref="Squiz.Commenting.FunctionComment.MissingParamComment">
+        <severity>0</severity>
+    </rule>
     <!-- Do not test scalar typehint (php-7 only feature) -->
     <rule ref="Squiz.Commenting.FunctionComment.ScalarTypeHintMissing">
         <severity>0</severity>
+    </rule>
+    <!-- Do not test PHP-7 typehint (php-7 only feature) -->
+    <rule ref="Squiz.Commenting.FunctionComment.TypeHintMissing">
+        <type>warning</type>
     </rule>
     <!-- Verifies that a @throws tag exists for a function that throws exceptions -->
     <rule ref="Squiz.Commenting.FunctionCommentThrowTag" />

@@ -294,8 +294,8 @@ abstract class AbstractProperty implements
      * If a valid "function" option is not passed,
      * this method does nothing.
      *
-     * @param  string $val    The value to escape.
-     * @param  array $options Optional escape options.
+     * @param  string $val     The value to escape.
+     * @param  array  $options Optional escape options.
      * @throws InvalidArgumentException If the value to escape is not a string.
      * @return string
      */

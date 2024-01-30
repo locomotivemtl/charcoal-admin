@@ -60,7 +60,7 @@ class MessageDisplay extends AbstractPropertyDisplay implements
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function hasMessage()
     {

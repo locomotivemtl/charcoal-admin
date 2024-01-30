@@ -13,7 +13,7 @@ interface LanguageSwitcherAwareInterface
     /**
      * Whether a language switcher could be displayed.
      *
-     * @return bool
+     * @return boolean
      */
     public function supportsLanguageSwitch(): bool;
 }

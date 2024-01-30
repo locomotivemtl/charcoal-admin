@@ -258,7 +258,7 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
      */
     public function getDisplayEscape()
     {
-        return $this->getDisplayEscapeOptions()['function'] ?? null;
+        return ($this->getDisplayEscapeOptions()['function'] ?? null);
     }
 
     /**
@@ -288,8 +288,8 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
     /**
      * Escapes the given value according to display escape options.
      *
-     * @param  string $val    The value to escape.
-     * @param  array $options Optional escape options.
+     * @param  string $val     The value to escape.
+     * @param  array  $options Optional escape options.
      * @throws InvalidArgumentException If the value to escape is not a string.
      * @return string
      */
@@ -328,6 +328,7 @@ abstract class AbstractPropertyDisplay extends AbstractProperty implements
     }
 
     /**
+     * @throws UnexpectedValueException If the value is not a scalar.
      * @return string
      */
     public function displayVal()

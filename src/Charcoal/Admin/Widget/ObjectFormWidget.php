@@ -573,7 +573,7 @@ class ObjectFormWidget extends FormWidget implements
     /**
      * Whether a language switcher could be displayed.
      *
-     * @return bool
+     * @return boolean
      */
     public function supportsLanguageSwitch(): bool
     {
@@ -624,7 +624,7 @@ class ObjectFormWidget extends FormWidget implements
      * Determine if the group has any multilingual properties.
      *
      * @param  FormGroupInterface $group
-     * @return bool
+     * @return boolean
      */
     protected function hasL10nGroupProperties(FormGroupInterface $group)
     {

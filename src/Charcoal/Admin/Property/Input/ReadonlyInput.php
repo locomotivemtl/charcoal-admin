@@ -224,7 +224,7 @@ class ReadonlyInput extends AbstractPropertyInput
     {
         if (!is_null($input) && $this->maybeInputIsSerialized()) {
             try {
-                $output = json_decode($input, false, 512,  JSON_THROW_ON_ERROR);
+                $output = json_decode($input, false, 512, JSON_THROW_ON_ERROR);
                 if (!is_scalar($output) && !is_null($output)) {
                     return $output;
                 }

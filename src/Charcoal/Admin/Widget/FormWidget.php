@@ -392,7 +392,7 @@ class FormWidget extends AdminWidget implements
      */
     public function hasSidebars()
     {
-        return (bool) $this->sidebars;
+        return (bool)$this->sidebars;
     }
 
     /**
@@ -617,7 +617,7 @@ class FormWidget extends AdminWidget implements
     /**
      * Whether a language switcher could be displayed.
      *
-     * @return bool
+     * @return boolean
      */
     public function supportsLanguageSwitch(): bool
     {

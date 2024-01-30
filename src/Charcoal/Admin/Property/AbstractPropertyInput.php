@@ -310,7 +310,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
      */
     public function getInputEscape()
     {
-        return $this->getInputEscapeOptions()['function'] ?? null;
+        return ($this->getInputEscapeOptions()['function'] ?? null);
     }
 
     /**
@@ -340,8 +340,8 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
     /**
      * Escapes the given value according to input escape options.
      *
-     * @param  string $val    The value to escape.
-     * @param  array $options Optional escape options.
+     * @param  string $val     The value to escape.
+     * @param  array  $options Optional escape options.
      * @throws InvalidArgumentException If the value to escape is not a string.
      * @return string
      */
@@ -508,7 +508,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
             }
         }
 
-        return $this->inputPrefix ?? null;
+        return ($this->inputPrefix ?? null);
     }
 
     /**
@@ -559,7 +559,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
             }
         }
 
-        return $this->inputSuffix ?? null;
+        return ($this->inputSuffix ?? null);
     }
 
     /**
@@ -655,7 +655,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
     }
 
     /**
-     * @return bool
+     * @return boolean
      */
     public function hasPlaceholder()
     {
@@ -687,7 +687,7 @@ abstract class AbstractPropertyInput extends AbstractProperty implements
             }
         }
 
-        return $this->placeholder ?? null;
+        return ($this->placeholder ?? null);
     }
 
     /**

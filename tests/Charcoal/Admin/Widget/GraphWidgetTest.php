@@ -32,11 +32,11 @@ class GraphWidgetTest extends AbstractTestCase
     {
         $obj = $this->obj;
         $ret = $obj->setData([
-            'height'=>222,
-            'colors'=>['#ff0000', '#0000ff']
+            'height' => 222,
+            'colors' => ['#ff0000', '#0000ff']
         ]);
         $this->assertSame($obj, $ret);
-        $this->assertEquals(222, $obj->height());
+        $this->assertEquals('222px', $obj->height());
         $this->assertEquals(['#ff0000', '#0000ff'], $obj->colors());
     }
 
@@ -46,11 +46,11 @@ class GraphWidgetTest extends AbstractTestCase
     public function testSetHeight()
     {
         $obj =  $this->obj;
-        $this->assertEquals(400, $obj->height());
+        $this->assertEquals('400px', $obj->height());
 
         $ret = $obj->setHeight(333);
         $this->assertSame($obj, $ret);
-        $this->assertEquals(333, $obj->height());
+        $this->assertEquals('333px', $obj->height());
 
         //$this->expectException('\InvalidArgumentException');
         //$obj->setHeight(false);

@@ -232,16 +232,16 @@ class LostPasswordAction extends AdminAction
     }
 
     /**
-     * @todo   Implement `$container['admin/config']['user.lost_password_email']`
      * @param  User   $user  The user to send the lost-password email to.
-     * @param  string $token The lost-password token, as string.
+     * @param  LostPasswordToken $token The lost-password token, as string.
      * @return void
      */
     private function sendLostPasswordEmail(User $user, $token)
     {
-        $translator = $this->translator();
-        $userEmail  = $user['email'];
-        $siteName   = $this->siteName();
+        $emailConfig = $this->adminConfig('email')['lost_password_email'];
+        $translator  = $this->translator();
+        $userEmail   = $user['email'];
+        $siteName    = $this->siteName();
 
         if ($siteName) {
             $subject = strtr($translator->translate('{{ siteName }} — Password Reset'), [
@@ -251,20 +251,11 @@ class LostPasswordAction extends AdminAction
             $subject = $translator->translate('Charcoal — Password Reset');
         }
 
-        $from = [
-            'name'  => 'Charcoal',
-            'email' => 'charcoal@locomotive.ca'
-        ];
-
         // Create email
         $emailObj = $this->emailFactory->create('email');
-        $emailObj->setData([
-            'campaign'          => 'admin.lost-password',
+        $emailObj->setData(array_merge([
             'to'                => $userEmail,
             'subject'           => (string)$subject,
-            'from'              => $from,
-            'log'               => true,
-            'template_ident'    => 'charcoal/admin/email/user.lost-password',
             'template_data'     => [
                 'user'             => $user,
                 'token'            => $token->id(),
@@ -274,7 +265,7 @@ class LostPasswordAction extends AdminAction
                 'expiry'           => $token->expiry()->format('Y-m-d H:i:s'),
                 'ipAddress'        => isset($_SERVER['REMOTE_ADDR']) ? $_SERVER['REMOTE_ADDR'] : '',
             ],
-        ]);
+        ], $emailConfig));
         $emailObj->send();
     }
 }

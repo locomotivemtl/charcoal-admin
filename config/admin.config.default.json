@@ -253,30 +253,15 @@
         }
     },
 
-    "user": {
-        "subscription_email": {
-            "active": true,
-            "template": "charcoal/admin/email/user.subscription",
-            "campaign": "admin.user.subscription",
-            "from": {
-                "name": "Charcoal",
-                "email": "registration@charcoal.locomotive.ca"
-            },
-            "subject": "Your subscription to Charcoal",
-            "log": true,
-            "track": true
-        },
+    "email": {
         "lost_password_email": {
-            "active": true,
-            "template": "charcoal/admin/email/user.lost-password",
-            "campaign": "admin.user.lost-password",
+            "template_ident": "charcoal/admin/email/user.lost-password",
+            "campaign": "admin.lost-password",
             "from": {
                 "name": "Charcoal",
-                "email": "registration@charcoal.locomotive.ca"
+                "email": "charcoal@locomotive.ca"
             },
-            "subject": "Reset your Charcoal password",
-            "log": true,
-            "track": true
+            "log": true
         }
     },
 

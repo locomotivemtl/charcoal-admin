@@ -253,7 +253,19 @@
         }
     },
 
-    "email": {
+    "user": {
+        "subscription_email": {
+            "active": true,
+            "template": "charcoal/admin/email/user.subscription",
+            "campaign": "admin.user.subscription",
+            "from": {
+                "name": "Charcoal",
+                "email": "registration@charcoal.locomotive.ca"
+            },
+            "subject": "Your subscription to Charcoal",
+            "log": true,
+            "track": true
+        },
         "lost_password_email": {
             "template_ident": "charcoal/admin/email/user.lost-password",
             "campaign": "admin.lost-password",

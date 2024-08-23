@@ -238,7 +238,7 @@ class LostPasswordAction extends AdminAction
      */
     private function sendLostPasswordEmail(User $user, $token)
     {
-        $emailConfig = $this->adminConfig('email')['lost_password_email'];
+        $emailConfig = $this->adminConfig('user')['lost_password_email'];
         $translator  = $this->translator();
         $userEmail   = $user['email'];
         $siteName    = $this->siteName();

@@ -267,16 +267,13 @@
             "track": true
         },
         "lost_password_email": {
-            "active": true,
-            "template": "charcoal/admin/email/user.lost-password",
-            "campaign": "admin.user.lost-password",
+            "template_ident": "charcoal/admin/email/user.lost-password",
+            "campaign": "admin.lost-password",
             "from": {
                 "name": "Charcoal",
-                "email": "registration@charcoal.locomotive.ca"
+                "email": "charcoal@locomotive.ca"
             },
-            "subject": "Reset your Charcoal password",
-            "log": true,
-            "track": true
+            "log": true
         }
     },
 

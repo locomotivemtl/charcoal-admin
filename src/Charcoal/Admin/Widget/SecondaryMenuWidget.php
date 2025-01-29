@@ -21,6 +21,7 @@ use Charcoal\Admin\AdminWidget;
 use Charcoal\Admin\Support\HttpAwareTrait;
 use Charcoal\Admin\Ui\ActionContainerTrait;
 use Charcoal\Admin\Ui\SecondaryMenu\SecondaryMenuGroupInterface;
+use Slim\Http\Uri;
 
 /**
  * Admin Secondary Menu Widget
@@ -236,6 +237,8 @@ class SecondaryMenuWidget extends AdminWidget implements
     {
         if ($this->adminRoute === null) {
             $requestUri = (string)$this->httpRequest()->getUri();
+            // remove credentials from url
+            $requestUri = $adminUrl = Uri::createFromString($requestUri)->withUserInfo('');
             $requestUri = str_replace($this->adminUrl(), '', $requestUri);
 
             $this->adminRoute = $requestUri;

@@ -776,6 +776,10 @@ class SelectizeInput extends SelectInput
                 'value'    => $val,
             ]);
 
+            if (count($val) > 1) {
+                $loader->addOrder($model->key(), 'values', [ 'values' => $val ]);
+            }
+
             $collection = $loader->load();
 
             if ($prop instanceof HierarchicalObjectProperty) {

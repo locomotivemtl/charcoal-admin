@@ -63,6 +63,7 @@ $selectize-arrow-offset: calc(#{$selectize-padding-x} + 5px) !default;
 @import "plugins/dropdown_header";
 @import "plugins/optgroup_columns";
 @import "plugins/remove_button";
+@import "plugins/clear_button";
 
 .selectize-dropdown, .selectize-dropdown.form-control {
     height: auto;

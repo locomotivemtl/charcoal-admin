@@ -250,11 +250,6 @@ class SelectizeInput extends SelectInput
      */
     public function choices()
     {
-        if ($this->p()['allowNull'] && !$this->p()['multiple']) {
-            $prepend = $this->parseChoice('', $this->emptyChoice());
-            yield $prepend;
-        }
-
         // When deferred, we want to fetch choices for current values only.
         if ($this->deferred()) {
             $choices = $this->selectizeVal($this->propertyVal());
@@ -508,6 +503,10 @@ class SelectizeInput extends SelectInput
 
         $options['placeholder'] = $placeholder;
         $prop = $this->property();
+
+        if ($prop['multiple']) {
+            $options['selectOnTab'] = false;
+        }
 
         // Generate Optgroups from model.
         if ($this->optgroupProperty() && $prop instanceof ObjectProperty) {

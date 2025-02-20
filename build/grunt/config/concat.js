@@ -59,7 +59,7 @@ module.exports = {
             // Multiselect Two-sides
             '<%= paths.npm %>/multiselect-two-sides/dist/js/multiselect.min.js',
             // Selectize
-            '<%= paths.npm %>/selectize/dist/js/standalone/selectize.min.js',
+            '<%= paths.npm %>/@selectize/selectize/dist/js/selectize.min.js',
             // Selectize
             '<%= paths.npm %>/clipboard/dist/clipboard.min.js',
             // jQuery Timeago

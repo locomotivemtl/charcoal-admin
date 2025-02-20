@@ -9,6 +9,7 @@
     },
     "dependencies": {
         "@claviska/jquery-minicolors": "^2.3.6",
+        "@selectize/selectize": "^0.15.2",
         "@shopify/draggable": "^1.0.0-beta.8",
         "@ungap/url-search-params": "^0.2.2",
         "awesome-bootstrap-checkbox": "1.0.1",
@@ -24,7 +25,6 @@
         "moment": "^2.29.3",
         "multiselect-two-sides": "^2.5.7",
         "recorderjs": "git+https://github.com/mattdiamond/Recorderjs.git",
-        "selectize": "~0.12.6",
         "tempusdominus-bootstrap-4": "^5.39.2",
         "timeago": "^1.6.5",
         "tinymce": "^5.10.4",

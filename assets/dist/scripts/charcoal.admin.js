@@ -3214,8 +3214,9 @@ Charcoal.Admin.Widget.prototype.dialog = function (dialog_opts, callback) {
         xhr = $.ajax({
             method:   'POST',
             url:      url,
-            data:     data,
-            dataType: 'json'
+            data:        JSON.stringify(data),
+            dataType:    'json',
+            contentType: 'application/json'
         });
 
         xhr

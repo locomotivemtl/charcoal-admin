@@ -2,7 +2,8 @@
     "root": true,
     "env": {
         "browser": true,
-        "amd": true
+        "amd": true,
+        "es6": true
     },
     "globals": {
         "Charcoal": true,

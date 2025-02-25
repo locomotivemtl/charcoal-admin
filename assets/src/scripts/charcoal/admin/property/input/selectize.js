@@ -149,7 +149,7 @@
                     self.refreshOption(data.value);
                 });
             },
-            onChange: function (e) {
+            onChange: function () {
                 this.$input[0].dispatchEvent(new Event('change'))
             }
         };

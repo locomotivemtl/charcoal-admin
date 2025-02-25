@@ -79,6 +79,13 @@ class SelectizeInput extends SelectInput
     protected $allowUpdate;
 
     /**
+     * Whether to show a button to allow preview items.
+     *
+     * @var boolean
+     */
+    protected $allowPreview;
+
+    /**
      * Whether to show a button to allow item create.
      *
      * @var boolean
@@ -273,7 +280,7 @@ class SelectizeInput extends SelectInput
      */
     public function inputGroup()
     {
-        return !!($this->allowClipboardCopy() || $this->allowUpdate() || $this->allowCreate());
+        return !!($this->allowClipboardCopy() || $this->allowUpdate() || $this->allowCreate() || $this->allowPreview());
     }
 
     /**
@@ -318,6 +325,27 @@ class SelectizeInput extends SelectInput
     public function allowUpdate()
     {
         return $this->allowUpdate;
+    }
+
+    /**
+     * @param boolean $allowPreview Show (TRUE) or hide (FALSE) the preview button.
+     * @return self
+     */
+    public function setAllowPreview($allowPreview)
+    {
+        $this->allowPreview = !!$allowPreview;
+
+        return $this;
+    }
+
+    /**
+     * Determine if the property allows "Preview items".
+     *
+     * @return boolean
+     */
+    public function allowPreview()
+    {
+        return $this->allowPreview;
     }
 
     /**
@@ -1018,6 +1046,7 @@ class SelectizeInput extends SelectInput
                 'statusTemplate'       => $this->translator()->translate('Step [[ current ]] of [[ total ]]'),
             ],
             'copy_items'               => $this->allowClipboardCopy(),
+            'allow_preview'            => $this->allowPreview(),
             'allow_update'             => $this->allowUpdate(),
             'allow_create'             => $this->allowCreate(),
 

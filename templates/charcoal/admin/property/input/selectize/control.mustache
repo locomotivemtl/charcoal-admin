@@ -35,6 +35,17 @@
             <span class="sr-only">{{# _t }}Copy To Clipboard{{/ _t }}</span>
         </button>
     {{/ allowClipboardCopy }}
+    {{# allowPreview }}
+        <a
+            id="{{ inputId }}_preview"
+            class="btn btn-lg btn-outline-secondary disabled"
+            data-update-target="#{{ inputId }}"
+            target="_blank"
+        >
+            <span class="fa fa-external-link" aria-hidden="true"></span>
+            <span class="sr-only">Voir</span>
+        </a>
+    {{/ allowPreview }}
     {{# allowUpdate }}
         <button type="button"
                 id="{{ inputId }}_update"

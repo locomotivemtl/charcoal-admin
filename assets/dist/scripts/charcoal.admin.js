@@ -10154,6 +10154,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
         this.clipboard = null;
         this.allow_update = null;
+        this.allow_preview = null;
 
         this.set_properties(opts).init();
 
@@ -10171,6 +10172,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
     Selectize.prototype.selectize_init = function () {
         this.init_selectize();
         this.init_clipboard();
+        this.init_allow_preview();
         this.init_allow_update();
         this.init_allow_create();
 
@@ -10192,6 +10194,7 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
 
         // Enables the copy button
         this.copy_items = opts.data.copy_items || this.copy_items;
+        this.allow_preview = opts.data.allow_preview || this.allow_preview;
         this.allow_update = opts.data.allow_update || this.allow_update;
         this.allow_create = opts.data.allow_create || this.allow_create;
         this.title = opts.data.title || this.title;
@@ -10259,6 +10262,9 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 self.sifter.iterator(this.options, function (data) {
                     self.refreshOption(data.value);
                 });
+            },
+            onChange: function () {
+                this.$input[0].dispatchEvent(new Event('change'))
             }
         };
 
@@ -10587,6 +10593,43 @@ Charcoal.Admin.Property_Input_SelectPicker.prototype.create_select = function ()
                 }
             });
         });
+    };
+
+    Selectize.prototype.init_allow_preview = function () {
+        switch (this.selectize.settings.mode) {
+            case 'single' :
+                this.allow_preview_single();
+                break;
+            case 'multiple' :
+                this.allow_update_multiple();
+                break;
+        }
+    };
+
+    Selectize.prototype.allow_preview_single = function () {
+        if (!this.allow_preview) {
+            return;
+        }
+
+        var selectize = this.selectize;
+        var $button = $(this.selectize_selector + '_preview');
+        const obj_type = this.obj_type
+        const initialValue = selectize.getValue()
+
+        const update_link = function (value) {
+            if (value === null || value === '') {
+                $button.attr('href', '').addClass('disabled');
+            } else {
+                var url = `/admin/object/edit?obj_type=${obj_type}&obj_id=${value}`
+                $button.attr('href', url).removeClass('disabled');
+            }
+        }
+
+        if (initialValue) {
+            update_link(initialValue)
+        }
+
+        selectize.on('change', update_link)
     };
 
     Selectize.prototype.init_allow_update = function () {

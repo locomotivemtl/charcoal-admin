@@ -869,7 +869,7 @@ trait CollectionContainerTrait
         $this->display->setDisplayType($displayType);
         $this->display->setProperty($property);
 
-        $metadata = $property->metadata();
+        $metadata = clone $property->metadata();
         $objMetadata = $object->metadata()->property($property->ident());
         if ($objMetadata) {
             $metadata->setData($objMetadata);

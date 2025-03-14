@@ -28,7 +28,7 @@
         "selectize": "~0.12.6",
         "tempusdominus-bootstrap-4": "^5.39.2",
         "timeago": "^1.6.5",
-        "tinymce": "^5.10.5",
+        "tinymce": "^5.10.7",
         "tinymce-i18n": "^22.5.2"
     },
     "devDependencies": {

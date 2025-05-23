@@ -872,6 +872,10 @@ trait CollectionContainerTrait
         $metadata = clone $property->metadata();
         $objMetadata = $object->metadata()->property($property->ident());
         if ($objMetadata) {
+            if (method_exists($object, 'filterPropertyMetadata')) {
+                $objMetadata = $object->filterPropertyMetadata($objMetadata, $property->getIdent());
+            }
+
             $metadata->setData($objMetadata);
         }
 

@@ -83,7 +83,7 @@ class StatusDisplay extends AbstractPropertyDisplay implements ViewableInterface
      */
     private function fallbackStatus()
     {
-        return !!$this->propertyVal() ? static::STATE_SUCCESS : static::STATE_DEFAULT;
+        return !!$this->getStatusValue() ? static::STATE_SUCCESS : static::STATE_DEFAULT;
     }
 
     /**
@@ -111,21 +111,21 @@ class StatusDisplay extends AbstractPropertyDisplay implements ViewableInterface
         switch ($operator) {
             default:
             case '===':
-                return $value === $this->propertyVal();
+                return $value === $this->getStatusValue();
             case '!==':
-                return $value !== $this->propertyVal();
+                return $value !== $this->getStatusValue();
             case '==':
-                return $value == $this->propertyVal();
+                return $value == $this->getStatusValue();
             case '!=':
-                return $value != $this->propertyVal();
+                return $value != $this->getStatusValue();
             case '>':
-                return $value > $this->propertyVal();
+                return $value > $this->getStatusValue();
             case '<':
-                return $value < $this->propertyVal();
+                return $value < $this->getStatusValue();
             case '>=':
-                return $value >= $this->propertyVal();
+                return $value >= $this->getStatusValue();
             case '<=':
-                return $value <= $this->propertyVal();
+                return $value <= $this->getStatusValue();
         }
     }
 
@@ -175,6 +175,12 @@ class StatusDisplay extends AbstractPropertyDisplay implements ViewableInterface
      */
     public function state()
     {
+        if ($this->state === null && $this->getProperty()->type() === 'object') {
+            $proto = $this->getProperty()->proto();
+            $state = is_callable([$proto, 'displayStatusState']) ? $proto->displayStatusState() : null;
+            $state && $this->setState($state);
+        }
+
         return $this->state;
     }
 
@@ -187,5 +193,26 @@ class StatusDisplay extends AbstractPropertyDisplay implements ViewableInterface
         $this->state = $state;
 
         return $this;
+    }
+
+    /**
+     * Retrieves the status value, either from an already set value or by dynamically
+     * determining it based on the property type and specific callable method.
+     *
+     * @return mixed The resolved status value.
+     */
+    public function getStatusValue()
+    {
+        if (isset($this->statusValue)) {
+            return $this->statusValue;
+        }
+
+        $property = $this->getProperty();
+
+        $this->statusValue = $property->type() === 'object' && is_callable([$property->proto(), 'displayStatusValue'])
+            ? $property->proto()->load($this->propertyVal())->displayStatusValue()
+            : $this->propertyVal();
+
+        return $this->statusValue;
     }
 }

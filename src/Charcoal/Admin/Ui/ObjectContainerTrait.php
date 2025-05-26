@@ -128,13 +128,6 @@ trait ObjectContainerTrait
      */
     public function setObjId($objId)
     {
-        if (!is_scalar($objId)) {
-            throw new InvalidArgumentException(sprintf(
-                'Object ID must be a string or numerical value, received %s.',
-                (is_object($objId) ? get_class($objId) : gettype($objId))
-            ));
-        }
-
         $this->objId = $objId;
 
         return $this;

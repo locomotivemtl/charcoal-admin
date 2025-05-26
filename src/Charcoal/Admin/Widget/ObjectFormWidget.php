@@ -100,14 +100,8 @@ class ObjectFormWidget extends FormWidget implements
      * @throws InvalidArgumentException If the identifier is not a string.
      * @return ObjectForm Chainable
      */
-    public function setFormIdent($formIdent)
+    public function setFormIdent(?string $formIdent)
     {
-        if (!is_string($formIdent)) {
-            throw new InvalidArgumentException(
-                'Form identifier must be a string'
-            );
-        }
-
         $this->formIdent = $formIdent;
 
         return $this;

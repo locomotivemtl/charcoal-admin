@@ -735,7 +735,7 @@ class TableWidget extends AdminWidget implements CollectionContainerInterface
      */
     public function listActions()
     {
-        if ($this->listActions === null) {
+        if (empty($this->listActions)) {
             $collectionConfig = $this->collectionConfig();
             if (isset($collectionConfig['list_actions'])) {
                 $actions = $collectionConfig['list_actions'];

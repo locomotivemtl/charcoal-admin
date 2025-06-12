@@ -20,7 +20,7 @@
                 {{# hasSidebarProperties }}
                     <ul class="c-sidebar-widget_table list-unstyled form-group">
                         {{# formProperties }}
-                            <li class="c-sidebar-widget_table_row">
+                            <li class="c-sidebar-widget_table_row {{formGroupCssClass}}">
                                 {{# showLabel }}
                                     <label class="c-sidebar-widget_table_header" for="{{ widgetId }}">{{> charcoal/admin/property/control/label }}</label>
                                     {{# showActiveLanguage }}

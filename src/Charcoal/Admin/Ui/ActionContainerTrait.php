@@ -376,7 +376,7 @@ trait ActionContainerTrait
         if (is_bool($condition)) {
             return $condition;
         } elseif (is_string($condition)) {
-            $not = ($condition[0] === '!');
+            $not = (!empty($condition) && $condition[0] === '!');
             if ($not) {
                 $condition = ltrim($condition, '!');
             }

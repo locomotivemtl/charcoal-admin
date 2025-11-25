@@ -295,7 +295,7 @@
             dialog_options: {
                 onhide: function () {
                     if (self.widget_id !== undefined) {
-                        Charcoal.Admin.manager().destroy_component('widgets', self.widget_id);
+                        Charcoal.Admin.manager().remove_component('widgets', self.widget_id);
                     }
 
                     callback({
